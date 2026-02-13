@@ -28,6 +28,10 @@ const Admin = () => {
           <h2 className="text-xl font-semibold text-white mb-4">Manage Tournaments</h2>
           <p className="text-gray-400">Create and manage tournaments</p>
         </Link>
+        <Link to="/admin/news" className="bg-gray-800 p-6 rounded-lg shadow-lg hover:bg-gray-700 transition duration-300">
+          <h2 className="text-xl font-semibold text-white mb-4">📰 Manage News</h2>
+          <p className="text-gray-400">Publish articles and announcements</p>
+        </Link>
       </div>
     </div>
   );

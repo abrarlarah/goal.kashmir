@@ -1,277 +1,203 @@
-import React, { useState } from 'react';
-import { NavLink, Link, useNavigate } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { NavLink, Link, useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
+import { motion, AnimatePresence } from 'framer-motion';
+import { Menu, X, Trophy, Shield, Users, BarChart2, LayoutDashboard, LogOut, ChevronRight, User, Newspaper } from 'lucide-react';
+import { cn } from '../../utils/cn';
 
 const Navbar = () => {
   const { currentUser, logout } = useAuth();
   const navigate = useNavigate();
+  const location = useLocation();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
+
+  // Handle scroll effect
+  useEffect(() => {
+    const handleScroll = () => {
+      setScrolled(window.scrollY > 20);
+    };
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
 
   const handleLogout = async () => {
     try {
       await logout();
       navigate('/login');
+      setMobileMenuOpen(false);
     } catch (error) {
       console.error('Failed to log out', error);
     }
   };
 
-  const closeMobileMenu = () => {
-    setMobileMenuOpen(false);
-  };
+  const navItems = [
+    { name: 'Dashboard', path: '/', icon: LayoutDashboard },
+    { name: 'News', path: '/news', icon: Newspaper },
+    { name: 'Tournaments', path: '/tournaments', icon: Trophy },
+    { name: 'Teams', path: '/teams', icon: Shield },
+    { name: 'Players', path: '/players', icon: Users },
+    { name: 'Leaderboard', path: '/leaderboard', icon: BarChart2 },
+  ];
+
+  if (currentUser) {
+    navItems.push({ name: 'Admin', path: '/admin', icon: User });
+  }
 
   return (
-    <nav className="bg-gray-800 sticky top-0 z-50 shadow-lg">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-16">
-          {/* Logo */}
-          <div className="flex items-center">
-            <div className="flex-shrink-0">
-              <Link to="/" className="text-white font-bold text-xl" onClick={closeMobileMenu}>
-                ⚽ SoccerHub
-              </Link>
+    <>
+      <motion.nav
+        initial={{ y: -100 }}
+        animate={{ y: 0 }}
+        className={cn(
+          "fixed top-0 inset-x-0 z-50 transition-all duration-300 border-b border-transparent",
+          scrolled
+            ? "bg-dark-bg/80 backdrop-blur-xl border-white/5 shadow-lg shadow-black/20"
+            : "bg-transparent backdrop-blur-sm"
+        )}
+      >
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex items-center justify-between h-16 md:h-20">
+            {/* Logo */}
+            <div className="flex-shrink-0 flex items-center gap-2 group cursor-pointer" onClick={() => navigate('/')}>
+              <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-brand-500 to-brand-700 flex items-center justify-center text-white shadow-lg shadow-brand-500/20 group-hover:scale-105 transition-transform">
+                <Trophy size={20} className="text-white fill-current" />
+              </div>
+              <div className="flex flex-col">
+                <span className="font-display font-bold text-xl tracking-tight text-white leading-none">Goal<span className="text-brand-400">Kashmir</span></span>
+                <span className="text-[10px] text-slate-400 font-medium tracking-wider uppercase">Premium League</span>
+              </div>
             </div>
-          </div>
 
-          {/* Desktop Navigation */}
-          <div className="hidden md:block">
-            <div className="ml-10 flex items-baseline space-x-4">
-              <NavLink
-                to="/"
-                className={({ isActive }) =>
-                  `px-3 py-2 rounded-md text-sm font-medium transition-all duration-200 ${isActive
-                    ? 'bg-gray-900 text-white shadow-inner border-b-2 border-green-500'
-                    : 'text-gray-300 hover:bg-gray-700 hover:text-white'
-                  }`
-                }
-              >
-                Dashboard
-              </NavLink>
-              <NavLink
-                to="/tournaments"
-                className={({ isActive }) =>
-                  `px-3 py-2 rounded-md text-sm font-medium transition-all duration-200 ${isActive
-                    ? 'bg-gray-900 text-white shadow-inner border-b-2 border-green-500'
-                    : 'text-gray-300 hover:bg-gray-700 hover:text-white'
-                  }`
-                }
-              >
-                Tournaments
-              </NavLink>
-              <NavLink
-                to="/teams"
-                className={({ isActive }) =>
-                  `px-3 py-2 rounded-md text-sm font-medium transition-all duration-200 ${isActive
-                    ? 'bg-gray-900 text-white shadow-inner border-b-2 border-green-500'
-                    : 'text-gray-300 hover:bg-gray-700 hover:text-white'
-                  }`
-                }
-              >
-                Teams
-              </NavLink>
-              <NavLink
-                to="/players"
-                className={({ isActive }) =>
-                  `px-3 py-2 rounded-md text-sm font-medium transition-all duration-200 ${isActive
-                    ? 'bg-gray-900 text-white shadow-inner border-b-2 border-green-500'
-                    : 'text-gray-300 hover:bg-gray-700 hover:text-white'
-                  }`
-                }
-              >
-                Players
-              </NavLink>
-              <NavLink
-                to="/leaderboard"
-                className={({ isActive }) =>
-                  `px-3 py-2 rounded-md text-sm font-medium transition-all duration-200 ${isActive
-                    ? 'bg-gray-900 text-white shadow-inner border-b-2 border-green-500'
-                    : 'text-gray-300 hover:bg-gray-700 hover:text-white'
-                  }`
-                }
-              >
-                Leaderboard
-              </NavLink>
-              {currentUser && (
-                <NavLink
-                  to="/admin"
-                  className={({ isActive }) =>
-                    `px-3 py-2 rounded-md text-sm font-medium transition-all duration-200 ${isActive
-                      ? 'bg-gray-900 text-white shadow-inner border-b-2 border-green-500'
-                      : 'text-gray-300 hover:bg-gray-700 hover:text-white'
-                    }`
-                  }
-                >
-                  Admin Panel
-                </NavLink>
-              )}
+            {/* Desktop Navigation */}
+            <div className="hidden md:flex items-center space-x-1">
+              {navItems.map((item) => {
+                const isActive = location.pathname === item.path;
+                return (
+                  <Link
+                    key={item.name}
+                    to={item.path}
+                    className="relative px-4 py-2 rounded-lg group"
+                  >
+                    <span className={cn(
+                      "relative z-10 flex items-center gap-2 text-sm font-medium transition-colors",
+                      isActive ? "text-white" : "text-slate-400 group-hover:text-white"
+                    )}>
+                      {item.name}
+                    </span>
+                    {isActive && (
+                      <motion.div
+                        layoutId="navbar-indicator"
+                        className="absolute inset-0 bg-white/10 rounded-lg border border-white/5"
+                        transition={{ type: "spring", bounce: 0.2, duration: 0.6 }}
+                      />
+                    )}
+                  </Link>
+                );
+              })}
             </div>
-          </div>
 
-          {/* Desktop Auth Buttons */}
-          <div className="hidden md:block">
-            <div className="ml-4 flex items-center md:ml-6">
+            {/* Desktop Auth */}
+            <div className="hidden md:flex items-center gap-4">
               {currentUser ? (
                 <button
                   onClick={handleLogout}
-                  className="px-4 py-2 text-sm font-medium text-white bg-red-600 rounded-md hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white transition-colors"
+                  className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-slate-300 hover:text-red-400 transition-colors"
                 >
-                  Logout
+                  <LogOut size={18} />
+                  <span>Logout</span>
                 </button>
               ) : (
-                <div className="flex space-x-2">
-                  <Link
-                    to="/login"
-                    className="px-4 py-2 text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white rounded-md transition-colors"
-                  >
-                    Login
-                  </Link>
+                <div className="flex items-center gap-3">
+                  <Link to="/login" className="text-sm font-medium text-slate-300 hover:text-white transition-colors">Login</Link>
                   <Link
                     to="/signup"
-                    className="px-4 py-2 text-sm font-medium text-white bg-green-600 rounded-md hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white transition-colors"
+                    className="px-4 py-2 bg-brand-600 hover:bg-brand-500 text-white text-sm font-medium rounded-lg shadow-lg shadow-brand-500/20 transition-all hover:scale-105 active:scale-95"
                   >
                     Sign Up
                   </Link>
                 </div>
               )}
             </div>
-          </div>
 
-          {/* Mobile menu button */}
-          <div className="md:hidden">
-            <button
-              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-white hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white"
-              aria-expanded="false"
-            >
-              <span className="sr-only">Open main menu</span>
-              {!mobileMenuOpen ? (
-                <svg className="block h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h16M4 18h16" />
-                </svg>
-              ) : (
-                <svg className="block h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
-                </svg>
-              )}
-            </button>
-          </div>
-        </div>
-      </div>
-
-      {/* Mobile menu */}
-      {mobileMenuOpen && (
-        <div className="md:hidden bg-gray-900">
-          <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3">
-            <NavLink
-              to="/"
-              onClick={closeMobileMenu}
-              className={({ isActive }) =>
-                `block px-3 py-2 rounded-md text-base font-medium transition-colors ${isActive
-                  ? 'bg-gray-900 text-white border-l-4 border-green-500'
-                  : 'text-gray-300 hover:bg-gray-700 hover:text-white'
-                }`
-              }
-            >
-              Dashboard
-            </NavLink>
-            <NavLink
-              to="/tournaments"
-              onClick={closeMobileMenu}
-              className={({ isActive }) =>
-                `block px-3 py-2 rounded-md text-base font-medium transition-colors ${isActive
-                  ? 'bg-gray-900 text-white border-l-4 border-green-500'
-                  : 'text-gray-300 hover:bg-gray-700 hover:text-white'
-                }`
-              }
-            >
-              Tournaments
-            </NavLink>
-            <NavLink
-              to="/teams"
-              onClick={closeMobileMenu}
-              className={({ isActive }) =>
-                `block px-3 py-2 rounded-md text-base font-medium transition-colors ${isActive
-                  ? 'bg-gray-900 text-white border-l-4 border-green-500'
-                  : 'text-gray-300 hover:bg-gray-700 hover:text-white'
-                }`
-              }
-            >
-              Teams
-            </NavLink>
-            <NavLink
-              to="/players"
-              onClick={closeMobileMenu}
-              className={({ isActive }) =>
-                `block px-3 py-2 rounded-md text-base font-medium transition-colors ${isActive
-                  ? 'bg-gray-900 text-white border-l-4 border-green-500'
-                  : 'text-gray-300 hover:bg-gray-700 hover:text-white'
-                }`
-              }
-            >
-              Players
-            </NavLink>
-            <NavLink
-              to="/leaderboard"
-              onClick={closeMobileMenu}
-              className={({ isActive }) =>
-                `block px-3 py-2 rounded-md text-base font-medium transition-colors ${isActive
-                  ? 'bg-gray-900 text-white border-l-4 border-green-500'
-                  : 'text-gray-300 hover:bg-gray-700 hover:text-white'
-                }`
-              }
-            >
-              Leaderboard
-            </NavLink>
-            {currentUser && (
-              <NavLink
-                to="/admin"
-                onClick={closeMobileMenu}
-                className={({ isActive }) =>
-                  `block px-3 py-2 rounded-md text-base font-medium transition-colors ${isActive
-                    ? 'bg-gray-900 text-white border-l-4 border-green-500'
-                    : 'text-gray-300 hover:bg-gray-700 hover:text-white'
-                  }`
-                }
+            {/* Mobile menu button */}
+            <div className="md:hidden">
+              <button
+                onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+                className="p-2 rounded-lg text-slate-400 hover:text-white hover:bg-white/5 transition-colors"
               >
-                Admin Panel
-              </NavLink>
-            )}
-          </div>
-          <div className="pt-4 pb-3 border-t border-gray-700">
-            <div className="px-2 space-y-1">
-              {currentUser ? (
-                <button
-                  onClick={() => {
-                    handleLogout();
-                    closeMobileMenu();
-                  }}
-                  className="block w-full text-left px-3 py-2 rounded-md text-base font-medium text-white bg-red-600 hover:bg-red-700 transition-colors"
-                >
-                  Logout
-                </button>
-              ) : (
-                <>
-                  <Link
-                    to="/login"
-                    onClick={closeMobileMenu}
-                    className="block px-3 py-2 rounded-md text-base font-medium text-gray-300 hover:bg-gray-700 hover:text-white transition-colors"
-                  >
-                    Login
-                  </Link>
-                  <Link
-                    to="/signup"
-                    onClick={closeMobileMenu}
-                    className="block px-3 py-2 rounded-md text-base font-medium text-white bg-green-600 hover:bg-green-700 transition-colors"
-                  >
-                    Sign Up
-                  </Link>
-                </>
-              )}
+                {mobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
+              </button>
             </div>
           </div>
         </div>
-      )}
-    </nav>
+
+        {/* Mobile Menu Overlay */}
+        <AnimatePresence>
+          {mobileMenuOpen && (
+            <motion.div
+              initial={{ opacity: 0, height: 0 }}
+              animate={{ opacity: 1, height: 'auto' }}
+              exit={{ opacity: 0, height: 0 }}
+              className="md:hidden bg-dark-bg/95 backdrop-blur-xl border-t border-white/5 overflow-hidden"
+            >
+              <div className="px-4 pt-4 pb-6 space-y-2">
+                {navItems.map((item) => (
+                  <NavLink
+                    key={item.name}
+                    to={item.path}
+                    onClick={() => setMobileMenuOpen(false)}
+                    className={({ isActive }) => cn(
+                      "flex items-center justify-between p-4 rounded-xl border border-transparent transition-all",
+                      isActive
+                        ? "bg-brand-500/10 border-brand-500/20 text-brand-400"
+                        : "bg-white/5 text-slate-400 border-white/5 hover:bg-white/10 hover:text-white"
+                    )}
+                  >
+                    <div className="flex items-center gap-3">
+                      <item.icon size={20} />
+                      <span className="font-medium">{item.name}</span>
+                    </div>
+                    <ChevronRight size={16} className="opacity-50" />
+                  </NavLink>
+                ))}
+
+                <div className="h-px bg-white/10 my-4" />
+
+                {currentUser ? (
+                  <button
+                    onClick={handleLogout}
+                    className="w-full flex items-center justify-center gap-2 p-4 rounded-xl bg-red-500/10 text-red-500 border border-red-500/20 font-medium hover:bg-red-500/20 transition-colors"
+                  >
+                    <LogOut size={20} />
+                    Logout
+                  </button>
+                ) : (
+                  <div className="grid grid-cols-2 gap-4">
+                    <Link
+                      to="/login"
+                      onClick={() => setMobileMenuOpen(false)}
+                      className="flex justify-center p-4 rounded-xl bg-white/5 text-slate-200 border border-white/5 font-medium hover:bg-white/10"
+                    >
+                      Login
+                    </Link>
+                    <Link
+                      to="/signup"
+                      onClick={() => setMobileMenuOpen(false)}
+                      className="flex justify-center p-4 rounded-xl bg-brand-600 text-white font-medium shadow-lg hover:bg-brand-500"
+                    >
+                      Sign Up
+                    </Link>
+                  </div>
+                )}
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </motion.nav>
+      {/* Spacer for fixed navbar */}
+      <div className="h-16 md:h-20" />
+    </>
   );
 };
 

@@ -2,15 +2,19 @@
   "name": "soccer-app",
   "version": "0.1.0",
   "private": true,
-  "homepage": "https://abrarlarah.github.io/soccer-app",
+  "homepage": "https://abrarlarah.github.io/goal.kashmir",
   "dependencies": {
     "@headlessui/react": "^1.7.7",
     "@heroicons/react": "^2.0.17",
+    "clsx": "^2.1.1",
     "firebase": "^9.17.1",
+    "framer-motion": "^12.34.0",
+    "lucide-react": "^0.563.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-router-dom": "^6.11.1",
-    "react-scripts": "5.0.1"
+    "react-scripts": "5.0.1",
+    "tailwind-merge": "^3.4.0"
   },
   "scripts": {
     "start": "react-scripts start",

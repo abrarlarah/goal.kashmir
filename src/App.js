@@ -15,6 +15,8 @@ import ManageTeams from './pages/admin/ManageTeams';
 import ManagePlayers from './pages/admin/ManagePlayers';
 import ManageTournaments from './pages/admin/ManageTournaments';
 import ManageLineups from './pages/admin/ManageLineups';
+import ManageNews from './pages/admin/ManageNews'; // Admin News
+import News from './pages/News'; // Public News
 import PrivateRoute from './components/common/PrivateRoute';
 import { DataProvider } from './context/DataContext';
 
@@ -30,6 +32,7 @@ function App() {
             <Route path="/teams" element={<Teams />} />
             <Route path="/players" element={<Players />} />
             <Route path="/leaderboard" element={<Leaderboard />} />
+            <Route path="/news" element={<News />} />
             <Route path="/live/:matchId" element={<LiveMatch />} />
             <Route path="/login" element={<Login />} />
             <Route path="/signup" element={<Signup />} />
@@ -80,6 +83,14 @@ function App() {
               element={
                 <PrivateRoute>
                   <ManageTournaments />
+                </PrivateRoute>
+              }
+            />
+            <Route
+              path="/admin/news"
+              element={
+                <PrivateRoute>
+                  <ManageNews />
                 </PrivateRoute>
               }
             />
