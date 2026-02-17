@@ -7,6 +7,8 @@ import { useAuth } from '../context/AuthContext';
 import { useData } from '../context/DataContext';
 import LineupDisplay from '../components/common/LineupDisplay';
 import SubstitutionManager from '../components/common/SubstitutionManager';
+import MatchPredictions from '../components/common/MatchPredictions';
+import { cn } from '../utils/cn';
 
 const LiveMatch = () => {
   const { matchId } = useParams();
@@ -15,6 +17,7 @@ const LiveMatch = () => {
   const [matchLineups, setMatchLineups] = useState([]);
   const [showSubstitution, setShowSubstitution] = useState(null); // Track which team's substitution panel is open
   const [showScorerSelect, setShowScorerSelect] = useState(null); // { team: 'A' | 'B' }
+  const [showCardSelect, setShowCardSelect] = useState(null); // { team: 'A' | 'B', type: 'yellow' | 'red' }
   const [showCancelSelect, setShowCancelSelect] = useState(null); // { team: 'A' | 'B' }
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
@@ -115,6 +118,35 @@ const LiveMatch = () => {
     } catch (err) {
       console.error("Error recording goal:", err);
       alert("Error recording goal. Check console.");
+    }
+  };
+
+  const confirmCard = async (team, player, type) => {
+    try {
+      // 1. Add Match Event
+      await addDoc(collection(db, 'matches', matchId, 'events'), {
+        type: type, // 'yellow' or 'red'
+        team: team === 'A' ? match.teamA : match.teamB,
+        minute: match.currentMinute || 0,
+        player: player ? player.name : 'Unknown Player',
+        playerId: player ? player.id : null,
+        timestamp: Date.now()
+      });
+
+      // 2. Update Player Stats
+      if (player && player.id) {
+        const playerRef = doc(db, 'players', player.id);
+        const currentPlayer = players.find(p => p.id === player.id);
+        const field = type === 'yellow' ? 'yellowCards' : 'redCards';
+        await updateDoc(playerRef, {
+          [field]: (currentPlayer?.[field] || 0) + 1
+        });
+      }
+
+      setShowCardSelect(null);
+    } catch (err) {
+      console.error("Error recording card:", err);
+      alert("Error recording card. Check console.");
     }
   };
 
@@ -265,6 +297,18 @@ const LiveMatch = () => {
               </div>
             </div>
 
+            {/* Card Controls */}
+            <div className="grid grid-cols-2 gap-4 mt-4">
+              <div className="flex justify-center gap-2">
+                <button onClick={() => setShowCardSelect({ team: 'A', type: 'yellow' })} className="bg-yellow-500 text-black font-bold px-3 py-1 rounded text-xs">Y-Card (A)</button>
+                <button onClick={() => setShowCardSelect({ team: 'A', type: 'red' })} className="bg-red-600 text-white font-bold px-3 py-1 rounded text-xs">R-Card (A)</button>
+              </div>
+              <div className="flex justify-center gap-2">
+                <button onClick={() => setShowCardSelect({ team: 'B', type: 'yellow' })} className="bg-yellow-500 text-black font-bold px-3 py-1 rounded text-xs">Y-Card (B)</button>
+                <button onClick={() => setShowCardSelect({ team: 'B', type: 'red' })} className="bg-red-600 text-white font-bold px-3 py-1 rounded text-xs">R-Card (B)</button>
+              </div>
+            </div>
+
             {/* Goal Scorer Selection UI */}
             {showScorerSelect && (
               <div className="mt-4 p-4 bg-gray-700 rounded-lg border border-yellow-500 shadow-xl">
@@ -300,6 +344,39 @@ const LiveMatch = () => {
                   >
                     Unknown Player
                   </button>
+                </div>
+              </div>
+            )}
+
+            {/* Card Selection UI */}
+            {showCardSelect && (
+              <div className="mt-4 p-4 bg-gray-700 rounded-lg border border-red-500 shadow-xl">
+                <div className="flex justify-between items-center mb-4">
+                  <h4 className={`${showCardSelect.type === 'yellow' ? 'text-yellow-400' : 'text-red-500'} font-bold uppercase tracking-wider`}>
+                    Select Player for {showCardSelect.type.toUpperCase()} Card ({showCardSelect.team === 'A' ? match.teamA : match.teamB})
+                  </h4>
+                  <button
+                    onClick={() => setShowCardSelect(null)}
+                    className="text-gray-400 hover:text-white"
+                  >
+                    <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" /></svg>
+                  </button>
+                </div>
+
+                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-2 max-h-48 overflow-y-auto pr-2 custom-scrollbar">
+                  {players
+                    .filter(p => p.team === (showCardSelect.team === 'A' ? match.teamA : match.teamB))
+                    .sort((a, b) => a.name.localeCompare(b.name))
+                    .map(player => (
+                      <button
+                        key={player.id}
+                        onClick={() => confirmCard(showCardSelect.team, player, showCardSelect.type)}
+                        className="bg-gray-600 hover:bg-brand-500 text-white text-xs py-2 px-3 rounded transition-colors text-left truncate"
+                        title={player.name}
+                      >
+                        {player.name}
+                      </button>
+                    ))}
                 </div>
               </div>
             )}
@@ -446,6 +523,11 @@ const LiveMatch = () => {
           </div>
         </div>
 
+        {/* Match Predictions / Voting */}
+        <div className="mb-8">
+          <MatchPredictions matchId={matchId} teamA={match.teamA} teamB={match.teamB} />
+        </div>
+
         {/* Team Lineups */}
         {matchLineups.length > 0 && (
           <div className="bg-gray-800 p-6 mt-6 rounded-lg">
@@ -482,46 +564,71 @@ const LiveMatch = () => {
           </div>
         )}
 
-        {/* Match Events */}
+        {/* Match Timeline/Events */}
         <div className="bg-gray-800 rounded-b-lg p-6">
-          <h3 className="text-lg font-bold mb-4">Match Events</h3>
+          <h3 className="text-lg font-bold mb-6 flex items-center gap-2">
+            <span className="h-2 w-2 bg-brand-500 rounded-full"></span>
+            Match Timeline
+          </h3>
           {events.length > 0 ? (
-            <div className="space-y-4">
-              {events.map((event) => (
+            <div className="relative border-l-2 border-gray-700 ml-4 pl-8 space-y-8">
+              {events.sort((a, b) => b.minute - a.minute).map((event) => (
                 <div
                   key={event.id}
-                  className="flex items-center p-3 bg-gray-700 rounded-lg"
+                  className="relative"
                 >
-                  <div className="w-16 text-center text-sm text-gray-400">
-                    {event.minute}'
+                  <div className="absolute -left-[41px] top-1 h-4 w-4 rounded-full bg-gray-800 border-2 border-brand-500 flex items-center justify-center z-10">
+                    <span className="h-1.5 w-1.5 bg-brand-500 rounded-full"></span>
                   </div>
-                  <div className="flex-1">
-                    {event.type === 'goal' && (
-                      <div className="flex items-center">
-                        <span className="text-green-400 mr-2">⚽</span>
-                        <span className="font-medium">{event.player}</span>
-                        <span className="text-gray-400 ml-2">scores for {event.team}</span>
-                      </div>
-                    )}
-                    {event.type === 'substitution' && (
-                      <div className="flex items-center">
-                        <span className="text-yellow-400 mr-2">🔄</span>
-                        <span className="text-gray-200">
-                          <span className="text-red-400">⬇️ {event.playerOut}</span>
-                          <span className="mx-2 text-gray-500">→</span>
-                          <span className="text-green-400">⬆️ {event.playerIn}</span>
-                        </span>
-                        <span className="text-gray-400 ml-2">({event.team})</span>
-                      </div>
-                    )}
-                    {/* ... other event types ... */}
+                  <div className="flex items-center gap-4">
+                    <div className="bg-gray-900 px-3 py-1 rounded text-xs font-bold text-brand-400 whitespace-nowrap min-w-[50px] text-center">
+                      {event.minute}'
+                    </div>
+                    <div className="flex-1 bg-gray-700/50 p-4 rounded-xl border border-white/5 hover:border-white/10 transition-colors">
+                      {event.type === 'goal' && (
+                        <div className="flex items-center gap-3">
+                          <span className="text-xl">⚽</span>
+                          <div>
+                            <span className="font-bold text-white text-lg">{event.player}</span>
+                            <span className="text-gray-400 ml-2 block text-xs uppercase tracking-wider">Goal for {event.team}</span>
+                          </div>
+                        </div>
+                      )}
+                      {(event.type === 'yellow' || event.type === 'red') && (
+                        <div className="flex items-center gap-3">
+                          <div className={cn(
+                            "h-5 w-4 rounded-sm shadow-sm",
+                            event.type === 'yellow' ? "bg-yellow-400" : "bg-red-600"
+                          )} />
+                          <div>
+                            <span className="font-bold text-white text-lg">{event.player}</span>
+                            <span className="text-gray-400 ml-2 block text-xs uppercase tracking-wider">
+                              {event.type === 'yellow' ? 'Yellow Card' : 'Red Card'} ({event.team})
+                            </span>
+                          </div>
+                        </div>
+                      )}
+                      {event.type === 'substitution' && (
+                        <div className="flex items-center gap-3">
+                          <span className="text-xl">🔄</span>
+                          <div>
+                            <div className="flex items-center gap-2">
+                              <span className="text-green-400 font-bold tracking-tight">⬆️ {event.playerIn}</span>
+                              <span className="text-gray-600">/</span>
+                              <span className="text-red-400 font-bold tracking-tight opacity-80">⬇️ {event.playerOut}</span>
+                            </div>
+                            <span className="text-gray-400 block text-xs uppercase tracking-wider mt-0.5">Substitution ({event.team})</span>
+                          </div>
+                        </div>
+                      )}
+                    </div>
                   </div>
                 </div>
               ))}
             </div>
           ) : (
-            <div className="text-center py-8 text-gray-400">
-              No events to display
+            <div className="text-center py-12 text-gray-500 bg-gray-900/50 rounded-2xl border border-dashed border-gray-700">
+              Awaiting match events...
             </div>
           )}
         </div>

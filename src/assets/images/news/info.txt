@@ -1,0 +1,2 @@
+Place news article images here.
+Refer to them in repoAssets.js as '/images/news/your-image.png'

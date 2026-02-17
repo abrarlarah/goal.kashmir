@@ -5,12 +5,20 @@ import { db } from '../firebase';
 import { useAuth } from '../context/AuthContext';
 import { useData } from '../context/DataContext';
 import { motion } from 'framer-motion';
-import { Search, Filter, Save, X, Edit2, Plus, User, Shield, Users } from 'lucide-react';
+import { Search, Filter, Save, X, Edit2, Plus, User, Shield, Users, MapPinned, Calendar } from 'lucide-react';
 import { cn } from '../utils/cn';
+import { calculateAge } from '../utils/ageUtils';
+
+// Districts of Jammu and Kashmir
+const DISTRICTS = {
+  JAMMU: ['Jammu', 'Samba', 'Kathua', 'Udhampur', 'Reasi', 'Rajouri', 'Poonch', 'Doda', 'Ramban', 'Kishtwar'],
+  KASHMIR: ['Srinagar', 'Ganderbal', 'Budgam', 'Baramulla', 'Bandipora', 'Kupwara', 'Pulwama', 'Shopian', 'Kulgam', 'Anantnag']
+};
 
 const Players = () => {
   const { players, loading } = useData();
   const [positionFilter, setPositionFilter] = useState('All');
+  const [selectedDistrict, setSelectedDistrict] = useState('Baramulla');
   const [searchQuery, setSearchQuery] = useState('');
   const { isAdmin } = useAuth();
 
@@ -52,7 +60,12 @@ const Players = () => {
     const matchesSearch =
       player.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
       player.team.toLowerCase().includes(searchQuery.toLowerCase());
-    return matchesPosition && matchesSearch;
+
+    // District filter - now using player's own district field
+    const matchesDistrict =
+      selectedDistrict === 'All' || player.district === selectedDistrict;
+
+    return matchesPosition && matchesSearch && matchesDistrict;
   });
 
   if (loading && players.length === 0) {
@@ -73,22 +86,48 @@ const Players = () => {
       <motion.div
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
-        className="flex flex-col md:flex-row md:items-end justify-between gap-6"
+        className="flex flex-col gap-6"
       >
-        <div>
-          <h1 className="text-3xl md:text-4xl font-display font-bold text-white mb-2">Players</h1>
-          <p className="text-slate-400">View performance stats and player details.</p>
+        <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
+          <div>
+            <h1 className="text-3xl md:text-4xl font-display font-bold text-white mb-2">Players</h1>
+            <p className="text-slate-400">View performance stats and player details.</p>
+          </div>
+
+          <div className="flex flex-col sm:flex-row gap-3">
+            {/* District Filter */}
+            <div className="flex items-center gap-2">
+              <MapPinned className="text-brand-400" size={20} />
+              <select
+                value={selectedDistrict}
+                onChange={(e) => setSelectedDistrict(e.target.value)}
+                className="bg-dark-card/50 backdrop-blur-sm border border-white/10 rounded-xl px-4 py-2.5 text-sm font-medium text-white focus:ring-2 focus:ring-brand-500 focus:border-brand-500 outline-none transition-all"
+              >
+                <option value="All">All Districts</option>
+                <optgroup label="Jammu Division">
+                  {DISTRICTS.JAMMU.map(district => (
+                    <option key={district} value={district}>{district}</option>
+                  ))}
+                </optgroup>
+                <optgroup label="Kashmir Division">
+                  {DISTRICTS.KASHMIR.map(district => (
+                    <option key={district} value={district}>{district}</option>
+                  ))}
+                </optgroup>
+              </select>
+            </div>
+
+            {isAdmin && (
+              <Link to="/admin/players" className="flex items-center gap-2 px-5 py-2.5 bg-brand-600 hover:bg-brand-500 text-white rounded-xl text-sm font-semibold transition-all shadow-lg shadow-brand-500/20 hover:scale-105 active:scale-95">
+                <Plus size={18} /> Add Player
+              </Link>
+            )}
+          </div>
         </div>
 
+        {/* Admin Controls */}
         {isAdmin && (
           <div className="flex items-center gap-3">
-            <Link
-              to="/admin/players"
-              className="flex items-center gap-2 px-4 py-2 bg-brand-600 hover:bg-brand-500 text-white rounded-lg text-sm font-semibold transition-all shadow-lg shadow-brand-500/20"
-            >
-              <Plus size={16} /> Add Player
-            </Link>
-
             {editMode ? (
               <>
                 <button
@@ -109,7 +148,7 @@ const Players = () => {
                 onClick={() => setEditMode(true)}
                 className="flex items-center gap-2 px-4 py-2 bg-white/5 hover:bg-white/10 text-white border border-white/5 rounded-lg text-sm font-medium transition-colors"
               >
-                <Edit2 size={16} /> Quick Edit
+                <Edit2 size={16} /> Edit Stats
               </button>
             )}
           </div>
@@ -168,6 +207,7 @@ const Players = () => {
                 <th className="px-6 py-4 text-left text-xs font-bold text-slate-400 uppercase tracking-wider">Player</th>
                 <th className="px-6 py-4 text-left text-xs font-bold text-slate-400 uppercase tracking-wider">Team</th>
                 <th className="px-6 py-4 text-left text-xs font-bold text-slate-400 uppercase tracking-wider">Position</th>
+                <th className="px-6 py-4 text-center text-xs font-bold text-slate-400 uppercase tracking-wider">Age</th>
                 <th className="px-6 py-4 text-center text-xs font-bold text-slate-400 uppercase tracking-wider">Matches</th>
                 <th className="px-6 py-4 text-center text-xs font-bold text-slate-400 uppercase tracking-wider">Goals</th>
                 <th className="px-6 py-4 text-center text-xs font-bold text-slate-400 uppercase tracking-wider">Assists</th>
@@ -183,10 +223,14 @@ const Players = () => {
                   <tr key={player.id} className="hover:bg-white/5 transition-colors group">
                     <td className="px-6 py-4 whitespace-nowrap">
                       <div className="flex items-center gap-3">
-                        <div className="h-8 w-8 rounded-full bg-slate-700 flex items-center justify-center text-xs font-bold text-slate-300">
-                          {player.name.charAt(0)}
+                        <div className="h-10 w-10 rounded-full bg-slate-700 flex items-center justify-center text-xs font-bold text-slate-300 overflow-hidden border border-white/10 group-hover:border-brand-500/30 transition-colors">
+                          {player.photoUrl ? (
+                            <img src={player.photoUrl} alt={player.name} className="h-full w-full object-cover" />
+                          ) : (
+                            player.name.charAt(0)
+                          )}
                         </div>
-                        <div className="text-sm font-medium text-white">{player.name}</div>
+                        <div className="text-sm font-medium text-white group-hover:text-brand-400 transition-colors">{player.name}</div>
                       </div>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
@@ -205,6 +249,18 @@ const Players = () => {
                       )}>
                         {player.position}
                       </span>
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap text-center">
+                      <div className="flex flex-col items-center">
+                        <span className="text-sm text-white font-medium">
+                          {player.dob ? calculateAge(player.dob) : (player.age || '-')}
+                        </span>
+                        {player.dob && (
+                          <span className="text-[10px] text-slate-500 flex items-center gap-1">
+                            <Calendar size={10} /> {new Date(player.dob).toLocaleDateString()}
+                          </span>
+                        )}
+                      </div>
                     </td>
 
                     <td className="px-6 py-4 whitespace-nowrap text-center">

@@ -1,12 +1,25 @@
 import React, { useState } from 'react';
 import { useData } from '../context/DataContext';
+import { MapPinned } from 'lucide-react';
+
+// Districts of Jammu and Kashmir
+const DISTRICTS = {
+  JAMMU: ['Jammu', 'Samba', 'Kathua', 'Udhampur', 'Reasi', 'Rajouri', 'Poonch', 'Doda', 'Ramban', 'Kishtwar'],
+  KASHMIR: ['Srinagar', 'Ganderbal', 'Budgam', 'Baramulla', 'Bandipora', 'Kupwara', 'Pulwama', 'Shopian', 'Kulgam', 'Anantnag']
+};
 
 const Leaderboard = () => {
   const { teams, matches, tournaments, loading } = useData();
   const [selectedCompetition, setSelectedCompetition] = useState('All');
+  const [selectedDistrict, setSelectedDistrict] = useState('Baramulla');
+
+  // Filter tournaments by district
+  const filteredTournaments = selectedDistrict === 'All'
+    ? tournaments
+    : tournaments.filter(t => t.district === selectedDistrict);
 
   // Competitions
-  const competitions = ['All', ...tournaments.map(t => t.name)];
+  const competitions = ['All', ...filteredTournaments.map(t => t.name)];
 
   const getProcessedStandings = () => {
     if (loading || teams.length === 0) return [];
@@ -103,81 +116,103 @@ const Leaderboard = () => {
 
   return (
     <div className="container mx-auto px-4 py-8">
-      <div className="mb-8">
-        <h1 className="text-3xl font-bold text-white mb-6">Leaderboard</h1>
+      <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 gap-4">
+        <h1 className="text-3xl font-bold text-white">Leaderboard</h1>
 
-        {/* Competition Selector */}
-        <div className="flex flex-wrap gap-2 mb-6">
-          {competitions.length > 1 && competitions.map((comp) => (
-            <button
-              key={comp}
-              onClick={() => setSelectedCompetition(comp === 'All' ? 'All' : comp)}
-              className={`px-4 py-2 rounded-md font-medium ${selectedCompetition === comp || (selectedCompetition === 'All' && comp === 'All')
-                ? 'bg-green-600 text-white'
-                : 'bg-gray-700 text-gray-300 hover:bg-gray-600'
-                }`}
+        <div className="flex flex-col sm:flex-row gap-3 w-full md:w-auto">
+          {/* District Filter */}
+          <div className="flex items-center gap-2">
+            <MapPinned className="text-brand-400" size={20} />
+            <select
+              value={selectedDistrict}
+              onChange={(e) => {
+                setSelectedDistrict(e.target.value);
+                setSelectedCompetition('All');
+              }}
+              className="bg-gray-800 text-white px-4 py-2 rounded border border-gray-700 focus:outline-none focus:ring-2 focus:ring-brand-500 min-w-[160px]"
             >
-              {comp}
-            </button>
-          ))}
-          {tournaments.length === 0 && <div className="text-gray-400">No tournaments found.</div>}
-        </div>
-
-        <div className="bg-gray-800 rounded-lg shadow-lg overflow-hidden">
-          <div className="overflow-x-auto">
-            <table className="min-w-full divide-y divide-gray-700">
-              <thead className="bg-gray-700">
-                <tr>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">#</th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">Team</th>
-                  <th className="px-3 py-3 text-center text-xs font-medium text-gray-300 uppercase">P</th>
-                  <th className="px-3 py-3 text-center text-xs font-medium text-gray-300 uppercase">W</th>
-                  <th className="px-3 py-3 text-center text-xs font-medium text-gray-300 uppercase">D</th>
-                  <th className="px-3 py-3 text-center text-xs font-medium text-gray-300 uppercase">L</th>
-                  <th className="px-3 py-3 text-center text-xs font-medium text-gray-300 uppercase">GF</th>
-                  <th className="px-3 py-3 text-center text-xs font-medium text-gray-300 uppercase">GA</th>
-                  <th className="px-3 py-3 text-center text-xs font-medium text-gray-300 uppercase">GD</th>
-                  <th className="px-6 py-3 text-center text-xs font-medium text-gray-300 uppercase">PTS</th>
-                  <th className="px-6 py-3 text-center text-xs font-medium text-gray-300 uppercase">Form</th>
-                </tr>
-              </thead>
-              <tbody className="bg-gray-800 divide-y divide-gray-700">
-                {tableData.map((team, index) => {
-                  const gd = team.goalsFor - team.goalsAgainst;
-                  return (
-                    <tr key={team.id} className="hover:bg-gray-700 transition-colors">
-                      <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-300">{index + 1}</td>
-                      <td className="px-6 py-4 whitespace-nowrap text-white font-medium">{team.name}</td>
-                      <td className="px-3 py-4 text-center text-gray-300">{team.played}</td>
-                      <td className="px-3 py-4 text-center text-gray-300">{team.wins}</td>
-                      <td className="px-3 py-4 text-center text-gray-300">{team.draws}</td>
-                      <td className="px-3 py-4 text-center text-gray-300">{team.losses}</td>
-                      <td className="px-3 py-4 text-center text-gray-300">{team.goalsFor}</td>
-                      <td className="px-3 py-4 text-center text-gray-300">{team.goalsAgainst}</td>
-                      <td className={`px-3 py-4 text-center font-medium ${gd > 0 ? 'text-green-400' : gd < 0 ? 'text-red-400' : 'text-gray-300'}`}>
-                        {gd > 0 ? '+' : ''}{gd}
-                      </td>
-                      <td className="px-6 py-4 text-center font-bold text-yellow-400">{team.points}</td>
-                      <td className="px-6 py-4">
-                        <div className="flex justify-center space-x-1">
-                          {team.form.slice(-5).map((res, i) => (
-                            <span key={i} className={`w-5 h-5 flex items-center justify-center rounded-full text-xs text-white ${res === 'W' ? 'bg-green-500' : res === 'D' ? 'bg-yellow-500' : 'bg-red-500'
-                              }`}>
-                              {res}
-                            </span>
-                          ))}
-                        </div>
-                      </td>
-                    </tr>
-                  );
-                })}
-              </tbody>
-            </table>
-            {tableData.length === 0 && <div className="text-center py-10 text-gray-400">No standings data available. Add teams and finish matches to see them here.</div>}
+              <option value="All">All Districts</option>
+              <optgroup label="Jammu Division">
+                {DISTRICTS.JAMMU.map(district => (
+                  <option key={district} value={district}>{district}</option>
+                ))}
+              </optgroup>
+              <optgroup label="Kashmir Division">
+                {DISTRICTS.KASHMIR.map(district => (
+                  <option key={district} value={district}>{district}</option>
+                ))}
+              </optgroup>
+            </select>
           </div>
+
+          {/* Competition Filter */}
+          <select
+            value={selectedCompetition}
+            onChange={(e) => setSelectedCompetition(e.target.value)}
+            className="bg-gray-800 text-white px-4 py-2 rounded border border-gray-700 focus:outline-none focus:ring-2 focus:ring-brand-500 min-w-[200px]"
+          >
+            {competitions.map(comp => (
+              <option key={comp} value={comp}>{comp}</option>
+            ))}
+          </select>
+        </div>
+      </div>
+
+      <div className="bg-gray-800 rounded-lg shadow-lg overflow-hidden">
+        <div className="overflow-x-auto">
+          <table className="min-w-full divide-y divide-gray-700">
+            <thead className="bg-gray-700">
+              <tr>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">#</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">Team</th>
+                <th className="px-3 py-3 text-center text-xs font-medium text-gray-300 uppercase">P</th>
+                <th className="px-3 py-3 text-center text-xs font-medium text-gray-300 uppercase">W</th>
+                <th className="px-3 py-3 text-center text-xs font-medium text-gray-300 uppercase">D</th>
+                <th className="px-3 py-3 text-center text-xs font-medium text-gray-300 uppercase">L</th>
+                <th className="px-3 py-3 text-center text-xs font-medium text-gray-300 uppercase">GF</th>
+                <th className="px-3 py-3 text-center text-xs font-medium text-gray-300 uppercase">GA</th>
+                <th className="px-3 py-3 text-center text-xs font-medium text-gray-300 uppercase">GD</th>
+                <th className="px-6 py-3 text-center text-xs font-medium text-gray-300 uppercase">PTS</th>
+                <th className="px-6 py-3 text-center text-xs font-medium text-gray-300 uppercase">Form</th>
+              </tr>
+            </thead>
+            <tbody className="bg-gray-800 divide-y divide-gray-700">
+              {tableData.map((team, index) => {
+                const gd = team.goalsFor - team.goalsAgainst;
+                return (
+                  <tr key={team.id} className="hover:bg-gray-700 transition-colors">
+                    <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-300">{index + 1}</td>
+                    <td className="px-6 py-4 whitespace-nowrap text-white font-medium">{team.name}</td>
+                    <td className="px-3 py-4 text-center text-gray-300">{team.played}</td>
+                    <td className="px-3 py-4 text-center text-gray-300">{team.wins}</td>
+                    <td className="px-3 py-4 text-center text-gray-300">{team.draws}</td>
+                    <td className="px-3 py-4 text-center text-gray-300">{team.losses}</td>
+                    <td className="px-3 py-4 text-center text-gray-300">{team.goalsFor}</td>
+                    <td className="px-3 py-4 text-center text-gray-300">{team.goalsAgainst}</td>
+                    <td className={`px-3 py-4 text-center font-medium ${gd > 0 ? 'text-green-400' : gd < 0 ? 'text-red-400' : 'text-gray-300'}`}>
+                      {gd > 0 ? '+' : ''}{gd}
+                    </td>
+                    <td className="px-6 py-4 text-center font-bold text-yellow-400">{team.points}</td>
+                    <td className="px-6 py-4">
+                      <div className="flex justify-center space-x-1">
+                        {team.form.slice(-5).map((res, i) => (
+                          <span key={i} className={`w-5 h-5 flex items-center justify-center rounded-full text-xs text-white ${res === 'W' ? 'bg-green-500' : res === 'D' ? 'bg-yellow-500' : 'bg-red-500'
+                            }`}>
+                            {res}
+                          </span>
+                        ))}
+                      </div>
+                    </td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
+          {tableData.length === 0 && <div className="text-center py-10 text-gray-400">No standings data available. Add teams and finish matches to see them here.</div>}
         </div>
       </div>
     </div>
   );
 };
+
 export default Leaderboard;

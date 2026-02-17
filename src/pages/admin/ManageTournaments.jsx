@@ -3,12 +3,19 @@ import { collection, addDoc, updateDoc, deleteDoc, doc } from 'firebase/firestor
 import { db } from '../../firebase';
 import { useData } from '../../context/DataContext';
 
+// Districts of Jammu and Kashmir
+const DISTRICTS = {
+    JAMMU: ['Jammu', 'Samba', 'Kathua', 'Udhampur', 'Reasi', 'Rajouri', 'Poonch', 'Doda', 'Ramban', 'Kishtwar'],
+    KASHMIR: ['Srinagar', 'Ganderbal', 'Budgam', 'Baramulla', 'Bandipora', 'Kupwara', 'Pulwama', 'Shopian', 'Kulgam', 'Anantnag']
+};
+
 const ManageTournaments = () => {
     const { tournaments } = useData();
     const [loading, setLoading] = useState(false); // Form loading
     const [successMessage, setSuccessMessage] = useState('');
     const [formData, setFormData] = useState({
         name: '',
+        district: '',
         startDate: '',
         endDate: '',
         teamsCount: 0,
@@ -45,6 +52,7 @@ const ManageTournaments = () => {
 
         setFormData({
             name: '',
+            district: '',
             startDate: '',
             endDate: '',
             teamsCount: 0,
@@ -96,6 +104,23 @@ const ManageTournaments = () => {
                         <input type="text" name="name" placeholder="Tournament Name" value={formData.name} onChange={handleInputChange} className="bg-gray-700 p-2 rounded text-white w-full" required />
                     </div>
 
+                    <div className="col-span-1 md:col-span-2">
+                        <label className="text-xs text-gray-400 block mb-1">District</label>
+                        <select name="district" value={formData.district} onChange={handleInputChange} className="bg-gray-700 p-2 rounded text-white w-full" required>
+                            <option value="">Select District</option>
+                            <optgroup label="Jammu Division">
+                                {DISTRICTS.JAMMU.map(district => (
+                                    <option key={district} value={district}>{district}</option>
+                                ))}
+                            </optgroup>
+                            <optgroup label="Kashmir Division">
+                                {DISTRICTS.KASHMIR.map(district => (
+                                    <option key={district} value={district}>{district}</option>
+                                ))}
+                            </optgroup>
+                        </select>
+                    </div>
+
                     <div className="flex gap-2">
                         <div className="w-full">
                             <label className="text-xs text-gray-400 block mb-1">Start Date</label>
@@ -138,7 +163,7 @@ const ManageTournaments = () => {
                     </button>
 
                     {editingId && (
-                        <button type="button" onClick={() => { setEditingId(null); setFormData({ name: '', startDate: '', endDate: '', teamsCount: 0, matchesCount: 0, status: 'upcoming', type: 'league' }); }} className="bg-gray-600 hover:bg-gray-500 p-2 rounded text-white col-span-full">
+                        <button type="button" onClick={() => { setEditingId(null); setFormData({ name: '', district: '', startDate: '', endDate: '', teamsCount: 0, matchesCount: 0, status: 'upcoming', type: 'league' }); }} className="bg-gray-600 hover:bg-gray-500 p-2 rounded text-white col-span-full">
                             Cancel Edit
                         </button>
                     )}
@@ -151,6 +176,9 @@ const ManageTournaments = () => {
                     <div key={t.id} className="bg-gray-800 p-4 rounded flex justify-between items-start">
                         <div>
                             <div className="font-bold text-lg text-white">{t.name}</div>
+                            {t.district && (
+                                <div className="text-xs text-brand-400 font-medium mt-0.5">📍 {t.district}</div>
+                            )}
                             <div className="text-sm text-gray-400">{t.status} • {t.type}</div>
                             <div className="text-xs text-gray-500 mt-1">{t.startDate} - {t.endDate}</div>
                         </div>

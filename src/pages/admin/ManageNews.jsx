@@ -5,8 +5,10 @@ import { ref, uploadBytes, getDownloadURL, uploadBytesResumable } from 'firebase
 import { db, storage } from '../../firebase';
 import { useAuth } from '../../context/AuthContext';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Plus, Trash2, Image, Type, Upload, Camera, X, Check, Edit2 } from 'lucide-react';
+import { Plus, Trash2, Image, Type, Upload, Camera, X, Check, Edit2, Folders } from 'lucide-react';
 import { cn } from '../../utils/cn';
+import AssetPicker from '../../components/admin/AssetPicker';
+import { registerAsset } from '../../utils/assetRegistry';
 
 const ManageNews = () => {
     const { isAdmin } = useAuth();
@@ -19,6 +21,7 @@ const ManageNews = () => {
     const videoRef = useRef(null);
     const canvasRef = useRef(null);
     const fileInputRef = useRef(null);
+    const [showAssetPicker, setShowAssetPicker] = useState(false);
     const [formData, setFormData] = useState({
         title: '',
         excerpt: '',
@@ -149,6 +152,10 @@ const ManageNews = () => {
             const downloadURL = await getDownloadURL(uploadTask.snapshot.ref);
 
             setFormData(prev => ({ ...prev, imageUrl: downloadURL }));
+
+            // Automatically register in Media Repository
+            await registerAsset(file.name, downloadURL, 'News');
+
             setStatusText('Done!');
         } catch (error) {
             console.error("Error uploading image:", error);
@@ -424,19 +431,35 @@ const ManageNews = () => {
                                                 className="flex items-center justify-center gap-2 px-4 py-2 bg-white/5 hover:bg-white/10 border border-white/10 rounded-lg text-sm text-slate-300 transition-colors"
                                             >
                                                 <Upload size={16} />
-                                                <span>Upload from Device</span>
+                                                <span>Upload</span>
+                                            </button>
+                                            <button
+                                                type="button"
+                                                onClick={() => setShowAssetPicker(true)}
+                                                disabled={uploading}
+                                                className="flex items-center justify-center gap-2 px-4 py-2 bg-brand-600/10 hover:bg-brand-600/20 text-brand-400 border border-brand-500/20 rounded-lg text-sm transition-colors"
+                                            >
+                                                <Folders size={16} />
+                                                <span>Repo</span>
                                             </button>
                                             <button
                                                 type="button"
                                                 onClick={startCamera}
                                                 disabled={uploading}
-                                                className="flex items-center justify-center gap-2 px-4 py-2 bg-brand-600/10 hover:bg-brand-600/20 text-brand-400 border border-brand-500/20 rounded-lg text-sm transition-colors"
+                                                className="flex items-center justify-center gap-2 px-4 py-2 bg-slate-700/50 hover:bg-slate-700 text-slate-300 rounded-lg text-sm transition-colors col-span-2"
                                             >
                                                 <Camera size={16} />
-                                                <span>Camera</span>
+                                                <span>Take Photo</span>
                                             </button>
                                         </div>
                                     )}
+
+                                    <AssetPicker
+                                        isOpen={showAssetPicker}
+                                        onClose={() => setShowAssetPicker(false)}
+                                        onSelect={(url) => setFormData(prev => ({ ...prev, imageUrl: url }))}
+                                        category="News"
+                                    />
 
                                     {/* Preview */}
                                     {formData.imageUrl && !showCamera && (

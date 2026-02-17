@@ -1,5 +1,6 @@
 // tailwind.config.js
 module.exports = {
+  darkMode: 'class',
   content: [  // Changed from purge to content for v3+ compatibility but keeping valid syntax
     './src/**/*.{js,jsx,ts,tsx}',
     './public/index.html'

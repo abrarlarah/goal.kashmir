@@ -1,7 +1,11 @@
 import React, { useState } from 'react';
 import { collection, addDoc, updateDoc, deleteDoc, doc } from 'firebase/firestore';
-import { db } from '../../firebase';
+import { ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage';
+import { db, storage } from '../../firebase';
 import { useData } from '../../context/DataContext';
+import { Upload, X, Image as ImageIcon, Folders } from 'lucide-react';
+import AssetPicker from '../../components/admin/AssetPicker';
+import { registerAsset } from '../../utils/assetRegistry';
 
 const ManageTeams = () => {
     const { teams, tournaments } = useData();
@@ -14,10 +18,14 @@ const ManageTeams = () => {
         manager: '',
         status: 'Active',
         players: 0,
+        logoUrl: '',
         tournaments: [] // Now an array
     });
     const [editingId, setEditingId] = useState(null);
     const [successMessage, setSuccessMessage] = useState('');
+    const [uploadProgress, setUploadProgress] = useState(0);
+    const [uploading, setUploading] = useState(false);
+    const [showAssetPicker, setShowAssetPicker] = useState(false);
 
     const handleInputChange = (e) => {
         const { name, value } = e.target;
@@ -36,6 +44,55 @@ const ManageTeams = () => {
                 return { ...prev, tournaments: [...current, tournamentName] };
             }
         });
+    };
+
+    const handleLogoUpload = async (e) => {
+        const file = e.target.files[0];
+        if (!file) return;
+
+        // Validate file type
+        if (!file.type.startsWith('image/')) {
+            alert('Please upload an image file');
+            return;
+        }
+
+        // Validate file size (max 5MB)
+        if (file.size > 5 * 1024 * 1024) {
+            alert('Image size should be less than 5MB');
+            return;
+        }
+
+        setUploading(true);
+        setUploadProgress(0);
+
+        try {
+            const storageRef = ref(storage, `team-logos/${Date.now()}_${file.name}`);
+            const uploadTask = uploadBytesResumable(storageRef, file);
+
+            await new Promise((resolve, reject) => {
+                uploadTask.on(
+                    'state_changed',
+                    (snapshot) => {
+                        const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+                        setUploadProgress(progress);
+                    },
+                    (error) => reject(error),
+                    () => resolve()
+                );
+            });
+
+            const downloadURL = await getDownloadURL(uploadTask.snapshot.ref);
+            setFormData(prev => ({ ...prev, logoUrl: downloadURL }));
+
+            // Automatically register in Media Repository
+            await registerAsset(file.name, downloadURL, 'Teams');
+
+            setUploading(false);
+        } catch (error) {
+            console.error('Upload error:', error);
+            alert(`Upload failed: ${error.code || error.message}`);
+            setUploading(false);
+        }
     };
 
     const handleSubmit = (e) => {
@@ -71,6 +128,7 @@ const ManageTeams = () => {
             manager: '',
             status: 'Active',
             players: 0,
+            logoUrl: '',
             tournaments: []
         });
         setEditingId(null);
@@ -100,6 +158,10 @@ const ManageTeams = () => {
         }
     };
 
+    const removeLogo = () => {
+        setFormData(prev => ({ ...prev, logoUrl: '' }));
+    };
+
     return (
         <div className="container mx-auto px-4 py-8 text-white">
             <h2 className="text-2xl font-bold mb-6">Manage Teams</h2>
@@ -114,6 +176,63 @@ const ManageTeams = () => {
             <div className="bg-gray-800 p-6 rounded-lg mb-8">
                 <h3 className="text-xl mb-4">{editingId ? 'Edit Team' : 'Add New Team'}</h3>
                 <form onSubmit={handleSubmit} className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    {/* Logo Upload Section */}
+                    <div className="md:col-span-2 flex flex-col items-center p-4 border-2 border-dashed border-gray-600 rounded-xl bg-gray-700/30">
+                        {formData.logoUrl ? (
+                            <div className="relative">
+                                <img src={formData.logoUrl} alt="Logo Preview" className="w-24 h-24 object-contain rounded-lg bg-white/10 p-2" />
+                                <button
+                                    type="button"
+                                    onClick={removeLogo}
+                                    className="absolute -top-2 -right-2 p-1 bg-red-500 rounded-full text-white shadow-lg hover:bg-red-600 transition-colors"
+                                >
+                                    <X size={14} />
+                                </button>
+                            </div>
+                        ) : (
+                            <div className="flex flex-col items-center gap-4">
+                                <label className="flex flex-col items-center justify-center cursor-pointer group">
+                                    <div className="w-16 h-16 rounded-full bg-gray-700 flex items-center justify-center text-gray-400 group-hover:bg-gray-600 transition-colors">
+                                        {uploading ? (
+                                            <div className="flex flex-col items-center">
+                                                <div className="w-8 h-8 border-2 border-brand-500 border-t-transparent animate-spin rounded-full mb-1"></div>
+                                                <span className="text-[10px] text-brand-400">{Math.round(uploadProgress)}%</span>
+                                            </div>
+                                        ) : (
+                                            <ImageIcon size={32} />
+                                        )}
+                                    </div>
+                                    <span className="mt-2 text-sm text-gray-400 group-hover:text-gray-300">
+                                        {uploading ? 'Uploading...' : 'Upload Team Logo'}
+                                    </span>
+                                    <input type="file" className="hidden" accept="image/*" onChange={handleLogoUpload} disabled={uploading} />
+                                </label>
+
+                                <div className="flex items-center gap-3">
+                                    <div className="h-[1px] w-12 bg-gray-600"></div>
+                                    <span className="text-xs text-gray-500 uppercase font-bold">OR</span>
+                                    <div className="h-[1px] w-12 bg-gray-600"></div>
+                                </div>
+
+                                <button
+                                    type="button"
+                                    onClick={() => setShowAssetPicker(true)}
+                                    className="flex items-center gap-2 px-4 py-2 bg-brand-500/10 hover:bg-brand-500/20 text-brand-400 border border-brand-500/20 rounded-xl text-sm font-semibold transition-all"
+                                >
+                                    <Folders size={18} />
+                                    Choose from Repository
+                                </button>
+                            </div>
+                        )}
+                    </div>
+
+                    <AssetPicker
+                        isOpen={showAssetPicker}
+                        onClose={() => setShowAssetPicker(false)}
+                        onSelect={(url) => setFormData(prev => ({ ...prev, logoUrl: url }))}
+                        category="Teams"
+                    />
+
                     <div>
                         <label className="text-xs text-gray-400 block mb-1">Team Name</label>
                         <input

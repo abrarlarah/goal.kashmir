@@ -1,13 +1,13 @@
 {
   "files": {
-    "main.css": "/goal.kashmir/static/css/main.91bcf8ac.css",
-    "main.js": "/goal.kashmir/static/js/main.0118aa9e.js",
+    "main.css": "/goal.kashmir/static/css/main.4733615d.css",
+    "main.js": "/goal.kashmir/static/js/main.74438ef9.js",
     "index.html": "/goal.kashmir/index.html",
-    "main.91bcf8ac.css.map": "/goal.kashmir/static/css/main.91bcf8ac.css.map",
-    "main.0118aa9e.js.map": "/goal.kashmir/static/js/main.0118aa9e.js.map"
+    "main.4733615d.css.map": "/goal.kashmir/static/css/main.4733615d.css.map",
+    "main.74438ef9.js.map": "/goal.kashmir/static/js/main.74438ef9.js.map"
   },
   "entrypoints": [
-    "static/css/main.91bcf8ac.css",
-    "static/js/main.0118aa9e.js"
+    "static/css/main.4733615d.css",
+    "static/js/main.74438ef9.js"
   ]
 }

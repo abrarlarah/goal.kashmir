@@ -18,6 +18,7 @@ export const calculateStandings = (teams, matches, selectedCompetition = 'All') 
                 id: team.id,
                 name: team.name,
                 shortName: team.shortName || team.name.substring(0, 3).toUpperCase(),
+                logoUrl: team.logoUrl || '',
                 played: 0,
                 wins: 0,
                 draws: 0,

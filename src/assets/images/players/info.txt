@@ -1,0 +1,2 @@
+Place player photos here.
+Refer to them in repoAssets.js as '/images/players/your-image.png'

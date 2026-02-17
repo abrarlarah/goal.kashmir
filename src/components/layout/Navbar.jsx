@@ -2,8 +2,9 @@ import React, { useState, useEffect } from 'react';
 import { NavLink, Link, useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Menu, X, Trophy, Shield, Users, BarChart2, LayoutDashboard, LogOut, ChevronRight, User, Newspaper } from 'lucide-react';
+import { Menu, X, Trophy, Shield, Users, BarChart2, LayoutDashboard, LogOut, ChevronRight, User, Newspaper, Search } from 'lucide-react';
 import { cn } from '../../utils/cn';
+import ThemeToggle from './ThemeToggle';
 
 const Navbar = () => {
   const { currentUser, logout } = useAuth();
@@ -50,10 +51,10 @@ const Navbar = () => {
         initial={{ y: -100 }}
         animate={{ y: 0 }}
         className={cn(
-          "fixed top-0 inset-x-0 z-50 transition-all duration-300 border-b border-transparent",
+          "fixed top-0 inset-x-0 z-50 transition-all duration-300 border-b",
           scrolled
-            ? "bg-dark-bg/80 backdrop-blur-xl border-white/5 shadow-lg shadow-black/20"
-            : "bg-transparent backdrop-blur-sm"
+            ? "bg-white/80 dark:bg-dark-bg/80 backdrop-blur-xl border-slate-200 dark:border-white/5 shadow-lg shadow-black/5 dark:shadow-black/20"
+            : "bg-transparent backdrop-blur-sm border-transparent"
         )}
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -64,8 +65,8 @@ const Navbar = () => {
                 <Trophy size={20} className="text-white fill-current" />
               </div>
               <div className="flex flex-col">
-                <span className="font-display font-bold text-xl tracking-tight text-white leading-none">Goal<span className="text-brand-400">Kashmir</span></span>
-                <span className="text-[10px] text-slate-400 font-medium tracking-wider uppercase">Premium League</span>
+                <span className="font-display font-bold text-xl tracking-tight text-slate-900 dark:text-white leading-none">Goal<span className="text-brand-400">Kashmir</span></span>
+                <span className="text-[10px] text-slate-500 dark:text-slate-400 font-medium tracking-wider uppercase">Premium League</span>
               </div>
             </div>
 
@@ -81,14 +82,14 @@ const Navbar = () => {
                   >
                     <span className={cn(
                       "relative z-10 flex items-center gap-2 text-sm font-medium transition-colors",
-                      isActive ? "text-white" : "text-slate-400 group-hover:text-white"
+                      isActive ? "text-brand-600 dark:text-white" : "text-slate-600 dark:text-slate-400 group-hover:text-brand-500 dark:group-hover:text-white"
                     )}>
                       {item.name}
                     </span>
                     {isActive && (
                       <motion.div
                         layoutId="navbar-indicator"
-                        className="absolute inset-0 bg-white/10 rounded-lg border border-white/5"
+                        className="absolute inset-0 bg-slate-100 dark:bg-white/10 rounded-lg border border-slate-200 dark:border-white/5"
                         transition={{ type: "spring", bounce: 0.2, duration: 0.6 }}
                       />
                     )}
@@ -97,19 +98,24 @@ const Navbar = () => {
               })}
             </div>
 
-            {/* Desktop Auth */}
+            {/* Desktop Auth & Search */}
             <div className="hidden md:flex items-center gap-4">
+              <Link to="/search" className="p-2 text-slate-500 dark:text-slate-400 hover:text-brand-500 dark:hover:text-white transition-colors">
+                <Search size={22} />
+              </Link>
+              <ThemeToggle />
+              <div className="h-6 w-px bg-slate-200 dark:bg-white/10 mx-1" />
               {currentUser ? (
                 <button
                   onClick={handleLogout}
-                  className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-slate-300 hover:text-red-400 transition-colors"
+                  className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-slate-600 dark:text-slate-300 hover:text-red-500 transition-colors"
                 >
                   <LogOut size={18} />
                   <span>Logout</span>
                 </button>
               ) : (
                 <div className="flex items-center gap-3">
-                  <Link to="/login" className="text-sm font-medium text-slate-300 hover:text-white transition-colors">Login</Link>
+                  <Link to="/login" className="text-sm font-medium text-slate-600 dark:text-slate-300 hover:text-brand-500 dark:hover:text-white transition-colors">Login</Link>
                   <Link
                     to="/signup"
                     className="px-4 py-2 bg-brand-600 hover:bg-brand-500 text-white text-sm font-medium rounded-lg shadow-lg shadow-brand-500/20 transition-all hover:scale-105 active:scale-95"
@@ -120,11 +126,15 @@ const Navbar = () => {
               )}
             </div>
 
-            {/* Mobile menu button */}
-            <div className="md:hidden">
+            {/* Mobile Actions */}
+            <div className="md:hidden flex items-center gap-2">
+              <Link to="/search" className="p-2 text-slate-500 dark:text-slate-400 hover:text-brand-500 dark:hover:text-white transition-colors">
+                <Search size={22} />
+              </Link>
+              <ThemeToggle />
               <button
                 onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-                className="p-2 rounded-lg text-slate-400 hover:text-white hover:bg-white/5 transition-colors"
+                className="p-2 rounded-lg text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-white/5 transition-colors"
               >
                 {mobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
               </button>

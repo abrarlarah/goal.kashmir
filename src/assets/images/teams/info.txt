@@ -1,0 +1,2 @@
+Place team logos here. Supported formats: .png, .jpg, .svg, .webp.
+Refer to them in repoAssets.js as '/images/teams/your-image.png'

@@ -37,9 +37,29 @@ const LineupDisplay = ({ lineup, players }) => {
 
     // Player card component
     const PlayerCard = ({ player }) => (
-        <div className="bg-green-700 rounded-lg p-2 text-center shadow-lg border-2 border-green-500 min-w-[70px]">
-            <div className="text-xs font-bold text-white truncate">{player.name.split(' ').pop()}</div>
-            <div className="text-[10px] text-green-200">{player.position.substring(0, 3).toUpperCase()}</div>
+        <div className="flex flex-col items-center gap-1 group">
+            <div className="relative">
+                <div className="h-10 w-10 md:h-12 md:w-12 rounded-full border-2 border-white/80 overflow-hidden bg-slate-900/50 flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform duration-300">
+                    {player.photoUrl ? (
+                        <img src={player.photoUrl} alt={player.name} className="h-full w-full object-cover" />
+                    ) : (
+                        <span className="text-white font-bold text-sm">{player.name.charAt(0)}</span>
+                    )}
+                </div>
+                <div className="absolute -bottom-1 -right-1 h-4 w-4 bg-brand-500 rounded-full border border-white flex items-center justify-center">
+                    <span className="text-[8px] font-bold text-white leading-none">
+                        {player.number || '#'}
+                    </span>
+                </div>
+            </div>
+            <div className="text-center">
+                <div className="text-[10px] md:text-xs font-bold text-white drop-shadow-md leading-tight">
+                    {player.name.split(' ').pop()}
+                </div>
+                <div className="text-[8px] text-green-200 font-medium tracking-wider opacity-80 uppercase">
+                    {player.position.slice(0, 3)}
+                </div>
+            </div>
         </div>
     );
 
@@ -98,8 +118,15 @@ const LineupDisplay = ({ lineup, players }) => {
                         {lineup.bench.map(playerId => {
                             const player = getPlayer(playerId);
                             return player ? (
-                                <div key={player.id} className="bg-gray-700 rounded px-2 py-1 text-xs text-white">
-                                    {player.name.split(' ').pop()}
+                                <div key={player.id} className="flex items-center gap-2 bg-black/30 rounded-full pl-1 pr-3 py-1 text-xs text-white border border-white/5">
+                                    <div className="h-6 w-6 rounded-full overflow-hidden bg-slate-700 flex items-center justify-center shrink-0">
+                                        {player.photoUrl ? (
+                                            <img src={player.photoUrl} alt="" className="h-full w-full object-cover" />
+                                        ) : (
+                                            <span className="text-[10px] text-white/50">{player.name.charAt(0)}</span>
+                                        )}
+                                    </div>
+                                    <span className="font-medium whitespace-nowrap">{player.name}</span>
                                 </div>
                             ) : null;
                         })}

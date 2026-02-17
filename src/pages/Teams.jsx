@@ -3,13 +3,20 @@ import { Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { useData } from '../context/DataContext';
 import { motion } from 'framer-motion';
-import { Search, MapPin, User, Shield, Plus, Trophy } from 'lucide-react';
+import { Search, MapPin, User, Shield, Plus, Trophy, MapPinned } from 'lucide-react';
 import { cn } from '../utils/cn';
 
+// Districts of Jammu and Kashmir
+const DISTRICTS = {
+  JAMMU: ['Jammu', 'Samba', 'Kathua', 'Udhampur', 'Reasi', 'Rajouri', 'Poonch', 'Doda', 'Ramban', 'Kishtwar'],
+  KASHMIR: ['Srinagar', 'Ganderbal', 'Budgam', 'Baramulla', 'Bandipora', 'Kupwara', 'Pulwama', 'Shopian', 'Kulgam', 'Anantnag']
+};
+
 const Teams = () => {
-  const { teams, loading } = useData();
+  const { teams, tournaments, loading } = useData();
   const { isAdmin } = useAuth();
   const [searchQuery, setSearchQuery] = useState('');
+  const [selectedDistrict, setSelectedDistrict] = useState('Baramulla');
 
   const container = {
     hidden: { opacity: 0 },
@@ -35,9 +42,28 @@ const Teams = () => {
     );
   }
 
-  const filteredTeams = teams.filter(team =>
-    team.name.toLowerCase().includes(searchQuery.toLowerCase())
-  );
+  // Filter teams by district through their tournaments
+  const filteredTeams = teams.filter(team => {
+    // Search filter
+    const matchesSearch = team.name.toLowerCase().includes(searchQuery.toLowerCase());
+
+    // District filter
+    if (selectedDistrict === 'All') {
+      return matchesSearch;
+    }
+
+    // Check if team participates in any tournament in the selected district
+    const teamTournaments = Array.isArray(team.tournaments)
+      ? team.tournaments
+      : (typeof team.tournaments === 'string' ? team.tournaments.split(',').map(t => t.trim()) : []);
+
+    const hasDistrictMatch = teamTournaments.some(tournamentName => {
+      const tournament = tournaments.find(t => t.name === tournamentName);
+      return tournament && tournament.district === selectedDistrict;
+    });
+
+    return matchesSearch && hasDistrictMatch;
+  });
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
@@ -46,21 +72,47 @@ const Teams = () => {
       <motion.div
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
-        className="flex flex-col md:flex-row md:items-end justify-between gap-6"
+        className="flex flex-col gap-6"
       >
-        <div>
-          <h1 className="text-3xl md:text-4xl font-display font-bold text-white mb-2">Clubs</h1>
-          <p className="text-slate-400">Manage and view all competing teams.</p>
-        </div>
+        <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
+          <div>
+            <h1 className="text-3xl md:text-4xl font-display font-bold text-white mb-2">Clubs</h1>
+            <p className="text-slate-400">Manage and view all competing teams.</p>
+          </div>
 
-        {isAdmin && (
-          <Link
-            to="/admin/teams"
-            className="flex items-center gap-2 px-5 py-2.5 bg-brand-600 hover:bg-brand-500 text-white rounded-xl text-sm font-semibold transition-all shadow-lg shadow-brand-500/20 hover:scale-105 active:scale-95"
-          >
-            <Plus size={18} /> Add New Team
-          </Link>
-        )}
+          <div className="flex flex-col sm:flex-row gap-3">
+            {/* District Filter */}
+            <div className="flex items-center gap-2">
+              <MapPinned className="text-brand-400" size={20} />
+              <select
+                value={selectedDistrict}
+                onChange={(e) => setSelectedDistrict(e.target.value)}
+                className="bg-dark-card/50 backdrop-blur-sm border border-white/10 rounded-xl px-4 py-2.5 text-sm font-medium text-white focus:ring-2 focus:ring-brand-500 focus:border-brand-500 outline-none transition-all"
+              >
+                <option value="All">All Districts</option>
+                <optgroup label="Jammu Division">
+                  {DISTRICTS.JAMMU.map(district => (
+                    <option key={district} value={district}>{district}</option>
+                  ))}
+                </optgroup>
+                <optgroup label="Kashmir Division">
+                  {DISTRICTS.KASHMIR.map(district => (
+                    <option key={district} value={district}>{district}</option>
+                  ))}
+                </optgroup>
+              </select>
+            </div>
+
+            {isAdmin && (
+              <Link
+                to="/admin/teams"
+                className="flex items-center gap-2 px-5 py-2.5 bg-brand-600 hover:bg-brand-500 text-white rounded-xl text-sm font-semibold transition-all shadow-lg shadow-brand-500/20 hover:scale-105 active:scale-95"
+              >
+                <Plus size={18} /> Add New Team
+              </Link>
+            )}
+          </div>
+        </div>
       </motion.div>
 
       {/* Search & Filter */}
@@ -99,25 +151,29 @@ const Teams = () => {
             {/* Background Glow */}
             <div className="absolute -top-20 -right-20 w-40 h-40 bg-brand-500/20 rounded-full blur-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
 
-            <div className="p-6 flex items-start space-x-5 relative z-10">
-              <div className="flex-shrink-0 h-20 w-20 rounded-2xl bg-slate-800 border border-white/5 flex items-center justify-center text-3xl font-display font-bold text-slate-600 shadow-inner group-hover:border-brand-500/20 group-hover:text-brand-500 transition-colors">
-                {team.logoUrl ? (
-                  <img src={team.logoUrl} alt={team.name} className="h-full w-full rounded-2xl object-cover" />
-                ) : (
-                  <span>{team.name.charAt(0)}</span>
-                )}
-              </div>
-
-              <div className="flex-1 min-w-0">
-                <h2 className="text-xl font-display font-bold text-white truncate mb-1">{team.name}</h2>
-                <div className="flex flex-col gap-1.5 text-sm text-slate-400">
-                  <div className="flex items-center gap-1.5">
-                    <MapPin size={14} className="text-slate-500" />
-                    <span className="truncate">{team.stadium || 'Unknown Stadium'}</span>
-                  </div>
-                  <div className="flex items-center gap-1.5">
-                    <User size={14} className="text-slate-500" />
-                    <span className="truncate">Mgr: {team.manager || team.coach || 'N/A'}</span>
+            {/* Team Logo/Name */}
+            <div className="p-6 pb-4">
+              <div className="flex items-center gap-4">
+                <div className="flex-shrink-0">
+                  {team.logoUrl ? (
+                    <div className="w-16 h-16 rounded-xl bg-white/5 border border-white/10 p-2 flex items-center justify-center overflow-hidden">
+                      <img src={team.logoUrl} alt={team.name} className="w-full h-full object-contain" />
+                    </div>
+                  ) : (
+                    <div className="w-16 h-16 rounded-xl bg-brand-500 flex items-center justify-center text-white text-2xl font-bold shadow-lg shadow-brand-500/20">
+                      {team.shortName || team.name.substring(0, 2).toUpperCase()}
+                    </div>
+                  )}
+                </div>
+                <div>
+                  <h3 className="text-xl font-display font-bold text-white group-hover:text-brand-400 transition-colors">
+                    {team.name}
+                  </h3>
+                  <div className="flex items-center gap-2 mt-1">
+                    <span className="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider bg-brand-500/10 text-brand-400 border border-brand-500/10">
+                      {team.status || 'Active'}
+                    </span>
+                    <span className="text-slate-500 text-xs font-medium">Est. {team.founded || 'N/A'}</span>
                   </div>
                 </div>
               </div>

@@ -82,7 +82,11 @@ const News = () => {
                     className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
                 >
                     {/* Featured Article (First One) */}
-                    <motion.div variants={item} className="lg:col-span-2 group cursor-pointer relative rounded-3xl overflow-hidden aspect-[16/9] md:aspect-[21/9]">
+                    <motion.div
+                        variants={item}
+                        className="lg:col-span-2 group cursor-pointer relative rounded-3xl overflow-hidden aspect-[16/9] md:aspect-[21/9]"
+                        onClick={() => window.location.href = `/news/${news[0].id}`}
+                    >
                         <img
                             src={news[0].imageUrl || 'https://images.unsplash.com/photo-1508098682722-e99c43a406b2?auto=format&fit=crop&q=80'}
                             alt={news[0].title}
@@ -108,43 +112,45 @@ const News = () => {
 
                     {/* Other Articles */}
                     {news.slice(1).map((article) => (
-                        <motion.div
+                        <Link
                             key={article.id}
-                            variants={item}
+                            to={`/news/${article.id}`}
                             className="group flex flex-col glass-card rounded-2xl overflow-hidden hover:border-brand-500/30 transition-all duration-300 h-full"
                         >
-                            <div className="relative aspect-video overflow-hidden">
-                                <img
-                                    src={article.imageUrl || 'https://images.unsplash.com/photo-1517466787929-bc90951d0974?auto=format&fit=crop&q=80'}
-                                    alt={article.title}
-                                    className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
-                                />
-                                <div className="absolute top-4 left-4">
-                                    <span className="px-2 py-1 bg-black/60 backdrop-blur-md text-white text-[10px] font-bold uppercase tracking-wider rounded border border-white/10">
-                                        {article.category}
-                                    </span>
+                            <motion.div variants={item} className="h-full flex flex-col">
+                                <div className="relative aspect-video overflow-hidden">
+                                    <img
+                                        src={article.imageUrl || 'https://images.unsplash.com/photo-1517466787929-bc90951d0974?auto=format&fit=crop&q=80'}
+                                        alt={article.title}
+                                        className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                                    />
+                                    <div className="absolute top-4 left-4">
+                                        <span className="px-2 py-1 bg-black/60 backdrop-blur-md text-white text-[10px] font-bold uppercase tracking-wider rounded border border-white/10">
+                                            {article.category}
+                                        </span>
+                                    </div>
                                 </div>
-                            </div>
 
-                            <div className="p-5 flex flex-col flex-1">
-                                <h3 className="text-xl font-display font-bold text-white mb-2 line-clamp-2 group-hover:text-brand-400 transition-colors">
-                                    {article.title}
-                                </h3>
-                                <p className="text-slate-400 text-sm line-clamp-3 mb-4 flex-1">
-                                    {article.excerpt}
-                                </p>
+                                <div className="p-5 flex flex-col flex-1">
+                                    <h3 className="text-xl font-display font-bold text-white mb-2 line-clamp-2 group-hover:text-brand-400 transition-colors">
+                                        {article.title}
+                                    </h3>
+                                    <p className="text-slate-400 text-sm line-clamp-3 mb-4 flex-1">
+                                        {article.excerpt}
+                                    </p>
 
-                                <div className="flex items-center justify-between pt-4 border-t border-white/5 mt-auto">
-                                    <span className="text-xs text-slate-500 flex items-center gap-1.5">
-                                        <Calendar size={12} />
-                                        {article.createdAt?.seconds ? new Date(article.createdAt.seconds * 1000).toLocaleDateString() : 'Recent'}
-                                    </span>
-                                    <span className="text-xs font-bold text-brand-500 flex items-center gap-1 group-hover:translate-x-1 transition-transform">
-                                        Read More <ArrowRight size={12} />
-                                    </span>
+                                    <div className="flex items-center justify-between pt-4 border-t border-white/5 mt-auto">
+                                        <span className="text-xs text-slate-500 flex items-center gap-1.5">
+                                            <Calendar size={12} />
+                                            {article.createdAt?.seconds ? new Date(article.createdAt.seconds * 1000).toLocaleDateString() : 'Recent'}
+                                        </span>
+                                        <span className="text-xs font-bold text-brand-500 flex items-center gap-1 group-hover:translate-x-1 transition-transform">
+                                            Read More <ArrowRight size={12} />
+                                        </span>
+                                    </div>
                                 </div>
-                            </div>
-                        </motion.div>
+                            </motion.div>
+                        </Link>
                     ))}
                 </motion.div>
             ) : (

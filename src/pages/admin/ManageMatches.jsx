@@ -17,7 +17,8 @@ const ManageMatches = () => {
     date: '',
     time: '',
     managerA: '',
-    managerB: ''
+    managerB: '',
+    round: '' // e.g., 'Group A', 'Semi-Final', 'Round 1'
   });
   const [successMessage, setSuccessMessage] = useState('');
 
@@ -71,39 +72,39 @@ const ManageMatches = () => {
       ? updateDoc(doc(db, 'matches', editingId), formData)
       : addDoc(collection(db, 'matches'), formData);
 
-    request.catch((error) => {
+    request.then(() => {
+      setSuccessMessage(editingId ? 'Match updated successfully!' : 'Match added successfully!');
+      setFormData({
+        teamA: '',
+        teamB: '',
+        scoreA: 0,
+        scoreB: 0,
+        status: 'scheduled',
+        currentMinute: 0,
+        competition: '',
+        date: '',
+        time: '',
+        managerA: '',
+        managerB: '',
+        round: ''
+      });
+      setEditingId(null);
+      window.scrollTo(0, 0);
+      setTimeout(() => setSuccessMessage(''), 3000);
+    }).catch((error) => {
       console.error("Error saving match: ", error);
       alert("Error saving: " + error.message);
+    }).finally(() => {
+      setLoading(false);
     });
-
-    // Optimistic Update
-    setSuccessMessage(editingId ? 'Match updated successfully!' : 'Match added successfully!');
-
-    setFormData({
-      teamA: '',
-      teamB: '',
-      scoreA: 0,
-      scoreB: 0,
-      status: 'scheduled',
-      currentMinute: 0,
-      competition: '',
-      date: '',
-      time: '',
-      managerA: '',
-      managerB: ''
-    });
-    setEditingId(null);
-
-    window.scrollTo(0, 0);
-    setTimeout(() => setSuccessMessage(''), 3000);
-    setLoading(false);
   };
 
   const handleEdit = (match) => {
     setFormData({
       ...match,
       managerA: match.managerA || '',
-      managerB: match.managerB || ''
+      managerB: match.managerB || '',
+      round: match.round || ''
     });
     setEditingId(match.id);
     setSuccessMessage('');
@@ -133,7 +134,6 @@ const ManageMatches = () => {
       await updateDoc(doc(db, 'matches', id), {
         [team === 'A' ? 'scoreA' : 'scoreB']: newScore
       });
-      // No manual fetch needed, context updates automatically
     } catch (error) {
       console.error("Error updating score: ", error);
     }
@@ -310,6 +310,18 @@ const ManageMatches = () => {
             </div>
           </div>
 
+          <div>
+            <label className="text-xs text-gray-400 block mb-1">Round / Group (e.g. 'Group A', 'Final', 'Quarter-Final')</label>
+            <input
+              type="text"
+              name="round"
+              placeholder="Round / Group"
+              value={formData.round || ''}
+              onChange={handleInputChange}
+              className="bg-gray-700 p-2 rounded text-white w-full"
+            />
+          </div>
+
           <div className="grid grid-cols-2 gap-2">
             <div className="w-full">
               <label className="text-xs text-gray-400 block mb-1">Home Score</label>
@@ -382,7 +394,10 @@ const ManageMatches = () => {
                   currentMinute: 0,
                   competition: '',
                   date: '',
-                  time: ''
+                  time: '',
+                  managerA: '',
+                  managerB: '',
+                  round: ''
                 });
               }}
               className="bg-gray-600 hover:bg-gray-500 p-2 rounded text-white col-span-full"
@@ -403,7 +418,7 @@ const ManageMatches = () => {
                 {match.teamA} <span className="text-green-400">{match.scoreA}</span> - <span className="text-green-400">{match.scoreB}</span> {match.teamB}
               </div>
               <div className="text-sm text-gray-400">
-                {match.competition} • {match.status} {match.status === 'live' && `• ${match.currentMinute}'`}
+                {match.competition} {match.round && `• ${match.round}`} • {match.status} {match.status === 'live' && `• ${match.currentMinute}'`}
               </div>
             </div>
             <div className="flex gap-2">
