@@ -3,7 +3,7 @@ import { collection, addDoc, updateDoc, deleteDoc, doc } from 'firebase/firestor
 import { ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage';
 import { db, storage } from '../../firebase';
 import { useData } from '../../context/DataContext';
-import { Upload, X, Image as ImageIcon, Folders } from 'lucide-react';
+import { Upload, X, Image as ImageIcon, Folders, Search } from 'lucide-react';
 import AssetPicker from '../../components/admin/AssetPicker';
 import { registerAsset } from '../../utils/assetRegistry';
 
@@ -22,6 +22,7 @@ const ManageTeams = () => {
         tournaments: [] // Now an array
     });
     const [editingId, setEditingId] = useState(null);
+    const [searchTerm, setSearchTerm] = useState('');
     const [successMessage, setSuccessMessage] = useState('');
     const [uploadProgress, setUploadProgress] = useState(0);
     const [uploading, setUploading] = useState(false);
@@ -161,6 +162,11 @@ const ManageTeams = () => {
     const removeLogo = () => {
         setFormData(prev => ({ ...prev, logoUrl: '' }));
     };
+
+    const filteredTeams = teams.filter(team =>
+        team.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        team.shortName.toLowerCase().includes(searchTerm.toLowerCase())
+    );
 
     return (
         <div className="container mx-auto px-4 py-8 text-white">
@@ -366,9 +372,21 @@ const ManageTeams = () => {
                 </form>
             </div>
 
+            {/* Search */}
+            <div className="mb-6 relative">
+                <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={18} />
+                <input
+                    type="text"
+                    placeholder="Search teams by name or short name..."
+                    value={searchTerm}
+                    onChange={(e) => setSearchTerm(e.target.value)}
+                    className="w-full bg-gray-800 border border-gray-700 rounded-lg pl-10 pr-4 py-2 text-white focus:ring-2 focus:ring-brand-500 outline-none"
+                />
+            </div>
+
             {/* List */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                {teams.map(team => (
+                {filteredTeams.map(team => (
                     <div key={team.id} className="bg-gray-800 p-4 rounded flex justify-between items-center">
                         <div>
                             <div className="font-bold text-lg">{team.name} ({team.shortName})</div>
@@ -392,8 +410,8 @@ const ManageTeams = () => {
                         </div>
                     </div>
                 ))}
-                {teams.length === 0 && !loading && (
-                    <p className="text-center text-gray-400 col-span-full">No teams found.</p>
+                {filteredTeams.length === 0 && !loading && (
+                    <p className="text-center text-gray-400 col-span-full">No teams found matching your search.</p>
                 )}
             </div>
         </div>

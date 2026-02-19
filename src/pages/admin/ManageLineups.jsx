@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { Search } from 'lucide-react';
 import { collection, addDoc, updateDoc, deleteDoc, doc, query, where, getDocs } from 'firebase/firestore';
 import { db } from '../../firebase';
 import { useData } from '../../context/DataContext';
@@ -14,13 +15,18 @@ const ManageLineups = () => {
         starting11: [],
         bench: []
     });
+    const [searchTerm, setSearchTerm] = useState('');
     const [successMessage, setSuccessMessage] = useState('');
 
     // Get match details
     const currentMatch = matches.find(m => m.id === selectedMatch);
 
-    // Get players for the selected team
-    const teamPlayers = players.filter(p => p.team === selectedTeam);
+    // Get players for the selected team with search
+    const teamPlayers = players.filter(p => {
+        const matchesTeam = p.team === selectedTeam;
+        const matchesSearch = p.name.toLowerCase().includes(searchTerm.toLowerCase());
+        return matchesTeam && matchesSearch;
+    });
 
     // Get already selected player IDs
     const selectedPlayerIds = [...lineup.starting11, ...lineup.bench];
@@ -184,8 +190,20 @@ const ManageLineups = () => {
                 <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
                     {/* Available Players */}
                     <div className="bg-gray-800 p-6 rounded-lg">
-                        <h3 className="text-xl mb-4">Available Players</h3>
-                        <div className="space-y-2 max-h-96 overflow-y-auto">
+                        <div className="flex flex-col mb-4">
+                            <h3 className="text-xl mb-2">Available Players</h3>
+                            <div className="relative">
+                                <Search className="absolute left-2 top-1/2 -translate-y-1/2 text-gray-500" size={14} />
+                                <input
+                                    type="text"
+                                    placeholder="Search team players..."
+                                    value={searchTerm}
+                                    onChange={(e) => setSearchTerm(e.target.value)}
+                                    className="w-full bg-gray-700 border border-gray-600 rounded pl-8 pr-2 py-1.5 text-xs text-white focus:ring-1 focus:ring-green-500 outline-none"
+                                />
+                            </div>
+                        </div>
+                        <div className="space-y-2 max-h-96 overflow-y-auto pr-1">
                             {teamPlayers
                                 .filter(p => !selectedPlayerIds.includes(p.id))
                                 .map(player => (

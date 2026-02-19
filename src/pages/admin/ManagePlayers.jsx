@@ -3,7 +3,7 @@ import { collection, addDoc, updateDoc, deleteDoc, doc } from 'firebase/firestor
 import { ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage';
 import { db, storage } from '../../firebase';
 import { useData } from '../../context/DataContext';
-import { Upload, X, User, Image as ImageIcon, Folders } from 'lucide-react';
+import { Upload, X, User, Image as ImageIcon, Folders, Search, Filter } from 'lucide-react';
 import AssetPicker from '../../components/admin/AssetPicker';
 import { registerAsset } from '../../utils/assetRegistry';
 import { calculateAge } from '../../utils/ageUtils';
@@ -17,6 +17,9 @@ const DISTRICTS = {
 const ManagePlayers = () => {
     const { players, teams } = useData();
     const [loading, setLoading] = useState(false); // Form loading
+    const [searchTerm, setSearchTerm] = useState('');
+    const [teamFilter, setTeamFilter] = useState('All');
+    const [teamSearchText, setTeamSearchText] = useState('');
     const [formData, setFormData] = useState({
         name: '',
         team: '',
@@ -172,6 +175,13 @@ const ManagePlayers = () => {
         }
     };
 
+    const filteredPlayers = players.filter(p => {
+        const matchesSearch = p.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+            p.team.toLowerCase().includes(searchTerm.toLowerCase());
+        const matchesTeam = teamFilter === 'All' || p.team === teamFilter;
+        return matchesSearch && matchesTeam;
+    });
+
     return (
         <div className="container mx-auto px-4 py-8 text-white">
             <h2 className="text-2xl font-bold mb-6">Manage Players</h2>
@@ -256,7 +266,21 @@ const ManagePlayers = () => {
                         />
                     </div>
                     <div>
-                        <label className="text-xs text-gray-400 block mb-1">Team</label>
+                        <label className="text-xs text-gray-400 block mb-1 flex justify-between items-center">
+                            <span>Team</span>
+                            {teams.length > 5 && (
+                                <div className="flex items-center gap-1 bg-gray-900/50 px-2 py-0.5 rounded border border-white/5">
+                                    <Search size={10} className="text-gray-500" />
+                                    <input
+                                        type="text"
+                                        placeholder="Find team..."
+                                        value={teamSearchText}
+                                        onChange={(e) => setTeamSearchText(e.target.value)}
+                                        className="bg-transparent border-none text-[10px] w-16 outline-none text-brand-400 placeholder:text-gray-600"
+                                    />
+                                </div>
+                            )}
+                        </label>
                         <select
                             name="team"
                             value={formData.team}
@@ -265,9 +289,13 @@ const ManagePlayers = () => {
                             required
                         >
                             <option value="" disabled>Select Team</option>
-                            {teams.map(t => (
-                                <option key={t.id} value={t.name}>{t.name}</option>
-                            ))}
+                            {teams
+                                .filter(t => t.name.toLowerCase().includes(teamSearchText.toLowerCase()))
+                                .sort((a, b) => a.name.localeCompare(b.name))
+                                .map(t => (
+                                    <option key={t.id} value={t.name}>{t.name}</option>
+                                ))
+                            }
                         </select>
                     </div>
                     <div>
@@ -425,6 +453,33 @@ const ManagePlayers = () => {
                 </form>
             </div>
 
+            {/* Search and Filters */}
+            <div className="flex flex-col md:flex-row gap-4 mb-6">
+                <div className="relative flex-1">
+                    <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={18} />
+                    <input
+                        type="text"
+                        placeholder="Search players by name or team..."
+                        value={searchTerm}
+                        onChange={(e) => setSearchTerm(e.target.value)}
+                        className="w-full bg-gray-800 border border-gray-700 rounded-lg pl-10 pr-4 py-2 text-white focus:ring-2 focus:ring-brand-500 outline-none"
+                    />
+                </div>
+                <div className="flex items-center gap-2">
+                    <Filter className="text-gray-400" size={18} />
+                    <select
+                        value={teamFilter}
+                        onChange={(e) => setTeamFilter(e.target.value)}
+                        className="bg-gray-800 border border-gray-700 rounded-lg px-4 py-2 text-white focus:ring-2 focus:ring-brand-500 outline-none"
+                    >
+                        <option value="All">All Teams</option>
+                        {teams.map(t => (
+                            <option key={t.id} value={t.name}>{t.name}</option>
+                        ))}
+                    </select>
+                </div>
+            </div>
+
             {/* List */}
             <div className="overflow-x-auto">
                 <table className="w-full text-left text-gray-300">
@@ -439,7 +494,7 @@ const ManagePlayers = () => {
                         </tr>
                     </thead>
                     <tbody>
-                        {players.map(player => (
+                        {filteredPlayers.map(player => (
                             <tr key={player.id} className="border-b border-gray-700 bg-gray-800 hover:bg-gray-700">
                                 <td className="px-4 py-3 font-medium text-white">{player.name}</td>
                                 <td className="px-4 py-3">{player.team}</td>
@@ -470,8 +525,8 @@ const ManagePlayers = () => {
                         ))}
                     </tbody>
                 </table>
-                {players.length === 0 && !loading && (
-                    <p className="text-center text-gray-400 mt-4">No players found.</p>
+                {filteredPlayers.length === 0 && !loading && (
+                    <p className="text-center text-gray-400 mt-4">No players found matching your criteria.</p>
                 )}
             </div>
         </div>
