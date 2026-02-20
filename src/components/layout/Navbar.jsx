@@ -115,13 +115,7 @@ const Navbar = () => {
                 </button>
               ) : (
                 <div className="flex items-center gap-3">
-                  <Link to="/login" className="text-sm font-medium text-slate-600 dark:text-slate-300 hover:text-brand-500 dark:hover:text-white transition-colors">Login</Link>
-                  <Link
-                    to="/signup"
-                    className="px-4 py-2 bg-brand-600 hover:bg-brand-500 text-white text-sm font-medium rounded-lg shadow-lg shadow-brand-500/20 transition-all hover:scale-105 active:scale-95"
-                  >
-                    Sign Up
-                  </Link>
+                  <Link to="/login" className="px-4 py-2 bg-brand-600 hover:bg-brand-500 text-white text-sm font-medium rounded-lg shadow-lg shadow-brand-500/20 transition-all hover:scale-105 active:scale-95">Login</Link>
                 </div>
               )}
             </div>
@@ -183,20 +177,13 @@ const Navbar = () => {
                     Logout
                   </button>
                 ) : (
-                  <div className="grid grid-cols-2 gap-4">
+                  <div className="flex flex-col gap-4">
                     <Link
                       to="/login"
                       onClick={() => setMobileMenuOpen(false)}
-                      className="flex justify-center p-4 rounded-xl bg-white/5 text-slate-200 border border-white/5 font-medium hover:bg-white/10"
-                    >
-                      Login
-                    </Link>
-                    <Link
-                      to="/signup"
-                      onClick={() => setMobileMenuOpen(false)}
                       className="flex justify-center p-4 rounded-xl bg-brand-600 text-white font-medium shadow-lg hover:bg-brand-500"
                     >
-                      Sign Up
+                      Login
                     </Link>
                   </div>
                 )}

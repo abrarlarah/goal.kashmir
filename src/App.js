@@ -8,7 +8,7 @@ import Players from './pages/Players';
 import Leaderboard from './pages/Leaderboard';
 import LiveMatch from './pages/LiveMatch';
 import Login from './pages/auth/Login';
-import Signup from './pages/auth/Signup';
+// import Signup from './pages/auth/Signup';
 import Admin from './pages/admin/Admin';
 import ManageMatches from './pages/admin/ManageMatches';
 import ManageTeams from './pages/admin/ManageTeams';
@@ -44,7 +44,7 @@ function App() {
               <Route path="/news/:id" element={<NewsDetail />} />
               <Route path="/live/:matchId" element={<LiveMatch />} />
               <Route path="/login" element={<Login />} />
-              <Route path="/signup" element={<Signup />} />
+              {/* <Route path="/signup" element={<Signup />} /> */}
 
               {/* Admin Routes */}
               <Route

@@ -15,7 +15,7 @@ const Login = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
+
     try {
       setError('');
       setLoading(true);
@@ -114,15 +114,8 @@ const Login = () => {
               {loading ? 'Signing in...' : 'Sign in'}
             </button>
           </div>
-          
-          <div className="text-center mt-4">
-            <p className="text-sm text-gray-400">
-              Don't have an account?{' '}
-              <Link to="/signup" className="font-medium text-green-500 hover:text-green-400">
-                Sign up
-              </Link>
-            </p>
-          </div>
+
+
         </form>
       </div>
     </div>
