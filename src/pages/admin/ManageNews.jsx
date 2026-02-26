@@ -312,17 +312,17 @@ const ManageNews = () => {
         }
     };
 
-    if (!isAdmin) return <div className="text-white text-center py-20">Access Denied</div>;
+    if (!isAdmin) return <div className="text-slate-900 dark:text-white text-center py-20">Access Denied</div>;
 
     return (
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
-            <h1 className="text-3xl font-display font-bold text-white mb-6">Manage News</h1>
+            <h1 className="text-3xl font-display font-bold text-slate-900 dark:text-white mb-6">Manage News</h1>
 
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
                 {/* Form */}
                 <div className="lg:col-span-1">
                     <div className="glass-card p-6 rounded-2xl sticky top-24">
-                        <h2 className="text-xl font-bold text-white mb-4 flex items-center justify-between">
+                        <h2 className="text-xl font-bold text-slate-900 dark:text-white mb-4 flex items-center justify-between">
                             <div className="flex items-center gap-2">
                                 {editingId ? <Edit2 size={20} className="text-brand-400" /> : <Plus size={20} className="text-brand-400" />}
                                 {editingId ? 'Edit Article' : 'New Article'}
@@ -331,7 +331,7 @@ const ManageNews = () => {
                                 <button
                                     type="button"
                                     onClick={resetForm}
-                                    className="text-xs text-slate-400 hover:text-white underline"
+                                    className="text-xs text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:text-white underline"
                                 >
                                     Cancel
                                 </button>
@@ -339,19 +339,19 @@ const ManageNews = () => {
                         </h2>
                         <form onSubmit={handleSubmit} className="space-y-4">
                             <div>
-                                <label className="block text-sm font-medium text-slate-400 mb-1">Title</label>
+                                <label className="block text-sm font-medium text-slate-600 dark:text-slate-400 mb-1">Title</label>
                                 <input
                                     type="text"
                                     required
-                                    className="w-full bg-black/20 border border-white/10 rounded-lg px-4 py-2 text-white focus:ring-1 focus:ring-brand-500 outline-none"
+                                    className="w-full bg-black/20 border border-slate-200 dark:border-white/10 rounded-lg px-4 py-2 text-slate-900 dark:text-white focus:ring-1 focus:ring-brand-500 outline-none"
                                     value={formData.title}
                                     onChange={e => setFormData({ ...formData, title: e.target.value })}
                                 />
                             </div>
                             <div>
-                                <label className="block text-sm font-medium text-slate-400 mb-1">Category</label>
+                                <label className="block text-sm font-medium text-slate-600 dark:text-slate-400 mb-1">Category</label>
                                 <select
-                                    className="w-full bg-black/20 border border-white/10 rounded-lg px-4 py-2 text-white focus:ring-1 focus:ring-brand-500 outline-none"
+                                    className="w-full bg-black/20 border border-slate-200 dark:border-white/10 rounded-lg px-4 py-2 text-slate-900 dark:text-white focus:ring-1 focus:ring-brand-500 outline-none"
                                     value={formData.category}
                                     onChange={e => setFormData({ ...formData, category: e.target.value })}
                                 >
@@ -364,7 +364,7 @@ const ManageNews = () => {
 
                             {/* Image Upload Section */}
                             <div>
-                                <label className="block text-sm font-medium text-slate-400 mb-1">Article Image</label>
+                                <label className="block text-sm font-medium text-slate-600 dark:text-slate-400 mb-1">Article Image</label>
                                 <input
                                     type="file"
                                     ref={fileInputRef}
@@ -402,7 +402,7 @@ const ManageNews = () => {
                                                     <button
                                                         type="button"
                                                         onClick={stopCamera}
-                                                        className="absolute right-4 top-1/2 -translate-y-1/2 p-2 bg-black/50 rounded-full text-white hover:bg-red-500 transition-colors"
+                                                        className="absolute right-4 top-1/2 -translate-y-1/2 p-2 bg-black/50 rounded-full text-slate-900 dark:text-white hover:bg-red-500 transition-colors"
                                                     >
                                                         <X size={20} />
                                                     </button>
@@ -415,7 +415,7 @@ const ManageNews = () => {
                                     <input
                                         type="url"
                                         placeholder="Or paste image URL..."
-                                        className="w-full bg-black/20 border border-white/10 rounded-lg px-4 py-2 text-white focus:ring-1 focus:ring-brand-500 outline-none text-sm"
+                                        className="w-full bg-black/20 border border-slate-200 dark:border-white/10 rounded-lg px-4 py-2 text-slate-900 dark:text-white focus:ring-1 focus:ring-brand-500 outline-none text-sm"
                                         value={formData.imageUrl}
                                         onChange={e => setFormData({ ...formData, imageUrl: e.target.value })}
                                         disabled={showCamera}
@@ -428,7 +428,7 @@ const ManageNews = () => {
                                                 type="button"
                                                 onClick={triggerFileInput}
                                                 disabled={uploading}
-                                                className="flex items-center justify-center gap-2 px-4 py-2 bg-white/5 hover:bg-white/10 border border-white/10 rounded-lg text-sm text-slate-300 transition-colors"
+                                                className="flex items-center justify-center gap-2 px-4 py-2 bg-white/5 hover:bg-white/10 border border-slate-200 dark:border-white/10 rounded-lg text-sm text-slate-700 dark:text-slate-300 transition-colors"
                                             >
                                                 <Upload size={16} />
                                                 <span>Upload</span>
@@ -446,7 +446,7 @@ const ManageNews = () => {
                                                 type="button"
                                                 onClick={startCamera}
                                                 disabled={uploading}
-                                                className="flex items-center justify-center gap-2 px-4 py-2 bg-slate-700/50 hover:bg-slate-700 text-slate-300 rounded-lg text-sm transition-colors col-span-2"
+                                                className="flex items-center justify-center gap-2 px-4 py-2 bg-slate-700/50 hover:bg-slate-700 text-slate-700 dark:text-slate-300 rounded-lg text-sm transition-colors col-span-2"
                                             >
                                                 <Camera size={16} />
                                                 <span>Take Photo</span>
@@ -463,18 +463,18 @@ const ManageNews = () => {
 
                                     {/* Preview */}
                                     {formData.imageUrl && !showCamera && (
-                                        <div className="relative mt-2 rounded-lg overflow-hidden aspect-video border border-white/10 bg-black/40 group">
+                                        <div className="relative mt-2 rounded-lg overflow-hidden aspect-video border border-slate-200 dark:border-white/10 bg-black/40 group">
                                             <img src={formData.imageUrl} alt="Preview" className="w-full h-full object-cover" />
                                             <button
                                                 type="button"
                                                 onClick={() => setFormData({ ...formData, imageUrl: '' })}
-                                                className="absolute top-2 right-2 p-1 bg-black/50 text-white rounded-full hover:bg-red-500 transition-colors opacity-0 group-hover:opacity-100"
+                                                className="absolute top-2 right-2 p-1 bg-black/50 text-slate-900 dark:text-white rounded-full hover:bg-red-500 transition-colors opacity-0 group-hover:opacity-100"
                                             >
                                                 <X size={14} />
                                             </button>
                                             {uploading && (
                                                 <div className="absolute inset-0 bg-black/60 flex items-center justify-center">
-                                                    <div className="text-white text-xs font-medium animate-pulse">Processing...</div>
+                                                    <div className="text-slate-900 dark:text-white text-xs font-medium animate-pulse">Processing...</div>
                                                 </div>
                                             )}
                                         </div>
@@ -483,21 +483,21 @@ const ManageNews = () => {
                             </div>
 
                             <div>
-                                <label className="block text-sm font-medium text-slate-400 mb-1">Summary (Excerpt)</label>
+                                <label className="block text-sm font-medium text-slate-600 dark:text-slate-400 mb-1">Summary (Excerpt)</label>
                                 <textarea
                                     required
                                     rows="2"
-                                    className="w-full bg-black/20 border border-white/10 rounded-lg px-4 py-2 text-white focus:ring-1 focus:ring-brand-500 outline-none"
+                                    className="w-full bg-black/20 border border-slate-200 dark:border-white/10 rounded-lg px-4 py-2 text-slate-900 dark:text-white focus:ring-1 focus:ring-brand-500 outline-none"
                                     value={formData.excerpt}
                                     onChange={e => setFormData({ ...formData, excerpt: e.target.value })}
                                 />
                             </div>
                             <div>
-                                <label className="block text-sm font-medium text-slate-400 mb-1">Full Content</label>
+                                <label className="block text-sm font-medium text-slate-600 dark:text-slate-400 mb-1">Full Content</label>
                                 <textarea
                                     required
                                     rows="6"
-                                    className="w-full bg-black/20 border border-white/10 rounded-lg px-4 py-2 text-white focus:ring-1 focus:ring-brand-500 outline-none"
+                                    className="w-full bg-black/20 border border-slate-200 dark:border-white/10 rounded-lg px-4 py-2 text-slate-900 dark:text-white focus:ring-1 focus:ring-brand-500 outline-none"
                                     value={formData.content}
                                     onChange={e => setFormData({ ...formData, content: e.target.value })}
                                 />
@@ -505,11 +505,11 @@ const ManageNews = () => {
                             <button
                                 type="submit"
                                 disabled={uploading}
-                                className="w-full bg-brand-600 hover:bg-brand-500 text-white font-bold py-3 rounded-xl transition-all shadow-lg shadow-brand-500/20 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+                                className="w-full bg-brand-600 hover:bg-brand-500 text-slate-900 dark:text-white font-bold py-3 rounded-xl transition-all shadow-lg shadow-brand-500/20 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
                             >
                                 {uploading ? (
                                     <>
-                                        <div className="h-4 w-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                                        <div className="h-4 w-4 border-2 border-slate-200 dark:border-white/30 border-t-white rounded-full animate-spin" />
                                         <span>{statusText || 'Processing...'}</span>
                                     </>
                                 ) : (
@@ -522,9 +522,9 @@ const ManageNews = () => {
 
                 {/* List */}
                 <div className="lg:col-span-2 space-y-4">
-                    <h2 className="text-xl font-bold text-white mb-4">Published Articles</h2>
+                    <h2 className="text-xl font-bold text-slate-900 dark:text-white mb-4">Published Articles</h2>
                     {loading ? (
-                        <div className="text-center py-10 text-slate-400">Loading...</div>
+                        <div className="text-center py-10 text-slate-600 dark:text-slate-400">Loading...</div>
                     ) : (
                         <div className="space-y-4">
                             {news.map(item => (
@@ -548,7 +548,7 @@ const ManageNews = () => {
                                         <div className="flex justify-between items-start">
                                             <div>
                                                 <span className="text-xs font-bold text-brand-400 uppercase tracking-wider mb-1 block">{item.category}</span>
-                                                <h3 className="font-bold text-white text-lg leading-tight truncate">{item.title}</h3>
+                                                <h3 className="font-bold text-slate-900 dark:text-white text-lg leading-tight truncate">{item.title}</h3>
                                             </div>
                                             <div className="flex gap-1">
                                                 <button
@@ -565,7 +565,7 @@ const ManageNews = () => {
                                                 </button>
                                             </div>
                                         </div>
-                                        <p className="text-slate-400 text-sm mt-2 line-clamp-2">{item.excerpt}</p>
+                                        <p className="text-slate-600 dark:text-slate-400 text-sm mt-2 line-clamp-2">{item.excerpt}</p>
                                         <div className="mt-2 text-xs text-slate-600">
                                             {item.createdAt?.seconds ? new Date(item.createdAt.seconds * 1000).toLocaleDateString() : 'Just now'}
                                         </div>
@@ -573,7 +573,7 @@ const ManageNews = () => {
                                 </motion.div>
                             ))}
                             {news.length === 0 && (
-                                <div className="text-center py-10 bg-white/5 rounded-xl border border-dashed border-white/10 text-slate-500">
+                                <div className="text-center py-10 bg-white/5 rounded-xl border border-dashed border-slate-200 dark:border-white/10 text-slate-500">
                                     No news articles yet. Add your first story!
                                 </div>
                             )}

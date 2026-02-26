@@ -169,11 +169,11 @@ const ManageTeams = () => {
     );
 
     return (
-        <div className="container mx-auto px-4 py-8 text-white">
+        <div className="container mx-auto px-4 py-8 text-slate-900 dark:text-white">
             <h2 className="text-2xl font-bold mb-6">Manage Teams</h2>
 
             {successMessage && (
-                <div className="bg-green-600 text-white p-3 rounded mb-4 animate-pulse">
+                <div className="bg-green-600 text-slate-900 dark:text-white p-3 rounded mb-4 animate-pulse">
                     {successMessage}
                 </div>
             )}
@@ -190,7 +190,7 @@ const ManageTeams = () => {
                                 <button
                                     type="button"
                                     onClick={removeLogo}
-                                    className="absolute -top-2 -right-2 p-1 bg-red-500 rounded-full text-white shadow-lg hover:bg-red-600 transition-colors"
+                                    className="absolute -top-2 -right-2 p-1 bg-red-500 rounded-full text-slate-900 dark:text-white shadow-lg hover:bg-red-600 transition-colors"
                                 >
                                     <X size={14} />
                                 </button>
@@ -247,7 +247,7 @@ const ManageTeams = () => {
                             placeholder="Team Name"
                             value={formData.name}
                             onChange={handleInputChange}
-                            className="bg-gray-700 p-2 rounded text-white w-full"
+                            className="bg-gray-700 p-2 rounded text-slate-900 dark:text-white w-full"
                             required
                         />
                     </div>
@@ -259,7 +259,7 @@ const ManageTeams = () => {
                             placeholder="e.g. MUN"
                             value={formData.shortName}
                             onChange={handleInputChange}
-                            className="bg-gray-700 p-2 rounded text-white w-full"
+                            className="bg-gray-700 p-2 rounded text-slate-900 dark:text-white w-full"
                             required
                         />
                     </div>
@@ -271,7 +271,7 @@ const ManageTeams = () => {
                             placeholder="Year"
                             value={formData.founded}
                             onChange={handleInputChange}
-                            className="bg-gray-700 p-2 rounded text-white w-full"
+                            className="bg-gray-700 p-2 rounded text-slate-900 dark:text-white w-full"
                         />
                     </div>
                     <div>
@@ -282,7 +282,7 @@ const ManageTeams = () => {
                             placeholder="Stadium"
                             value={formData.stadium}
                             onChange={handleInputChange}
-                            className="bg-gray-700 p-2 rounded text-white w-full"
+                            className="bg-gray-700 p-2 rounded text-slate-900 dark:text-white w-full"
                         />
                     </div>
                     <div>
@@ -293,7 +293,7 @@ const ManageTeams = () => {
                             placeholder="Manager's Name"
                             value={formData.manager || ''}
                             onChange={handleInputChange}
-                            className="bg-gray-700 p-2 rounded text-white w-full"
+                            className="bg-gray-700 p-2 rounded text-slate-900 dark:text-white w-full"
                         />
                     </div>
                     <div>
@@ -304,7 +304,7 @@ const ManageTeams = () => {
                             placeholder="0"
                             value={formData.players}
                             onChange={handleInputChange}
-                            className="bg-gray-700 p-2 rounded text-white w-full"
+                            className="bg-gray-700 p-2 rounded text-slate-900 dark:text-white w-full"
                         />
                     </div>
                     <div>
@@ -313,7 +313,7 @@ const ManageTeams = () => {
                             name="status"
                             value={formData.status || 'Active'}
                             onChange={handleInputChange}
-                            className="bg-gray-700 p-2 rounded text-white w-full"
+                            className="bg-gray-700 p-2 rounded text-slate-900 dark:text-white w-full"
                         >
                             <option value="Active">Active</option>
                             <option value="Inactive">Inactive</option>
@@ -330,7 +330,7 @@ const ManageTeams = () => {
                                     type="button"
                                     onClick={() => handleTournamentToggle(t.name)}
                                     className={`text-xs px-2 py-1 rounded transition-colors ${Array.isArray(formData.tournaments) && formData.tournaments.includes(t.name)
-                                        ? 'bg-green-600 text-white shadow-sm'
+                                        ? 'bg-green-600 text-slate-900 dark:text-white shadow-sm'
                                         : 'bg-gray-600 text-gray-300 hover:bg-gray-500'
                                         }`}
                                 >
@@ -344,7 +344,7 @@ const ManageTeams = () => {
                     <button
                         type="submit"
                         disabled={loading}
-                        className={`bg-green-600 hover:bg-green-700 p-2 rounded text-white col-span-full ${loading ? 'opacity-50 cursor-not-allowed' : ''}`}
+                        className={`bg-green-600 hover:bg-green-700 p-2 rounded text-slate-900 dark:text-white col-span-full ${loading ? 'opacity-50 cursor-not-allowed' : ''}`}
                     >
                         {loading ? 'Saving...' : (editingId ? 'Update Team' : 'Add Team')}
                     </button>
@@ -364,7 +364,7 @@ const ManageTeams = () => {
                                     tournaments: ''
                                 });
                             }}
-                            className="bg-gray-600 hover:bg-gray-500 p-2 rounded text-white col-span-full"
+                            className="bg-gray-600 hover:bg-gray-500 p-2 rounded text-slate-900 dark:text-white col-span-full"
                         >
                             Cancel Edit
                         </button>
@@ -380,7 +380,7 @@ const ManageTeams = () => {
                     placeholder="Search teams by name or short name..."
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
-                    className="w-full bg-gray-800 border border-gray-700 rounded-lg pl-10 pr-4 py-2 text-white focus:ring-2 focus:ring-brand-500 outline-none"
+                    className="w-full bg-gray-800 border border-gray-700 rounded-lg pl-10 pr-4 py-2 text-slate-900 dark:text-white focus:ring-2 focus:ring-brand-500 outline-none"
                 />
             </div>
 

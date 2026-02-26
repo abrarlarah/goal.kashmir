@@ -8,6 +8,7 @@ import { useData } from '../context/DataContext';
 import LineupDisplay from '../components/common/LineupDisplay';
 import SubstitutionManager from '../components/common/SubstitutionManager';
 import MatchPredictions from '../components/common/MatchPredictions';
+import MatchTimer from '../components/common/MatchTimer';
 import { cn } from '../utils/cn';
 
 const LiveMatch = () => {
@@ -76,6 +77,19 @@ const LiveMatch = () => {
     }
   }, [matchId, lineups]);
 
+  const getMinuteOnly = (totalSeconds) => {
+    return Math.floor(totalSeconds / 60);
+  };
+
+  const calculateTotalSecondsSnapshot = (m) => {
+    const baseSeconds = m.elapsedSeconds !== undefined ? m.elapsedSeconds : (m.currentMinute || 0) * 60;
+    if (m.status === 'live' && m.timerRunning && m.timerLastStarted) {
+      const elapsedMs = Date.now() - m.timerLastStarted;
+      return baseSeconds + Math.floor(elapsedMs / 1000);
+    }
+    return baseSeconds;
+  };
+
   const getTeamInfo = (teamName) => {
     return (teams || []).find(t => t.name === teamName) || {};
   };
@@ -96,10 +110,12 @@ const LiveMatch = () => {
       });
 
       // 2. Add Match Event
+      const currentSecs = calculateTotalSecondsSnapshot(match);
       await addDoc(collection(db, 'matches', matchId, 'events'), {
         type: 'goal',
         team: team === 'A' ? match.teamA : match.teamB,
-        minute: match.currentMinute || 0,
+        minute: getMinuteOnly(currentSecs),
+        seconds: currentSecs, // Exact seconds for precision sorting
         player: player ? player.name : 'Unknown Player',
         playerId: player ? player.id : null,
         timestamp: Date.now()
@@ -124,10 +140,12 @@ const LiveMatch = () => {
   const confirmCard = async (team, player, type) => {
     try {
       // 1. Add Match Event
+      const currentSecs = calculateTotalSecondsSnapshot(match);
       await addDoc(collection(db, 'matches', matchId, 'events'), {
         type: type, // 'yellow' or 'red'
         team: team === 'A' ? match.teamA : match.teamB,
-        minute: match.currentMinute || 0,
+        minute: getMinuteOnly(currentSecs),
+        seconds: currentSecs,
         player: player ? player.name : 'Unknown Player',
         playerId: player ? player.id : null,
         timestamp: Date.now()
@@ -210,24 +228,96 @@ const LiveMatch = () => {
     }
   };
 
-  const updateMinute = async (increment) => {
-    const newMinute = (match.currentMinute || 0) + increment;
-    if (newMinute < 0) return;
+  const updateMinute = async (incrementMins) => {
+    const currentBaseSeconds = match.elapsedSeconds !== undefined ? match.elapsedSeconds : (match.currentMinute || 0) * 60;
+    let newSeconds = currentBaseSeconds + (incrementMins * 60);
+    if (newSeconds < 0) newSeconds = 0;
+
+    const updates = {
+      elapsedSeconds: newSeconds,
+      currentMinute: Math.floor(newSeconds / 60) // Update legacy field too
+    };
+
+    // If timer is running, we need to reset the start time to now so the increment is relative to the new base
+    if (match.timerRunning) {
+      updates.timerLastStarted = Date.now();
+    }
+
     try {
-      await updateDoc(doc(db, 'matches', matchId), {
-        currentMinute: newMinute
-      });
+      await updateDoc(doc(db, 'matches', matchId), updates);
     } catch (err) {
       console.error("Error updating minute:", err);
     }
   };
 
-  const toggleMatchStatus = async () => {
-    const newStatus = match.status === 'live' ? 'finished' : 'live';
+  const toggleTimer = async () => {
+    if (!match) return;
+
     try {
-      await updateDoc(doc(db, 'matches', matchId), {
-        status: newStatus
-      });
+      if (match.timerRunning) {
+        // Pause: Save exact elapsed seconds
+        const elapsedMs = Date.now() - (match.timerLastStarted || Date.now());
+        const additionalSeconds = Math.floor(elapsedMs / 1000);
+        const currentBaseSeconds = match.elapsedSeconds !== undefined ? match.elapsedSeconds : (match.currentMinute || 0) * 60;
+        const totalSeconds = currentBaseSeconds + additionalSeconds;
+
+        await updateDoc(doc(db, 'matches', matchId), {
+          timerRunning: false,
+          elapsedSeconds: totalSeconds,
+          currentMinute: Math.floor(totalSeconds / 60),
+          timerLastStarted: null
+        });
+      } else {
+        // Start/Resume
+        await updateDoc(doc(db, 'matches', matchId), {
+          timerRunning: true,
+          timerLastStarted: Date.now(),
+          status: 'live'
+        });
+      }
+    } catch (err) {
+      console.error("Error toggling timer:", err);
+    }
+  };
+
+  const resetTimer = async () => {
+    if (!window.confirm("Are you sure you want to reset the timer to 00:00?")) return;
+
+    const updates = {
+      elapsedSeconds: 0,
+      currentMinute: 0,
+      timerLastStarted: match.timerRunning ? Date.now() : null
+    };
+
+    try {
+      await updateDoc(doc(db, 'matches', matchId), updates);
+    } catch (err) {
+      console.error("Error resetting timer:", err);
+    }
+  };
+
+  const toggleMatchStatus = async () => {
+    const isEnding = match.status === 'live';
+    const newStatus = isEnding ? 'finished' : 'live';
+
+    const updates = { status: newStatus };
+
+    if (isEnding) {
+      // If ending, stop timer and save final seconds
+      if (match.timerRunning) {
+        const elapsedMs = Date.now() - (match.timerLastStarted || Date.now());
+        const additionalSeconds = Math.floor(elapsedMs / 1000);
+        const currentBaseSeconds = match.elapsedSeconds !== undefined ? match.elapsedSeconds : (match.currentMinute || 0) * 60;
+        const totalSeconds = currentBaseSeconds + additionalSeconds;
+        updates.elapsedSeconds = totalSeconds;
+        updates.currentMinute = Math.floor(totalSeconds / 60);
+      }
+      updates.timerRunning = false;
+      updates.timerLastStarted = null;
+    }
+
+    try {
+      await updateDoc(doc(db, 'matches', matchId), updates);
     } catch (err) {
       console.error("Error updating status:", err);
     }
@@ -271,29 +361,48 @@ const LiveMatch = () => {
 
               {/* Team A Controls */}
               <div className="p-2 border border-gray-600 rounded">
-                <p className="text-white mb-2">{match.teamA}</p>
-                <button onClick={() => updateScore('A', 1)} className="bg-green-600 text-white px-3 py-1 rounded mx-1 hover:bg-green-700">+ Goal</button>
-                <button onClick={() => updateScore('A', -1)} className="bg-red-600 text-white px-3 py-1 rounded mx-1 hover:bg-red-700">- Goal</button>
+                <p className="text-slate-900 dark:text-white mb-2">{match.teamA}</p>
+                <button onClick={() => updateScore('A', 1)} className="bg-green-600 text-slate-900 dark:text-white px-3 py-1 rounded mx-1 hover:bg-green-700">+ Goal</button>
+                <button onClick={() => updateScore('A', -1)} className="bg-red-600 text-slate-900 dark:text-white px-3 py-1 rounded mx-1 hover:bg-red-700">- Goal</button>
               </div>
 
               {/* Clock Controls */}
               <div className="p-2 border border-gray-600 rounded">
-                <p className="text-white mb-2">Minute: {match.currentMinute}'</p>
-                <button onClick={() => updateMinute(-1)} className="bg-red-600 text-white px-3 py-1 rounded mx-1 hover:bg-red-700">-1 Min</button>
-                <button onClick={() => updateMinute(1)} className="bg-blue-600 text-white px-3 py-1 rounded mx-1 hover:bg-blue-700">+1 Min</button>
-                <button onClick={() => updateMinute(5)} className="bg-blue-600 text-white px-3 py-1 rounded mx-1 hover:bg-blue-700">+5 Min</button>
-                <div className="mt-2">
-                  <button onClick={toggleMatchStatus} className={`px-4 py-1 rounded text-white ${match.status === 'live' ? 'bg-yellow-600 hover:bg-yellow-700' : 'bg-green-600 hover:bg-green-700'}`}>
-                    {match.status === 'live' ? 'End Match' : 'Start Match'}
+                <p className="text-slate-900 dark:text-white mb-2 font-mono text-3xl font-bold">
+                  <MatchTimer match={match} /> {match.timerRunning && <span className="text-red-500 animate-pulse text-sm">LIVE</span>}
+                </p>
+                <div className="flex justify-center gap-1 mb-3">
+                  <button onClick={() => updateMinute(-1)} className="bg-gray-700 text-slate-900 dark:text-white px-3 py-1.5 rounded-lg hover:bg-gray-600 transition-colors text-sm font-bold">-1m</button>
+                  <button onClick={() => updateMinute(1)} className="bg-gray-700 text-slate-900 dark:text-white px-3 py-1.5 rounded-lg hover:bg-gray-600 transition-colors text-sm font-bold">+1m</button>
+                  <button onClick={() => updateMinute(5)} className="bg-gray-700 text-slate-900 dark:text-white px-3 py-1.5 rounded-lg hover:bg-gray-600 transition-colors text-sm font-bold">+5m</button>
+                </div>
+                <div className="flex flex-col gap-2">
+                  <button
+                    onClick={toggleTimer}
+                    className={`w-full py-2 rounded font-bold text-slate-900 dark:text-white transition-colors ${match.timerRunning ? 'bg-yellow-600 hover:bg-yellow-700' : 'bg-green-600 hover:bg-green-700'}`}
+                  >
+                    {match.timerRunning ? '⏸ Pause Timer' : '▶️ Start Timer'}
+                  </button>
+                  <button
+                    onClick={toggleMatchStatus}
+                    className={`w-full py-1 rounded text-xs font-bold text-slate-900 dark:text-white transition-colors ${match.status === 'live' ? 'bg-red-900/50 hover:bg-red-800 border border-red-500/30' : 'bg-green-900/50 hover:bg-green-800 border border-green-500/30'}`}
+                  >
+                    {match.status === 'live' ? 'END MATCH' : 'START MATCH'}
+                  </button>
+                  <button
+                    onClick={resetTimer}
+                    className="w-full py-1 rounded text-[10px] font-bold text-gray-400 hover:text-slate-900 dark:text-white hover:bg-white/5 border border-slate-200 dark:border-white/10 transition-colors uppercase tracking-widest"
+                  >
+                    Reset Clock
                   </button>
                 </div>
               </div>
 
               {/* Team B Controls */}
               <div className="p-2 border border-gray-600 rounded">
-                <p className="text-white mb-2">{match.teamB}</p>
-                <button onClick={() => updateScore('B', 1)} className="bg-green-600 text-white px-3 py-1 rounded mx-1 hover:bg-green-700">+ Goal</button>
-                <button onClick={() => updateScore('B', -1)} className="bg-red-600 text-white px-3 py-1 rounded mx-1 hover:bg-red-700">- Goal</button>
+                <p className="text-slate-900 dark:text-white mb-2">{match.teamB}</p>
+                <button onClick={() => updateScore('B', 1)} className="bg-green-600 text-slate-900 dark:text-white px-3 py-1 rounded mx-1 hover:bg-green-700">+ Goal</button>
+                <button onClick={() => updateScore('B', -1)} className="bg-red-600 text-slate-900 dark:text-white px-3 py-1 rounded mx-1 hover:bg-red-700">- Goal</button>
               </div>
             </div>
 
@@ -301,11 +410,11 @@ const LiveMatch = () => {
             <div className="grid grid-cols-2 gap-4 mt-4">
               <div className="flex justify-center gap-2">
                 <button onClick={() => setShowCardSelect({ team: 'A', type: 'yellow' })} className="bg-yellow-500 text-black font-bold px-3 py-1 rounded text-xs">Y-Card (A)</button>
-                <button onClick={() => setShowCardSelect({ team: 'A', type: 'red' })} className="bg-red-600 text-white font-bold px-3 py-1 rounded text-xs">R-Card (A)</button>
+                <button onClick={() => setShowCardSelect({ team: 'A', type: 'red' })} className="bg-red-600 text-slate-900 dark:text-white font-bold px-3 py-1 rounded text-xs">R-Card (A)</button>
               </div>
               <div className="flex justify-center gap-2">
                 <button onClick={() => setShowCardSelect({ team: 'B', type: 'yellow' })} className="bg-yellow-500 text-black font-bold px-3 py-1 rounded text-xs">Y-Card (B)</button>
-                <button onClick={() => setShowCardSelect({ team: 'B', type: 'red' })} className="bg-red-600 text-white font-bold px-3 py-1 rounded text-xs">R-Card (B)</button>
+                <button onClick={() => setShowCardSelect({ team: 'B', type: 'red' })} className="bg-red-600 text-slate-900 dark:text-white font-bold px-3 py-1 rounded text-xs">R-Card (B)</button>
               </div>
             </div>
 
@@ -318,7 +427,7 @@ const LiveMatch = () => {
                   </h4>
                   <button
                     onClick={() => setShowScorerSelect(null)}
-                    className="text-gray-400 hover:text-white"
+                    className="text-gray-400 hover:text-slate-900 dark:text-white"
                   >
                     <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" /></svg>
                   </button>
@@ -332,7 +441,7 @@ const LiveMatch = () => {
                       <button
                         key={player.id}
                         onClick={() => confirmGoal(showScorerSelect.team, player)}
-                        className="bg-gray-600 hover:bg-green-600 text-white text-xs py-2 px-3 rounded transition-colors text-left truncate"
+                        className="bg-gray-600 hover:bg-green-600 text-slate-900 dark:text-white text-xs py-2 px-3 rounded transition-colors text-left truncate"
                         title={player.name}
                       >
                         {player.name}
@@ -340,7 +449,7 @@ const LiveMatch = () => {
                     ))}
                   <button
                     onClick={() => confirmGoal(showScorerSelect.team, null)}
-                    className="bg-gray-500 hover:bg-gray-400 text-white text-xs py-2 px-3 rounded transition-colors"
+                    className="bg-gray-500 hover:bg-gray-400 text-slate-900 dark:text-white text-xs py-2 px-3 rounded transition-colors"
                   >
                     Unknown Player
                   </button>
@@ -357,7 +466,7 @@ const LiveMatch = () => {
                   </h4>
                   <button
                     onClick={() => setShowCardSelect(null)}
-                    className="text-gray-400 hover:text-white"
+                    className="text-gray-400 hover:text-slate-900 dark:text-white"
                   >
                     <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" /></svg>
                   </button>
@@ -371,7 +480,7 @@ const LiveMatch = () => {
                       <button
                         key={player.id}
                         onClick={() => confirmCard(showCardSelect.team, player, showCardSelect.type)}
-                        className="bg-gray-600 hover:bg-brand-500 text-white text-xs py-2 px-3 rounded transition-colors text-left truncate"
+                        className="bg-gray-600 hover:bg-brand-500 text-slate-900 dark:text-white text-xs py-2 px-3 rounded transition-colors text-left truncate"
                         title={player.name}
                       >
                         {player.name}
@@ -390,7 +499,7 @@ const LiveMatch = () => {
                   </h4>
                   <button
                     onClick={() => setShowCancelSelect(null)}
-                    className="text-gray-400 hover:text-white"
+                    className="text-gray-400 hover:text-slate-900 dark:text-white"
                   >
                     <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" /></svg>
                   </button>
@@ -404,12 +513,12 @@ const LiveMatch = () => {
                       .filter(e => e.type === 'goal' && e.team === (showCancelSelect.team === 'A' ? match.teamA : match.teamB))
                       .map(goal => (
                         <div key={goal.id} className="flex justify-between items-center bg-gray-600 p-2 rounded">
-                          <span className="text-sm text-white">
+                          <span className="text-sm text-slate-900 dark:text-white">
                             {goal.player} ({goal.minute}')
                           </span>
                           <button
                             onClick={() => confirmCancelGoal(goal)}
-                            className="bg-red-600 hover:bg-red-700 text-white text-[10px] py-1 px-3 rounded font-bold uppercase transition-colors"
+                            className="bg-red-600 hover:bg-red-700 text-slate-900 dark:text-white text-[10px] py-1 px-3 rounded font-bold uppercase transition-colors"
                           >
                             Revoke
                           </button>
@@ -438,7 +547,7 @@ const LiveMatch = () => {
           <div className="flex items-start justify-center space-x-4">
             {/* Team A Info & Scorers */}
             <div className="flex-1 text-right">
-              <div className="text-2xl font-bold text-white">{match.teamA}</div>
+              <div className="text-2xl font-bold text-slate-900 dark:text-white">{match.teamA}</div>
               <div className="text-xs text-gray-400 mb-3 italic">Manager: {match.managerA || 'N/A'}</div>
 
               {/* Scorers A */}
@@ -458,17 +567,17 @@ const LiveMatch = () => {
 
             {/* Score & Time */}
             <div className="mx-6 text-center min-w-[120px]">
-              <div className="text-6xl font-black text-white tracking-tighter mb-2">
+              <div className="text-6xl font-black text-slate-900 dark:text-white tracking-tighter mb-2">
                 {match.scoreA} - {match.scoreB}
               </div>
               <div className="text-sm">
                 {match.status === 'live' ? (
                   <div className="inline-flex items-center gap-2 bg-red-900/30 text-red-500 px-3 py-1 rounded-full font-bold border border-red-500/20">
                     <span className="relative flex h-2 w-2">
-                      <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
+                      <span className={cn("absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75", match.timerRunning && "animate-ping")}></span>
                       <span className="relative inline-flex rounded-full h-2 w-2 bg-red-500"></span>
                     </span>
-                    {match.currentMinute}'
+                    <MatchTimer match={match} />
                   </div>
                 ) : (
                   <span className="bg-gray-700 text-gray-300 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-widest">Full Time</span>
@@ -478,7 +587,7 @@ const LiveMatch = () => {
 
             {/* Team B Info & Scorers */}
             <div className="flex-1 text-left">
-              <div className="text-2xl font-bold text-white">{match.teamB}</div>
+              <div className="text-2xl font-bold text-slate-900 dark:text-white">{match.teamB}</div>
               <div className="text-xs text-gray-400 mb-3 italic">Manager: {match.managerB || 'N/A'}</div>
 
               {/* Scorers B */}
@@ -540,7 +649,7 @@ const LiveMatch = () => {
                     {isAdmin && match.status === 'live' && (
                       <button
                         onClick={() => setShowSubstitution(showSubstitution === lineup.id ? null : lineup.id)}
-                        className="bg-yellow-600 hover:bg-yellow-700 text-white px-3 py-1 rounded text-sm"
+                        className="bg-yellow-600 hover:bg-yellow-700 text-slate-900 dark:text-white px-3 py-1 rounded text-sm"
                       >
                         {showSubstitution === lineup.id ? 'Hide Substitution' : '🔄 Make Substitution'}
                       </button>
@@ -584,12 +693,12 @@ const LiveMatch = () => {
                     <div className="bg-gray-900 px-3 py-1 rounded text-xs font-bold text-brand-400 whitespace-nowrap min-w-[50px] text-center">
                       {event.minute}'
                     </div>
-                    <div className="flex-1 bg-gray-700/50 p-4 rounded-xl border border-white/5 hover:border-white/10 transition-colors">
+                    <div className="flex-1 bg-gray-700/50 p-4 rounded-xl border border-slate-200 dark:border-white/5 hover:border-slate-200 dark:border-white/10 transition-colors">
                       {event.type === 'goal' && (
                         <div className="flex items-center gap-3">
                           <span className="text-xl">⚽</span>
                           <div>
-                            <span className="font-bold text-white text-lg">{event.player}</span>
+                            <span className="font-bold text-slate-900 dark:text-white text-lg">{event.player}</span>
                             <span className="text-gray-400 ml-2 block text-xs uppercase tracking-wider">Goal for {event.team}</span>
                           </div>
                         </div>
@@ -601,7 +710,7 @@ const LiveMatch = () => {
                             event.type === 'yellow' ? "bg-yellow-400" : "bg-red-600"
                           )} />
                           <div>
-                            <span className="font-bold text-white text-lg">{event.player}</span>
+                            <span className="font-bold text-slate-900 dark:text-white text-lg">{event.player}</span>
                             <span className="text-gray-400 ml-2 block text-xs uppercase tracking-wider">
                               {event.type === 'yellow' ? 'Yellow Card' : 'Red Card'} ({event.team})
                             </span>

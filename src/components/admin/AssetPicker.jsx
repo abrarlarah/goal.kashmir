@@ -43,13 +43,13 @@ const AssetPicker = ({ isOpen, onClose, onSelect, category }) => {
                     initial={{ opacity: 0, scale: 0.9 }}
                     animate={{ opacity: 1, scale: 1 }}
                     exit={{ opacity: 0, scale: 0.9 }}
-                    className="bg-gray-800 border border-white/10 rounded-2xl w-full max-w-2xl overflow-hidden shadow-2xl"
+                    className="bg-gray-800 border border-slate-200 dark:border-white/10 rounded-2xl w-full max-w-2xl overflow-hidden shadow-2xl"
                 >
                     {/* Header */}
-                    <div className="p-4 border-b border-white/5 flex items-center justify-between bg-gray-800/50">
+                    <div className="p-4 border-b border-slate-200 dark:border-white/5 flex items-center justify-between bg-gray-800/50">
                         <div className="flex items-center gap-2">
                             <ImageIcon className="text-brand-500" size={20} />
-                            <h3 className="text-lg font-bold text-white">Select from Repository</h3>
+                            <h3 className="text-lg font-bold text-slate-900 dark:text-white">Select from Repository</h3>
                         </div>
                         <button onClick={onClose} className="p-2 hover:bg-white/5 rounded-full text-gray-400">
                             <X size={20} />
@@ -57,7 +57,7 @@ const AssetPicker = ({ isOpen, onClose, onSelect, category }) => {
                     </div>
 
                     {/* Search */}
-                    <div className="p-4 border-b border-white/5 bg-gray-900/20">
+                    <div className="p-4 border-b border-slate-200 dark:border-white/5 bg-gray-900/20">
                         <div className="relative">
                             <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500" size={18} />
                             <input
@@ -65,7 +65,7 @@ const AssetPicker = ({ isOpen, onClose, onSelect, category }) => {
                                 placeholder={`Search ${category || 'repository'} assets...`}
                                 value={searchQuery}
                                 onChange={(e) => setSearchQuery(e.target.value)}
-                                className="w-full bg-black/20 border border-white/10 rounded-xl pl-10 pr-4 py-2 text-white focus:ring-2 focus:ring-brand-500 outline-none"
+                                className="w-full bg-black/20 border border-slate-200 dark:border-white/10 rounded-xl pl-10 pr-4 py-2 text-slate-900 dark:text-white focus:ring-2 focus:ring-brand-500 outline-none"
                             />
                         </div>
                     </div>
@@ -86,7 +86,7 @@ const AssetPicker = ({ isOpen, onClose, onSelect, category }) => {
                                             onSelect(asset.url);
                                             onClose();
                                         }}
-                                        className="group relative cursor-pointer aspect-square rounded-xl overflow-hidden border border-white/5 hover:border-brand-500/50 transition-all shadow-lg bg-black/20"
+                                        className="group relative cursor-pointer aspect-square rounded-xl overflow-hidden border border-slate-200 dark:border-white/5 hover:border-brand-500/50 transition-all shadow-lg bg-black/20"
                                     >
                                         <img
                                             src={asset.url}
@@ -94,10 +94,10 @@ const AssetPicker = ({ isOpen, onClose, onSelect, category }) => {
                                             className="w-full h-full object-cover transition-transform group-hover:scale-110"
                                         />
                                         <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex flex-col justify-end p-2">
-                                            <p className="text-[10px] text-white font-medium truncate">{asset.name}</p>
+                                            <p className="text-[10px] text-slate-900 dark:text-white font-medium truncate">{asset.name}</p>
                                         </div>
                                         <div className="absolute top-2 right-2 bg-brand-500 h-6 w-6 rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 shadow-lg scale-0 group-hover:scale-100 transition-all">
-                                            <Check size={14} className="text-white font-bold" />
+                                            <Check size={14} className="text-slate-900 dark:text-white font-bold" />
                                         </div>
                                     </div>
                                 ))}
@@ -111,10 +111,10 @@ const AssetPicker = ({ isOpen, onClose, onSelect, category }) => {
                     </div>
 
                     {/* Footer */}
-                    <div className="p-4 border-t border-white/5 bg-gray-900/50 text-right">
+                    <div className="p-4 border-t border-slate-200 dark:border-white/5 bg-gray-900/50 text-right">
                         <button
                             onClick={onClose}
-                            className="px-4 py-2 text-sm font-medium text-gray-400 hover:text-white transition-colors"
+                            className="px-4 py-2 text-sm font-medium text-gray-400 hover:text-slate-900 dark:text-white transition-colors"
                         >
                             Cancel
                         </button>

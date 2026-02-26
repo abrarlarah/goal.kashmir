@@ -183,11 +183,11 @@ const ManagePlayers = () => {
     });
 
     return (
-        <div className="container mx-auto px-4 py-8 text-white">
+        <div className="container mx-auto px-4 py-8 text-slate-900 dark:text-white">
             <h2 className="text-2xl font-bold mb-6">Manage Players</h2>
 
             {successMessage && (
-                <div className="bg-green-600 text-white p-3 rounded mb-4 animate-pulse">
+                <div className="bg-green-600 text-slate-900 dark:text-white p-3 rounded mb-4 animate-pulse">
                     {successMessage}
                 </div>
             )}
@@ -204,7 +204,7 @@ const ManagePlayers = () => {
                                 <button
                                     type="button"
                                     onClick={removePhoto}
-                                    className="absolute -top-1 -right-1 p-1 bg-red-500 rounded-full text-white shadow-lg hover:bg-red-600"
+                                    className="absolute -top-1 -right-1 p-1 bg-red-500 rounded-full text-slate-900 dark:text-white shadow-lg hover:bg-red-600"
                                 >
                                     <X size={12} />
                                 </button>
@@ -261,7 +261,7 @@ const ManagePlayers = () => {
                             placeholder="Full Name"
                             value={formData.name}
                             onChange={handleInputChange}
-                            className="bg-gray-700 p-2 rounded text-white w-full"
+                            className="bg-gray-700 p-2 rounded text-slate-900 dark:text-white w-full"
                             required
                         />
                     </div>
@@ -269,7 +269,7 @@ const ManagePlayers = () => {
                         <label className="text-xs text-gray-400 block mb-1 flex justify-between items-center">
                             <span>Team</span>
                             {teams.length > 5 && (
-                                <div className="flex items-center gap-1 bg-gray-900/50 px-2 py-0.5 rounded border border-white/5">
+                                <div className="flex items-center gap-1 bg-gray-900/50 px-2 py-0.5 rounded border border-slate-200 dark:border-white/5">
                                     <Search size={10} className="text-gray-500" />
                                     <input
                                         type="text"
@@ -285,7 +285,7 @@ const ManagePlayers = () => {
                             name="team"
                             value={formData.team}
                             onChange={handleInputChange}
-                            className="bg-gray-700 p-2 rounded text-white w-full"
+                            className="bg-gray-700 p-2 rounded text-slate-900 dark:text-white w-full"
                             required
                         >
                             <option value="" disabled>Select Team</option>
@@ -304,7 +304,7 @@ const ManagePlayers = () => {
                             name="position"
                             value={formData.position}
                             onChange={handleInputChange}
-                            className="bg-gray-700 p-2 rounded text-white w-full"
+                            className="bg-gray-700 p-2 rounded text-slate-900 dark:text-white w-full"
                         >
                             {positions.map(p => <option key={p} value={p}>{p}</option>)}
                         </select>
@@ -315,7 +315,7 @@ const ManagePlayers = () => {
                             name="district"
                             value={formData.district}
                             onChange={handleInputChange}
-                            className="bg-gray-700 p-2 rounded text-white w-full"
+                            className="bg-gray-700 p-2 rounded text-slate-900 dark:text-white w-full"
                             required
                         >
                             <option value="" disabled>Select District</option>
@@ -339,7 +339,7 @@ const ManagePlayers = () => {
                             placeholder="Nationality"
                             value={formData.nationality}
                             onChange={handleInputChange}
-                            className="bg-gray-700 p-2 rounded text-white w-full"
+                            className="bg-gray-700 p-2 rounded text-slate-900 dark:text-white w-full"
                         />
                     </div>
                     <div>
@@ -349,7 +349,7 @@ const ManagePlayers = () => {
                             name="dob"
                             value={formData.dob}
                             onChange={handleInputChange}
-                            className="bg-gray-700 p-2 rounded text-white w-full"
+                            className="bg-gray-700 p-2 rounded text-slate-900 dark:text-white w-full"
                         />
                     </div>
                     <div>
@@ -371,7 +371,7 @@ const ManagePlayers = () => {
                             placeholder="0"
                             value={formData.matches}
                             onChange={handleInputChange}
-                            className="bg-gray-700 p-2 rounded text-white w-full"
+                            className="bg-gray-700 p-2 rounded text-slate-900 dark:text-white w-full"
                         />
                     </div>
                     <div>
@@ -382,7 +382,7 @@ const ManagePlayers = () => {
                             placeholder="0"
                             value={formData.goals}
                             onChange={handleInputChange}
-                            className="bg-gray-700 p-2 rounded text-white w-full"
+                            className="bg-gray-700 p-2 rounded text-slate-900 dark:text-white w-full"
                         />
                     </div>
                     <div>
@@ -393,7 +393,7 @@ const ManagePlayers = () => {
                             placeholder="0"
                             value={formData.assists}
                             onChange={handleInputChange}
-                            className="bg-gray-700 p-2 rounded text-white w-full"
+                            className="bg-gray-700 p-2 rounded text-slate-900 dark:text-white w-full"
                         />
                     </div>
                     <div>
@@ -404,7 +404,7 @@ const ManagePlayers = () => {
                             placeholder="0"
                             value={formData.yellowCards}
                             onChange={handleInputChange}
-                            className="bg-gray-700 p-2 rounded text-white w-full"
+                            className="bg-gray-700 p-2 rounded text-slate-900 dark:text-white w-full"
                         />
                     </div>
                     <div>
@@ -415,14 +415,14 @@ const ManagePlayers = () => {
                             placeholder="0"
                             value={formData.redCards}
                             onChange={handleInputChange}
-                            className="bg-gray-700 p-2 rounded text-white w-full"
+                            className="bg-gray-700 p-2 rounded text-slate-900 dark:text-white w-full"
                         />
                     </div>
 
                     <button
                         type="submit"
                         disabled={loading}
-                        className={`bg-green-600 hover:bg-green-700 p-2 rounded text-white col-span-full ${loading ? 'opacity-50 cursor-not-allowed' : ''}`}
+                        className={`bg-green-600 hover:bg-green-700 p-2 rounded text-slate-900 dark:text-white col-span-full ${loading ? 'opacity-50 cursor-not-allowed' : ''}`}
                     >
                         {loading ? 'Saving...' : (editingId ? 'Update Player' : 'Add Player')}
                     </button>
@@ -445,7 +445,7 @@ const ManagePlayers = () => {
                                     redCards: 0
                                 });
                             }}
-                            className="bg-gray-600 hover:bg-gray-500 p-2 rounded text-white col-span-full"
+                            className="bg-gray-600 hover:bg-gray-500 p-2 rounded text-slate-900 dark:text-white col-span-full"
                         >
                             Cancel Edit
                         </button>
@@ -462,7 +462,7 @@ const ManagePlayers = () => {
                         placeholder="Search players by name or team..."
                         value={searchTerm}
                         onChange={(e) => setSearchTerm(e.target.value)}
-                        className="w-full bg-gray-800 border border-gray-700 rounded-lg pl-10 pr-4 py-2 text-white focus:ring-2 focus:ring-brand-500 outline-none"
+                        className="w-full bg-gray-800 border border-gray-700 rounded-lg pl-10 pr-4 py-2 text-slate-900 dark:text-white focus:ring-2 focus:ring-brand-500 outline-none"
                     />
                 </div>
                 <div className="flex items-center gap-2">
@@ -470,7 +470,7 @@ const ManagePlayers = () => {
                     <select
                         value={teamFilter}
                         onChange={(e) => setTeamFilter(e.target.value)}
-                        className="bg-gray-800 border border-gray-700 rounded-lg px-4 py-2 text-white focus:ring-2 focus:ring-brand-500 outline-none"
+                        className="bg-gray-800 border border-gray-700 rounded-lg px-4 py-2 text-slate-900 dark:text-white focus:ring-2 focus:ring-brand-500 outline-none"
                     >
                         <option value="All">All Teams</option>
                         {teams.map(t => (
@@ -496,7 +496,7 @@ const ManagePlayers = () => {
                     <tbody>
                         {filteredPlayers.map(player => (
                             <tr key={player.id} className="border-b border-gray-700 bg-gray-800 hover:bg-gray-700">
-                                <td className="px-4 py-3 font-medium text-white">{player.name}</td>
+                                <td className="px-4 py-3 font-medium text-slate-900 dark:text-white">{player.name}</td>
                                 <td className="px-4 py-3">{player.team}</td>
                                 <td className="px-4 py-3">
                                     <span className="text-xs bg-brand-500/20 text-brand-400 px-2 py-1 rounded">

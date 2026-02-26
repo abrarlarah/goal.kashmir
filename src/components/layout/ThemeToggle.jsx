@@ -11,7 +11,7 @@ const ThemeToggle = () => {
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
             onClick={toggleTheme}
-            className="p-2 rounded-xl bg-slate-100 dark:bg-white/5 text-slate-600 dark:text-slate-400 hover:text-brand-500 dark:hover:text-white transition-all border border-slate-200 dark:border-white/5"
+            className="p-2 rounded-xl bg-slate-100 dark:bg-white/5 text-slate-600 dark:text-slate-400 hover:text-brand-500 dark:hover:text-slate-900 dark:text-white transition-all border border-slate-200 dark:border-white/5"
             aria-label="Toggle Theme"
         >
             {theme === 'dark' ? (

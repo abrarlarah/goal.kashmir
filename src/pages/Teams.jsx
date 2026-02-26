@@ -36,7 +36,7 @@ const Teams = () => {
       <div className="flex h-[80vh] items-center justify-center">
         <div className="flex flex-col items-center gap-4">
           <div className="h-10 w-10 animate-spin rounded-full border-4 border-brand-500 border-t-transparent"></div>
-          <div className="text-slate-400 font-medium animate-pulse">Loading Teams...</div>
+          <div className="text-slate-600 dark:text-slate-400 font-medium animate-pulse">Loading Teams...</div>
         </div>
       </div>
     );
@@ -76,8 +76,8 @@ const Teams = () => {
       >
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
           <div>
-            <h1 className="text-3xl md:text-4xl font-display font-bold text-white mb-2">Clubs</h1>
-            <p className="text-slate-400">Manage and view all competing teams.</p>
+            <h1 className="text-3xl md:text-4xl font-display font-bold text-slate-900 dark:text-white mb-2">Clubs</h1>
+            <p className="text-slate-600 dark:text-slate-400">Manage and view all competing teams.</p>
           </div>
 
           <div className="flex flex-col sm:flex-row gap-3">
@@ -87,7 +87,7 @@ const Teams = () => {
               <select
                 value={selectedDistrict}
                 onChange={(e) => setSelectedDistrict(e.target.value)}
-                className="bg-dark-card/50 backdrop-blur-sm border border-white/10 rounded-xl px-4 py-2.5 text-sm font-medium text-white focus:ring-2 focus:ring-brand-500 focus:border-brand-500 outline-none transition-all"
+                className="bg-white dark:bg-dark-card/50 backdrop-blur-sm border border-slate-200 dark:border-white/10 rounded-xl px-4 py-2.5 text-sm font-medium text-slate-900 dark:text-white focus:ring-2 focus:ring-brand-500 focus:border-brand-500 outline-none transition-all"
               >
                 <option value="All">All Districts</option>
                 <optgroup label="Jammu Division">
@@ -106,7 +106,7 @@ const Teams = () => {
             {isAdmin && (
               <Link
                 to="/admin/teams"
-                className="flex items-center gap-2 px-5 py-2.5 bg-brand-600 hover:bg-brand-500 text-white rounded-xl text-sm font-semibold transition-all shadow-lg shadow-brand-500/20 hover:scale-105 active:scale-95"
+                className="flex items-center gap-2 px-5 py-2.5 bg-brand-600 hover:bg-brand-500 text-slate-900 dark:text-white rounded-xl text-sm font-semibold transition-all shadow-lg shadow-brand-500/20 hover:scale-105 active:scale-95"
               >
                 <Plus size={18} /> Add New Team
               </Link>
@@ -128,7 +128,7 @@ const Teams = () => {
         <input
           type="text"
           placeholder="Search teams..."
-          className="block w-full pl-10 pr-3 py-3 border border-white/10 rounded-xl leading-5 bg-white/5 text-slate-300 placeholder-slate-500 focus:outline-none focus:bg-white/10 focus:ring-1 focus:ring-brand-500/50 focus:border-brand-500/50 sm:text-sm transition-colors"
+          className="block w-full pl-10 pr-3 py-3 border border-slate-200 dark:border-white/10 rounded-xl leading-5 bg-white/5 text-slate-700 dark:text-slate-300 placeholder-slate-500 focus:outline-none focus:bg-white/10 focus:ring-1 focus:ring-brand-500/50 focus:border-brand-500/50 sm:text-sm transition-colors"
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
         />
@@ -156,17 +156,17 @@ const Teams = () => {
               <div className="flex items-center gap-4">
                 <div className="flex-shrink-0">
                   {team.logoUrl ? (
-                    <div className="w-16 h-16 rounded-xl bg-white/5 border border-white/10 p-2 flex items-center justify-center overflow-hidden">
+                    <div className="w-16 h-16 rounded-xl bg-white/5 border border-slate-200 dark:border-white/10 p-2 flex items-center justify-center overflow-hidden">
                       <img src={team.logoUrl} alt={team.name} className="w-full h-full object-contain" />
                     </div>
                   ) : (
-                    <div className="w-16 h-16 rounded-xl bg-brand-500 flex items-center justify-center text-white text-2xl font-bold shadow-lg shadow-brand-500/20">
+                    <div className="w-16 h-16 rounded-xl bg-brand-500 flex items-center justify-center text-slate-900 dark:text-white text-2xl font-bold shadow-lg shadow-brand-500/20">
                       {team.shortName || team.name.substring(0, 2).toUpperCase()}
                     </div>
                   )}
                 </div>
                 <div>
-                  <h3 className="text-xl font-display font-bold text-white group-hover:text-brand-400 transition-colors">
+                  <h3 className="text-xl font-display font-bold text-slate-900 dark:text-white group-hover:text-brand-400 transition-colors">
                     {team.name}
                   </h3>
                   <div className="flex items-center gap-2 mt-1">
@@ -180,15 +180,15 @@ const Teams = () => {
             </div>
 
             {/* Footer Stats/Status */}
-            <div className="px-6 py-4 border-t border-white/5 bg-black/20 flex justify-between items-center relative z-10">
-              <div className="flex items-center gap-2 text-xs text-slate-400">
+            <div className="px-6 py-4 border-t border-slate-200 dark:border-white/5 bg-black/20 flex justify-between items-center relative z-10">
+              <div className="flex items-center gap-2 text-xs text-slate-600 dark:text-slate-400">
                 <Shield size={14} />
                 <span>Squad: {team.players || 0}</span>
               </div>
 
               <span className={cn(
                 "text-[10px] uppercase font-bold px-2 py-0.5 rounded-full border tracking-wide",
-                team.status === 'Inactive' ? 'bg-slate-800 text-slate-400 border-slate-700' :
+                team.status === 'Inactive' ? 'bg-slate-800 text-slate-600 dark:text-slate-400 border-slate-700' :
                   team.status === 'Suspended' ? 'bg-red-900/20 text-red-500 border-red-500/20' :
                     team.status === 'Dissolved' ? 'bg-black text-slate-600 border-slate-800' :
                       'bg-green-500/10 text-brand-400 border-brand-500/20'
@@ -209,8 +209,8 @@ const Teams = () => {
           <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-white/5 text-slate-500 mb-4">
             <Trophy size={32} strokeWidth={1.5} />
           </div>
-          <h3 className="text-lg font-medium text-white mb-1">No teams found</h3>
-          <p className="text-slate-400">Try adjusting your search criteria.</p>
+          <h3 className="text-lg font-medium text-slate-900 dark:text-white mb-1">No teams found</h3>
+          <p className="text-slate-600 dark:text-slate-400">Try adjusting your search criteria.</p>
         </motion.div>
       )}
     </div>

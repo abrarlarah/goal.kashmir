@@ -138,11 +138,11 @@ const ManageLineups = () => {
     };
 
     return (
-        <div className="container mx-auto px-4 py-8 text-white">
+        <div className="container mx-auto px-4 py-8 text-slate-900 dark:text-white">
             <h2 className="text-3xl font-bold mb-6">⚽ Manage Match Lineups</h2>
 
             {successMessage && (
-                <div className="bg-green-600 text-white p-3 rounded mb-4 animate-pulse">
+                <div className="bg-green-600 text-slate-900 dark:text-white p-3 rounded mb-4 animate-pulse">
                     {successMessage}
                 </div>
             )}
@@ -153,7 +153,7 @@ const ManageLineups = () => {
                 <select
                     value={selectedMatch}
                     onChange={(e) => handleMatchChange(e.target.value)}
-                    className="bg-gray-700 p-3 rounded text-white w-full mb-4"
+                    className="bg-gray-700 p-3 rounded text-slate-900 dark:text-white w-full mb-4"
                 >
                     <option value="">Select a match</option>
                     {matches.filter(m => m.status !== 'finished').map(match => (
@@ -199,7 +199,7 @@ const ManageLineups = () => {
                                     placeholder="Search team players..."
                                     value={searchTerm}
                                     onChange={(e) => setSearchTerm(e.target.value)}
-                                    className="w-full bg-gray-700 border border-gray-600 rounded pl-8 pr-2 py-1.5 text-xs text-white focus:ring-1 focus:ring-green-500 outline-none"
+                                    className="w-full bg-gray-700 border border-gray-600 rounded pl-8 pr-2 py-1.5 text-xs text-slate-900 dark:text-white focus:ring-1 focus:ring-green-500 outline-none"
                                 />
                             </div>
                         </div>

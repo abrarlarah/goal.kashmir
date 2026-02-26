@@ -93,7 +93,7 @@ const SubstitutionManager = ({ lineup, players, onSubstitutionComplete }) => {
                     <select
                         value={selectedStarter}
                         onChange={(e) => setSelectedStarter(e.target.value)}
-                        className="w-full bg-gray-700 text-white p-2 rounded border border-gray-600"
+                        className="w-full bg-gray-700 text-slate-900 dark:text-white p-2 rounded border border-gray-600"
                     >
                         <option value="">Select player to replace</option>
                         {lineup.starting11.map(playerId => {
@@ -115,7 +115,7 @@ const SubstitutionManager = ({ lineup, players, onSubstitutionComplete }) => {
                     <select
                         value={selectedBench}
                         onChange={(e) => setSelectedBench(e.target.value)}
-                        className="w-full bg-gray-700 text-white p-2 rounded border border-gray-600"
+                        className="w-full bg-gray-700 text-slate-900 dark:text-white p-2 rounded border border-gray-600"
                     >
                         <option value="">Select substitute</option>
                         {lineup.bench && lineup.bench.map(playerId => {
@@ -149,7 +149,7 @@ const SubstitutionManager = ({ lineup, players, onSubstitutionComplete }) => {
             <button
                 onClick={handleSubstitution}
                 disabled={!selectedStarter || !selectedBench || isSubstituting}
-                className="w-full bg-yellow-600 hover:bg-yellow-700 disabled:bg-gray-600 disabled:cursor-not-allowed text-white font-bold py-2 px-4 rounded transition-colors"
+                className="w-full bg-yellow-600 hover:bg-yellow-700 disabled:bg-gray-600 disabled:cursor-not-allowed text-slate-900 dark:text-white font-bold py-2 px-4 rounded transition-colors"
             >
                 {isSubstituting ? 'Making Substitution...' : 'Confirm Substitution'}
             </button>

@@ -73,7 +73,7 @@ const Players = () => {
       <div className="flex h-[80vh] items-center justify-center">
         <div className="flex flex-col items-center gap-4">
           <div className="h-10 w-10 animate-spin rounded-full border-4 border-brand-500 border-t-transparent"></div>
-          <div className="text-slate-400 font-medium animate-pulse">Loading Players...</div>
+          <div className="text-slate-600 dark:text-slate-400 font-medium animate-pulse">Loading Players...</div>
         </div>
       </div>
     );
@@ -90,8 +90,8 @@ const Players = () => {
       >
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
           <div>
-            <h1 className="text-3xl md:text-4xl font-display font-bold text-white mb-2">Players</h1>
-            <p className="text-slate-400">View performance stats and player details.</p>
+            <h1 className="text-3xl md:text-4xl font-display font-bold text-slate-900 dark:text-white mb-2">Players</h1>
+            <p className="text-slate-600 dark:text-slate-400">View performance stats and player details.</p>
           </div>
 
           <div className="flex flex-col sm:flex-row gap-3">
@@ -101,7 +101,7 @@ const Players = () => {
               <select
                 value={selectedDistrict}
                 onChange={(e) => setSelectedDistrict(e.target.value)}
-                className="bg-dark-card/50 backdrop-blur-sm border border-white/10 rounded-xl px-4 py-2.5 text-sm font-medium text-white focus:ring-2 focus:ring-brand-500 focus:border-brand-500 outline-none transition-all"
+                className="bg-white dark:bg-dark-card/50 backdrop-blur-sm border border-slate-200 dark:border-white/10 rounded-xl px-4 py-2.5 text-sm font-medium text-slate-900 dark:text-white focus:ring-2 focus:ring-brand-500 focus:border-brand-500 outline-none transition-all"
               >
                 <option value="All">All Districts</option>
                 <optgroup label="Jammu Division">
@@ -118,7 +118,7 @@ const Players = () => {
             </div>
 
             {isAdmin && (
-              <Link to="/admin/players" className="flex items-center gap-2 px-5 py-2.5 bg-brand-600 hover:bg-brand-500 text-white rounded-xl text-sm font-semibold transition-all shadow-lg shadow-brand-500/20 hover:scale-105 active:scale-95">
+              <Link to="/admin/players" className="flex items-center gap-2 px-5 py-2.5 bg-brand-600 hover:bg-brand-500 text-slate-900 dark:text-white rounded-xl text-sm font-semibold transition-all shadow-lg shadow-brand-500/20 hover:scale-105 active:scale-95">
                 <Plus size={18} /> Add Player
               </Link>
             )}
@@ -132,7 +132,7 @@ const Players = () => {
               <>
                 <button
                   onClick={saveChanges}
-                  className="flex items-center gap-2 px-4 py-2 bg-green-500 hover:bg-green-400 text-white rounded-lg text-sm font-medium transition-colors"
+                  className="flex items-center gap-2 px-4 py-2 bg-green-500 hover:bg-green-400 text-slate-900 dark:text-white rounded-lg text-sm font-medium transition-colors"
                 >
                   <Save size={16} /> Save
                 </button>
@@ -146,7 +146,7 @@ const Players = () => {
             ) : (
               <button
                 onClick={() => setEditMode(true)}
-                className="flex items-center gap-2 px-4 py-2 bg-white/5 hover:bg-white/10 text-white border border-white/5 rounded-lg text-sm font-medium transition-colors"
+                className="flex items-center gap-2 px-4 py-2 bg-white/5 hover:bg-white/10 text-slate-900 dark:text-white border border-slate-200 dark:border-white/5 rounded-lg text-sm font-medium transition-colors"
               >
                 <Edit2 size={16} /> Edit Stats
               </button>
@@ -169,7 +169,7 @@ const Players = () => {
           <input
             type="text"
             placeholder="Search players or teams..."
-            className="block w-full pl-10 pr-3 py-2.5 border border-white/10 rounded-xl leading-5 bg-white/5 text-slate-300 placeholder-slate-500 focus:outline-none focus:bg-white/10 focus:ring-1 focus:ring-brand-500/50 focus:border-brand-500/50 sm:text-sm transition-colors"
+            className="block w-full pl-10 pr-3 py-2.5 border border-slate-200 dark:border-white/10 rounded-xl leading-5 bg-white/5 text-slate-700 dark:text-slate-300 placeholder-slate-500 focus:outline-none focus:bg-white/10 focus:ring-1 focus:ring-brand-500/50 focus:border-brand-500/50 sm:text-sm transition-colors"
             value={searchQuery}
             onChange={e => setSearchQuery(e.target.value)}
           />
@@ -180,7 +180,7 @@ const Players = () => {
             <Filter className="h-4 w-4 text-slate-500" />
           </div>
           <select
-            className="block w-full pl-9 pr-10 py-2.5 border border-white/10 rounded-xl leading-5 bg-dark-card text-slate-300 focus:outline-none focus:ring-1 focus:ring-brand-500/50 sm:text-sm appearance-none cursor-pointer"
+            className="block w-full pl-9 pr-10 py-2.5 border border-slate-200 dark:border-white/10 rounded-xl leading-5 bg-white dark:bg-dark-card text-slate-700 dark:text-slate-300 focus:outline-none focus:ring-1 focus:ring-brand-500/50 sm:text-sm appearance-none cursor-pointer"
             value={positionFilter}
             onChange={e => setPositionFilter(e.target.value)}
           >
@@ -198,20 +198,20 @@ const Players = () => {
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.3 }}
-        className="glass-card rounded-2xl overflow-hidden border border-white/5"
+        className="glass-card rounded-2xl overflow-hidden border border-slate-200 dark:border-white/5"
       >
         <div className="overflow-x-auto">
           <table className="min-w-full divide-y divide-white/5">
             <thead className="bg-white/5">
               <tr>
-                <th className="px-6 py-4 text-left text-xs font-bold text-slate-400 uppercase tracking-wider">Player</th>
-                <th className="px-6 py-4 text-left text-xs font-bold text-slate-400 uppercase tracking-wider">Team</th>
-                <th className="px-6 py-4 text-left text-xs font-bold text-slate-400 uppercase tracking-wider">Position</th>
-                <th className="px-6 py-4 text-center text-xs font-bold text-slate-400 uppercase tracking-wider">Age</th>
-                <th className="px-6 py-4 text-center text-xs font-bold text-slate-400 uppercase tracking-wider">Matches</th>
-                <th className="px-6 py-4 text-center text-xs font-bold text-slate-400 uppercase tracking-wider">Goals</th>
-                <th className="px-6 py-4 text-center text-xs font-bold text-slate-400 uppercase tracking-wider">Assists</th>
-                <th className="px-6 py-4 text-center text-xs font-bold text-slate-400 uppercase tracking-wider">Cards</th>
+                <th className="px-6 py-4 text-left text-xs font-bold text-slate-600 dark:text-slate-400 uppercase tracking-wider">Player</th>
+                <th className="px-6 py-4 text-left text-xs font-bold text-slate-600 dark:text-slate-400 uppercase tracking-wider">Team</th>
+                <th className="px-6 py-4 text-left text-xs font-bold text-slate-600 dark:text-slate-400 uppercase tracking-wider">Position</th>
+                <th className="px-6 py-4 text-center text-xs font-bold text-slate-600 dark:text-slate-400 uppercase tracking-wider">Age</th>
+                <th className="px-6 py-4 text-center text-xs font-bold text-slate-600 dark:text-slate-400 uppercase tracking-wider">Matches</th>
+                <th className="px-6 py-4 text-center text-xs font-bold text-slate-600 dark:text-slate-400 uppercase tracking-wider">Goals</th>
+                <th className="px-6 py-4 text-center text-xs font-bold text-slate-600 dark:text-slate-400 uppercase tracking-wider">Assists</th>
+                <th className="px-6 py-4 text-center text-xs font-bold text-slate-600 dark:text-slate-400 uppercase tracking-wider">Cards</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-white/5 bg-transparent">
@@ -223,18 +223,18 @@ const Players = () => {
                   <tr key={player.id} className="hover:bg-white/5 transition-colors group">
                     <td className="px-6 py-4 whitespace-nowrap">
                       <div className="flex items-center gap-3">
-                        <div className="h-10 w-10 rounded-full bg-slate-700 flex items-center justify-center text-xs font-bold text-slate-300 overflow-hidden border border-white/10 group-hover:border-brand-500/30 transition-colors">
+                        <div className="h-10 w-10 rounded-full bg-slate-700 flex items-center justify-center text-xs font-bold text-slate-700 dark:text-slate-300 overflow-hidden border border-slate-200 dark:border-white/10 group-hover:border-brand-500/30 transition-colors">
                           {player.photoUrl ? (
                             <img src={player.photoUrl} alt={player.name} className="h-full w-full object-cover" />
                           ) : (
                             player.name.charAt(0)
                           )}
                         </div>
-                        <div className="text-sm font-medium text-white group-hover:text-brand-400 transition-colors">{player.name}</div>
+                        <div className="text-sm font-medium text-slate-900 dark:text-white group-hover:text-brand-400 transition-colors">{player.name}</div>
                       </div>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
-                      <div className="flex items-center gap-2 text-sm text-slate-300">
+                      <div className="flex items-center gap-2 text-sm text-slate-700 dark:text-slate-300">
                         <Shield size={14} className="text-slate-500" />
                         {player.team}
                       </div>
@@ -252,7 +252,7 @@ const Players = () => {
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-center">
                       <div className="flex flex-col items-center">
-                        <span className="text-sm text-white font-medium">
+                        <span className="text-sm text-slate-900 dark:text-white font-medium">
                           {player.dob ? calculateAge(player.dob) : (player.age || '-')}
                         </span>
                         {player.dob && (
@@ -267,12 +267,12 @@ const Players = () => {
                       {editMode ? (
                         <input
                           type="number"
-                          className="w-16 bg-black/50 border border-white/10 rounded px-2 py-1 text-white text-center focus:ring-1 focus:ring-brand-500 outline-none"
+                          className="w-16 bg-black/50 border border-slate-200 dark:border-white/10 rounded px-2 py-1 text-slate-900 dark:text-white text-center focus:ring-1 focus:ring-brand-500 outline-none"
                           value={display.matches || 0}
                           onChange={e => handleStatChange(player.id, 'matches', e.target.value)}
                         />
                       ) : (
-                        <span className="text-sm text-slate-400">{display.matches}</span>
+                        <span className="text-sm text-slate-600 dark:text-slate-400">{display.matches}</span>
                       )}
                     </td>
 
@@ -280,7 +280,7 @@ const Players = () => {
                       {editMode ? (
                         <input
                           type="number"
-                          className="w-16 bg-black/50 border border-white/10 rounded px-2 py-1 text-white text-center focus:ring-1 focus:ring-brand-500 outline-none"
+                          className="w-16 bg-black/50 border border-slate-200 dark:border-white/10 rounded px-2 py-1 text-slate-900 dark:text-white text-center focus:ring-1 focus:ring-brand-500 outline-none"
                           value={display.goals || 0}
                           onChange={e => handleStatChange(player.id, 'goals', e.target.value)}
                         />
@@ -295,7 +295,7 @@ const Players = () => {
                       {editMode ? (
                         <input
                           type="number"
-                          className="w-16 bg-black/50 border border-white/10 rounded px-2 py-1 text-white text-center focus:ring-1 focus:ring-brand-500 outline-none"
+                          className="w-16 bg-black/50 border border-slate-200 dark:border-white/10 rounded px-2 py-1 text-slate-900 dark:text-white text-center focus:ring-1 focus:ring-brand-500 outline-none"
                           value={display.assists || 0}
                           onChange={e => handleStatChange(player.id, 'assists', e.target.value)}
                         />
@@ -329,8 +329,8 @@ const Players = () => {
             <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-white/5 text-slate-500 mb-4">
               <Users size={32} strokeWidth={1.5} />
             </div>
-            <h3 className="text-lg font-medium text-white mb-1">No players found</h3>
-            <p className="text-slate-400">Try adjusting your filters.</p>
+            <h3 className="text-lg font-medium text-slate-900 dark:text-white mb-1">No players found</h3>
+            <p className="text-slate-600 dark:text-slate-400">Try adjusting your filters.</p>
           </div>
         )}
       </motion.div>

@@ -61,8 +61,8 @@ const Navbar = () => {
           <div className="flex items-center justify-between h-16 md:h-20">
             {/* Logo */}
             <div className="flex-shrink-0 flex items-center gap-2 group cursor-pointer" onClick={() => navigate('/')}>
-              <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-brand-500 to-brand-700 flex items-center justify-center text-white shadow-lg shadow-brand-500/20 group-hover:scale-105 transition-transform">
-                <Trophy size={20} className="text-white fill-current" />
+              <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-brand-500 to-brand-700 flex items-center justify-center text-slate-900 dark:text-white shadow-lg shadow-brand-500/20 group-hover:scale-105 transition-transform">
+                <Trophy size={20} className="text-slate-900 dark:text-white fill-current" />
               </div>
               <div className="flex flex-col">
                 <span className="font-display font-bold text-xl tracking-tight text-slate-900 dark:text-white leading-none">Goal<span className="text-brand-400">Kashmir</span></span>
@@ -71,7 +71,7 @@ const Navbar = () => {
             </div>
 
             {/* Desktop Navigation */}
-            <div className="hidden md:flex items-center space-x-1">
+            <div className="hidden lg:flex items-center space-x-1">
               {navItems.map((item) => {
                 const isActive = location.pathname === item.path;
                 return (
@@ -82,7 +82,7 @@ const Navbar = () => {
                   >
                     <span className={cn(
                       "relative z-10 flex items-center gap-2 text-sm font-medium transition-colors",
-                      isActive ? "text-brand-600 dark:text-white" : "text-slate-600 dark:text-slate-400 group-hover:text-brand-500 dark:group-hover:text-white"
+                      isActive ? "text-brand-600 dark:text-brand-400" : "text-slate-600 dark:text-slate-400 group-hover:text-brand-500 dark:group-hover:text-white"
                     )}>
                       {item.name}
                     </span>
@@ -99,7 +99,7 @@ const Navbar = () => {
             </div>
 
             {/* Desktop Auth & Search */}
-            <div className="hidden md:flex items-center gap-4">
+            <div className="hidden lg:flex items-center gap-4">
               <Link to="/search" className="p-2 text-slate-500 dark:text-slate-400 hover:text-brand-500 dark:hover:text-white transition-colors">
                 <Search size={22} />
               </Link>
@@ -121,7 +121,7 @@ const Navbar = () => {
             </div>
 
             {/* Mobile Actions */}
-            <div className="md:hidden flex items-center gap-2">
+            <div className="lg:hidden flex items-center gap-2">
               <Link to="/search" className="p-2 text-slate-500 dark:text-slate-400 hover:text-brand-500 dark:hover:text-white transition-colors">
                 <Search size={22} />
               </Link>
@@ -143,7 +143,7 @@ const Navbar = () => {
               initial={{ opacity: 0, height: 0 }}
               animate={{ opacity: 1, height: 'auto' }}
               exit={{ opacity: 0, height: 0 }}
-              className="md:hidden bg-dark-bg/95 backdrop-blur-xl border-t border-white/5 overflow-hidden"
+              className="lg:hidden bg-dark-bg/95 backdrop-blur-xl border-t border-slate-200 dark:border-white/5 overflow-hidden"
             >
               <div className="px-4 pt-4 pb-6 space-y-2">
                 {navItems.map((item) => (
@@ -154,8 +154,8 @@ const Navbar = () => {
                     className={({ isActive }) => cn(
                       "flex items-center justify-between p-4 rounded-xl border border-transparent transition-all",
                       isActive
-                        ? "bg-brand-500/10 border-brand-500/20 text-brand-400"
-                        : "bg-white/5 text-slate-400 border-white/5 hover:bg-white/10 hover:text-white"
+                        ? "bg-brand-500/10 border-brand-500/20 text-brand-600 dark:text-brand-400"
+                        : "bg-white/5 text-slate-600 dark:text-slate-400 border-slate-200 dark:border-white/5 hover:bg-white/10 hover:text-slate-900 dark:hover:text-white"
                     )}
                   >
                     <div className="flex items-center gap-3">

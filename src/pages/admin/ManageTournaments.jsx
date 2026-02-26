@@ -86,11 +86,11 @@ const ManageTournaments = () => {
     };
 
     return (
-        <div className="container mx-auto px-4 py-8 text-white">
+        <div className="container mx-auto px-4 py-8 text-slate-900 dark:text-white">
             <h2 className="text-2xl font-bold mb-6">Manage Tournaments</h2>
 
             {successMessage && (
-                <div className="bg-green-600 text-white p-3 rounded mb-4 animate-pulse">
+                <div className="bg-green-600 text-slate-900 dark:text-white p-3 rounded mb-4 animate-pulse">
                     {successMessage}
                 </div>
             )}
@@ -101,12 +101,12 @@ const ManageTournaments = () => {
                 <form onSubmit={handleSubmit} className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div className="col-span-1 md:col-span-2">
                         <label className="text-xs text-gray-400 block mb-1">Tournament Name</label>
-                        <input type="text" name="name" placeholder="Tournament Name" value={formData.name} onChange={handleInputChange} className="bg-gray-700 p-2 rounded text-white w-full" required />
+                        <input type="text" name="name" placeholder="Tournament Name" value={formData.name} onChange={handleInputChange} className="bg-gray-700 p-2 rounded text-slate-900 dark:text-white w-full" required />
                     </div>
 
                     <div className="col-span-1 md:col-span-2">
                         <label className="text-xs text-gray-400 block mb-1">District</label>
-                        <select name="district" value={formData.district} onChange={handleInputChange} className="bg-gray-700 p-2 rounded text-white w-full" required>
+                        <select name="district" value={formData.district} onChange={handleInputChange} className="bg-gray-700 p-2 rounded text-slate-900 dark:text-white w-full" required>
                             <option value="">Select District</option>
                             <optgroup label="Jammu Division">
                                 {DISTRICTS.JAMMU.map(district => (
@@ -124,32 +124,32 @@ const ManageTournaments = () => {
                     <div className="flex gap-2">
                         <div className="w-full">
                             <label className="text-xs text-gray-400 block mb-1">Start Date</label>
-                            <input type="date" name="startDate" value={formData.startDate} onChange={handleInputChange} className="bg-gray-700 p-2 rounded text-white w-full" />
+                            <input type="date" name="startDate" value={formData.startDate} onChange={handleInputChange} className="bg-gray-700 p-2 rounded text-slate-900 dark:text-white w-full" />
                         </div>
                         <div className="w-full">
                             <label className="text-xs text-gray-400 block mb-1">End Date</label>
-                            <input type="date" name="endDate" value={formData.endDate} onChange={handleInputChange} className="bg-gray-700 p-2 rounded text-white w-full" />
+                            <input type="date" name="endDate" value={formData.endDate} onChange={handleInputChange} className="bg-gray-700 p-2 rounded text-slate-900 dark:text-white w-full" />
                         </div>
                     </div>
 
                     <div className="flex gap-2">
                         <div className="w-full">
                             <label className="text-xs text-gray-400 block mb-1">Teams Count</label>
-                            <input type="number" name="teamsCount" placeholder="0" value={formData.teamsCount} onChange={handleInputChange} className="bg-gray-700 p-2 rounded text-white w-full" />
+                            <input type="number" name="teamsCount" placeholder="0" value={formData.teamsCount} onChange={handleInputChange} className="bg-gray-700 p-2 rounded text-slate-900 dark:text-white w-full" />
                         </div>
                         <div className="w-full">
                             <label className="text-xs text-gray-400 block mb-1">Matches Count</label>
-                            <input type="number" name="matchesCount" placeholder="0" value={formData.matchesCount} onChange={handleInputChange} className="bg-gray-700 p-2 rounded text-white w-full" />
+                            <input type="number" name="matchesCount" placeholder="0" value={formData.matchesCount} onChange={handleInputChange} className="bg-gray-700 p-2 rounded text-slate-900 dark:text-white w-full" />
                         </div>
                     </div>
 
-                    <select name="status" value={formData.status} onChange={handleInputChange} className="bg-gray-700 p-2 rounded text-white">
+                    <select name="status" value={formData.status} onChange={handleInputChange} className="bg-gray-700 p-2 rounded text-slate-900 dark:text-white">
                         <option value="upcoming">Upcoming</option>
                         <option value="ongoing">Ongoing</option>
                         <option value="finished">Finished</option>
                     </select>
 
-                    <select name="type" value={formData.type} onChange={handleInputChange} className="bg-gray-700 p-2 rounded text-white">
+                    <select name="type" value={formData.type} onChange={handleInputChange} className="bg-gray-700 p-2 rounded text-slate-900 dark:text-white">
                         <option value="league">League</option>
                         <option value="knockout">Knockout</option>
                     </select>
@@ -157,13 +157,13 @@ const ManageTournaments = () => {
                     <button
                         type="submit"
                         disabled={loading}
-                        className={`bg-green-600 hover:bg-green-700 p-2 rounded text-white col-span-full ${loading ? 'opacity-50 cursor-not-allowed' : ''}`}
+                        className={`bg-green-600 hover:bg-green-700 p-2 rounded text-slate-900 dark:text-white col-span-full ${loading ? 'opacity-50 cursor-not-allowed' : ''}`}
                     >
                         {loading ? 'Saving...' : (editingId ? 'Update Tournament' : 'Add Tournament')}
                     </button>
 
                     {editingId && (
-                        <button type="button" onClick={() => { setEditingId(null); setFormData({ name: '', district: '', startDate: '', endDate: '', teamsCount: 0, matchesCount: 0, status: 'upcoming', type: 'league' }); }} className="bg-gray-600 hover:bg-gray-500 p-2 rounded text-white col-span-full">
+                        <button type="button" onClick={() => { setEditingId(null); setFormData({ name: '', district: '', startDate: '', endDate: '', teamsCount: 0, matchesCount: 0, status: 'upcoming', type: 'league' }); }} className="bg-gray-600 hover:bg-gray-500 p-2 rounded text-slate-900 dark:text-white col-span-full">
                             Cancel Edit
                         </button>
                     )}
@@ -175,7 +175,7 @@ const ManageTournaments = () => {
                 {tournaments.map(t => (
                     <div key={t.id} className="bg-gray-800 p-4 rounded flex justify-between items-start">
                         <div>
-                            <div className="font-bold text-lg text-white">{t.name}</div>
+                            <div className="font-bold text-lg text-slate-900 dark:text-white">{t.name}</div>
                             {t.district && (
                                 <div className="text-xs text-brand-400 font-medium mt-0.5">📍 {t.district}</div>
                             )}
@@ -183,8 +183,8 @@ const ManageTournaments = () => {
                             <div className="text-xs text-gray-500 mt-1">{t.startDate} - {t.endDate}</div>
                         </div>
                         <div className="flex flex-col gap-2">
-                            <button onClick={() => handleEdit(t)} className="bg-blue-600 hover:bg-blue-700 px-3 py-1 rounded text-sm text-white">Edit</button>
-                            <button onClick={() => handleDelete(t.id)} className="bg-red-600 hover:bg-red-700 px-3 py-1 rounded text-sm text-white">Delete</button>
+                            <button onClick={() => handleEdit(t)} className="bg-blue-600 hover:bg-blue-700 px-3 py-1 rounded text-sm text-slate-900 dark:text-white">Edit</button>
+                            <button onClick={() => handleDelete(t.id)} className="bg-red-600 hover:bg-red-700 px-3 py-1 rounded text-sm text-slate-900 dark:text-white">Delete</button>
                         </div>
                     </div>
                 ))}

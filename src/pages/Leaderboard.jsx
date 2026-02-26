@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import { useData } from '../context/DataContext';
 import { MapPinned } from 'lucide-react';
 
@@ -10,16 +10,31 @@ const DISTRICTS = {
 
 const Leaderboard = () => {
   const { teams, matches, tournaments, loading } = useData();
-  const [selectedCompetition, setSelectedCompetition] = useState('All');
+  const [selectedCompetitionId, setSelectedCompetitionId] = useState('All');
   const [selectedDistrict, setSelectedDistrict] = useState('Baramulla');
+  const [selectedYear, setSelectedYear] = useState(new Date().getFullYear().toString());
 
-  // Filter tournaments by district
-  const filteredTournaments = selectedDistrict === 'All'
-    ? tournaments
-    : tournaments.filter(t => t.district === selectedDistrict);
+  // Filter tournaments by district and year
+  const availableYears = useMemo(() => {
+    const years = tournaments
+      .map(t => t.startDate ? new Date(t.startDate).getFullYear().toString() : null)
+      .filter(Boolean);
+    return [...new Set(years)].sort((a, b) => b - a);
+  }, [tournaments]);
+
+  const filteredTournaments = useMemo(() => {
+    let ts = tournaments;
+    if (selectedDistrict !== 'All') {
+      ts = ts.filter(t => t.district === selectedDistrict);
+    }
+    if (selectedYear !== 'All') {
+      ts = ts.filter(t => t.startDate && new Date(t.startDate).getFullYear().toString() === selectedYear);
+    }
+    return ts;
+  }, [tournaments, selectedDistrict, selectedYear]);
 
   // Competitions
-  const competitions = ['All', ...filteredTournaments.map(t => t.name)];
+  const competitions = [{ id: 'All', name: 'All' }, ...filteredTournaments];
 
   const getProcessedStandings = () => {
     if (loading || teams.length === 0) return [];
@@ -29,11 +44,13 @@ const Leaderboard = () => {
     // Initialize stats map ONLY for teams participating in the selected competition
     teams
       .filter(team => {
-        if (selectedCompetition === 'All') return true;
+        if (selectedCompetitionId === 'All') return true;
+        const tourney = tournaments.find(t => t.id === selectedCompetitionId);
+        if (!tourney) return false;
         const teamTournaments = Array.isArray(team.tournaments)
           ? team.tournaments
           : (typeof team.tournaments === 'string' ? team.tournaments.split(',').map(t => t.trim()) : []);
-        return teamTournaments.includes(selectedCompetition);
+        return teamTournaments.includes(tourney.name);
       })
       .forEach(team => {
         stats[team.name] = {
@@ -52,10 +69,12 @@ const Leaderboard = () => {
       });
 
     // Filter Matches
-    const filteredMatches = matches.filter(m =>
-      (selectedCompetition === 'All' || !selectedCompetition || m.competition === selectedCompetition) &&
-      (m.status === 'finished')
-    );
+    const filteredMatches = matches.filter(m => {
+      if (selectedCompetitionId === 'All' || !selectedCompetitionId) return m.status === 'finished';
+      const tourney = tournaments.find(t => t.id === selectedCompetitionId);
+      if (!tourney) return false;
+      return (m.tournamentId === selectedCompetitionId || (!m.tournamentId && m.competition === tourney.name)) && m.status === 'finished';
+    });
 
     filteredMatches.forEach(match => {
       // Find teams by name (assuming names are unique keys in matches)
@@ -112,14 +131,31 @@ const Leaderboard = () => {
 
   const tableData = getProcessedStandings();
 
-  if (loading && teams.length === 0) return <div className="text-center text-white py-20">Loading Standings...</div>;
+  if (loading && teams.length === 0) return <div className="text-center text-slate-900 dark:text-white py-20">Loading Standings...</div>;
 
   return (
     <div className="container mx-auto px-4 py-8">
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 gap-4">
-        <h1 className="text-3xl font-bold text-white">Leaderboard</h1>
+        <h1 className="text-3xl font-bold text-slate-900 dark:text-white">Leaderboard</h1>
 
         <div className="flex flex-col sm:flex-row gap-3 w-full md:w-auto">
+          {/* Year Filter */}
+          <div className="flex items-center gap-2">
+            <select
+              value={selectedYear}
+              onChange={(e) => {
+                setSelectedYear(e.target.value);
+                setSelectedCompetitionId('All');
+              }}
+              className="bg-gray-800 text-slate-900 dark:text-white px-4 py-2 rounded border border-gray-700 focus:outline-none focus:ring-2 focus:ring-brand-500 min-w-[120px]"
+            >
+              <option value="All">All Years</option>
+              {availableYears.map(year => (
+                <option key={year} value={year}>{year}</option>
+              ))}
+            </select>
+          </div>
+
           {/* District Filter */}
           <div className="flex items-center gap-2">
             <MapPinned className="text-brand-400" size={20} />
@@ -127,9 +163,9 @@ const Leaderboard = () => {
               value={selectedDistrict}
               onChange={(e) => {
                 setSelectedDistrict(e.target.value);
-                setSelectedCompetition('All');
+                setSelectedCompetitionId('All');
               }}
-              className="bg-gray-800 text-white px-4 py-2 rounded border border-gray-700 focus:outline-none focus:ring-2 focus:ring-brand-500 min-w-[160px]"
+              className="bg-gray-800 text-slate-900 dark:text-white px-4 py-2 rounded border border-gray-700 focus:outline-none focus:ring-2 focus:ring-brand-500 min-w-[160px]"
             >
               <option value="All">All Districts</option>
               <optgroup label="Jammu Division">
@@ -147,12 +183,12 @@ const Leaderboard = () => {
 
           {/* Competition Filter */}
           <select
-            value={selectedCompetition}
-            onChange={(e) => setSelectedCompetition(e.target.value)}
-            className="bg-gray-800 text-white px-4 py-2 rounded border border-gray-700 focus:outline-none focus:ring-2 focus:ring-brand-500 min-w-[200px]"
+            value={selectedCompetitionId}
+            onChange={(e) => setSelectedCompetitionId(e.target.value)}
+            className="bg-gray-800 text-slate-900 dark:text-white px-4 py-2 rounded border border-gray-700 focus:outline-none focus:ring-2 focus:ring-brand-500 min-w-[200px]"
           >
             {competitions.map(comp => (
-              <option key={comp} value={comp}>{comp}</option>
+              <option key={comp.id} value={comp.id}>{comp.name}</option>
             ))}
           </select>
         </div>
@@ -182,7 +218,7 @@ const Leaderboard = () => {
                 return (
                   <tr key={team.id} className="hover:bg-gray-700 transition-colors">
                     <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-300">{index + 1}</td>
-                    <td className="px-6 py-4 whitespace-nowrap text-white font-medium">{team.name}</td>
+                    <td className="px-6 py-4 whitespace-nowrap text-slate-900 dark:text-white font-medium">{team.name}</td>
                     <td className="px-3 py-4 text-center text-gray-300">{team.played}</td>
                     <td className="px-3 py-4 text-center text-gray-300">{team.wins}</td>
                     <td className="px-3 py-4 text-center text-gray-300">{team.draws}</td>
@@ -196,7 +232,7 @@ const Leaderboard = () => {
                     <td className="px-6 py-4">
                       <div className="flex justify-center space-x-1">
                         {team.form.slice(-5).map((res, i) => (
-                          <span key={i} className={`w-5 h-5 flex items-center justify-center rounded-full text-xs text-white ${res === 'W' ? 'bg-green-500' : res === 'D' ? 'bg-yellow-500' : 'bg-red-500'
+                          <span key={i} className={`w-5 h-5 flex items-center justify-center rounded-full text-xs text-slate-900 dark:text-white ${res === 'W' ? 'bg-green-500' : res === 'D' ? 'bg-yellow-500' : 'bg-red-500'
                             }`}>
                             {res}
                           </span>

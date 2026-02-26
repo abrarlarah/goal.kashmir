@@ -153,11 +153,11 @@ const ManageMatches = () => {
   const otherMatches = matches.filter(m => m.status !== 'live');
 
   return (
-    <div className="container mx-auto px-4 py-8 text-white">
+    <div className="container mx-auto px-4 py-8 text-slate-900 dark:text-white">
       <h2 className="text-2xl font-bold mb-6">Manage Matches</h2>
 
       {successMessage && (
-        <div className="bg-green-600 text-white p-3 rounded mb-4 animate-pulse">
+        <div className="bg-green-600 text-slate-900 dark:text-white p-3 rounded mb-4 animate-pulse">
           {successMessage}
         </div>
       )}
@@ -224,7 +224,7 @@ const ManageMatches = () => {
               name="competition"
               value={formData.competition}
               onChange={handleInputChange}
-              className="bg-gray-700 p-2 rounded text-white w-full"
+              className="bg-gray-700 p-2 rounded text-slate-900 dark:text-white w-full"
               required
             >
               <option value="" disabled>Select Competition</option>
@@ -241,7 +241,7 @@ const ManageMatches = () => {
                 name="teamA"
                 value={formData.teamA}
                 onChange={handleInputChange}
-                className="bg-gray-700 p-2 rounded text-white w-full"
+                className="bg-gray-700 p-2 rounded text-slate-900 dark:text-white w-full"
                 required
               >
                 <option value="" disabled>Select Home Team</option>
@@ -257,7 +257,7 @@ const ManageMatches = () => {
                 placeholder="Home Manager"
                 value={formData.managerA || ''}
                 onChange={handleInputChange}
-                className="bg-gray-700 p-2 rounded text-white w-full mt-2 text-sm"
+                className="bg-gray-700 p-2 rounded text-slate-900 dark:text-white w-full mt-2 text-sm"
               />
             </div>
             <div>
@@ -266,7 +266,7 @@ const ManageMatches = () => {
                 name="teamB"
                 value={formData.teamB}
                 onChange={handleInputChange}
-                className="bg-gray-700 p-2 rounded text-white w-full"
+                className="bg-gray-700 p-2 rounded text-slate-900 dark:text-white w-full"
                 required
               >
                 <option value="" disabled>Select Away Team</option>
@@ -282,7 +282,7 @@ const ManageMatches = () => {
                 placeholder="Away Manager"
                 value={formData.managerB || ''}
                 onChange={handleInputChange}
-                className="bg-gray-700 p-2 rounded text-white w-full mt-2 text-sm"
+                className="bg-gray-700 p-2 rounded text-slate-900 dark:text-white w-full mt-2 text-sm"
               />
             </div>
           </div>
@@ -295,7 +295,7 @@ const ManageMatches = () => {
                 name="date"
                 value={formData.date}
                 onChange={handleInputChange}
-                className="bg-gray-700 p-2 rounded text-white w-full"
+                className="bg-gray-700 p-2 rounded text-slate-900 dark:text-white w-full"
               />
             </div>
             <div>
@@ -305,7 +305,7 @@ const ManageMatches = () => {
                 name="time"
                 value={formData.time}
                 onChange={handleInputChange}
-                className="bg-gray-700 p-2 rounded text-white w-full"
+                className="bg-gray-700 p-2 rounded text-slate-900 dark:text-white w-full"
               />
             </div>
           </div>
@@ -318,7 +318,7 @@ const ManageMatches = () => {
               placeholder="Round / Group"
               value={formData.round || ''}
               onChange={handleInputChange}
-              className="bg-gray-700 p-2 rounded text-white w-full"
+              className="bg-gray-700 p-2 rounded text-slate-900 dark:text-white w-full"
             />
           </div>
 
@@ -331,7 +331,7 @@ const ManageMatches = () => {
                 placeholder="0"
                 value={formData.scoreA}
                 onChange={handleInputChange}
-                className="bg-gray-700 p-2 rounded text-white w-full"
+                className="bg-gray-700 p-2 rounded text-slate-900 dark:text-white w-full"
               />
             </div>
             <div className="w-full">
@@ -342,7 +342,7 @@ const ManageMatches = () => {
                 placeholder="0"
                 value={formData.scoreB}
                 onChange={handleInputChange}
-                className="bg-gray-700 p-2 rounded text-white w-full"
+                className="bg-gray-700 p-2 rounded text-slate-900 dark:text-white w-full"
               />
             </div>
           </div>
@@ -354,7 +354,7 @@ const ManageMatches = () => {
                 name="status"
                 value={formData.status}
                 onChange={handleInputChange}
-                className="bg-gray-700 p-2 rounded text-white w-full"
+                className="bg-gray-700 p-2 rounded text-slate-900 dark:text-white w-full"
               >
                 <option value="scheduled">Scheduled</option>
                 <option value="live">Live</option>
@@ -369,14 +369,14 @@ const ManageMatches = () => {
                 placeholder="0'"
                 value={formData.currentMinute}
                 onChange={handleInputChange}
-                className="bg-gray-700 p-2 rounded text-white w-full"
+                className="bg-gray-700 p-2 rounded text-slate-900 dark:text-white w-full"
               />
             </div>
           </div>
           <button
             type="submit"
             disabled={loading}
-            className={`bg-green-600 hover:bg-green-700 p-2 rounded text-white col-span-full ${loading ? 'opacity-50 cursor-not-allowed' : ''}`}
+            className={`bg-green-600 hover:bg-green-700 p-2 rounded text-slate-900 dark:text-white col-span-full ${loading ? 'opacity-50 cursor-not-allowed' : ''}`}
           >
             {loading ? 'Saving...' : (editingId ? 'Update Match' : 'Add Match')}
           </button>
@@ -400,7 +400,7 @@ const ManageMatches = () => {
                   round: ''
                 });
               }}
-              className="bg-gray-600 hover:bg-gray-500 p-2 rounded text-white col-span-full"
+              className="bg-gray-600 hover:bg-gray-500 p-2 rounded text-slate-900 dark:text-white col-span-full"
             >
               Cancel Edit
             </button>
