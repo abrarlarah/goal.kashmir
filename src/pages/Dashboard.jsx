@@ -5,7 +5,7 @@ import { calculateStandings } from '../utils/soccerUtils';
 import LineupDisplay from '../components/common/LineupDisplay';
 import MatchTimer from '../components/common/MatchTimer';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Calendar, Clock, MapPin, Shirt, ChevronRight, Trophy, TrendingUp, Users, Activity, MapPinned } from 'lucide-react';
+import { Calendar, Clock, MapPin, Shirt, ChevronRight, Trophy, TrendingUp, Users, Activity, MapPinned, ExternalLink } from 'lucide-react';
 import { cn } from '../utils/cn';
 
 // Districts of Jammu and Kashmir
@@ -96,6 +96,7 @@ const Dashboard = () => {
 
   const getMatchLineups = (matchId) => lineups.filter(l => l.matchId === matchId);
   const getTeamInfo = (teamName) => teams.find(t => t.name === teamName) || {};
+  const getTournamentId = (name) => tournaments.find(t => t.name === name)?.id;
 
   // Dashboard Enhancements Logic
   const today = new Date().toISOString().split('T')[0];
@@ -215,36 +216,60 @@ const Dashboard = () => {
         </div>
 
         {/* Tournament Filter */}
-        <div className="flex flex-wrap gap-2 bg-white dark:bg-dark-card/50 backdrop-blur-sm p-1.5 rounded-xl border border-slate-200 dark:border-white/5">
-          <button
-            onClick={() => setDashboardCompetitionId('All')}
-            className={cn(
-              "px-4 py-2 rounded-lg text-sm font-medium transition-all duration-300",
-              dashboardCompetitionId === 'All'
-                ? "bg-brand-500 text-slate-900 dark:text-white shadow-lg shadow-brand-500/20"
-                : "text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:text-white hover:bg-white/5"
-            )}
-          >
-            All Tournaments
-          </button>
-          {filteredTournaments.map(t => (
+        <div className="flex flex-wrap items-center gap-2 bg-white dark:bg-dark-card/50 backdrop-blur-sm p-1.5 rounded-xl border border-slate-200 dark:border-white/5">
+          <div className="flex items-center">
             <button
-              key={t.id}
-              onClick={() => setDashboardCompetitionId(t.id)}
+              onClick={() => setDashboardCompetitionId('All')}
               className={cn(
-                "px-4 py-2 rounded-lg text-sm font-medium transition-all duration-300 flex items-center gap-2",
-                dashboardCompetitionId === t.id
+                "px-4 py-2 rounded-lg text-sm font-medium transition-all duration-300",
+                dashboardCompetitionId === 'All'
                   ? "bg-brand-500 text-slate-900 dark:text-white shadow-lg shadow-brand-500/20"
                   : "text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:text-white hover:bg-white/5"
               )}
             >
-              {t.name}
-              <span className="text-[10px] opacity-60">
-                {t.startDate ? `(${new Date(t.startDate).getFullYear()})` : ''}
-                {t.district ? ` • ${t.district}` : ''}
-              </span>
+              All Tournaments
             </button>
-          ))}
+            <Link to="/tournaments" className="p-2 text-slate-400 hover:text-brand-500 transition-colors" title="View All Tournaments">
+              <ExternalLink size={14} />
+            </Link>
+          </div>
+
+          <div className="flex flex-wrap gap-2">
+            {filteredTournaments.map(t => (
+              <div key={t.id} className="flex items-center">
+                <button
+                  onClick={() => setDashboardCompetitionId(t.id)}
+                  className={cn(
+                    "px-4 py-2 rounded-lg text-sm font-medium transition-all duration-300 flex items-center gap-2",
+                    dashboardCompetitionId === t.id
+                      ? "bg-brand-500 text-slate-900 dark:text-white shadow-lg shadow-brand-500/20"
+                      : "text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:text-white hover:bg-white/5"
+                  )}
+                >
+                  {t.name}
+                  <span className="text-[10px] opacity-60">
+                    {t.startDate ? `(${new Date(t.startDate).getFullYear()})` : ''}
+                  </span>
+                </button>
+                <Link
+                  to={`/tournaments/${t.id}`}
+                  className={cn(
+                    "p-2 transition-colors",
+                    dashboardCompetitionId === t.id ? "text-slate-900 dark:text-white" : "text-slate-500 hover:text-brand-500"
+                  )}
+                  title={`Go to ${t.name} Details`}
+                >
+                  <ExternalLink size={14} />
+                </Link>
+              </div>
+            ))}
+          </div>
+
+          <div className="ml-auto pr-2 border-l border-white/10 pl-2 self-center flex items-center gap-1">
+            <Link to="/tournaments" className="text-xs font-bold text-brand-400 hover:text-brand-300 transition-colors flex items-center gap-1">
+              See All <ChevronRight size={14} />
+            </Link>
+          </div>
         </div>
       </motion.div>
 
@@ -295,7 +320,13 @@ const Dashboard = () => {
                                 <MapPin size={14} /> {match.stadium}
                               </span>
                             )}
-                            <span className="px-2 py-1 bg-white/5 rounded text-slate-700 dark:text-slate-300">{match.competition}</span>
+                            {getTournamentId(match.competition) ? (
+                              <Link to={`/tournaments/${getTournamentId(match.competition)}`} className="px-2 py-1 bg-brand-500/10 hover:bg-brand-500/20 text-brand-500 rounded transition-colors">
+                                {match.competition}
+                              </Link>
+                            ) : (
+                              <span className="px-2 py-1 bg-white/5 rounded text-slate-700 dark:text-slate-300">{match.competition}</span>
+                            )}
                           </div>
                         </div>
 
@@ -444,7 +475,13 @@ const Dashboard = () => {
 
                   {/* Meta */}
                   <div className="flex-shrink-0 flex items-center gap-3 opacity-50 group-hover:opacity-100 transition-opacity">
-                    <span className="text-xs text-slate-600 dark:text-slate-400 bg-white/5 px-2 py-1 rounded">{match.competition}</span>
+                    {getTournamentId(match.competition) ? (
+                      <Link to={`/tournaments/${getTournamentId(match.competition)}`} className="text-xs text-brand-400 font-bold bg-brand-500/5 px-2 py-1 rounded hover:bg-brand-500/10 transition-colors">
+                        {match.competition}
+                      </Link>
+                    ) : (
+                      <span className="text-xs text-slate-600 dark:text-slate-400 bg-white/5 px-2 py-1 rounded">{match.competition}</span>
+                    )}
                   </div>
 
                   <Link to={`/live/${match.id}`} className="absolute inset-0" />
@@ -464,8 +501,12 @@ const Dashboard = () => {
               {finishedMatches.length > 0 ? finishedMatches.map(match => (
                 <div key={match.id} className="p-4 rounded-xl bg-white dark:bg-dark-card border border-slate-200 dark:border-white/5 flex flex-col gap-3 group hover:bg-slate-50 dark:bg-dark-surface hover:border-brand-500/30 transition-all cursor-pointer">
                   <Link to={`/live/${match.id}`} className="block">
-                    <div className="flex justify-between text-xs text-slate-500">
-                      <span>{match.competition}</span>
+                    <div className="flex justify-between text-xs text-slate-500 mb-1">
+                      {getTournamentId(match.competition) ? (
+                        <span className="text-brand-400 font-bold">{match.competition}</span>
+                      ) : (
+                        <span>{match.competition}</span>
+                      )}
                       <span>{match.date && new Date(match.date).toLocaleDateString()}</span>
                     </div>
                     <div className="flex justify-between items-center">
@@ -501,9 +542,19 @@ const Dashboard = () => {
               <h3 className="font-display font-bold text-slate-900 dark:text-white flex items-center gap-2">
                 <Trophy size={18} className="text-yellow-500" /> Standings
               </h3>
-              <Link to="/leaderboard" className="text-xs text-brand-400 hover:text-brand-300 font-medium flex items-center">
-                View All <ChevronRight size={14} />
-              </Link>
+              <div className="flex items-center gap-3">
+                {dashboardCompetitionId !== 'All' && (
+                  <Link
+                    to={`/tournaments/${dashboardCompetitionId}`}
+                    className="text-[10px] font-black uppercase tracking-widest text-brand-400 hover:text-brand-300 flex items-center bg-brand-500/5 px-2 py-1 rounded-lg border border-brand-500/10"
+                  >
+                    Details
+                  </Link>
+                )}
+                <Link to="/leaderboard" className="text-xs text-slate-400 hover:text-slate-300 font-medium flex items-center">
+                  All <ChevronRight size={14} />
+                </Link>
+              </div>
             </div>
 
             {dashboardCompetitionId === 'All' ? (

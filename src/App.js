@@ -19,6 +19,8 @@ import ManageNews from './pages/admin/ManageNews'; // Admin News
 import News from './pages/News'; // Public News
 import NewsDetail from './pages/NewsDetail'; // Public News Detail
 import TournamentDetail from './pages/TournamentDetail';
+import PlayerDetail from './pages/PlayerDetail';
+import TeamDetail from './pages/TeamDetail';
 import Search from './pages/Search';
 import PrivateRoute from './components/common/PrivateRoute';
 import { DataProvider } from './context/DataContext';
@@ -38,7 +40,9 @@ function App() {
               <Route path="/tournaments/:id" element={<TournamentDetail />} />
               <Route path="/search" element={<Search />} />
               <Route path="/teams" element={<Teams />} />
+              <Route path="/teams/:id" element={<TeamDetail />} />
               <Route path="/players" element={<Players />} />
+              <Route path="/players/:id" element={<PlayerDetail />} />
               <Route path="/leaderboard" element={<Leaderboard />} />
               <Route path="/news" element={<News />} />
               <Route path="/news/:id" element={<NewsDetail />} />

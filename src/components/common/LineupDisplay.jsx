@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 
 const LineupDisplay = ({ lineup, players }) => {
     if (!lineup || !lineup.starting11 || lineup.starting11.length === 0) {
@@ -37,7 +38,7 @@ const LineupDisplay = ({ lineup, players }) => {
 
     // Player card component
     const PlayerCard = ({ player }) => (
-        <div className="flex flex-col items-center gap-1 group">
+        <Link to={`/players/${player.id}`} className="flex flex-col items-center gap-1 group">
             <div className="relative">
                 <div className="h-10 w-10 md:h-12 md:w-12 rounded-full border-2 border-slate-200 dark:border-white/80 overflow-hidden bg-slate-900/50 flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform duration-300">
                     {player.photoUrl ? (
@@ -53,14 +54,14 @@ const LineupDisplay = ({ lineup, players }) => {
                 </div>
             </div>
             <div className="text-center">
-                <div className="text-[10px] md:text-xs font-bold text-slate-900 dark:text-white drop-shadow-md leading-tight">
+                <div className="text-[10px] md:text-xs font-bold text-slate-900 dark:text-white drop-shadow-md leading-tight group-hover:text-green-300 transition-colors">
                     {player.name.split(' ').pop()}
                 </div>
                 <div className="text-[8px] text-green-200 font-medium tracking-wider opacity-80 uppercase">
                     {player.position.slice(0, 3)}
                 </div>
             </div>
-        </div>
+        </Link>
     );
 
     return (
@@ -118,7 +119,11 @@ const LineupDisplay = ({ lineup, players }) => {
                         {lineup.bench.map(playerId => {
                             const player = getPlayer(playerId);
                             return player ? (
-                                <div key={player.id} className="flex items-center gap-2 bg-black/30 rounded-full pl-1 pr-3 py-1 text-xs text-slate-900 dark:text-white border border-slate-200 dark:border-white/5">
+                                <Link
+                                    key={player.id}
+                                    to={`/players/${player.id}`}
+                                    className="flex items-center gap-2 bg-black/30 rounded-full pl-1 pr-3 py-1 text-xs text-slate-900 dark:text-white border border-slate-200 dark:border-white/5 hover:bg-black/50 transition-colors"
+                                >
                                     <div className="h-6 w-6 rounded-full overflow-hidden bg-slate-700 flex items-center justify-center shrink-0">
                                         {player.photoUrl ? (
                                             <img src={player.photoUrl} alt="" className="h-full w-full object-cover" />
@@ -127,7 +132,7 @@ const LineupDisplay = ({ lineup, players }) => {
                                         )}
                                     </div>
                                     <span className="font-medium whitespace-nowrap">{player.name}</span>
-                                </div>
+                                </Link>
                             ) : null;
                         })}
                     </div>

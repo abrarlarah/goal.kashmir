@@ -148,36 +148,38 @@ const Teams = () => {
             whileHover={{ y: -5 }}
             className="group relative glass-card rounded-2xl overflow-hidden hover:border-brand-500/30 transition-all duration-300"
           >
-            {/* Background Glow */}
-            <div className="absolute -top-20 -right-20 w-40 h-40 bg-brand-500/20 rounded-full blur-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+            <Link to={`/teams/${team.id}`} className="block">
+              {/* Background Glow */}
+              <div className="absolute -top-20 -right-20 w-40 h-40 bg-brand-500/20 rounded-full blur-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
 
-            {/* Team Logo/Name */}
-            <div className="p-6 pb-4">
-              <div className="flex items-center gap-4">
-                <div className="flex-shrink-0">
-                  {team.logoUrl ? (
-                    <div className="w-16 h-16 rounded-xl bg-white/5 border border-slate-200 dark:border-white/10 p-2 flex items-center justify-center overflow-hidden">
-                      <img src={team.logoUrl} alt={team.name} className="w-full h-full object-contain" />
+              {/* Team Logo/Name */}
+              <div className="p-6 pb-4">
+                <div className="flex items-center gap-4">
+                  <div className="flex-shrink-0">
+                    {team.logoUrl ? (
+                      <div className="w-16 h-16 rounded-xl bg-white/5 border border-slate-200 dark:border-white/10 p-2 flex items-center justify-center overflow-hidden">
+                        <img src={team.logoUrl} alt={team.name} className="w-full h-full object-contain" />
+                      </div>
+                    ) : (
+                      <div className="w-16 h-16 rounded-xl bg-brand-500 flex items-center justify-center text-slate-900 dark:text-white text-2xl font-bold shadow-lg shadow-brand-500/20">
+                        {team.shortName || team.name.substring(0, 2).toUpperCase()}
+                      </div>
+                    )}
+                  </div>
+                  <div>
+                    <h3 className="text-xl font-display font-bold text-slate-900 dark:text-white group-hover:text-brand-400 transition-colors">
+                      {team.name}
+                    </h3>
+                    <div className="flex items-center gap-2 mt-1">
+                      <span className="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider bg-brand-500/10 text-brand-400 border border-brand-500/10">
+                        {team.status || 'Active'}
+                      </span>
+                      <span className="text-slate-500 text-xs font-medium">Est. {team.founded || 'N/A'}</span>
                     </div>
-                  ) : (
-                    <div className="w-16 h-16 rounded-xl bg-brand-500 flex items-center justify-center text-slate-900 dark:text-white text-2xl font-bold shadow-lg shadow-brand-500/20">
-                      {team.shortName || team.name.substring(0, 2).toUpperCase()}
-                    </div>
-                  )}
-                </div>
-                <div>
-                  <h3 className="text-xl font-display font-bold text-slate-900 dark:text-white group-hover:text-brand-400 transition-colors">
-                    {team.name}
-                  </h3>
-                  <div className="flex items-center gap-2 mt-1">
-                    <span className="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider bg-brand-500/10 text-brand-400 border border-brand-500/10">
-                      {team.status || 'Active'}
-                    </span>
-                    <span className="text-slate-500 text-xs font-medium">Est. {team.founded || 'N/A'}</span>
                   </div>
                 </div>
               </div>
-            </div>
+            </Link>
 
             {/* Footer Stats/Status */}
             <div className="px-6 py-4 border-t border-slate-200 dark:border-white/5 bg-black/20 flex justify-between items-center relative z-10">

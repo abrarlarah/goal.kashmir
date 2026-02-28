@@ -6,6 +6,7 @@ import { cn } from '../utils/cn';
 import { useAuth } from '../context/AuthContext';
 import { db } from '../firebase';
 import MatchTimer from '../components/common/MatchTimer';
+import MatchBracket from '../components/common/MatchBracket';
 import { doc, updateDoc, addDoc, collection } from 'firebase/firestore';
 
 const TournamentDetail = () => {
@@ -478,7 +479,7 @@ const TournamentDetail = () => {
                                     <tr key={team.id} className="hover:bg-white/5 transition-colors">
                                         <td className="px-6 py-4 font-black text-slate-500">{idx + 1}</td>
                                         <td className="px-6 py-4">
-                                            <div className="flex items-center gap-3 text-slate-900 dark:text-white font-bold">
+                                            <Link to={`/teams/${team.id}`} className="flex items-center gap-3 text-slate-900 dark:text-white font-bold hover:text-brand-400 transition-colors">
                                                 {team.logoUrl ? (
                                                     <img src={team.logoUrl} className="w-8 h-8 object-contain" alt="" />
                                                 ) : (
@@ -487,7 +488,7 @@ const TournamentDetail = () => {
                                                     </div>
                                                 )}
                                                 {team.name}
-                                            </div>
+                                            </Link>
                                         </td>
                                         <td className="px-4 py-4 text-center font-bold text-slate-600 dark:text-slate-400">{team.played}</td>
                                         <td className="px-4 py-4 text-center font-bold text-slate-600 dark:text-slate-400">{team.wins}</td>
@@ -503,32 +504,7 @@ const TournamentDetail = () => {
                 )}
 
                 {activeTab === 'bracket' && (
-                    <div className="space-y-12 py-8 overflow-x-auto">
-                        <div className="flex gap-16 min-w-[800px] justify-center">
-                            {/* Simple Bracket Logic: assuming rounds are named 'Final', 'Semi-Final', 'Quarter-Final' */}
-                            {['Quarter-Final', 'Semi-Final', 'Final'].map(round => (
-                                matchesByRound[round] ? (
-                                    <div key={round} className="flex flex-col gap-8">
-                                        <h4 className="text-center text-xs font-black uppercase tracking-widest text-slate-500">{round}</h4>
-                                        <div className="flex flex-col gap-8 justify-around flex-1">
-                                            {matchesByRound[round].map(match => (
-                                                <div key={match.id} className="w-48 bg-slate-800 border border-slate-200 dark:border-white/10 rounded-xl overflow-hidden shadow-xl">
-                                                    <div className={cn("p-2 border-b border-slate-200 dark:border-white/5 flex justify-between items-center", match.scoreA > match.scoreB && "bg-brand-500/10")}>
-                                                        <span className="text-xs font-bold text-slate-900 dark:text-white truncate max-w-[100px]">{match.teamA}</span>
-                                                        <span className="text-xs font-black text-slate-900 dark:text-white">{match.scoreA}</span>
-                                                    </div>
-                                                    <div className={cn("p-2 flex justify-between items-center", match.scoreB > match.scoreA && "bg-brand-500/10")}>
-                                                        <span className="text-xs font-bold text-slate-900 dark:text-white truncate max-w-[100px]">{match.teamB}</span>
-                                                        <span className="text-xs font-black text-slate-900 dark:text-white">{match.scoreB}</span>
-                                                    </div>
-                                                </div>
-                                            ))}
-                                        </div>
-                                    </div>
-                                ) : null
-                            ))}
-                        </div>
-                    </div>
+                    <MatchBracket matchesByRound={matchesByRound} />
                 )}
 
                 {activeTab === 'teams' && (
@@ -551,11 +527,18 @@ const TournamentDetail = () => {
 
                         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
                             {tournamentTeams.map(team => (
-                                <div key={team.id} className="relative group bg-slate-900 border border-slate-200 dark:border-white/5 p-6 rounded-3xl hover:border-brand-500/20 transition-all text-center flex flex-col items-center">
+                                <Link
+                                    key={team.id}
+                                    to={`/teams/${team.id}`}
+                                    className="relative group bg-slate-900 border border-slate-200 dark:border-white/5 p-6 rounded-3xl hover:border-brand-500/20 transition-all text-center flex flex-col items-center shadow-lg"
+                                >
                                     {isAdmin && (
                                         <button
-                                            onClick={() => handleRemoveTeam(team)}
-                                            className="absolute top-2 right-2 p-2 bg-red-500/10 text-red-500 rounded-full opacity-0 group-hover:opacity-100 hover:bg-red-500 hover:text-slate-900 dark:text-white transition-all"
+                                            onClick={(e) => {
+                                                e.preventDefault(); // Prevent navigating to team detail
+                                                handleRemoveTeam(team);
+                                            }}
+                                            className="absolute top-2 right-2 p-2 bg-red-500/10 text-red-500 rounded-full opacity-0 group-hover:opacity-100 hover:bg-red-500 hover:text-slate-900 dark:text-white transition-all z-20"
                                         >
                                             <X size={14} />
                                         </button>
@@ -567,9 +550,9 @@ const TournamentDetail = () => {
                                             {team.name.substring(0, 2).toUpperCase()}
                                         </div>
                                     )}
-                                    <h4 className="text-lg font-bold text-slate-900 dark:text-white mb-1">{team.name}</h4>
+                                    <h4 className="text-lg font-bold text-slate-900 dark:text-white mb-1 group-hover:text-brand-400 transition-colors">{team.name}</h4>
                                     <p className="text-xs text-slate-500 uppercase tracking-widest font-bold">{team.shortName || 'Club'}</p>
-                                </div>
+                                </Link>
                             ))}
                         </div>
 

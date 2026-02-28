@@ -222,7 +222,7 @@ const Players = () => {
                 return (
                   <tr key={player.id} className="hover:bg-white/5 transition-colors group">
                     <td className="px-6 py-4 whitespace-nowrap">
-                      <div className="flex items-center gap-3">
+                      <Link to={`/players/${player.id}`} className="flex items-center gap-3">
                         <div className="h-10 w-10 rounded-full bg-slate-700 flex items-center justify-center text-xs font-bold text-slate-700 dark:text-slate-300 overflow-hidden border border-slate-200 dark:border-white/10 group-hover:border-brand-500/30 transition-colors">
                           {player.photoUrl ? (
                             <img src={player.photoUrl} alt={player.name} className="h-full w-full object-cover" />
@@ -231,7 +231,7 @@ const Players = () => {
                           )}
                         </div>
                         <div className="text-sm font-medium text-slate-900 dark:text-white group-hover:text-brand-400 transition-colors">{player.name}</div>
-                      </div>
+                      </Link>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
                       <div className="flex items-center gap-2 text-sm text-slate-700 dark:text-slate-300">

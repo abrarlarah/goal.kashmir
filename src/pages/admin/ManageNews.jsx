@@ -413,12 +413,13 @@ const ManageNews = () => {
 
                                     {/* URL Input Fallback */}
                                     <input
-                                        type="url"
+                                        type="text"
                                         placeholder="Or paste image URL..."
                                         className="w-full bg-black/20 border border-slate-200 dark:border-white/10 rounded-lg px-4 py-2 text-slate-900 dark:text-white focus:ring-1 focus:ring-brand-500 outline-none text-sm"
                                         value={formData.imageUrl}
                                         onChange={e => setFormData({ ...formData, imageUrl: e.target.value })}
                                         disabled={showCamera}
+                                        required
                                     />
 
                                     {/* Action Buttons */}
@@ -454,12 +455,7 @@ const ManageNews = () => {
                                         </div>
                                     )}
 
-                                    <AssetPicker
-                                        isOpen={showAssetPicker}
-                                        onClose={() => setShowAssetPicker(false)}
-                                        onSelect={(url) => setFormData(prev => ({ ...prev, imageUrl: url }))}
-                                        category="News"
-                                    />
+                                    {/* AssetPicker is moved to bottom of component */}
 
                                     {/* Preview */}
                                     {formData.imageUrl && !showCamera && (
@@ -581,6 +577,12 @@ const ManageNews = () => {
                     )}
                 </div>
             </div>
+            <AssetPicker
+                isOpen={showAssetPicker}
+                onClose={() => setShowAssetPicker(false)}
+                onSelect={(url) => setFormData(prev => ({ ...prev, imageUrl: url }))}
+                category="News"
+            />
         </div>
     );
 };
