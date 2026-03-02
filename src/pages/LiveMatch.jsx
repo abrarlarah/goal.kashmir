@@ -1,7 +1,7 @@
 // src/pages/LiveMatch.jsx
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { useParams } from 'react-router-dom';
-import { doc, onSnapshot, updateDoc, collection, addDoc, query, where, getDocs, deleteDoc } from 'firebase/firestore';
+import { doc, onSnapshot, updateDoc, collection, addDoc, query, where, getDocs, deleteDoc, writeBatch } from 'firebase/firestore';
 import { db } from '../firebase';
 import { useAuth } from '../context/AuthContext';
 import { useData } from '../context/DataContext';
@@ -22,8 +22,21 @@ const LiveMatch = () => {
   const [showCancelSelect, setShowCancelSelect] = useState(null); // { team: 'A' | 'B' }
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
+  const [isEditingTeams, setIsEditingTeams] = useState(false);
+  const [editFormData, setEditFormData] = useState({ teamA: '', teamB: '' });
   const { isAdmin } = useAuth();
   const { players, lineups, teams } = useData();
+
+  // Filter teams to only show those registered in THIS tournament
+  const tournamentTeams = useMemo(() => {
+    if (!match || !match.competition || !teams) return [];
+    return teams.filter(team => {
+      const tTournaments = Array.isArray(team.tournaments)
+        ? team.tournaments
+        : (typeof team.tournaments === 'string' ? team.tournaments.split(',').map(t => t.trim()) : []);
+      return tTournaments.includes(match.competition);
+    });
+  }, [teams, match]);
 
   useEffect(() => {
     // Subscribe to match updates
@@ -250,6 +263,66 @@ const LiveMatch = () => {
     }
   };
 
+  const handleUpdateTeams = async () => {
+    try {
+      const teamAInfo = teams.find(t => t.name === editFormData.teamA) || {};
+      const teamBInfo = teams.find(t => t.name === editFormData.teamB) || {};
+
+      const nameAChanged = match.teamA !== editFormData.teamA;
+      const nameBChanged = match.teamB !== editFormData.teamB;
+
+      // Primary match update
+      await updateDoc(doc(db, 'matches', matchId), {
+        teamA: editFormData.teamA,
+        teamB: editFormData.teamB,
+        managerA: teamAInfo.manager || '',
+        managerB: teamBInfo.manager || ''
+      });
+
+      // Optional cascading update for placeholders
+      if (nameAChanged || nameBChanged) {
+        let msg = "";
+        if (nameAChanged && nameBChanged) msg = `Update all matches replacing "${match.teamA}" with "${editFormData.teamA}" AND "${match.teamB}" with "${editFormData.teamB}"?`;
+        else if (nameAChanged) msg = `Update all matches replacing "${match.teamA}" with "${editFormData.teamA}"?`;
+        else msg = `Update all matches replacing "${match.teamB}" with "${editFormData.teamB}"?`;
+
+        if (window.confirm(msg)) {
+          const batch = writeBatch(db);
+          const qAList = [nameAChanged ? match.teamA : null, nameBChanged ? match.teamB : null].filter(Boolean);
+          const qBList = [nameAChanged ? match.teamA : null, nameBChanged ? match.teamB : null].filter(Boolean);
+
+          const qA = query(collection(db, 'matches'), where('tournamentId', '==', match.tournamentId), where('teamA', 'in', qAList));
+          const qB = query(collection(db, 'matches'), where('tournamentId', '==', match.tournamentId), where('teamB', 'in', qBList));
+
+          const [snapA, snapB] = await Promise.all([getDocs(qA), getDocs(qB)]);
+
+          snapA.forEach(d => {
+            const data = d.data();
+            const updates = {};
+            if (nameAChanged && data.teamA === match.teamA) { updates.teamA = editFormData.teamA; updates.managerA = teamAInfo.manager || ''; }
+            if (nameBChanged && data.teamA === match.teamB) { updates.teamA = editFormData.teamB; updates.managerA = teamBInfo.manager || ''; }
+            if (Object.keys(updates).length > 0) batch.update(d.ref, updates);
+          });
+
+          snapB.forEach(d => {
+            const data = d.data();
+            const updates = {};
+            if (nameAChanged && data.teamB === match.teamA) { updates.teamB = editFormData.teamA; updates.managerB = teamAInfo.manager || ''; }
+            if (nameBChanged && data.teamB === match.teamB) { updates.teamB = editFormData.teamB; updates.managerB = teamBInfo.manager || ''; }
+            if (Object.keys(updates).length > 0) batch.update(d.ref, updates);
+          });
+
+          await batch.commit();
+        }
+      }
+
+      setIsEditingTeams(false);
+    } catch (err) {
+      console.error("Error updating teams:", err);
+      alert("Error updating team names: " + err.message);
+    }
+  };
+
   const toggleTimer = async () => {
     if (!match) return;
 
@@ -376,7 +449,16 @@ const LiveMatch = () => {
                   <button onClick={() => updateMinute(1)} className="bg-gray-700 text-slate-900 dark:text-white px-3 py-1.5 rounded-lg hover:bg-gray-600 transition-colors text-sm font-bold">+1m</button>
                   <button onClick={() => updateMinute(5)} className="bg-gray-700 text-slate-900 dark:text-white px-3 py-1.5 rounded-lg hover:bg-gray-600 transition-colors text-sm font-bold">+5m</button>
                 </div>
-                <div className="flex flex-col gap-2">
+                <div className="flex flex-col gap-1.5">
+                  <button
+                    onClick={() => {
+                      setIsEditingTeams(!isEditingTeams);
+                      setEditFormData({ teamA: match.teamA, teamB: match.teamB });
+                    }}
+                    className="w-full py-1.5 bg-slate-700 hover:bg-slate-600 rounded text-[10px] font-black uppercase tracking-widest text-brand-400 border border-brand-500/20"
+                  >
+                    🛠️ Edit Teams
+                  </button>
                   <button
                     onClick={toggleTimer}
                     className={`w-full py-2 rounded font-bold text-slate-900 dark:text-white transition-colors ${match.timerRunning ? 'bg-yellow-600 hover:bg-yellow-700' : 'bg-green-600 hover:bg-green-700'}`}
@@ -398,13 +480,67 @@ const LiveMatch = () => {
                 </div>
               </div>
 
-              {/* Team B Controls */}
               <div className="p-2 border border-gray-600 rounded">
                 <p className="text-slate-900 dark:text-white mb-2">{match.teamB}</p>
                 <button onClick={() => updateScore('B', 1)} className="bg-green-600 text-slate-900 dark:text-white px-3 py-1 rounded mx-1 hover:bg-green-700">+ Goal</button>
                 <button onClick={() => updateScore('B', -1)} className="bg-red-600 text-slate-900 dark:text-white px-3 py-1 rounded mx-1 hover:bg-red-700">- Goal</button>
               </div>
             </div>
+
+            {/* Team Editing Inline UI */}
+            {isEditingTeams && (
+              <div className="mt-4 p-4 bg-gray-900 rounded-xl border border-brand-500/50 shadow-2xl">
+                <h4 className="text-xs font-black uppercase tracking-widest text-brand-400 mb-4">Edit Match Participants</h4>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div>
+                    <label className="text-[10px] text-gray-500 uppercase font-bold mb-1 block">Team A (Home)</label>
+                    <select
+                      value={editFormData.teamA}
+                      onChange={(e) => setEditFormData({ ...editFormData, teamA: e.target.value })}
+                      className="w-full bg-slate-800 border border-slate-700 rounded-lg p-2 text-slate-900 dark:text-white text-sm"
+                    >
+                      <option value="">Select Home Team</option>
+                      {tournamentTeams.map(t => (
+                        <option key={t.id} value={t.name}>{t.name}</option>
+                      ))}
+                      {!tournamentTeams.find(t => t.name === (match.teamA || '')) && match.teamA && (
+                        <option value={match.teamA}>{match.teamA} (Not in Tournament)</option>
+                      )}
+                    </select>
+                  </div>
+                  <div>
+                    <label className="text-[10px] text-gray-500 uppercase font-bold mb-1 block">Team B (Away)</label>
+                    <select
+                      value={editFormData.teamB}
+                      onChange={(e) => setEditFormData({ ...editFormData, teamB: e.target.value })}
+                      className="w-full bg-slate-800 border border-slate-700 rounded-lg p-2 text-slate-900 dark:text-white text-sm"
+                    >
+                      <option value="">Select Away Team</option>
+                      {tournamentTeams.map(t => (
+                        <option key={t.id} value={t.name}>{t.name}</option>
+                      ))}
+                      {!tournamentTeams.find(t => t.name === (match.teamB || '')) && match.teamB && (
+                        <option value={match.teamB}>{match.teamB} (Not in Tournament)</option>
+                      )}
+                    </select>
+                  </div>
+                </div>
+                <div className="mt-4 flex gap-2">
+                  <button
+                    onClick={handleUpdateTeams}
+                    className="bg-brand-500 text-slate-900 px-4 py-2 rounded-lg font-bold text-sm"
+                  >
+                    Save Changes
+                  </button>
+                  <button
+                    onClick={() => setIsEditingTeams(false)}
+                    className="bg-slate-700 text-slate-900 dark:text-white px-4 py-2 rounded-lg text-sm"
+                  >
+                    Cancel
+                  </button>
+                </div>
+              </div>
+            )}
 
             {/* Card Controls */}
             <div className="grid grid-cols-2 gap-4 mt-4">

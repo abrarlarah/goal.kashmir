@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { collection, addDoc, updateDoc, deleteDoc, doc } from 'firebase/firestore';
+import { collection, addDoc, updateDoc, deleteDoc, doc, query, where, getDocs, writeBatch } from 'firebase/firestore';
 import { ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage';
 import { db, storage } from '../../firebase';
 import { useData } from '../../context/DataContext';
@@ -96,7 +96,7 @@ const ManageTeams = () => {
         }
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
         setLoading(true);
         setSuccessMessage('');
@@ -107,35 +107,63 @@ const ManageTeams = () => {
             tournaments: Array.isArray(formData.tournaments) ? formData.tournaments : []
         };
 
-        const request = editingId
-            ? updateDoc(doc(db, 'teams', editingId), dataToSave)
-            : addDoc(collection(db, 'teams'), dataToSave);
+        try {
+            if (editingId) {
+                const originalTeam = teams.find(t => t.id === editingId);
+                const nameChanged = originalTeam && originalTeam.name !== formData.name;
 
-        request.catch((error) => {
+                await updateDoc(doc(db, 'teams', editingId), dataToSave);
+
+                // Cascade updates if name changed
+                if (nameChanged) {
+                    const oldName = originalTeam.name;
+                    const newName = formData.name;
+                    const batch = writeBatch(db);
+
+                    // 1. Update Matches
+                    const matchesQueryA = query(collection(db, 'matches'), where('teamA', '==', oldName));
+                    const matchesQueryB = query(collection(db, 'matches'), where('teamB', '==', oldName));
+                    const [matchesA, matchesB] = await Promise.all([getDocs(matchesQueryA), getDocs(matchesQueryB)]);
+
+                    matchesA.forEach(d => batch.update(d.ref, { teamA: newName }));
+                    matchesB.forEach(d => batch.update(d.ref, { teamB: newName }));
+
+                    // 2. Update Players
+                    const playersQuery = query(collection(db, 'players'), where('team', '==', oldName));
+                    const playersDocs = await getDocs(playersQuery);
+                    playersDocs.forEach(d => batch.update(d.ref, { team: newName }));
+
+                    await batch.commit();
+                    setSuccessMessage('Team and all associated matches/players updated!');
+                } else {
+                    setSuccessMessage('Team updated successfully!');
+                }
+            } else {
+                await addDoc(collection(db, 'teams'), dataToSave);
+                setSuccessMessage('Team added successfully!');
+            }
+
+            // Clear form
+            setFormData({
+                name: '',
+                shortName: '',
+                founded: '',
+                stadium: '',
+                manager: '',
+                status: 'Active',
+                players: 0,
+                logoUrl: '',
+                tournaments: []
+            });
+            setEditingId(null);
+            window.scrollTo(0, 0);
+            setTimeout(() => setSuccessMessage(''), 3000);
+        } catch (error) {
             console.error("Error saving team: ", error);
             alert("Error saving team: " + error.message);
-            setSuccessMessage('');
-        });
-
-        // Optimistic UI update
-        setSuccessMessage(editingId ? 'Team updated successfully!' : 'Team added successfully!');
-
-        // Clear form
-        setFormData({
-            name: '',
-            shortName: '',
-            founded: '',
-            stadium: '',
-            manager: '',
-            status: 'Active',
-            players: 0,
-            logoUrl: '',
-            tournaments: []
-        });
-        setEditingId(null);
-        window.scrollTo(0, 0);
-        setTimeout(() => setSuccessMessage(''), 3000);
-        setLoading(false);
+        } finally {
+            setLoading(false);
+        }
     };
 
     const handleEdit = (team) => {

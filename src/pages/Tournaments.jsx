@@ -2,10 +2,10 @@ import React, { useState, useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { useData } from '../context/DataContext';
-import { Calendar, MapPin, Filter } from 'lucide-react';
+import { Calendar, MapPin, Users } from 'lucide-react';
 
 const Tournaments = () => {
-  const { tournaments, loading } = useData();
+  const { tournaments, matches, loading } = useData();
   const { isAdmin } = useAuth();
   const [selectedYear, setSelectedYear] = useState('All');
   const [selectedDistrict, setSelectedDistrict] = useState('All');
@@ -86,12 +86,15 @@ const Tournaments = () => {
               <div className="flex justify-between items-start">
                 <div>
                   <h2 className="text-xl font-bold text-slate-900 dark:text-white">{tournament.name}</h2>
-                  <div className="mt-2 flex items-center">
+                  <div className="mt-2 flex items-center gap-2">
                     <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${tournament.status === 'ongoing'
                       ? 'bg-green-100 text-green-800'
                       : tournament.status === 'finished' ? 'bg-gray-100 text-gray-800' : 'bg-yellow-100 text-yellow-800'
                       }`}>
                       {tournament.status.charAt(0).toUpperCase() + tournament.status.slice(1)}
+                    </span>
+                    <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-brand-500/10 text-brand-400 border border-brand-500/20">
+                      {tournament.type === 'knockout' ? '🏆 Knockout' : tournament.type === 'pool' ? '🏊 2 Pools' : '📋 League'}
                     </span>
                   </div>
                 </div>
@@ -108,13 +111,36 @@ const Tournaments = () => {
                 </div>
                 <div>
                   <p className="text-gray-400">Teams</p>
-                  <p className="text-slate-900 dark:text-white">{tournament.teamsCount}</p>
+                  <p className="text-slate-900 dark:text-white font-bold">{tournament.teamsCount || 0}</p>
                 </div>
                 <div>
                   <p className="text-gray-400">Matches</p>
-                  <p className="text-slate-900 dark:text-white">{tournament.matchesCount}</p>
+                  <p className="text-slate-900 dark:text-white font-bold">
+                    {matches.filter(m => m.tournamentId === tournament.id || (!m.tournamentId && m.competition === tournament.name)).length || tournament.matchesCount || 0}
+                  </p>
                 </div>
               </div>
+
+              {/* Teams List */}
+              {tournament.teamsList && tournament.teamsList.length > 0 && (
+                <div className="mt-4 pt-3 border-t border-white/5">
+                  <p className="text-[10px] text-gray-400 uppercase font-bold tracking-wider mb-2 flex items-center gap-1">
+                    <Users size={12} /> Registered Teams
+                  </p>
+                  <div className="flex flex-wrap gap-1">
+                    {tournament.teamsList.slice(0, 6).map((team, idx) => (
+                      <span key={idx} className="text-[10px] px-2 py-0.5 rounded-full bg-white/5 text-slate-400 border border-white/5">
+                        {team}
+                      </span>
+                    ))}
+                    {tournament.teamsList.length > 6 && (
+                      <span className="text-[10px] px-2 py-0.5 rounded-full bg-brand-500/10 text-brand-400">
+                        +{tournament.teamsList.length - 6} more
+                      </span>
+                    )}
+                  </div>
+                </div>
+              )}
 
               <div className="mt-6">
                 <Link

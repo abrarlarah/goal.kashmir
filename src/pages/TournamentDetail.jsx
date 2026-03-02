@@ -1,13 +1,14 @@
 import React, { useState, useMemo } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { useData } from '../context/DataContext';
-import { Trophy, Calendar, Users, MapPin, ChevronRight, Info, LayoutGrid, List, Plus, Search, X } from 'lucide-react';
+import { Trophy, Calendar, Users, MapPin, List, Plus, Search, X, Edit3 } from 'lucide-react';
 import { cn } from '../utils/cn';
 import { useAuth } from '../context/AuthContext';
 import { db } from '../firebase';
 import MatchTimer from '../components/common/MatchTimer';
 import MatchBracket from '../components/common/MatchBracket';
-import { doc, updateDoc, addDoc, collection } from 'firebase/firestore';
+import { doc, updateDoc, addDoc, collection, deleteDoc } from 'firebase/firestore';
+import { generateKnockoutMatches, generatePoolMatches, generateDualKnockoutMatches } from '../utils/bracketGenerator';
 
 const TournamentDetail = () => {
     const { id } = useParams();
@@ -31,6 +32,7 @@ const TournamentDetail = () => {
         managerB: ''
     });
     const [isSavingMatch, setIsSavingMatch] = useState(false);
+    const [successMessage, setSuccessMessage] = useState('');
 
     const tournament = useMemo(() => tournaments.find(t => t.id === id), [tournaments, id]);
 
@@ -132,22 +134,53 @@ const TournamentDetail = () => {
         }
     };
 
-    // Calculate Standings for League Type
-    const standings = useMemo(() => {
-        if (!tournament || tournament.type !== 'league') return [];
+    const handleSeedBracket = async () => {
+        const count = tournament.teamsCount || tournamentTeams.length || 10;
+        const isPool = tournament.type === 'pool';
+        const isDualKnockout = tournament.type === 'dual_knockout';
 
+        let msg = `This will generate an automated ${count}-team knockout structure. Continue?`;
+        if (isPool) msg = `This will generate a ${count}-team 2-Pool structure (Pool A + Pool B round-robin, Semi-Finals, Final). Continue?`;
+        if (isDualKnockout) msg = `This will generate a ${count}-team 2-Pool Knockout structure (Left Wing vs Right Wing). Continue?`;
+
+        if (!window.confirm(msg)) return;
+
+        try {
+            setIsSavingMatch(true);
+            let matchesToCreate = [];
+            if (isPool) {
+                matchesToCreate = generatePoolMatches(count, tournament.name, tournament.id, tournament.startDate);
+            } else if (isDualKnockout) {
+                matchesToCreate = generateDualKnockoutMatches(count, tournament.name, tournament.id, tournament.startDate);
+            } else {
+                matchesToCreate = generateKnockoutMatches(count, tournament.name, tournament.id, tournament.startDate);
+            }
+
+            const batchPromises = matchesToCreate.map(matchData =>
+                addDoc(collection(db, 'matches'), matchData)
+            );
+            await Promise.all(batchPromises);
+            alert(`Success! Generated ${matchesToCreate.length} matches for a ${count}-team ${isPool ? 'pool' : 'bracket'}.`);
+        } catch (err) {
+            console.error("Error seeding:", err);
+            alert("Error seeding structure");
+        } finally {
+            setIsSavingMatch(false);
+        }
+    };
+
+    // Helper to compute standings from a set of matches and team names
+    const computeStandings = (matchList, teamNames) => {
         const stats = {};
-        tournamentTeams.forEach(team => {
-            stats[team.name] = {
-                id: team.id,
-                name: team.name,
-                logoUrl: team.logoUrl,
+        teamNames.forEach(name => {
+            stats[name] = {
+                name,
                 played: 0, wins: 0, draws: 0, losses: 0,
                 gf: 0, ga: 0, pts: 0, gd: 0
             };
         });
 
-        tournamentMatches.filter(m => m.status === 'finished').forEach(match => {
+        matchList.filter(m => m.status === 'finished').forEach(match => {
             const teamA = stats[match.teamA];
             const teamB = stats[match.teamB];
             if (!teamA || !teamB) return;
@@ -172,7 +205,51 @@ const TournamentDetail = () => {
             if (b.gd !== a.gd) return b.gd - a.gd;
             return b.gf - a.gf;
         });
+    };
+
+    // Calculate Standings for League Type
+    const standings = useMemo(() => {
+        if (!tournament || tournament.type !== 'league') return [];
+        const teamNames = tournamentTeams.map(t => t.name);
+        return computeStandings(tournamentMatches, teamNames);
     }, [tournament, tournamentTeams, tournamentMatches]);
+
+    // Calculate Pool Standings for Pool Type
+    const poolAStandings = useMemo(() => {
+        if (!tournament || tournament.type !== 'pool') return [];
+        const poolAMatches = tournamentMatches.filter(m => m.pool === 'A' || m.round === 'Pool A');
+        const poolATeamNames = [...new Set(poolAMatches.flatMap(m => [m.teamA, m.teamB]))];
+        return computeStandings(poolAMatches, poolATeamNames);
+    }, [tournament, tournamentMatches]);
+
+    const poolBStandings = useMemo(() => {
+        if (!tournament || tournament.type !== 'pool') return [];
+        const poolBMatches = tournamentMatches.filter(m => m.pool === 'B' || m.round === 'Pool B');
+        const poolBTeamNames = [...new Set(poolBMatches.flatMap(m => [m.teamA, m.teamB]))];
+        return computeStandings(poolBMatches, poolBTeamNames);
+    }, [tournament, tournamentMatches]);
+
+    // Knockout matches for pool type (Everything that isn't a pool round-robin match)
+    const knockoutMatchesByRound = useMemo(() => {
+        if (!tournament || tournament.type !== 'pool') return {};
+        // Filter out Pool A/B matches to only show the bracket part
+        const knockoutMatches = tournamentMatches.filter(m =>
+            m.round !== 'Pool A' && m.round !== 'Pool B' && m.pool === undefined
+        );
+
+        const groups = {};
+        knockoutMatches.forEach(m => {
+            const round = m.round || 'General';
+            if (!groups[round]) groups[round] = [];
+            groups[round].push(m);
+        });
+
+        // Ensure rounds are ordered correctly
+        Object.keys(groups).forEach(key => {
+            groups[key].sort((a, b) => (a.matchOrder || 0) - (b.matchOrder || 0));
+        });
+        return groups;
+    }, [tournament, tournamentMatches]);
 
     // Group matches by Round for Brackets or Schedule
     const matchesByRound = useMemo(() => {
@@ -182,6 +259,12 @@ const TournamentDetail = () => {
             if (!groups[round]) groups[round] = [];
             groups[round].push(m);
         });
+
+        // Sort matches within each round by matchOrder to preserve correct left/right placement
+        Object.keys(groups).forEach(key => {
+            groups[key].sort((a, b) => (a.matchOrder || 0) - (b.matchOrder || 0));
+        });
+
         return groups;
     }, [tournamentMatches]);
 
@@ -191,12 +274,24 @@ const TournamentDetail = () => {
     const tabs = [
         { id: 'fixtures', label: 'Fixtures', icon: Calendar },
         ...(tournament.type === 'league' ? [{ id: 'standings', label: 'Standings', icon: List }] : []),
-        ...(tournament.type === 'knockout' ? [{ id: 'bracket', label: 'Bracket', icon: Trophy }] : []),
+        ...(tournament.type === 'knockout' || tournament.type === 'dual_knockout' ? [{ id: 'bracket', label: 'Bracket', icon: Trophy }] : []),
+        ...(tournament.type === 'pool' ? [
+            { id: 'pools', label: 'Pool Standings', icon: List },
+            { id: 'bracket', label: 'Knockout', icon: Trophy }
+        ] : []),
         { id: 'teams', label: 'Teams', icon: Users },
     ];
 
     return (
         <div className="max-w-7xl mx-auto px-4 py-8 space-y-8">
+            {successMessage && (
+                <div className="fixed top-24 right-4 z-50 animate-bounce">
+                    <div className="bg-green-500 text-white px-6 py-3 rounded-2xl shadow-2xl font-black text-sm border border-white/20 flex items-center gap-3">
+                        <div className="h-2 w-2 rounded-full bg-white animate-pulse" />
+                        {successMessage}
+                    </div>
+                </div>
+            )}
             {/* Hero Header */}
             <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-brand-900 to-slate-900 border border-slate-200 dark:border-white/10 p-8 shadow-2xl">
                 <div className="absolute top-0 right-0 p-12 opacity-10">
@@ -210,8 +305,10 @@ const TournamentDetail = () => {
 
                     <div className="text-center md:text-left flex-1">
                         <div className="flex flex-wrap items-center justify-center md:justify-start gap-3 mb-3">
-                            <span className="px-3 py-1 rounded-full bg-brand-500/10 text-brand-400 text-xs font-bold uppercase tracking-wider border border-brand-500/20">
-                                {tournament.type}
+                            <span className="px-3 py-1 rounded-full bg-brand-500/10 text-brand-400 text-[10px] font-black uppercase tracking-widest border border-brand-500/20">
+                                {tournament.type === 'knockout' ? '🏆 Knockout' :
+                                    tournament.type === 'pool' ? '🏊 Pool + Knockout' :
+                                        tournament.type === 'dual_knockout' ? '🌱 2-Pool Knockout' : '📋 League'}
                             </span>
                             <span className={cn(
                                 "px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider border",
@@ -237,11 +334,11 @@ const TournamentDetail = () => {
 
                     <div className="grid grid-cols-2 gap-4">
                         <div className="bg-white/5 backdrop-blur-sm rounded-2xl p-4 border border-slate-200 dark:border-white/5 text-center">
-                            <div className="text-2xl font-black text-slate-900 dark:text-white">{tournament.teamsCount}</div>
+                            <div className="text-2xl font-black text-slate-900 dark:text-white">{tournament.teamsCount || 0}</div>
                             <div className="text-[10px] text-slate-500 uppercase font-bold">Teams</div>
                         </div>
                         <div className="bg-white/5 backdrop-blur-sm rounded-2xl p-4 border border-slate-200 dark:border-white/5 text-center">
-                            <div className="text-2xl font-black text-slate-900 dark:text-white">{tournament.matchesCount}</div>
+                            <div className="text-2xl font-black text-slate-900 dark:text-white">{tournamentMatches.length || tournament.matchesCount || 0}</div>
                             <div className="text-[10px] text-slate-500 uppercase font-bold">Matches</div>
                         </div>
                     </div>
@@ -302,8 +399,13 @@ const TournamentDetail = () => {
                                                 <Link
                                                     key={match.id}
                                                     to={`/live/${match.id}`}
-                                                    className="group bg-slate-900 border border-slate-200 dark:border-white/5 rounded-2xl p-5 hover:border-brand-500/30 transition-all shadow-lg"
+                                                    className="group relative bg-slate-900 border border-slate-200 dark:border-white/5 rounded-2xl p-5 hover:border-brand-500/30 transition-all shadow-lg"
                                                 >
+                                                    {isAdmin && (
+                                                        <div className="absolute top-2 right-2 p-2 bg-brand-500 text-slate-900 rounded-lg opacity-0 group-hover:opacity-100 transition-all z-20">
+                                                            <Edit3 size={14} />
+                                                        </div>
+                                                    )}
                                                     <div className="flex items-center justify-between gap-4">
                                                         <div className="flex-1 flex flex-col items-center">
                                                             <div className="w-12 h-12 bg-white/5 rounded-full flex items-center justify-center mb-2 overflow-hidden border border-slate-200 dark:border-white/5 group-hover:border-brand-500/30 transition-colors p-2">
@@ -433,16 +535,33 @@ const TournamentDetail = () => {
                                         </div>
 
                                         <div>
-                                            <label className="text-[10px] text-slate-500 uppercase font-black mb-1 block">Round / Group</label>
-                                            <input
-                                                type="text"
+                                            <label className="text-[10px] text-slate-500 uppercase font-black mb-1 block">Round / Stage</label>
+                                            <select
                                                 name="round"
-                                                placeholder="e.g. Round 1, Semi-Final, Group A"
                                                 value={matchFormData.round}
                                                 onChange={handleMatchInputChange}
                                                 className="w-full bg-slate-800 border border-slate-200 dark:border-white/5 rounded-xl p-3 text-slate-900 dark:text-white outline-none focus:border-brand-500 transition-all"
                                                 required
-                                            />
+                                            >
+                                                <option value="">Select Stage</option>
+                                                {tournament.type === 'knockout' ? (
+                                                    <>
+                                                        <option value="Round of 32">Round of 32</option>
+                                                        <option value="Round of 16">Round of 16 (Prelims)</option>
+                                                        <option value="Quarter-Final">Quarter-Final</option>
+                                                        <option value="Semi-Final">Semi-Final</option>
+                                                        <option value="Final">Final</option>
+                                                    </>
+                                                ) : (
+                                                    <>
+                                                        <option value="Round 1">Round 1</option>
+                                                        <option value="Round 2">Round 2</option>
+                                                        <option value="Round 3">Round 3</option>
+                                                        <option value="Finals week">Finals week</option>
+                                                    </>
+                                                )}
+                                                <option value="General">General/Friendly</option>
+                                            </select>
                                         </div>
 
                                         <button
@@ -503,8 +622,165 @@ const TournamentDetail = () => {
                     </div>
                 )}
 
+                {/* Pool Standings Tab (for pool type) */}
+                {activeTab === 'pools' && tournament.type === 'pool' && (
+                    <div className="space-y-8">
+                        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                            {/* Pool A */}
+                            <div className="bg-slate-900 rounded-3xl border border-white/10 overflow-hidden">
+                                <div className="px-6 py-4 bg-indigo-500/10 border-b border-white/5">
+                                    <h3 className="text-lg font-display font-black text-white flex items-center gap-2">
+                                        <span className="h-6 w-6 bg-indigo-500 rounded-lg flex items-center justify-center text-xs font-black text-white">A</span>
+                                        Pool A
+                                    </h3>
+                                </div>
+                                <table className="w-full text-left">
+                                    <thead className="bg-white/5 border-b border-white/10 text-[10px] uppercase font-black text-slate-500 tracking-widest">
+                                        <tr>
+                                            <th className="px-4 py-3">#</th>
+                                            <th className="px-4 py-3">Team</th>
+                                            <th className="px-3 py-3 text-center">P</th>
+                                            <th className="px-3 py-3 text-center">W</th>
+                                            <th className="px-3 py-3 text-center">D</th>
+                                            <th className="px-3 py-3 text-center">L</th>
+                                            <th className="px-3 py-3 text-center">GD</th>
+                                            <th className="px-4 py-3 text-center">Pts</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody className="divide-y divide-white/5">
+                                        {poolAStandings.map((team, idx) => (
+                                            <tr key={team.name} className={cn(
+                                                "hover:bg-white/5 transition-colors",
+                                                idx < 2 && "border-l-2 border-l-green-500"
+                                            )}>
+                                                <td className="px-4 py-3 font-black text-slate-500">{idx + 1}</td>
+                                                <td className="px-4 py-3">
+                                                    <span className="font-bold text-white">{team.name}</span>
+                                                    {idx < 2 && <span className="ml-2 text-[8px] bg-green-500/10 text-green-400 px-1.5 py-0.5 rounded-full font-bold">Q</span>}
+                                                </td>
+                                                <td className="px-3 py-3 text-center text-slate-400">{team.played}</td>
+                                                <td className="px-3 py-3 text-center text-slate-400">{team.wins}</td>
+                                                <td className="px-3 py-3 text-center text-slate-400">{team.draws}</td>
+                                                <td className="px-3 py-3 text-center text-slate-400">{team.losses}</td>
+                                                <td className="px-3 py-3 text-center font-bold text-brand-400">{team.gd}</td>
+                                                <td className="px-4 py-3 text-center font-black text-white bg-brand-500/5">{team.pts}</td>
+                                            </tr>
+                                        ))}
+                                        {poolAStandings.length === 0 && (
+                                            <tr><td colSpan={8} className="px-4 py-8 text-center text-slate-500 text-sm">No matches played yet</td></tr>
+                                        )}
+                                    </tbody>
+                                </table>
+                            </div>
+
+                            {/* Pool B */}
+                            <div className="bg-slate-900 rounded-3xl border border-white/10 overflow-hidden">
+                                <div className="px-6 py-4 bg-orange-500/10 border-b border-white/5">
+                                    <h3 className="text-lg font-display font-black text-white flex items-center gap-2">
+                                        <span className="h-6 w-6 bg-orange-500 rounded-lg flex items-center justify-center text-xs font-black text-white">B</span>
+                                        Pool B
+                                    </h3>
+                                </div>
+                                <table className="w-full text-left">
+                                    <thead className="bg-white/5 border-b border-white/10 text-[10px] uppercase font-black text-slate-500 tracking-widest">
+                                        <tr>
+                                            <th className="px-4 py-3">#</th>
+                                            <th className="px-4 py-3">Team</th>
+                                            <th className="px-3 py-3 text-center">P</th>
+                                            <th className="px-3 py-3 text-center">W</th>
+                                            <th className="px-3 py-3 text-center">D</th>
+                                            <th className="px-3 py-3 text-center">L</th>
+                                            <th className="px-3 py-3 text-center">GD</th>
+                                            <th className="px-4 py-3 text-center">Pts</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody className="divide-y divide-white/5">
+                                        {poolBStandings.map((team, idx) => (
+                                            <tr key={team.name} className={cn(
+                                                "hover:bg-white/5 transition-colors",
+                                                idx < 2 && "border-l-2 border-l-green-500"
+                                            )}>
+                                                <td className="px-4 py-3 font-black text-slate-500">{idx + 1}</td>
+                                                <td className="px-4 py-3">
+                                                    <span className="font-bold text-white">{team.name}</span>
+                                                    {idx < 2 && <span className="ml-2 text-[8px] bg-green-500/10 text-green-400 px-1.5 py-0.5 rounded-full font-bold">Q</span>}
+                                                </td>
+                                                <td className="px-3 py-3 text-center text-slate-400">{team.played}</td>
+                                                <td className="px-3 py-3 text-center text-slate-400">{team.wins}</td>
+                                                <td className="px-3 py-3 text-center text-slate-400">{team.draws}</td>
+                                                <td className="px-3 py-3 text-center text-slate-400">{team.losses}</td>
+                                                <td className="px-3 py-3 text-center font-bold text-brand-400">{team.gd}</td>
+                                                <td className="px-4 py-3 text-center font-black text-white bg-brand-500/5">{team.pts}</td>
+                                            </tr>
+                                        ))}
+                                        {poolBStandings.length === 0 && (
+                                            <tr><td colSpan={8} className="px-4 py-8 text-center text-slate-500 text-sm">No matches played yet</td></tr>
+                                        )}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                        {/* Qualification Info */}
+                        <div className="flex items-center justify-center gap-6 py-3 bg-white/5 rounded-2xl border border-white/5">
+                            <div className="flex items-center gap-2">
+                                <div className="w-3 h-1 bg-green-500 rounded" />
+                                <span className="text-[10px] text-slate-400 font-bold uppercase tracking-wider">Qualifies to Semi-Finals</span>
+                            </div>
+                            <span className="text-slate-600">•</span>
+                            <span className="text-[10px] text-slate-500">Semi-Finals: A1 vs B2, B1 vs A2 → Final</span>
+                        </div>
+                    </div>
+                )}
+
                 {activeTab === 'bracket' && (
-                    <MatchBracket matchesByRound={matchesByRound} />
+                    <div className="space-y-6">
+                        {isAdmin && (
+                            <div className="flex justify-end gap-3 mb-4">
+                                {tournamentMatches.length > 0 && (
+                                    <button
+                                        onClick={async () => {
+                                            if (window.confirm("ARE YOU SURE? This will permanently delete ALL matches for this tournament and let you start over.")) {
+                                                try {
+                                                    setIsSavingMatch(true);
+                                                    const deletePromises = tournamentMatches.map(m => deleteDoc(doc(db, 'matches', m.id)));
+                                                    await Promise.all(deletePromises);
+                                                    setSuccessMessage("Bracket cleared. You can now re-seed.");
+                                                    setTimeout(() => setSuccessMessage(''), 3000);
+                                                } catch (e) {
+                                                    console.error(e);
+                                                } finally {
+                                                    setIsSavingMatch(false);
+                                                }
+                                            }
+                                        }}
+                                        className="px-4 py-2 bg-red-500/10 text-red-500 rounded-xl font-bold text-xs hover:bg-red-500 hover:text-white transition-all border border-red-500/20"
+                                    >
+                                        Delete & Reset Bracket
+                                    </button>
+                                )}
+                                {tournamentMatches.length === 0 && (
+                                    <button
+                                        onClick={handleSeedBracket}
+                                        className="px-4 py-2 bg-brand-500 text-slate-900 dark:text-white rounded-xl font-black text-xs hover:scale-105 transition-all shadow-lg shadow-brand-500/20"
+                                    >
+                                        <Plus size={14} className="inline mr-1" />
+                                        Initialize {tournament.type === 'dual_knockout' ? '2-Pool' : ''} Bracket
+                                    </button>
+                                )}
+                            </div>
+                        )}
+
+                        {tournamentMatches.length === 0 && !isAdmin && (
+                            <div className="text-center py-20 text-slate-500 italic">
+                                Bracket has not been initialized by admin yet.
+                            </div>
+                        )}
+                        <MatchBracket
+                            matchesByRound={tournament.type === 'pool' ? knockoutMatchesByRound : matchesByRound}
+                            tournamentTeams={tournamentTeams}
+                        />
+                    </div>
                 )}
 
                 {activeTab === 'teams' && (
