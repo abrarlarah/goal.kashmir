@@ -122,7 +122,7 @@ const MatchBracket = ({ matchesByRound, tournamentTeams = [] }) => {
                         ))}
                     </div>
 
-                    {isAdmin && !match.isPlaceholder && (
+                    {isAdmin && (
                         <Link to={`/live/${match.id}`} className="absolute top-1 right-1 p-1 bg-brand-500 text-slate-900 rounded-md opacity-0 group-hover/card:opacity-100 transition-all z-20">
                             <Edit3 size={10} />
                         </Link>

@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { Search } from 'lucide-react';
+import { useParams } from 'react-router-dom';
 import { collection, addDoc, updateDoc, deleteDoc, doc, query, where, getDocs } from 'firebase/firestore';
 import { db } from '../../firebase';
 import { useData } from '../../context/DataContext';
 
 const ManageLineups = () => {
+    const { matchId, teamName } = useParams();
     const { matches, players, teams, lineups } = useData();
     const [selectedMatch, setSelectedMatch] = useState('');
     const [selectedTeam, setSelectedTeam] = useState('');
@@ -15,6 +17,16 @@ const ManageLineups = () => {
         starting11: [],
         bench: []
     });
+
+    useEffect(() => {
+        if (matchId) {
+            setSelectedMatch(matchId);
+            if (teamName) {
+                handleTeamChange(teamName, matchId);
+            }
+        }
+    }, [matchId, teamName, lineups, matches]);
+
     const [searchTerm, setSearchTerm] = useState('');
     const [successMessage, setSuccessMessage] = useState('');
 
@@ -37,11 +49,11 @@ const ManageLineups = () => {
         setLineup({ id: '', matchId: '', teamName: '', starting11: [], bench: [] });
     };
 
-    const handleTeamChange = (teamName) => {
+    const handleTeamChange = (teamName, mId = selectedMatch) => {
         setSelectedTeam(teamName);
 
         // Check if lineup already exists for this match and team
-        const existingLineup = lineups.find(l => l.matchId === selectedMatch && l.teamName === teamName);
+        const existingLineup = lineups.find(l => l.matchId === mId && l.teamName === teamName);
 
         if (existingLineup) {
             setLineup({
@@ -54,7 +66,7 @@ const ManageLineups = () => {
         } else {
             setLineup({
                 id: '',
-                matchId: selectedMatch,
+                matchId: mId,
                 teamName: teamName,
                 starting11: [],
                 bench: []

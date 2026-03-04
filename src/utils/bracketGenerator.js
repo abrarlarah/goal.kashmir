@@ -1,7 +1,5 @@
 /**
  * Standard utility to get round names based on the number of teams participating in that stage.
- * @param {number} teamsCount 
- * @returns {string}
  */
 const getStandardRoundName = (teamsCount) => {
     if (teamsCount <= 2) return 'Final';
@@ -15,16 +13,26 @@ const getStandardRoundName = (teamsCount) => {
 
 /**
  * Generates a knockout match structure for any number of teams N.
+ * Supports actual team names and manager info.
  */
-export const generateKnockoutMatches = (n, tournamentName, tournamentId, startDate) => {
+export const generateKnockoutMatches = (n, tournamentName, tournamentId, startDate, actualTeams = []) => {
     if (n < 2) return [];
+
+    const getTName = (idx) => {
+        const team = actualTeams[idx];
+        return team?.name || team || `Team ${idx + 1}`;
+    };
+    const getMName = (idx) => {
+        const team = actualTeams[idx];
+        return team?.manager || '';
+    };
 
     let powerOf2 = 2;
     while (powerOf2 * 2 <= n) powerOf2 *= 2;
 
     const matches = [];
     const playInCount = n - powerOf2;
-    let teamCounter = 1;
+    let teamCounter = 0; // Index for actualTeams
 
     // Phase 1: Play-in Round
     if (playInCount > 0) {
@@ -32,9 +40,13 @@ export const generateKnockoutMatches = (n, tournamentName, tournamentId, startDa
         const subRoundName = `Preliminary / ${getStandardRoundName(nextRoundTeams)}`;
 
         for (let i = 0; i < playInCount; i++) {
+            const idxA = teamCounter++;
+            const idxB = teamCounter++;
             matches.push({
-                teamA: `Team ${teamCounter++}`,
-                teamB: `Team ${teamCounter++}`,
+                teamA: getTName(idxA),
+                teamB: getTName(idxB),
+                managerA: getMName(idxA),
+                managerB: getMName(idxB),
                 round: subRoundName,
                 roundOrder: 0,
                 matchOrder: i,
@@ -54,16 +66,25 @@ export const generateKnockoutMatches = (n, tournamentName, tournamentId, startDa
         for (let i = 0; i < matchCount; i++) {
             let tA = 'TBD';
             let tB = 'TBD';
+            let mA = '';
+            let mB = '';
 
-            // Initial seeding for the first full round
             if (currentTeams === powerOf2) {
-                if (teamCounter <= n) tA = `Team ${teamCounter++}`;
-                if (teamCounter <= n) tB = `Team ${teamCounter++}`;
+                if (teamCounter < n) {
+                    tA = getTName(teamCounter);
+                    mA = getMName(teamCounter++);
+                }
+                if (teamCounter < n) {
+                    tB = getTName(teamCounter);
+                    mB = getMName(teamCounter++);
+                }
             }
 
             matches.push({
                 teamA: tA,
                 teamB: tB,
+                managerA: mA,
+                managerB: mB,
                 round: rName,
                 roundOrder: rName === 'Final' ? 99 : roundLevel,
                 matchOrder: i,
@@ -87,21 +108,36 @@ export const generateKnockoutMatches = (n, tournamentName, tournamentId, startDa
 /**
  * Generates a 2-Pool (Group Stage) + Knockout match structure.
  */
-export const generatePoolMatches = (n, tournamentName, tournamentId, startDate) => {
+export const generatePoolMatches = (n, tournamentName, tournamentId, startDate, actualTeams = []) => {
     if (n < 4) return [];
 
     const matches = [];
     const poolACount = Math.ceil(n / 2);
     const poolBCount = n - poolACount;
 
-    const poolATeams = Array.from({ length: poolACount }, (_, i) => `Team ${i + 1}`);
-    const poolBTeams = Array.from({ length: poolBCount }, (_, i) => `Team ${poolACount + i + 1}`);
+    const allTeams = Array.from({ length: n }, (_, i) => ({
+        name: actualTeams[i]?.name || actualTeams[i] || `Team ${i + 1}`,
+        manager: actualTeams[i]?.manager || ''
+    }));
+
+    const poolATeams = allTeams.slice(0, poolACount);
+    const poolBTeams = allTeams.slice(poolACount);
 
     // Pool A round-robin
     let mOrder = 0;
     for (let i = 0; i < poolATeams.length; i++) {
         for (let j = i + 1; j < poolATeams.length; j++) {
-            matches.push({ teamA: poolATeams[i], teamB: poolATeams[j], round: 'Pool A', pool: 'A', roundOrder: 1, matchOrder: mOrder++, isPlaceholder: false });
+            matches.push({
+                teamA: poolATeams[i].name,
+                teamB: poolATeams[j].name,
+                managerA: poolATeams[i].manager,
+                managerB: poolATeams[j].manager,
+                round: 'Pool A',
+                pool: 'A',
+                roundOrder: 1,
+                matchOrder: mOrder++,
+                isPlaceholder: false
+            });
         }
     }
 
@@ -109,7 +145,17 @@ export const generatePoolMatches = (n, tournamentName, tournamentId, startDate) 
     mOrder = 0;
     for (let i = 0; i < poolBTeams.length; i++) {
         for (let j = i + 1; j < poolBTeams.length; j++) {
-            matches.push({ teamA: poolBTeams[i], teamB: poolBTeams[j], round: 'Pool B', pool: 'B', roundOrder: 1, matchOrder: mOrder++, isPlaceholder: false });
+            matches.push({
+                teamA: poolBTeams[i].name,
+                teamB: poolBTeams[j].name,
+                managerA: poolBTeams[i].manager,
+                managerB: poolBTeams[j].manager,
+                round: 'Pool B',
+                pool: 'B',
+                roundOrder: 1,
+                matchOrder: mOrder++,
+                isPlaceholder: false
+            });
         }
     }
 
@@ -129,82 +175,58 @@ export const generatePoolMatches = (n, tournamentName, tournamentId, startDate) 
     }));
 };
 
-export const calcPoolMatchesCount = (n) => {
-    if (n < 4) return 0;
-    const nA = Math.ceil(n / 2), nB = n - nA;
-    return (nA * (nA - 1) / 2) + (nB * (nB - 1) / 2) + 3;
+/**
+ * Utility to calculate total matches for a given tournament type.
+ */
+export const calcMatchesCount = (n, type) => {
+    const num = Number(n);
+    if (!num || num < 2) return 0;
+
+    switch (type) {
+        case 'league':
+            return (num * (num - 1)) / 2;
+        case 'knockout':
+            return num - 1;
+        case 'pool':
+            const nA = Math.ceil(num / 2), nB = num - nA;
+            return (nA * (nA - 1) / 2) + (nB * (nB - 1) / 2) + 3;
+        case 'dual_knockout':
+            return num - 1;
+        default:
+            return 0;
+    }
 };
 
 /**
- * Generates a dual-pool knockout structure (Left Wing vs Right Wing).
+ * Generates a full League (Round Robin) match structure.
  */
-export const generateDualKnockoutMatches = (n, tournamentName, tournamentId, startDate) => {
-    if (n < 4) return [];
+export const generateLeagueMatches = (n, tournamentName, tournamentId, startDate, actualTeams = []) => {
+    if (n < 2) return [];
 
     const matches = [];
-    const poolACount = Math.ceil(n / 2);
-    const poolBCount = n - poolACount;
+    const teamsList = Array.from({ length: n }, (_, i) => {
+        return actualTeams[i]?.name || actualTeams[i] || `Team ${i + 1}`;
+    });
 
-    const generateWing = (teamCount, poolLabel) => {
-        const wingMatches = [];
-        let powerOf2 = 2;
-        while (powerOf2 * 2 <= teamCount) powerOf2 *= 2;
+    let mOrder = 0;
+    for (let i = 0; i < teamsList.length; i++) {
+        for (let j = i + 1; j < teamsList.length; j++) {
+            const teamA = teamsList[i];
+            const teamB = teamsList[j];
+            const managerA = actualTeams[i]?.manager || '';
+            const managerB = actualTeams[j]?.manager || '';
 
-        const playInCount = teamCount - powerOf2;
-        let teamCounter = 1;
-
-        // Wing Phase 1: Play-in
-        if (playInCount > 0) {
-            for (let i = 0; i < playInCount; i++) {
-                wingMatches.push({
-                    teamA: `Team ${poolLabel}-${teamCounter++}`,
-                    teamB: `Team ${poolLabel}-${teamCounter++}`,
-                    round: `Preliminary`,
-                    pool: poolLabel, roundOrder: 0, matchOrder: i, isPlaceholder: false
-                });
-            }
+            matches.push({
+                teamA,
+                teamB,
+                managerA,
+                managerB,
+                round: 'League',
+                roundOrder: 1,
+                matchOrder: mOrder++,
+                isPlaceholder: false
+            });
         }
-
-        // Wing Phase 2: Knockout Tree
-        let wingTeams = powerOf2;
-        let roundLevel = 1;
-
-        while (wingTeams >= 2) {
-            const matchCount = wingTeams / 2;
-            // Name relative to the WHOLE tournament (e.g. 2 matches in wing = 4 total = Semi-Final)
-            const globalTeamsAtThisStage = wingTeams * 2;
-            const rName = getStandardRoundName(globalTeamsAtThisStage);
-
-            for (let i = 0; i < matchCount; i++) {
-                let tA = 'TBD', tB = 'TBD';
-                if (wingTeams === powerOf2) {
-                    if (teamCounter <= teamCount) tA = `Team ${poolLabel}-${teamCounter++}`;
-                    if (teamCounter <= teamCount) tB = `Team ${poolLabel}-${teamCounter++}`;
-                }
-
-                wingMatches.push({
-                    teamA: tA, teamB: tB, round: rName, pool: poolLabel,
-                    roundOrder: rName === 'Final' ? 99 : roundLevel,
-                    matchOrder: poolLabel === 'A' ? i : i + 100, // Offset matchOrder for wing separation if needed
-                    isPlaceholder: (tA === 'TBD' || tB === 'TBD')
-                });
-            }
-            wingTeams /= 2;
-            roundLevel++;
-        }
-        return wingMatches;
-    };
-
-    matches.push(...generateWing(poolACount, 'A'));
-    matches.push(...generateWing(poolBCount, 'B'));
-
-    // The Grand Final - ensuring it's unique
-    const hasFinal = matches.some(m => m.round === 'Final');
-    if (!hasFinal) {
-        matches.push({
-            teamA: 'Winner Pool A', teamB: 'Winner Pool B',
-            round: 'Final', roundOrder: 99, matchOrder: 0, isPlaceholder: true
-        });
     }
 
     return matches.map(m => ({
@@ -214,4 +236,48 @@ export const generateDualKnockoutMatches = (n, tournamentName, tournamentId, sta
         date: startDate || new Date().toISOString().split('T')[0],
         time: '12:00', scoreA: 0, scoreB: 0, status: 'scheduled', currentMinute: 0
     }));
+};
+
+/**
+ * Generates a dual-pool knockout structure (Left Wing vs Right Wing).
+ */
+export const generateDualKnockoutMatches = (n, tournamentName, tournamentId, startDate, actualTeams = []) => {
+    if (n < 4) return [];
+
+    const nA = Math.ceil(n / 2);
+    const nB = n - nA;
+
+    const poolA = actualTeams.slice(0, nA);
+    const poolB = actualTeams.slice(nA);
+
+    // Reuse generateKnockoutMatches logic but internally offset them
+    const wingA = generateKnockoutMatches(nA, tournamentName, tournamentId, startDate, poolA);
+    const wingB = generateKnockoutMatches(nB, tournamentName, tournamentId, startDate, poolB);
+
+    const merged = [
+        ...wingA.map(m => ({ ...m, pool: 'A' })),
+        ...wingB.map(m => ({ ...m, pool: 'B', matchOrder: m.matchOrder + 100 }))
+    ];
+
+    // Grand Final (Winner A vs Winner B)
+    merged.push({
+        teamA: 'Winner Pool A',
+        teamB: 'Winner Pool B',
+        round: 'Final',
+        roundOrder: 99,
+        matchOrder: 0,
+        isPlaceholder: true,
+        competition: tournamentName,
+        tournamentId: tournamentId,
+        date: startDate || new Date().toISOString().split('T')[0],
+        time: '12:00', scoreA: 0, scoreB: 0, status: 'scheduled', currentMinute: 0
+    });
+
+    return merged;
+};
+
+export const calcPoolMatchesCount = (n) => {
+    if (n < 4) return 0;
+    const nA = Math.ceil(n / 2), nB = n - nA;
+    return (nA * (nA - 1) / 2) + (nB * (nB - 1) / 2) + 3;
 };

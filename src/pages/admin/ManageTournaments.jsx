@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { collection, addDoc, updateDoc, deleteDoc, doc, query, where, getDocs } from 'firebase/firestore';
 import { db } from '../../firebase';
 import { useData } from '../../context/DataContext';
-import { generateKnockoutMatches, generatePoolMatches, calcPoolMatchesCount, generateDualKnockoutMatches } from '../../utils/bracketGenerator';
+import { generateKnockoutMatches, generatePoolMatches, generateDualKnockoutMatches, generateLeagueMatches, calcMatchesCount } from '../../utils/bracketGenerator';
 
 // Districts of Jammu and Kashmir
 const DISTRICTS = {
@@ -27,16 +27,6 @@ const ManageTournaments = () => {
         teamsList: [] // e.g. ['Team 1', 'Team 2', ...]
     });
     const [editingId, setEditingId] = useState(null);
-
-    // Helper to calculate matches count
-    const calcMatchesCount = (teamsCount, type) => {
-        const n = Number(teamsCount) || 0;
-        if (n < 2) return 0;
-        if (type === 'knockout' || type === 'dual_knockout') return n - 1;
-        if (type === 'pool') return calcPoolMatchesCount(n);
-        // league: each team plays every other team twice (home & away)
-        return n * (n - 1);
-    };
 
     // Helper to generate team list
     const generateTeamsList = (count) => {
@@ -88,7 +78,14 @@ const ManageTournaments = () => {
                 // Auto-seed matches if requested
                 if (autoSeed && formData.teamsCount > 0) {
                     let matches = [];
-                    if (formData.type === 'knockout') {
+                    if (formData.type === 'league') {
+                        matches = generateLeagueMatches(
+                            formData.teamsCount,
+                            formData.name,
+                            currentTournamentId,
+                            formData.startDate
+                        );
+                    } else if (formData.type === 'knockout') {
                         matches = generateKnockoutMatches(
                             formData.teamsCount,
                             formData.name,

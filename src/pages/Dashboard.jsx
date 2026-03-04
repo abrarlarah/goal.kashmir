@@ -5,8 +5,9 @@ import { calculateStandings } from '../utils/soccerUtils';
 import LineupDisplay from '../components/common/LineupDisplay';
 import MatchTimer from '../components/common/MatchTimer';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Calendar, Clock, MapPin, Shirt, ChevronRight, Trophy, TrendingUp, Users, Activity, MapPinned, ExternalLink } from 'lucide-react';
+import { Calendar, Clock, MapPin, Shirt, ChevronRight, Trophy, TrendingUp, Users, Activity, MapPinned, ExternalLink, UserPlus } from 'lucide-react';
 import { cn } from '../utils/cn';
+import { useAuth } from '../context/AuthContext';
 
 // Districts of Jammu and Kashmir
 const DISTRICTS = {
@@ -16,6 +17,7 @@ const DISTRICTS = {
 
 const Dashboard = () => {
   const { matches, players, teams, tournaments, lineups, loading } = useData();
+  const { isAdmin } = useAuth();
   const [dashboardCompetitionId, setDashboardCompetitionId] = useState('All');
   const [selectedDistrict, setSelectedDistrict] = useState('Baramulla');
   const [selectedYear, setSelectedYear] = useState(new Date().getFullYear().toString());
@@ -55,17 +57,30 @@ const Dashboard = () => {
     return ts;
   }, [tournaments, selectedDistrict, selectedYear]);
 
-  // Automatically select the first tournament when data loads
+  // Auto-select a tournament only if necessary (initial load or current selection gone)
   useEffect(() => {
-    if (dashboardCompetitionId === 'All' && filteredTournaments.length > 0) {
+    const isCurrentInFiltered = filteredTournaments.some(t => t.id === dashboardCompetitionId);
+    if (!isCurrentInFiltered && dashboardCompetitionId !== 'All' && filteredTournaments.length > 0) {
       setDashboardCompetitionId(filteredTournaments[0].id);
     }
   }, [filteredTournaments, dashboardCompetitionId]);
 
   // Data Filtering
-  const filteredMatches = dashboardCompetitionId && dashboardCompetitionId !== 'All'
-    ? matches.filter(m => (m.tournamentId === dashboardCompetitionId) || (!m.tournamentId && m.competition === tournaments.find(t => t.id === dashboardCompetitionId)?.name))
-    : matches;
+  const filteredMatches = useMemo(() => {
+    if (dashboardCompetitionId && dashboardCompetitionId !== 'All') {
+      const tourney = tournaments.find(t => t.id === dashboardCompetitionId);
+      return matches.filter(m => (m.tournamentId === dashboardCompetitionId) || (!m.tournamentId && m.competition === tourney?.name));
+    }
+
+    // If 'All' is selected, filter matches by the currently filtered tournaments (District/Year aware)
+    const activeTourneyIds = new Set(filteredTournaments.map(t => t.id));
+    const activeTourneyNames = new Set(filteredTournaments.map(t => t.name));
+
+    return matches.filter(m =>
+      activeTourneyIds.has(m.tournamentId) ||
+      (!m.tournamentId && activeTourneyNames.has(m.competition))
+    );
+  }, [matches, dashboardCompetitionId, filteredTournaments, tournaments]);
 
   const relevantTeamNames = dashboardCompetitionId && dashboardCompetitionId !== 'All'
     ? teams.filter(team => {
@@ -221,15 +236,22 @@ const Dashboard = () => {
             <button
               onClick={() => setDashboardCompetitionId('All')}
               className={cn(
-                "px-4 py-2 rounded-lg text-sm font-medium transition-all duration-300",
+                "px-4 py-2 rounded-l-lg text-sm font-medium transition-all duration-300",
                 dashboardCompetitionId === 'All'
-                  ? "bg-brand-500 text-slate-900 dark:text-white shadow-lg shadow-brand-500/20"
-                  : "text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:text-white hover:bg-white/5"
+                  ? "bg-brand-500 text-slate-900 shadow-lg shadow-brand-500/20"
+                  : "text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-white/5"
               )}
             >
               All Tournaments
             </button>
-            <Link to="/tournaments" className="p-2 text-slate-400 hover:text-brand-500 transition-colors" title="View All Tournaments">
+            <Link
+              to="/tournaments"
+              className={cn(
+                "p-2 px-3 rounded-r-lg border-l border-white/10 transition-colors flex items-center justify-center",
+                dashboardCompetitionId === 'All' ? "bg-brand-500 text-slate-900" : "bg-white/5 text-slate-400 hover:text-brand-500"
+              )}
+              title="Browse Full Tournament List"
+            >
               <ExternalLink size={14} />
             </Link>
           </div>
@@ -385,6 +407,14 @@ const Dashboard = () => {
                             >
                               <Shirt size={16} /> {isExpanded ? 'Hide Lineups' : 'Lineups'}
                             </button>
+                          )}
+                          {isAdmin && (
+                            <Link
+                              to={`/admin/lineups/${match.id}`}
+                              className="flex items-center gap-2 px-5 py-2 bg-indigo-600/20 hover:bg-indigo-600/40 text-indigo-400 rounded-lg text-sm font-semibold transition-all border border-indigo-500/30"
+                            >
+                              <UserPlus size={16} /> Add Lineup
+                            </Link>
                           )}
                         </div>
                       </div>
@@ -682,7 +712,7 @@ const Dashboard = () => {
             <h3 className="font-display font-bold text-slate-900 dark:text-white mb-6 flex items-center gap-2">
               <Calendar size={18} className="text-indigo-400" /> This Week
             </h3>
-            <div className="space-y-3">
+            <div className="space-y-3 max-h-[210px] overflow-y-auto pr-2 scrollbar-thin scrollbar-thumb-white/10 scrollbar-track-transparent">
               {weeklyFixtures.length > 0 ? weeklyFixtures.map(match => (
                 <Link to={`/live/${match.id}`} key={match.id} className="block group">
                   <div className="flex gap-4 p-3 rounded-xl hover:bg-white/5 transition-all border border-transparent hover:border-slate-200 dark:border-white/10">

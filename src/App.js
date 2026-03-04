@@ -84,7 +84,7 @@ function App() {
                 }
               />
               <Route
-                path="/admin/lineups"
+                path="/admin/lineups/:matchId?/:teamName?"
                 element={
                   <PrivateRoute>
                     <ManageLineups />

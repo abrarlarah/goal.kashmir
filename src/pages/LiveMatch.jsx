@@ -1,6 +1,6 @@
 // src/pages/LiveMatch.jsx
 import React, { useState, useEffect, useMemo } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, Link } from 'react-router-dom';
 import { doc, onSnapshot, updateDoc, collection, addDoc, query, where, getDocs, deleteDoc, writeBatch } from 'firebase/firestore';
 import { db } from '../firebase';
 import { useAuth } from '../context/AuthContext';
@@ -10,6 +10,7 @@ import SubstitutionManager from '../components/common/SubstitutionManager';
 import MatchPredictions from '../components/common/MatchPredictions';
 import MatchTimer from '../components/common/MatchTimer';
 import { cn } from '../utils/cn';
+import { UserPlus, Settings } from 'lucide-react';
 
 const LiveMatch = () => {
   const { matchId } = useParams();
@@ -23,9 +24,9 @@ const LiveMatch = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [isEditingTeams, setIsEditingTeams] = useState(false);
-  const [editFormData, setEditFormData] = useState({ teamA: '', teamB: '' });
+  const [editFormData, setEditFormData] = useState({ teamA: '', teamB: '', date: '', time: '', stadium: '' });
   const { isAdmin } = useAuth();
-  const { players, lineups, teams } = useData();
+  const { players, lineups, teams, matches } = useData();
 
   // Filter teams to only show those registered in THIS tournament
   const tournamentTeams = useMemo(() => {
@@ -275,6 +276,9 @@ const LiveMatch = () => {
       await updateDoc(doc(db, 'matches', matchId), {
         teamA: editFormData.teamA,
         teamB: editFormData.teamB,
+        date: editFormData.date,
+        time: editFormData.time,
+        stadium: editFormData.stadium,
         managerA: teamAInfo.manager || '',
         managerB: teamBInfo.manager || ''
       });
@@ -369,6 +373,75 @@ const LiveMatch = () => {
     }
   };
 
+  const propagateWinner = async (currentMatch, isRemoving = false) => {
+    // Only propagate for tournament knockout matches
+    if (!currentMatch.tournamentId) return;
+    const isKnockout = currentMatch.round !== 'Pool A' && currentMatch.round !== 'Pool B' && !currentMatch.round?.includes('Pool');
+    if (!isKnockout) return;
+
+    try {
+      // 1. Determine winner name
+      let winnerName = 'TBD';
+      let winnerManager = '';
+      if (!isRemoving) {
+        if (currentMatch.scoreA > currentMatch.scoreB) {
+          winnerName = currentMatch.teamA;
+          winnerManager = currentMatch.managerA || '';
+        } else if (currentMatch.scoreB > currentMatch.scoreA) {
+          winnerName = currentMatch.teamB;
+          winnerManager = currentMatch.managerB || '';
+        } else {
+          // It's a draw - knockout matches usually shouldn't end in a draw
+          // We won't propagate if it's a draw unless there's winner logic
+          return;
+        }
+      }
+
+      // 2. Identify Next Match
+      // Standard progression: next match is floor(matchOrder / 2) in next round
+      // Handles wing offset (100+) for dual-wing brackets
+      const isWingB = currentMatch.pool === 'B' || currentMatch.matchOrder >= 100;
+      const baseOrder = currentMatch.matchOrder % 100;
+      const nextBaseOrder = Math.floor(baseOrder / 2);
+
+      let nextRoundOrder;
+      if (currentMatch.round === 'Semi-Final') {
+        nextRoundOrder = 99; // Final
+      } else {
+        nextRoundOrder = currentMatch.roundOrder + 1;
+      }
+
+      // Find the next match in the tournament matches list
+      const nextMatch = matches.find(m =>
+        m.tournamentId === currentMatch.tournamentId &&
+        m.roundOrder === nextRoundOrder &&
+        (nextRoundOrder === 99 ? true : (m.matchOrder === (isWingB ? nextBaseOrder + 100 : nextBaseOrder)))
+      );
+
+      if (nextMatch) {
+        // Determine if winner goes to Team A or Team B of next match
+        // In Final (99), Wing A is Team A, Wing B is Team B
+        let teamField = 'teamA';
+        let managerField = 'managerA';
+
+        if (nextRoundOrder === 99) {
+          teamField = isWingB ? 'teamB' : 'teamA';
+          managerField = isWingB ? 'managerB' : 'managerA';
+        } else {
+          teamField = baseOrder % 2 === 0 ? 'teamA' : 'teamB';
+          managerField = baseOrder % 2 === 0 ? 'managerA' : 'managerB';
+        }
+
+        await updateDoc(doc(db, 'matches', nextMatch.id), {
+          [teamField]: winnerName,
+          [managerField]: winnerManager
+        });
+      }
+    } catch (err) {
+      console.error("Error propagating winner:", err);
+    }
+  };
+
   const toggleMatchStatus = async () => {
     const isEnding = match.status === 'live';
     const newStatus = isEnding ? 'finished' : 'live';
@@ -391,6 +464,14 @@ const LiveMatch = () => {
 
     try {
       await updateDoc(doc(db, 'matches', matchId), updates);
+
+      // Auto-propagate winner in brackets
+      if (newStatus === 'finished') {
+        await propagateWinner(match);
+      } else if (newStatus === 'live') {
+        // If moving back to live, optionally clear the winner from the next round
+        // await propagateWinner(match, true);
+      }
     } catch (err) {
       console.error("Error updating status:", err);
     }
@@ -453,11 +534,17 @@ const LiveMatch = () => {
                   <button
                     onClick={() => {
                       setIsEditingTeams(!isEditingTeams);
-                      setEditFormData({ teamA: match.teamA, teamB: match.teamB });
+                      setEditFormData({
+                        teamA: match.teamA,
+                        teamB: match.teamB,
+                        date: match.date || '',
+                        time: match.time || '',
+                        stadium: match.stadium || ''
+                      });
                     }}
                     className="w-full py-1.5 bg-slate-700 hover:bg-slate-600 rounded text-[10px] font-black uppercase tracking-widest text-brand-400 border border-brand-500/20"
                   >
-                    🛠️ Edit Teams
+                    🛠️ Edit Match Details
                   </button>
                   <button
                     onClick={toggleTimer}
@@ -487,11 +574,12 @@ const LiveMatch = () => {
               </div>
             </div>
 
-            {/* Team Editing Inline UI */}
+            {/* Match Information Editing Inline UI */}
             {isEditingTeams && (
               <div className="mt-4 p-4 bg-gray-900 rounded-xl border border-brand-500/50 shadow-2xl">
-                <h4 className="text-xs font-black uppercase tracking-widest text-brand-400 mb-4">Edit Match Participants</h4>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <h4 className="text-xs font-black uppercase tracking-widest text-brand-400 mb-4">Edit Match Details</h4>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
                   <div>
                     <label className="text-[10px] text-gray-500 uppercase font-bold mb-1 block">Team A (Home)</label>
                     <select
@@ -525,12 +613,44 @@ const LiveMatch = () => {
                     </select>
                   </div>
                 </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+                  <div>
+                    <label className="text-[10px] text-gray-500 uppercase font-bold mb-1 block">Match Date</label>
+                    <input
+                      type="date"
+                      value={editFormData.date}
+                      onChange={(e) => setEditFormData({ ...editFormData, date: e.target.value })}
+                      className="w-full bg-slate-800 border border-slate-700 rounded-lg p-2 text-slate-900 dark:text-white text-sm"
+                    />
+                  </div>
+                  <div>
+                    <label className="text-[10px] text-gray-500 uppercase font-bold mb-1 block">Match Time</label>
+                    <input
+                      type="time"
+                      value={editFormData.time}
+                      onChange={(e) => setEditFormData({ ...editFormData, time: e.target.value })}
+                      className="w-full bg-slate-800 border border-slate-700 rounded-lg p-2 text-slate-900 dark:text-white text-sm"
+                    />
+                  </div>
+                  <div>
+                    <label className="text-[10px] text-gray-500 uppercase font-bold mb-1 block">Stadium / Venue</label>
+                    <input
+                      type="text"
+                      placeholder="Enter stadium name"
+                      value={editFormData.stadium}
+                      onChange={(e) => setEditFormData({ ...editFormData, stadium: e.target.value })}
+                      className="w-full bg-slate-800 border border-slate-700 rounded-lg p-2 text-slate-900 dark:text-white text-sm"
+                    />
+                  </div>
+                </div>
+
                 <div className="mt-4 flex gap-2">
                   <button
                     onClick={handleUpdateTeams}
                     className="bg-brand-500 text-slate-900 px-4 py-2 rounded-lg font-bold text-sm"
                   >
-                    Save Changes
+                    Save All Changes
                   </button>
                   <button
                     onClick={() => setIsEditingTeams(false)}
@@ -773,32 +893,49 @@ const LiveMatch = () => {
           <MatchPredictions matchId={matchId} teamA={match.teamA} teamB={match.teamB} />
         </div>
 
-        {/* Team Lineups */}
-        {matchLineups.length > 0 && (
-          <div className="bg-gray-800 p-6 mt-6 rounded-lg">
-            <h3 className="text-xl font-bold mb-4">Team Lineups</h3>
+        {/* Team Lineups Section */}
+        <div className="bg-gray-800 p-6 mt-6 rounded-lg relative overflow-hidden">
+          {/* Header with Admin Manage Button */}
+          <div className="flex justify-between items-center mb-6">
+            <h3 className="text-xl font-bold flex items-center gap-2">
+              <span className="w-1.5 h-6 bg-brand-500 rounded-full"></span>
+              Team Lineups
+            </h3>
+            {isAdmin && (
+              <Link
+                to={`/admin/lineups/${matchId}`}
+                className="flex items-center gap-2 px-3 py-1.5 bg-brand-500/10 hover:bg-brand-500/20 text-brand-500 rounded-lg text-xs font-black uppercase tracking-wider transition-all border border-brand-500/20"
+              >
+                <Settings size={14} /> Manage Lineups
+              </Link>
+            )}
+          </div>
+
+          {matchLineups.length > 0 ? (
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
               {matchLineups.map(lineup => (
                 <div key={lineup.id} className="space-y-4">
                   <div className="flex justify-between items-center">
-                    <h4 className="text-lg font-semibold">{lineup.teamName}</h4>
+                    <h4 className="text-lg font-semibold text-slate-900 dark:text-white">{lineup.teamName}</h4>
                     {isAdmin && match.status === 'live' && (
                       <button
                         onClick={() => setShowSubstitution(showSubstitution === lineup.id ? null : lineup.id)}
-                        className="bg-yellow-600 hover:bg-yellow-700 text-slate-900 dark:text-white px-3 py-1 rounded text-sm"
+                        className="bg-yellow-600 hover:bg-yellow-700 text-slate-900 dark:text-white px-3 py-1 rounded text-[10px] font-black uppercase tracking-widest transition-all"
                       >
-                        {showSubstitution === lineup.id ? 'Hide Substitution' : '🔄 Make Substitution'}
+                        {showSubstitution === lineup.id ? 'Hide Sub' : '🔄 Sub'}
                       </button>
                     )}
                   </div>
 
                   {/* Substitution Manager */}
                   {isAdmin && showSubstitution === lineup.id && (
-                    <SubstitutionManager
-                      lineup={lineup}
-                      players={players}
-                      onSubstitutionComplete={() => setShowSubstitution(null)}
-                    />
+                    <div className="bg-black/20 p-4 rounded-xl border border-white/5 mb-4">
+                      <SubstitutionManager
+                        lineup={lineup}
+                        players={players}
+                        onSubstitutionComplete={() => setShowSubstitution(null)}
+                      />
+                    </div>
                   )}
 
                   {/* Lineup Display */}
@@ -806,8 +943,21 @@ const LiveMatch = () => {
                 </div>
               ))}
             </div>
-          </div>
-        )}
+          ) : (
+            <div className="py-12 border border-dashed border-white/10 rounded-xl flex flex-col items-center justify-center text-center">
+              <UserPlus className="w-10 h-10 text-slate-600 mb-3 opacity-20" />
+              <p className="text-slate-500 text-sm mb-4">No lineups have been added for this match yet.</p>
+              {isAdmin && (
+                <Link
+                  to={`/admin/lineups/${matchId}`}
+                  className="px-6 py-2 bg-brand-500 text-slate-900 rounded-lg font-bold text-sm hover:bg-brand-400 transition-colors shadow-lg shadow-brand-500/20"
+                >
+                  Add Match Lineup
+                </Link>
+              )}
+            </div>
+          )}
+        </div>
 
         {/* Match Timeline/Events */}
         <div className="bg-gray-800 rounded-b-lg p-6">

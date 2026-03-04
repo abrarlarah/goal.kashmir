@@ -8,7 +8,7 @@ import { db } from '../firebase';
 import MatchTimer from '../components/common/MatchTimer';
 import MatchBracket from '../components/common/MatchBracket';
 import { doc, updateDoc, addDoc, collection, deleteDoc } from 'firebase/firestore';
-import { generateKnockoutMatches, generatePoolMatches, generateDualKnockoutMatches } from '../utils/bracketGenerator';
+import { generateKnockoutMatches, generatePoolMatches, generateDualKnockoutMatches, generateLeagueMatches } from '../utils/bracketGenerator';
 
 const TournamentDetail = () => {
     const { id } = useParams();
@@ -148,22 +148,78 @@ const TournamentDetail = () => {
         try {
             setIsSavingMatch(true);
             let matchesToCreate = [];
-            if (isPool) {
-                matchesToCreate = generatePoolMatches(count, tournament.name, tournament.id, tournament.startDate);
-            } else if (isDualKnockout) {
-                matchesToCreate = generateDualKnockoutMatches(count, tournament.name, tournament.id, tournament.startDate);
+            if (tournament.type === 'league') {
+                matchesToCreate = generateLeagueMatches(count, tournament.name, tournament.id, tournament.startDate, tournamentTeams);
+            } else if (tournament.type === 'pool') {
+                matchesToCreate = generatePoolMatches(count, tournament.name, tournament.id, tournament.startDate, tournamentTeams);
+            } else if (tournament.type === 'dual_knockout') {
+                matchesToCreate = generateDualKnockoutMatches(count, tournament.name, tournament.id, tournament.startDate, tournamentTeams);
             } else {
-                matchesToCreate = generateKnockoutMatches(count, tournament.name, tournament.id, tournament.startDate);
+                matchesToCreate = generateKnockoutMatches(count, tournament.name, tournament.id, tournament.startDate, tournamentTeams);
             }
 
             const batchPromises = matchesToCreate.map(matchData =>
                 addDoc(collection(db, 'matches'), matchData)
             );
             await Promise.all(batchPromises);
-            alert(`Success! Generated ${matchesToCreate.length} matches for a ${count}-team ${isPool ? 'pool' : 'bracket'}.`);
+
+            const typeLabel = tournament.type === 'league' ? 'league' : (tournament.type === 'pool' ? 'pool' : 'bracket');
+            alert(`Success! Generated ${matchesToCreate.length} matches for a ${count}-team ${typeLabel}.`);
         } catch (err) {
             console.error("Error seeding:", err);
             alert("Error seeding structure");
+        } finally {
+            setIsSavingMatch(false);
+        }
+    };
+
+    const handleSyncTeamNames = async () => {
+        if (!window.confirm("This will replace 'Team 1', 'Team 2', etc. in your matches with the actual teams registered in this tournament. Continue?")) return;
+
+        try {
+            setIsSavingMatch(true);
+            const updates = [];
+
+            // Map "Team X" to actual team names
+            tournamentMatches.forEach(match => {
+                let matchUpdate = {};
+                let changed = false;
+
+                // Check Team A
+                if (match.teamA && match.teamA.startsWith('Team ')) {
+                    const idx = parseInt(match.teamA.replace('Team ', '')) - 1;
+                    if (tournamentTeams[idx]) {
+                        matchUpdate.teamA = tournamentTeams[idx].name;
+                        matchUpdate.managerA = tournamentTeams[idx].manager || '';
+                        changed = true;
+                    }
+                }
+
+                // Check Team B
+                if (match.teamB && match.teamB.startsWith('Team ')) {
+                    const idx = parseInt(match.teamB.replace('Team ', '')) - 1;
+                    if (tournamentTeams[idx]) {
+                        matchUpdate.teamB = tournamentTeams[idx].name;
+                        matchUpdate.managerB = tournamentTeams[idx].manager || '';
+                        changed = true;
+                    }
+                }
+
+                if (changed) {
+                    updates.push(updateDoc(doc(db, 'matches', match.id), matchUpdate));
+                }
+            });
+
+            if (updates.length > 0) {
+                await Promise.all(updates);
+                setSuccessMessage(`Successfully synced names for ${updates.length} matches!`);
+                setTimeout(() => setSuccessMessage(''), 3000);
+            } else {
+                alert("No matches with 'Team X' placeholders were found or teams are already synced.");
+            }
+        } catch (err) {
+            console.error("Error syncing teams:", err);
+            alert("Error syncing team names");
         } finally {
             setIsSavingMatch(false);
         }
@@ -374,13 +430,34 @@ const TournamentDetail = () => {
                                 Match Schedule
                             </h3>
                             {isAdmin && (
-                                <button
-                                    onClick={() => setShowScheduleMatch(true)}
-                                    className="flex items-center gap-2 px-4 py-2 bg-brand-500 text-slate-900 dark:text-white rounded-xl font-bold text-sm hover:bg-brand-600 transition-all shadow-lg"
-                                >
-                                    <Plus size={18} />
-                                    Schedule Match
-                                </button>
+                                <div className="flex gap-2">
+                                    {tournamentMatches.length > 0 && isAdmin && (
+                                        <button
+                                            onClick={handleSyncTeamNames}
+                                            className="flex items-center gap-2 px-4 py-2 bg-indigo-500/10 text-indigo-500 rounded-xl font-bold text-sm hover:bg-indigo-500 hover:text-white transition-all border border-indigo-500/20"
+                                            title="Sync 'Team 1, 2...' with actual team names"
+                                        >
+                                            <Users size={18} />
+                                            Sync Teams
+                                        </button>
+                                    )}
+                                    {tournamentMatches.length === 0 && (
+                                        <button
+                                            onClick={handleSeedBracket}
+                                            className="flex items-center gap-2 px-4 py-2 bg-indigo-600 text-white rounded-xl font-bold text-sm hover:bg-indigo-700 transition-all shadow-lg shadow-indigo-500/20"
+                                        >
+                                            <List size={18} />
+                                            Generate {tournament.type === 'league' ? 'League' : 'Bracket'}
+                                        </button>
+                                    )}
+                                    <button
+                                        onClick={() => setShowScheduleMatch(true)}
+                                        className="flex items-center gap-2 px-4 py-2 bg-brand-500 text-slate-900 dark:text-white rounded-xl font-bold text-sm hover:bg-brand-600 transition-all shadow-lg"
+                                    >
+                                        <Plus size={18} />
+                                        Schedule Match
+                                    </button>
+                                </div>
                             )}
                         </div>
 
@@ -765,7 +842,7 @@ const TournamentDetail = () => {
                                         className="px-4 py-2 bg-brand-500 text-slate-900 dark:text-white rounded-xl font-black text-xs hover:scale-105 transition-all shadow-lg shadow-brand-500/20"
                                     >
                                         <Plus size={14} className="inline mr-1" />
-                                        Initialize {tournament.type === 'dual_knockout' ? '2-Pool' : ''} Bracket
+                                        Initialize {tournament.type === 'league' ? 'League' : (tournament.type === 'dual_knockout' ? '2-Pool' : 'Bracket')}
                                     </button>
                                 )}
                             </div>
