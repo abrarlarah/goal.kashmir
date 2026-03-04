@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { updateDoc, doc } from 'firebase/firestore';
 import { db } from '../firebase';
 import { useAuth } from '../context/AuthContext';
@@ -17,6 +17,7 @@ const DISTRICTS = {
 
 const Players = () => {
   const { players, loading } = useData();
+  const navigate = useNavigate();
   const [positionFilter, setPositionFilter] = useState('All');
   const [selectedDistrict, setSelectedDistrict] = useState('Baramulla');
   const [searchQuery, setSearchQuery] = useState('');
@@ -212,6 +213,7 @@ const Players = () => {
                 <th className="px-6 py-4 text-center text-xs font-bold text-slate-600 dark:text-slate-400 uppercase tracking-wider">Goals</th>
                 <th className="px-6 py-4 text-center text-xs font-bold text-slate-600 dark:text-slate-400 uppercase tracking-wider">Assists</th>
                 <th className="px-6 py-4 text-center text-xs font-bold text-slate-600 dark:text-slate-400 uppercase tracking-wider">Cards</th>
+                {isAdmin && <th className="px-6 py-4 text-right text-xs font-bold text-slate-600 dark:text-slate-400 uppercase tracking-wider">Action</th>}
               </tr>
             </thead>
             <tbody className="divide-y divide-white/5 bg-transparent">
@@ -317,6 +319,17 @@ const Players = () => {
                         {(!display.yellowCards && !display.redCards) && <span className="text-slate-700">-</span>}
                       </div>
                     </td>
+                    {isAdmin && (
+                      <td className="px-6 py-4 whitespace-nowrap text-right">
+                        <button
+                          onClick={() => navigate('/admin/players', { state: { editPlayer: player } })}
+                          className="p-2 bg-brand-500/10 text-brand-500 hover:bg-brand-500 hover:text-white rounded-lg transition-all"
+                          title="Edit Player Details"
+                        >
+                          <Edit2 size={14} />
+                        </button>
+                      </td>
+                    )}
                   </tr>
                 );
               })}

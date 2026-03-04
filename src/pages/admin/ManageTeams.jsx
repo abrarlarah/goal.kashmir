@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { collection, addDoc, updateDoc, deleteDoc, doc, query, where, getDocs, writeBatch } from 'firebase/firestore';
+import { useLocation } from 'react-router-dom';
 import { ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage';
 import { db, storage } from '../../firebase';
 import { useData } from '../../context/DataContext';
@@ -9,6 +10,7 @@ import { registerAsset } from '../../utils/assetRegistry';
 
 const ManageTeams = () => {
     const { teams, tournaments } = useData();
+    const location = useLocation();
     const [loading, setLoading] = useState(false); // Loading for form submission
     const [formData, setFormData] = useState({
         name: '',
@@ -19,7 +21,10 @@ const ManageTeams = () => {
         status: 'Active',
         players: 0,
         logoUrl: '',
-        tournaments: [] // Now an array
+        tournaments: [],
+        description: '',
+        trophies: 0,
+        district: 'Baramulla'
     });
     const [editingId, setEditingId] = useState(null);
     const [searchTerm, setSearchTerm] = useState('');
@@ -28,11 +33,19 @@ const ManageTeams = () => {
     const [uploading, setUploading] = useState(false);
     const [showAssetPicker, setShowAssetPicker] = useState(false);
 
+    useEffect(() => {
+        if (location.state && location.state.editTeam) {
+            handleEdit(location.state.editTeam);
+            // Clear location state after picking it up
+            window.history.replaceState({}, document.title);
+        }
+    }, [location.state]);
+
     const handleInputChange = (e) => {
         const { name, value } = e.target;
         setFormData(prev => ({
             ...prev,
-            [name]: (name === 'founded' || name === 'players') ? Number(value) : value
+            [name]: (name === 'founded' || name === 'players' || name === 'trophies') ? Number(value) : value
         }));
     };
 
@@ -153,7 +166,10 @@ const ManageTeams = () => {
                 status: 'Active',
                 players: 0,
                 logoUrl: '',
-                tournaments: []
+                tournaments: [],
+                description: '',
+                trophies: 0,
+                district: 'Baramulla'
             });
             setEditingId(null);
             window.scrollTo(0, 0);
@@ -350,6 +366,49 @@ const ManageTeams = () => {
                         </select>
                     </div>
                     <div>
+                        <label className="text-xs text-gray-400 block mb-1">Home District</label>
+                        <select
+                            name="district"
+                            value={formData.district || ''}
+                            onChange={handleInputChange}
+                            className="bg-gray-700 p-2 rounded text-slate-900 dark:text-white w-full"
+                        >
+                            <option value="">Select District</option>
+                            <optgroup label="Jammu Division">
+                                {['Jammu', 'Samba', 'Kathua', 'Udhampur', 'Reasi', 'Rajouri', 'Poonch', 'Doda', 'Ramban', 'Kishtwar'].map(d => (
+                                    <option key={d} value={d}>{d}</option>
+                                ))}
+                            </optgroup>
+                            <optgroup label="Kashmir Division">
+                                {['Srinagar', 'Ganderbal', 'Budgam', 'Baramulla', 'Bandipora', 'Kupwara', 'Pulwama', 'Shopian', 'Kulgam', 'Anantnag'].map(d => (
+                                    <option key={d} value={d}>{d}</option>
+                                ))}
+                            </optgroup>
+                        </select>
+                    </div>
+                    <div>
+                        <label className="text-xs text-gray-400 block mb-1">Trophies Won</label>
+                        <input
+                            type="number"
+                            name="trophies"
+                            placeholder="0"
+                            value={formData.trophies || 0}
+                            onChange={handleInputChange}
+                            className="bg-gray-700 p-2 rounded text-slate-900 dark:text-white w-full"
+                        />
+                    </div>
+                    <div className="col-span-full">
+                        <label className="text-xs text-gray-400 block mb-1">Club History / Description</label>
+                        <textarea
+                            name="description"
+                            rows="4"
+                            placeholder="Write about the club's history, values, and achievements..."
+                            value={formData.description || ''}
+                            onChange={handleInputChange}
+                            className="bg-gray-700 p-3 rounded text-slate-900 dark:text-white w-full"
+                        ></textarea>
+                    </div>
+                    <div>
                         <label className="text-xs text-gray-400 block mb-1">Participating Tournaments</label>
                         <div className="flex flex-wrap gap-2 bg-gray-700 p-2 rounded min-h-[42px] items-center">
                             {tournaments.map(t => (
@@ -389,7 +448,11 @@ const ManageTeams = () => {
                                     manager: '',
                                     status: 'Active',
                                     players: 0,
-                                    tournaments: ''
+                                    tournaments: [],
+                                    logoUrl: '',
+                                    description: '',
+                                    trophies: 0,
+                                    district: 'Baramulla'
                                 });
                             }}
                             className="bg-gray-600 hover:bg-gray-500 p-2 rounded text-slate-900 dark:text-white col-span-full"
@@ -398,10 +461,10 @@ const ManageTeams = () => {
                         </button>
                     )}
                 </form>
-            </div>
+            </div >
 
             {/* Search */}
-            <div className="mb-6 relative">
+            < div className="mb-6 relative" >
                 <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={18} />
                 <input
                     type="text"
@@ -410,39 +473,43 @@ const ManageTeams = () => {
                     onChange={(e) => setSearchTerm(e.target.value)}
                     className="w-full bg-gray-800 border border-gray-700 rounded-lg pl-10 pr-4 py-2 text-slate-900 dark:text-white focus:ring-2 focus:ring-brand-500 outline-none"
                 />
-            </div>
+            </div >
 
             {/* List */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                {filteredTeams.map(team => (
-                    <div key={team.id} className="bg-gray-800 p-4 rounded flex justify-between items-center">
-                        <div>
-                            <div className="font-bold text-lg">{team.name} ({team.shortName})</div>
-                            <div className="text-sm text-gray-400">
-                                Stadium: {team.stadium} • Manager: {team.manager || 'N/A'}
+            < div className="grid grid-cols-1 md:grid-cols-2 gap-4" >
+                {
+                    filteredTeams.map(team => (
+                        <div key={team.id} className="bg-gray-800 p-4 rounded flex justify-between items-center">
+                            <div>
+                                <div className="font-bold text-lg">{team.name} ({team.shortName})</div>
+                                <div className="text-sm text-gray-400">
+                                    Stadium: {team.stadium} • Manager: {team.manager || 'N/A'}
+                                </div>
+                            </div>
+                            <div className="flex gap-2">
+                                <button
+                                    onClick={() => handleEdit(team)}
+                                    className="bg-blue-600 hover:bg-blue-700 px-3 py-1 rounded text-sm"
+                                >
+                                    Edit
+                                </button>
+                                <button
+                                    onClick={() => handleDelete(team.id)}
+                                    className="bg-red-600 hover:bg-red-700 px-3 py-1 rounded text-sm"
+                                >
+                                    Delete
+                                </button>
                             </div>
                         </div>
-                        <div className="flex gap-2">
-                            <button
-                                onClick={() => handleEdit(team)}
-                                className="bg-blue-600 hover:bg-blue-700 px-3 py-1 rounded text-sm"
-                            >
-                                Edit
-                            </button>
-                            <button
-                                onClick={() => handleDelete(team.id)}
-                                className="bg-red-600 hover:bg-red-700 px-3 py-1 rounded text-sm"
-                            >
-                                Delete
-                            </button>
-                        </div>
-                    </div>
-                ))}
-                {filteredTeams.length === 0 && !loading && (
-                    <p className="text-center text-gray-400 col-span-full">No teams found matching your search.</p>
-                )}
-            </div>
-        </div>
+                    ))
+                }
+                {
+                    filteredTeams.length === 0 && !loading && (
+                        <p className="text-center text-gray-400 col-span-full">No teams found matching your search.</p>
+                    )
+                }
+            </div >
+        </div >
     );
 };
 

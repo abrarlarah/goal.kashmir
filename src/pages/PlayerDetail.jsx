@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useParams, Link } from 'react-router-dom';
+import { useParams, Link, useNavigate } from 'react-router-dom';
 import { doc, getDoc, collection, query, where, getDocs, limit, orderBy } from 'firebase/firestore';
 import { db } from '../firebase';
 import { useData } from '../context/DataContext';
@@ -15,13 +15,17 @@ import {
     Trophy,
     Activity,
     User as UserIcon,
-    History
+    History,
+    Edit3
 } from 'lucide-react';
+import { useAuth } from '../context/AuthContext';
 import { calculateAge } from '../utils/ageUtils';
 import { cn } from '../utils/cn';
 
 const PlayerDetail = () => {
     const { id } = useParams();
+    const navigate = useNavigate();
+    const { isAdmin } = useAuth();
     const { teams, matches, lineups, loading: dataLoading } = useData();
     const [player, setPlayer] = useState(null);
     const [team, setTeam] = useState(null);
@@ -159,14 +163,25 @@ const PlayerDetail = () => {
 
     return (
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-12">
-            {/* Back Button */}
-            <Link
-                to="/players"
-                className="inline-flex items-center gap-2 text-slate-600 dark:text-slate-400 hover:text-brand-500 transition-colors mb-8 group"
-            >
-                <ChevronLeft size={20} className="group-hover:-translate-x-1 transition-transform" />
-                <span className="font-semibold">Back to Players</span>
-            </Link>
+            <div className="flex justify-between items-center mb-8">
+                <Link
+                    to="/players"
+                    className="inline-flex items-center gap-2 text-slate-600 dark:text-slate-400 hover:text-brand-500 transition-colors group"
+                >
+                    <ChevronLeft size={20} className="group-hover:-translate-x-1 transition-transform" />
+                    <span className="font-semibold">Back to Players</span>
+                </Link>
+
+                {isAdmin && (
+                    <button
+                        onClick={() => navigate('/admin/players', { state: { editPlayer: player } })}
+                        className="flex items-center gap-2 px-4 py-2 bg-brand-500/10 text-brand-500 hover:bg-brand-500 hover:text-white rounded-xl text-sm font-bold transition-all shadow-sm"
+                    >
+                        <Edit3 size={16} />
+                        Edit Player Details
+                    </button>
+                )}
+            </div>
 
             {/* Profile Header Card */}
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-12">

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useParams, Link } from 'react-router-dom';
+import { useParams, Link, useNavigate } from 'react-router-dom';
 import { doc, getDoc, collection, query, where, getDocs } from 'firebase/firestore';
 import { db } from '../firebase';
 import { motion } from 'framer-motion';
@@ -11,19 +11,22 @@ import {
     Calendar,
     MapPin,
     Activity,
-    Info,
-    ExternalLink,
-    Clock,
-    User as UserIcon
+    User as UserIcon,
+    Edit2,
+    Clock
 } from 'lucide-react';
+import { useAuth } from '../context/AuthContext';
 import { cn } from '../utils/cn';
 
 const TeamDetail = () => {
     const { id } = useParams();
+    const navigate = useNavigate();
+    const { isAdmin } = useAuth();
     const [team, setTeam] = useState(null);
     const [players, setPlayers] = useState([]);
     const [matches, setMatches] = useState([]);
     const [loading, setLoading] = useState(true);
+    const [filterType, setFilterType] = useState('all'); // 'all', 'won', 'lost', 'drawn', 'pending'
 
     useEffect(() => {
         const fetchTeamData = async () => {
@@ -88,13 +91,75 @@ const TeamDetail = () => {
 
     return (
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-            <Link
-                to="/teams"
-                className="inline-flex items-center gap-2 text-slate-500 hover:text-blue-500 transition-colors mb-8 group"
-            >
-                <ChevronLeft size={20} className="group-hover:-translate-x-1 transition-transform" />
-                <span className="font-semibold">Back to Clubs</span>
-            </Link>
+            <div className="flex justify-between items-center mb-8">
+                <Link
+                    to="/teams"
+                    className="inline-flex items-center gap-2 text-slate-500 hover:text-blue-500 transition-colors group"
+                >
+                    <ChevronLeft size={20} className="group-hover:-translate-x-1 transition-transform" />
+                    <span className="font-semibold">Back to Clubs</span>
+                </Link>
+
+                {isAdmin && (
+                    <button
+                        onClick={() => navigate('/admin/teams', { state: { editTeam: team } })}
+                        className="flex items-center gap-2 px-4 py-2 bg-brand-500/10 text-brand-500 hover:bg-brand-500 hover:text-white rounded-xl text-sm font-bold transition-all shadow-sm"
+                    >
+                        <Edit2 size={16} />
+                        Edit Club Details
+                    </button>
+                )}
+            </div>
+
+            {/* Match Stats Summary */}
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mb-12">
+                {[
+                    {
+                        id: 'won',
+                        label: 'Matches Won',
+                        value: matches.filter(m => m.status === 'finished' && ((m.teamA === team.name && Number(m.scoreA) > Number(m.scoreB)) || (m.teamB === team.name && Number(m.scoreB) > Number(m.scoreA)))).length,
+                        color: 'text-green-500',
+                        bg: 'bg-green-500/10'
+                    },
+                    {
+                        id: 'lost',
+                        label: 'Matches Lost',
+                        value: matches.filter(m => m.status === 'finished' && ((m.teamA === team.name && Number(m.scoreA) < Number(m.scoreB)) || (m.teamB === team.name && Number(m.scoreB) < Number(m.scoreA)))).length,
+                        color: 'text-red-500',
+                        bg: 'bg-red-500/10'
+                    },
+                    {
+                        id: 'drawn',
+                        label: 'Matches Drawn',
+                        value: matches.filter(m => m.status === 'finished' && Number(m.scoreA) === Number(m.scoreB)).length,
+                        color: 'text-yellow-500',
+                        bg: 'bg-yellow-500/10'
+                    },
+                    {
+                        id: 'pending',
+                        label: 'Pending Matches',
+                        value: matches.filter(m => m.status !== 'finished').length,
+                        color: 'text-blue-500',
+                        bg: 'bg-blue-500/10'
+                    }
+                ].map((stat, idx) => (
+                    <button
+                        key={idx}
+                        onClick={() => setFilterType(filterType === stat.id ? 'all' : stat.id)}
+                        className={cn(
+                            `glass-card p-6 rounded-3xl border flex flex-col items-center justify-center transition-all hover:scale-105 active:scale-95`,
+                            stat.bg,
+                            filterType === stat.id ? "border-brand-500 shadow-[0_0_20px_rgba(var(--brand-500-rgb),0.2)] ring-2 ring-brand-500/50" : "border-slate-200 dark:border-white/5"
+                        )}
+                    >
+                        <span className={`text-4xl font-black mb-1 ${stat.color}`}>{stat.value}</span>
+                        <span className="text-[10px] uppercase font-bold tracking-widest text-slate-500">{stat.label}</span>
+                        {filterType === stat.id && (
+                            <span className="mt-2 text-[8px] font-black uppercase tracking-tighter text-brand-400 animate-pulse">Viewing Report</span>
+                        )}
+                    </button>
+                ))}
+            </div>
 
             {/* Header section with Stats */}
             <div className="grid grid-cols-1 lg:grid-cols-4 gap-8 mb-12">
@@ -161,28 +226,47 @@ const TeamDetail = () => {
                             animate={{ opacity: 1, y: 0 }}
                             className="space-y-4"
                         >
-                            <h3 className="text-xl font-display font-bold flex items-center gap-2 text-slate-900 dark:text-white">
-                                <Activity size={20} className="text-blue-500" />
-                                Recent Fixtures
+                            <h3 className="text-xl font-display font-bold flex items-center justify-between gap-2 text-slate-900 dark:text-white">
+                                <div className="flex items-center gap-2">
+                                    <Activity size={20} className="text-blue-500" />
+                                    {filterType === 'all' ? 'Recent Fixtures' : `${filterType.toUpperCase()} Matches Report`}
+                                </div>
+                                {filterType !== 'all' && (
+                                    <button
+                                        onClick={() => setFilterType('all')}
+                                        className="text-[10px] uppercase font-black tracking-widest text-brand-500 hover:text-brand-400"
+                                    >
+                                        Clear Filter
+                                    </button>
+                                )}
                             </h3>
-                            <div className="space-y-3">
-                                {matches.slice(0, 5).map(match => (
-                                    <div key={match.id} className="glass-card p-4 rounded-2xl border border-slate-200 dark:border-white/5 flex items-center justify-between hover:bg-white/5 transition-colors group">
-                                        <div className="flex-1 text-right text-sm font-medium pr-4 truncate">
-                                            {match.teamA}
-                                        </div>
-                                        <div className="flex flex-col items-center px-4 bg-slate-900/50 rounded-xl py-1 min-w-[80px]">
-                                            <span className="text-lg font-bold text-slate-900 dark:text-white">
-                                                {match.status === 'finished' ? `${match.scoreA} - ${match.scoreB}` : 'vs'}
-                                            </span>
-                                            <span className="text-[9px] uppercase tracking-tighter text-slate-500">{match.date}</span>
-                                        </div>
-                                        <div className="flex-1 text-left text-sm font-medium pl-4 truncate">
-                                            {match.teamB}
-                                        </div>
-                                    </div>
-                                ))}
-                                {matches.length === 0 && <p className="text-slate-500 text-sm italic">No recent matches recorded.</p>}
+                            <div className="space-y-3 max-h-[360px] overflow-y-auto pr-2 custom-scrollbar">
+                                {matches
+                                    .filter(m => {
+                                        if (filterType === 'all') return true;
+                                        if (filterType === 'won') return m.status === 'finished' && ((m.teamA === team.name && Number(m.scoreA) > Number(m.scoreB)) || (m.teamB === team.name && Number(m.scoreB) > Number(m.scoreA)));
+                                        if (filterType === 'lost') return m.status === 'finished' && ((m.teamA === team.name && Number(m.scoreA) < Number(m.scoreB)) || (m.teamB === team.name && Number(m.scoreB) < Number(m.scoreA)));
+                                        if (filterType === 'drawn') return m.status === 'finished' && Number(m.scoreA) === Number(m.scoreB);
+                                        if (filterType === 'pending') return m.status !== 'finished';
+                                        return true;
+                                    })
+                                    .map(match => (
+                                        <Link key={match.id} to={`/matches/${match.id}`} className="glass-card p-4 rounded-2xl border border-slate-200 dark:border-white/5 flex items-center justify-between hover:bg-white/5 transition-colors group">
+                                            <div className="flex-1 text-right text-sm font-medium pr-4 truncate">
+                                                {match.teamA}
+                                            </div>
+                                            <div className="flex flex-col items-center px-4 bg-slate-900/50 rounded-xl py-1 min-w-[80px]">
+                                                <span className="text-lg font-bold text-slate-900 dark:text-white">
+                                                    {match.status === 'finished' ? `${match.scoreA} - ${match.scoreB}` : 'vs'}
+                                                </span>
+                                                <span className="text-[9px] uppercase tracking-tighter text-slate-500">{match.date}</span>
+                                            </div>
+                                            <div className="flex-1 text-left text-sm font-medium pl-4 truncate">
+                                                {match.teamB}
+                                            </div>
+                                        </Link>
+                                    ))}
+                                {matches.length === 0 && <p className="text-slate-500 text-sm italic">No records found.</p>}
                             </div>
                         </motion.div>
 
@@ -194,9 +278,9 @@ const TeamDetail = () => {
                         >
                             <h3 className="text-xl font-display font-bold flex items-center gap-2 text-slate-900 dark:text-white">
                                 <Users size={20} className="text-blue-500" />
-                                Squad Members
+                                Squad Members ({players.length})
                             </h3>
-                            <div className="grid grid-cols-1 gap-2 max-h-[600px] overflow-y-auto pr-2 custom-scrollbar">
+                            <div className="grid grid-cols-1 gap-2 max-h-[360px] overflow-y-auto pr-2 custom-scrollbar">
                                 {players.sort((a, b) => (a.number || 99) - (b.number || 99)).map(player => (
                                     <Link
                                         key={player.id}
@@ -210,7 +294,20 @@ const TeamDetail = () => {
                                             <div className="text-sm font-bold text-slate-900 dark:text-white group-hover:text-blue-500 transition-colors">{player.name}</div>
                                             <div className="text-[10px] text-slate-500 uppercase tracking-wide">{player.position} • #{player.number || '--'}</div>
                                         </div>
-                                        <div className="opacity-0 group-hover:opacity-100 transition-opacity">
+                                        <div className="flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                                            {isAdmin && (
+                                                <button
+                                                    onClick={(e) => {
+                                                        e.preventDefault();
+                                                        e.stopPropagation();
+                                                        navigate('/admin/players', { state: { editPlayer: player } });
+                                                    }}
+                                                    className="p-1.5 bg-brand-500/10 text-brand-500 hover:bg-brand-500 hover:text-white rounded-lg transition-all"
+                                                    title="Edit Player Details"
+                                                >
+                                                    <Edit2 size={12} />
+                                                </button>
+                                            )}
                                             <ChevronLeft className="rotate-180 text-blue-500" size={16} />
                                         </div>
                                     </Link>
@@ -229,9 +326,10 @@ const TeamDetail = () => {
                         <p className="text-slate-600 dark:text-slate-400 leading-relaxed mb-6">
                             {team.description || `${team.name} is a competitive football club participating in multiple tournaments across the region. Known for their resilience and local fans, the club represents the spirit of ${team.district || 'their community'}.`}
                         </p>
-                        <div className="flex gap-4">
+                        <div className="flex flex-wrap gap-4">
                             <div className="flex items-center gap-2 text-xs font-bold text-blue-500 bg-blue-500/10 px-4 py-2 rounded-xl border border-blue-500/20">
-                                <Trophy size={14} /> Multiple Honors
+                                <Trophy size={14} />
+                                {team.trophies > 0 ? `${team.trophies} Official Titles` : 'Regional Contender'}
                             </div>
                             <div className="flex items-center gap-2 text-xs font-bold text-green-500 bg-green-500/10 px-4 py-2 rounded-xl border border-green-500/20">
                                 <Users size={14} /> Community Driven

@@ -1,9 +1,10 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { collection, addDoc, updateDoc, deleteDoc, doc } from 'firebase/firestore';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage';
 import { db, storage } from '../../firebase';
 import { useData } from '../../context/DataContext';
-import { Upload, X, User, Image as ImageIcon, Folders, Search, Filter } from 'lucide-react';
+import { Upload, X, User, Image as ImageIcon, Folders, Search, Filter, Edit3 } from 'lucide-react';
 import AssetPicker from '../../components/admin/AssetPicker';
 import { registerAsset } from '../../utils/assetRegistry';
 import { calculateAge } from '../../utils/ageUtils';
@@ -16,6 +17,8 @@ const DISTRICTS = {
 
 const ManagePlayers = () => {
     const { players, teams } = useData();
+    const location = useLocation();
+    const navigate = useNavigate();
     const [loading, setLoading] = useState(false); // Form loading
     const [searchTerm, setSearchTerm] = useState('');
     const [teamFilter, setTeamFilter] = useState('All');
@@ -43,6 +46,14 @@ const ManagePlayers = () => {
     const [successMessage, setSuccessMessage] = useState('');
 
     const positions = ['Forward', 'Midfielder', 'Defender', 'Goalkeeper'];
+
+    useEffect(() => {
+        if (location.state && location.state.editPlayer) {
+            handleEdit(location.state.editPlayer);
+            // Clear state so it doesn't re-trigger
+            window.history.replaceState({}, document.title);
+        }
+    }, [location.state]);
 
     const handleInputChange = (e) => {
         const { name, value } = e.target;
@@ -508,18 +519,22 @@ const ManagePlayers = () => {
                                     {player.goals} G, {player.assists} A
                                 </td>
                                 <td className="px-4 py-3">
-                                    <button
-                                        onClick={() => handleEdit(player)}
-                                        className="text-blue-500 hover:text-blue-400 mr-3"
-                                    >
-                                        Edit
-                                    </button>
-                                    <button
-                                        onClick={() => handleDelete(player.id)}
-                                        className="text-red-500 hover:text-red-400"
-                                    >
-                                        Delete
-                                    </button>
+                                    <div className="flex items-center gap-2">
+                                        <button
+                                            onClick={() => handleEdit(player)}
+                                            className="p-2 bg-blue-500/10 text-blue-500 hover:bg-blue-500 hover:text-white rounded-lg transition-all"
+                                            title="Edit Player"
+                                        >
+                                            <Edit3 size={16} />
+                                        </button>
+                                        <button
+                                            onClick={() => handleDelete(player.id)}
+                                            className="p-2 bg-red-500/10 text-red-500 hover:bg-red-500 hover:text-white rounded-lg transition-all"
+                                            title="Delete Player"
+                                        >
+                                            <X size={16} />
+                                        </button>
+                                    </div>
                                 </td>
                             </tr>
                         ))}

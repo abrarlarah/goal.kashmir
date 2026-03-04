@@ -212,7 +212,7 @@ const Dashboard = () => {
                   setSelectedDistrict(e.target.value);
                   setDashboardCompetitionId('All');
                 }}
-                className="bg-white dark:bg-dark-card/50 backdrop-blur-sm border border-slate-200 dark:border-white/10 rounded-xl px-4 py-2 text-sm font-medium text-slate-900 dark:text-white focus:ring-2 focus:ring-brand-500 outline-none transition-all"
+                className="bg-white dark:bg-dark-card/50 backdrop-blur-sm border border-slate-200 dark:border-white/10 rounded-xl px-4 py-2 text-sm font-medium text-slate-900 dark:text-white focus:ring-2 focus:ring-brand-500 outline-none transition-all min-w-[140px]"
               >
                 <option value="All">All Districts</option>
                 <optgroup label="Jammu Division">
@@ -227,72 +227,37 @@ const Dashboard = () => {
                 </optgroup>
               </select>
             </div>
-          </div>
-        </div>
 
-        {/* Tournament Filter */}
-        <div className="flex flex-wrap items-center gap-2 bg-white dark:bg-dark-card/50 backdrop-blur-sm p-1.5 rounded-xl border border-slate-200 dark:border-white/5">
-          <div className="flex items-center">
-            <button
-              onClick={() => setDashboardCompetitionId('All')}
-              className={cn(
-                "px-4 py-2 rounded-l-lg text-sm font-medium transition-all duration-300",
-                dashboardCompetitionId === 'All'
-                  ? "bg-brand-500 text-slate-900 shadow-lg shadow-brand-500/20"
-                  : "text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-white/5"
-              )}
-            >
-              All Tournaments
-            </button>
-            <Link
-              to="/tournaments"
-              className={cn(
-                "p-2 px-3 rounded-r-lg border-l border-white/10 transition-colors flex items-center justify-center",
-                dashboardCompetitionId === 'All' ? "bg-brand-500 text-slate-900" : "bg-white/5 text-slate-400 hover:text-brand-500"
-              )}
-              title="Browse Full Tournament List"
-            >
-              <ExternalLink size={14} />
-            </Link>
-          </div>
-
-          <div className="flex flex-wrap gap-2">
-            {filteredTournaments.map(t => (
-              <div key={t.id} className="flex items-center">
-                <button
-                  onClick={() => setDashboardCompetitionId(t.id)}
-                  className={cn(
-                    "px-4 py-2 rounded-lg text-sm font-medium transition-all duration-300 flex items-center gap-2",
-                    dashboardCompetitionId === t.id
-                      ? "bg-brand-500 text-slate-900 dark:text-white shadow-lg shadow-brand-500/20"
-                      : "text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:text-white hover:bg-white/5"
-                  )}
+            {/* Competition Filter */}
+            <div className="flex items-center gap-2">
+              <Trophy className="text-brand-400" size={18} />
+              <div className="flex items-center gap-1 group">
+                <select
+                  value={dashboardCompetitionId}
+                  onChange={(e) => setDashboardCompetitionId(e.target.value)}
+                  className="bg-white dark:bg-dark-card/50 backdrop-blur-sm border border-slate-200 dark:border-white/10 rounded-xl px-4 py-2 text-sm font-medium text-slate-900 dark:text-white focus:ring-2 focus:ring-brand-500 outline-none transition-all max-w-[200px]"
                 >
-                  {t.name}
-                  <span className="text-[10px] opacity-60">
-                    {t.startDate ? `(${new Date(t.startDate).getFullYear()})` : ''}
-                  </span>
-                </button>
-                <Link
-                  to={`/tournaments/${t.id}`}
-                  className={cn(
-                    "p-2 transition-colors",
-                    dashboardCompetitionId === t.id ? "text-slate-900 dark:text-white" : "text-slate-500 hover:text-brand-500"
-                  )}
-                  title={`Go to ${t.name} Details`}
-                >
-                  <ExternalLink size={14} />
-                </Link>
+                  <option value="All">All Tournaments</option>
+                  {filteredTournaments.map(t => (
+                    <option key={t.id} value={t.id}>
+                      {t.name} {t.startDate ? `(${new Date(t.startDate).getFullYear()})` : ''}
+                    </option>
+                  ))}
+                </select>
+                {dashboardCompetitionId !== 'All' && (
+                  <Link
+                    to={`/tournaments/${dashboardCompetitionId}`}
+                    className="p-2 bg-brand-500/10 text-brand-500 rounded-lg hover:bg-brand-500 hover:text-white transition-all shadow-sm"
+                    title="View Details"
+                  >
+                    <ExternalLink size={14} />
+                  </Link>
+                )}
               </div>
-            ))}
-          </div>
-
-          <div className="ml-auto pr-2 border-l border-white/10 pl-2 self-center flex items-center gap-1">
-            <Link to="/tournaments" className="text-xs font-bold text-brand-400 hover:text-brand-300 transition-colors flex items-center gap-1">
-              See All <ChevronRight size={14} />
-            </Link>
+            </div>
           </div>
         </div>
+
       </motion.div>
 
       <motion.div

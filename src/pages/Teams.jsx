@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { useData } from '../context/DataContext';
 import { motion } from 'framer-motion';
-import { Search, MapPin, User, Shield, Plus, Trophy, MapPinned } from 'lucide-react';
+import { Search, MapPin, User, Shield, Plus, Trophy, MapPinned, Edit2 } from 'lucide-react';
 import { cn } from '../utils/cn';
 
 // Districts of Jammu and Kashmir
@@ -13,7 +13,8 @@ const DISTRICTS = {
 };
 
 const Teams = () => {
-  const { teams, tournaments, loading } = useData();
+  const { teams, tournaments, matches, loading } = useData();
+  const navigate = useNavigate();
   const { isAdmin } = useAuth();
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedDistrict, setSelectedDistrict] = useState('Baramulla');
@@ -52,7 +53,12 @@ const Teams = () => {
       return matchesSearch;
     }
 
-    // Check if team participates in any tournament in the selected district
+    // 1. Direct match on team's district field
+    if (team.district === selectedDistrict) {
+      return matchesSearch;
+    }
+
+    // 2. Fallback: Check if team participates in any tournament in the selected district
     const teamTournaments = Array.isArray(team.tournaments)
       ? team.tournaments
       : (typeof team.tournaments === 'string' ? team.tournaments.split(',').map(t => t.trim()) : []);
@@ -178,14 +184,54 @@ const Teams = () => {
                     </div>
                   </div>
                 </div>
+
+                {/* Match Stats Summary */}
+                <div className="grid grid-cols-3 gap-2 mt-6">
+                  {[
+                    {
+                      label: 'Won',
+                      val: matches.filter(m => m.status === 'finished' && ((m.teamA === team.name && Number(m.scoreA) > Number(m.scoreB)) || (m.teamB === team.name && Number(m.scoreB) > Number(m.scoreA)))).length,
+                      color: 'text-green-500',
+                      bg: 'bg-green-500/5'
+                    },
+                    {
+                      label: 'Lost',
+                      val: matches.filter(m => m.status === 'finished' && ((m.teamA === team.name && Number(m.scoreA) < Number(m.scoreB)) || (m.teamB === team.name && Number(m.scoreB) < Number(m.scoreA)))).length,
+                      color: 'text-red-500',
+                      bg: 'bg-red-500/5'
+                    },
+                    {
+                      label: 'Pending',
+                      val: matches.filter(m => m.status !== 'finished' && (m.teamA === team.name || m.teamB === team.name)).length,
+                      color: 'text-blue-500',
+                      bg: 'bg-blue-500/5'
+                    }
+                  ].map((s, i) => (
+                    <div key={i} className={cn("flex flex-col items-center py-2 rounded-xl border border-white/5", s.bg)}>
+                      <span className={cn("text-lg font-black", s.color)}>{s.val}</span>
+                      <span className="text-[8px] uppercase font-bold tracking-tighter text-slate-500">{s.label}</span>
+                    </div>
+                  ))}
+                </div>
               </div>
             </Link>
 
             {/* Footer Stats/Status */}
             <div className="px-6 py-4 border-t border-slate-200 dark:border-white/5 bg-black/20 flex justify-between items-center relative z-10">
-              <div className="flex items-center gap-2 text-xs text-slate-600 dark:text-slate-400">
-                <Shield size={14} />
-                <span>Squad: {team.players || 0}</span>
+              <div className="flex items-center gap-3">
+                <div className="flex items-center gap-2 text-xs text-slate-600 dark:text-slate-400">
+                  <Shield size={14} />
+                  <span>Squad: {team.players || 0}</span>
+                </div>
+                {isAdmin && (
+                  <button
+                    onClick={() => navigate('/admin/teams', { state: { editTeam: team } })}
+                    className="p-1.5 bg-brand-500/10 text-brand-500 hover:bg-brand-500 hover:text-white rounded-lg transition-all"
+                    title="Edit Team Details"
+                  >
+                    <Edit2 size={12} />
+                  </button>
+                )}
               </div>
 
               <span className={cn(
