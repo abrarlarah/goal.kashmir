@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import { useData } from '../context/DataContext';
 import { MapPinned, Trophy, Users, ShieldAlert, Award, Search, ChevronRight } from 'lucide-react';
 import { cn } from '../utils/cn';
@@ -35,6 +35,24 @@ const Leaderboard = () => {
     }
     return ts;
   }, [tournaments, selectedDistrict, selectedYear]);
+
+  // Handle default tournament selection
+  useEffect(() => {
+    if (filteredTournaments.length > 0) {
+      // Auto-select first tournament if nothing selected or current selected is not in filtered list
+      if (selectedCompetitionId === 'All' || !filteredTournaments.find(t => t.id === selectedCompetitionId)) {
+        // We only override 'All' if it's the INITIAL state or if we're coming from a filter change
+        // To allow manual 'All' selection, we'd need to know if the user just clicked it.
+        // But the requirement says "by default show single tournament".
+        setSelectedCompetitionId(filteredTournaments[0].id);
+      }
+    } else {
+      setSelectedCompetitionId('All');
+    }
+    // We EXCLUDE selectedCompetitionId from dependencies so that manually selecting 'All' 
+    // doesn't immediately flip back to a single tournament.
+    // However, changing filteredTournaments (via Year/District) will trigger this.
+  }, [filteredTournaments]);
 
   // Competitions
   const competitions = [{ id: 'All', name: 'All' }, ...filteredTournaments];
