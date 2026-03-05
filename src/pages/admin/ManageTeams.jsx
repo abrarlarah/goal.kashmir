@@ -4,7 +4,7 @@ import { useLocation } from 'react-router-dom';
 import { ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage';
 import { db, storage } from '../../firebase';
 import { useData } from '../../context/DataContext';
-import { Upload, X, Image as ImageIcon, Folders, Search } from 'lucide-react';
+import { Upload, X, Image as ImageIcon, Folders, Search, ChevronLeft, ChevronRight, ChevronsLeft, ChevronsRight } from 'lucide-react';
 import AssetPicker from '../../components/admin/AssetPicker';
 import { registerAsset } from '../../utils/assetRegistry';
 
@@ -211,6 +211,26 @@ const ManageTeams = () => {
         team.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
         team.shortName.toLowerCase().includes(searchTerm.toLowerCase())
     );
+
+    // Pagination Logic
+    const [currentPage, setCurrentPage] = useState(1);
+    const teamsPerPage = 10;
+    const totalPages = Math.ceil(filteredTeams.length / teamsPerPage);
+
+    const indexOfLastTeam = currentPage * teamsPerPage;
+    const indexOfFirstTeam = indexOfLastTeam - teamsPerPage;
+    const currentItems = filteredTeams.slice(indexOfFirstTeam, indexOfLastTeam);
+
+    const paginate = (pageNumber) => {
+        setCurrentPage(pageNumber);
+        const listElement = document.getElementById('team-list-top');
+        if (listElement) listElement.scrollIntoView({ behavior: 'smooth' });
+    };
+
+    // Reset to page 1 on search change
+    useEffect(() => {
+        setCurrentPage(1);
+    }, [searchTerm]);
 
     return (
         <div className="container mx-auto px-4 py-8 text-slate-900 dark:text-white">
@@ -464,7 +484,7 @@ const ManageTeams = () => {
             </div >
 
             {/* Search */}
-            < div className="mb-6 relative" >
+            < div id="team-list-top" className="mb-6 relative" >
                 <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={18} />
                 <input
                     type="text"
@@ -478,24 +498,33 @@ const ManageTeams = () => {
             {/* List */}
             < div className="grid grid-cols-1 md:grid-cols-2 gap-4" >
                 {
-                    filteredTeams.map(team => (
+                    currentItems.map(team => (
                         <div key={team.id} className="bg-gray-800 p-4 rounded flex justify-between items-center">
-                            <div>
-                                <div className="font-bold text-lg">{team.name} ({team.shortName})</div>
-                                <div className="text-sm text-gray-400">
-                                    Stadium: {team.stadium} • Manager: {team.manager || 'N/A'}
+                            <div className="flex items-center gap-4">
+                                <div className="w-12 h-12 rounded bg-white/5 flex items-center justify-center border border-white/5 overflow-hidden">
+                                    {team.logoUrl ? (
+                                        <img src={team.logoUrl} alt={team.name} className="w-full h-full object-contain p-1" />
+                                    ) : (
+                                        <ImageIcon className="text-gray-600" size={24} />
+                                    )}
+                                </div>
+                                <div>
+                                    <div className="font-bold text-lg">{team.name} ({team.shortName})</div>
+                                    <div className="text-sm text-gray-400">
+                                        Stadium: {team.stadium} • Manager: {team.manager || 'N/A'}
+                                    </div>
                                 </div>
                             </div>
-                            <div className="flex gap-2">
+                            <div className="flex gap-2 text-slate-900 dark:text-white">
                                 <button
                                     onClick={() => handleEdit(team)}
-                                    className="bg-blue-600 hover:bg-blue-700 px-3 py-1 rounded text-sm"
+                                    className="bg-blue-600 hover:bg-blue-700 px-3 py-1 rounded text-sm transition-colors"
                                 >
                                     Edit
                                 </button>
                                 <button
                                     onClick={() => handleDelete(team.id)}
-                                    className="bg-red-600 hover:bg-red-700 px-3 py-1 rounded text-sm"
+                                    className="bg-red-600 hover:bg-red-700 px-3 py-1 rounded text-sm transition-colors"
                                 >
                                     Delete
                                 </button>
@@ -505,10 +534,80 @@ const ManageTeams = () => {
                 }
                 {
                     filteredTeams.length === 0 && !loading && (
-                        <p className="text-center text-gray-400 col-span-full">No teams found matching your search.</p>
+                        <p className="text-center text-gray-400 col-span-full py-8">No teams found matching your search.</p>
                     )
                 }
             </div >
+
+            {/* Pagination Controls */}
+            {filteredTeams.length > teamsPerPage && (
+                <div className="mt-8 flex flex-col sm:flex-row items-center justify-between gap-4 bg-gray-800/50 p-4 rounded-2xl border border-white/5">
+                    <div className="text-sm text-gray-400 font-medium">
+                        Showing <span className="text-white font-bold">{indexOfFirstTeam + 1}</span> to <span className="text-white font-bold">{Math.min(indexOfLastTeam, filteredTeams.length)}</span> of <span className="text-white font-bold">{filteredTeams.length}</span> teams
+                    </div>
+                    <div className="flex items-center gap-2">
+                        <button
+                            onClick={() => paginate(1)}
+                            disabled={currentPage === 1}
+                            className="p-2 rounded-xl bg-gray-800 border border-white/5 text-gray-400 hover:text-white disabled:opacity-30 disabled:cursor-not-allowed transition-all"
+                        >
+                            <ChevronsLeft size={18} />
+                        </button>
+                        <button
+                            onClick={() => paginate(currentPage - 1)}
+                            disabled={currentPage === 1}
+                            className="p-2 rounded-xl bg-gray-800 border border-white/5 text-gray-400 hover:text-white disabled:opacity-30 disabled:cursor-not-allowed transition-all"
+                        >
+                            <ChevronLeft size={18} />
+                        </button>
+
+                        <div className="flex items-center gap-1 mx-2">
+                            {[...Array(totalPages)].map((_, i) => {
+                                const pageNum = i + 1;
+                                if (
+                                    pageNum === 1 ||
+                                    pageNum === totalPages ||
+                                    (pageNum >= currentPage - 1 && pageNum <= currentPage + 1)
+                                ) {
+                                    return (
+                                        <button
+                                            key={pageNum}
+                                            onClick={() => paginate(pageNum)}
+                                            className={`w-10 h-10 rounded-xl text-sm font-bold transition-all ${currentPage === pageNum
+                                                ? "bg-brand-500 text-slate-900 shadow-lg shadow-brand-500/20"
+                                                : "bg-gray-800 border border-white/5 text-gray-400 hover:text-white"
+                                                }`}
+                                        >
+                                            {pageNum}
+                                        </button>
+                                    );
+                                } else if (
+                                    pageNum === currentPage - 2 ||
+                                    pageNum === currentPage + 2
+                                ) {
+                                    return <span key={pageNum} className="text-gray-600">...</span>;
+                                }
+                                return null;
+                            })}
+                        </div>
+
+                        <button
+                            onClick={() => paginate(currentPage + 1)}
+                            disabled={currentPage === totalPages}
+                            className="p-2 rounded-xl bg-gray-800 border border-white/5 text-gray-400 hover:text-white disabled:opacity-30 disabled:cursor-not-allowed transition-all"
+                        >
+                            <ChevronRight size={18} />
+                        </button>
+                        <button
+                            onClick={() => paginate(totalPages)}
+                            disabled={currentPage === totalPages}
+                            className="p-2 rounded-xl bg-gray-800 border border-white/5 text-gray-400 hover:text-white disabled:opacity-30 disabled:cursor-not-allowed transition-all"
+                        >
+                            <ChevronsRight size={18} />
+                        </button>
+                    </div>
+                </div>
+            )}
         </div >
     );
 };

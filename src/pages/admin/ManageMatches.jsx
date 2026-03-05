@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { collection, addDoc, updateDoc, deleteDoc, doc } from 'firebase/firestore';
 import { db } from '../../firebase';
 import { useData } from '../../context/DataContext';
+import { ChevronLeft, ChevronRight, ChevronsLeft, ChevronsRight } from 'lucide-react';
 
 const ManageMatches = () => {
   const { matches, teams, tournaments } = useData();
@@ -151,6 +152,21 @@ const ManageMatches = () => {
 
   const liveMatches = matches.filter(m => m.status === 'live');
   const otherMatches = matches.filter(m => m.status !== 'live');
+
+  // Pagination Logic
+  const [currentPage, setCurrentPage] = useState(1);
+  const matchesPerPage = 10;
+  const totalPages = Math.ceil(otherMatches.length / matchesPerPage);
+
+  const indexOfLastMatch = currentPage * matchesPerPage;
+  const indexOfFirstMatch = indexOfLastMatch - matchesPerPage;
+  const currentMatches = otherMatches.slice(indexOfFirstMatch, indexOfLastMatch);
+
+  const paginate = (pageNumber) => {
+    setCurrentPage(pageNumber);
+    const listElement = document.getElementById('match-list-top');
+    if (listElement) listElement.scrollIntoView({ behavior: 'smooth' });
+  };
 
   return (
     <div className="container mx-auto px-4 py-8 text-slate-900 dark:text-white">
@@ -409,9 +425,9 @@ const ManageMatches = () => {
       </div>
 
       {/* List */}
-      <h3 className="text-xl font-bold mb-4">All Matches</h3>
+      <h3 id="match-list-top" className="text-xl font-bold mb-4">All Matches</h3>
       <div className="grid gap-4">
-        {otherMatches.map(match => (
+        {currentMatches.map(match => (
           <div key={match.id} className="bg-gray-800 p-4 rounded flex justify-between items-center">
             <div>
               <div className="font-bold text-lg">
@@ -441,6 +457,76 @@ const ManageMatches = () => {
           <p className="text-center text-gray-400">No scheduled or finished matches found.</p>
         )}
       </div>
+
+      {/* Pagination Controls */}
+      {otherMatches.length > matchesPerPage && (
+        <div className="mt-8 flex flex-col sm:flex-row items-center justify-between gap-4 bg-gray-800/50 p-4 rounded-2xl border border-white/5">
+          <div className="text-sm text-gray-400 font-medium">
+            Showing <span className="text-white font-bold">{indexOfFirstMatch + 1}</span> to <span className="text-white font-bold">{Math.min(indexOfLastMatch, otherMatches.length)}</span> of <span className="text-white font-bold">{otherMatches.length}</span> matches
+          </div>
+          <div className="flex items-center gap-2">
+            <button
+              onClick={() => paginate(1)}
+              disabled={currentPage === 1}
+              className="p-2 rounded-xl bg-gray-800 border border-white/5 text-gray-400 hover:text-white disabled:opacity-30 disabled:cursor-not-allowed transition-all"
+            >
+              <ChevronsLeft size={18} />
+            </button>
+            <button
+              onClick={() => paginate(currentPage - 1)}
+              disabled={currentPage === 1}
+              className="p-2 rounded-xl bg-gray-800 border border-white/5 text-gray-400 hover:text-white disabled:opacity-30 disabled:cursor-not-allowed transition-all"
+            >
+              <ChevronLeft size={18} />
+            </button>
+
+            <div className="flex items-center gap-1 mx-2">
+              {[...Array(totalPages)].map((_, i) => {
+                const pageNum = i + 1;
+                if (
+                  pageNum === 1 ||
+                  pageNum === totalPages ||
+                  (pageNum >= currentPage - 1 && pageNum <= currentPage + 1)
+                ) {
+                  return (
+                    <button
+                      key={pageNum}
+                      onClick={() => paginate(pageNum)}
+                      className={`w-10 h-10 rounded-xl text-sm font-bold transition-all ${currentPage === pageNum
+                          ? "bg-brand-500 text-slate-900 shadow-lg shadow-brand-500/20"
+                          : "bg-gray-800 border border-white/5 text-gray-400 hover:text-white"
+                        }`}
+                    >
+                      {pageNum}
+                    </button>
+                  );
+                } else if (
+                  pageNum === currentPage - 2 ||
+                  pageNum === currentPage + 2
+                ) {
+                  return <span key={pageNum} className="text-gray-600">...</span>;
+                }
+                return null;
+              })}
+            </div>
+
+            <button
+              onClick={() => paginate(currentPage + 1)}
+              disabled={currentPage === totalPages}
+              className="p-2 rounded-xl bg-gray-800 border border-white/5 text-gray-400 hover:text-white disabled:opacity-30 disabled:cursor-not-allowed transition-all"
+            >
+              <ChevronRight size={18} />
+            </button>
+            <button
+              onClick={() => paginate(totalPages)}
+              disabled={currentPage === totalPages}
+              className="p-2 rounded-xl bg-gray-800 border border-white/5 text-gray-400 hover:text-white disabled:opacity-30 disabled:cursor-not-allowed transition-all"
+            >
+              <ChevronsRight size={18} />
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

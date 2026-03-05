@@ -4,7 +4,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage';
 import { db, storage } from '../../firebase';
 import { useData } from '../../context/DataContext';
-import { Upload, X, User, Image as ImageIcon, Folders, Search, Filter, Edit3 } from 'lucide-react';
+import { Upload, X, User, Image as ImageIcon, Folders, Search, Filter, Edit3, ChevronLeft, ChevronRight, ChevronsLeft, ChevronsRight } from 'lucide-react';
 import AssetPicker from '../../components/admin/AssetPicker';
 import { registerAsset } from '../../utils/assetRegistry';
 import { calculateAge } from '../../utils/ageUtils';
@@ -206,6 +206,26 @@ const ManagePlayers = () => {
         const matchesTeam = teamFilter === 'All' || p.team === teamFilter;
         return matchesSearch && matchesTeam;
     });
+
+    // Pagination Logic
+    const [currentPage, setCurrentPage] = useState(1);
+    const playersPerPage = 10;
+    const totalPages = Math.ceil(filteredPlayers.length / playersPerPage);
+
+    const indexOfLastPlayer = currentPage * playersPerPage;
+    const indexOfFirstPlayer = indexOfLastPlayer - playersPerPage;
+    const currentItems = filteredPlayers.slice(indexOfFirstPlayer, indexOfLastPlayer);
+
+    const paginate = (pageNumber) => {
+        setCurrentPage(pageNumber);
+        const listElement = document.getElementById('player-list-top');
+        if (listElement) listElement.scrollIntoView({ behavior: 'smooth' });
+    };
+
+    // Reset to page 1 on filter/search change
+    useEffect(() => {
+        setCurrentPage(1);
+    }, [searchTerm, teamFilter]);
 
     return (
         <div className="container mx-auto px-4 py-8 text-slate-900 dark:text-white">
@@ -514,7 +534,7 @@ const ManagePlayers = () => {
             </div>
 
             {/* Search and Filters */}
-            <div className="flex flex-col md:flex-row gap-4 mb-6">
+            <div id="player-list-top" className="flex flex-col md:flex-row gap-4 mb-6">
                 <div className="relative flex-1">
                     <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={18} />
                     <input
@@ -555,7 +575,7 @@ const ManagePlayers = () => {
                         </tr>
                     </thead>
                     <tbody>
-                        {filteredPlayers.map(player => (
+                        {currentItems.map(player => (
                             <tr key={player.id} className="border-b border-gray-700 bg-gray-800 hover:bg-gray-700">
                                 <td className="px-4 py-3 font-medium text-slate-900 dark:text-white">{player.name}</td>
                                 <td className="px-4 py-3">{player.team}</td>
@@ -599,6 +619,77 @@ const ManagePlayers = () => {
                     )
                 }
             </div >
+
+            {/* Pagination Controls */}
+            {filteredPlayers.length > playersPerPage && (
+                <div className="mt-8 flex flex-col sm:flex-row items-center justify-between gap-4 bg-gray-800/50 p-4 rounded-2xl border border-white/5">
+                    <div className="text-sm text-gray-400 font-medium">
+                        Showing <span className="text-slate-900 dark:text-white font-bold">{indexOfFirstPlayer + 1}</span> to <span className="text-slate-900 dark:text-white font-bold">{Math.min(indexOfLastPlayer, filteredPlayers.length)}</span> of <span className="text-slate-900 dark:text-white font-bold">{filteredPlayers.length}</span> players
+                    </div>
+                    <div className="flex items-center gap-2">
+                        <button
+                            onClick={() => paginate(1)}
+                            disabled={currentPage === 1}
+                            className="p-2 rounded-xl bg-gray-800 border border-white/5 text-gray-400 hover:text-white disabled:opacity-30 disabled:cursor-not-allowed transition-all"
+                        >
+                            <ChevronsLeft size={18} />
+                        </button>
+                        <button
+                            onClick={() => paginate(currentPage - 1)}
+                            disabled={currentPage === 1}
+                            className="p-2 rounded-xl bg-gray-800 border border-white/5 text-gray-400 hover:text-white disabled:opacity-30 disabled:cursor-not-allowed transition-all"
+                        >
+                            <ChevronLeft size={18} />
+                        </button>
+
+                        <div className="flex items-center gap-1 mx-2">
+                            {[...Array(totalPages)].map((_, i) => {
+                                const pageNum = i + 1;
+                                // Show first, last, current, and pages around current
+                                if (
+                                    pageNum === 1 ||
+                                    pageNum === totalPages ||
+                                    (pageNum >= currentPage - 1 && pageNum <= currentPage + 1)
+                                ) {
+                                    return (
+                                        <button
+                                            key={pageNum}
+                                            onClick={() => paginate(pageNum)}
+                                            className={`w-10 h-10 rounded-xl text-sm font-bold transition-all ${currentPage === pageNum
+                                                    ? "bg-brand-500 text-slate-900 dark:text-white shadow-lg shadow-brand-500/20"
+                                                    : "bg-gray-800 border border-white/5 text-gray-400 hover:text-white"
+                                                }`}
+                                        >
+                                            {pageNum}
+                                        </button>
+                                    );
+                                } else if (
+                                    pageNum === currentPage - 2 ||
+                                    pageNum === currentPage + 2
+                                ) {
+                                    return <span key={pageNum} className="text-gray-600">...</span>;
+                                }
+                                return null;
+                            })}
+                        </div>
+
+                        <button
+                            onClick={() => paginate(currentPage + 1)}
+                            disabled={currentPage === totalPages}
+                            className="p-2 rounded-xl bg-gray-800 border border-white/5 text-gray-400 hover:text-white disabled:opacity-30 disabled:cursor-not-allowed transition-all"
+                        >
+                            <ChevronRight size={18} />
+                        </button>
+                        <button
+                            onClick={() => paginate(totalPages)}
+                            disabled={currentPage === totalPages}
+                            className="p-2 rounded-xl bg-gray-800 border border-white/5 text-gray-400 hover:text-white disabled:opacity-30 disabled:cursor-not-allowed transition-all"
+                        >
+                            <ChevronsRight size={18} />
+                        </button>
+                    </div>
+                </div>
+            )}
         </div >
     );
 };
