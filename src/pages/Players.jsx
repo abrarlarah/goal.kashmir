@@ -16,14 +16,14 @@ const DISTRICTS = {
 };
 
 const Players = () => {
-  const { players, loading } = useData();
+  const { players, tournaments, loading } = useData();
   const navigate = useNavigate();
   const [positionFilter, setPositionFilter] = useState('All');
   const [selectedDistrict, setSelectedDistrict] = useState('Baramulla');
   const [searchQuery, setSearchQuery] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
   const playersPerPage = 8;
-  const { isAdmin } = useAuth();
+  const { isAdmin, isSuperAdmin, currentUser } = useAuth();
 
   const [editMode, setEditMode] = useState(false);
   const [editedPlayers, setEditedPlayers] = useState({});
@@ -82,6 +82,19 @@ const Players = () => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
+  // Determine if this user is allowed to edit a specific player
+  const canEditPlayer = (player) => {
+    if (!isAdmin || !player) return false;
+    if (isSuperAdmin) return true;
+
+    const playerTeamName = player.team;
+    return tournaments.some(t => {
+      const isAssignedToMe = t.createdBy === currentUser?.uid;
+      const isTeamInTournament = Array.isArray(t.teamsList) && t.teamsList.includes(playerTeamName);
+      return isAssignedToMe && isTeamInTournament;
+    });
+  };
+
   if (loading && players.length === 0) {
     return (
       <div className="flex h-[80vh] items-center justify-center">
@@ -131,7 +144,7 @@ const Players = () => {
               </select>
             </div>
 
-            {isAdmin && (
+            {isSuperAdmin && (
               <Link to="/admin/players" className="flex items-center gap-2 px-5 py-2.5 bg-brand-600 hover:bg-brand-500 text-slate-900 dark:text-white rounded-xl text-sm font-semibold transition-all shadow-lg shadow-brand-500/20 hover:scale-105 active:scale-95">
                 <Plus size={18} /> Add Player
               </Link>
@@ -291,7 +304,7 @@ const Players = () => {
                     </td>
 
                     <td className="px-6 py-4 whitespace-nowrap text-center">
-                      {editMode ? (
+                      {editMode && canEditPlayer(player) ? (
                         <input
                           type="number"
                           className="w-16 bg-black/50 border border-slate-200 dark:border-white/10 rounded px-2 py-1 text-slate-900 dark:text-white text-center focus:ring-1 focus:ring-brand-500 outline-none"
@@ -304,7 +317,7 @@ const Players = () => {
                     </td>
 
                     <td className="px-6 py-4 whitespace-nowrap text-center">
-                      {editMode ? (
+                      {editMode && canEditPlayer(player) ? (
                         <input
                           type="number"
                           className="w-16 bg-black/50 border border-slate-200 dark:border-white/10 rounded px-2 py-1 text-slate-900 dark:text-white text-center focus:ring-1 focus:ring-brand-500 outline-none"
@@ -319,7 +332,7 @@ const Players = () => {
                     </td>
 
                     <td className="px-6 py-4 whitespace-nowrap text-center">
-                      {editMode ? (
+                      {editMode && canEditPlayer(player) ? (
                         <input
                           type="number"
                           className="w-16 bg-black/50 border border-slate-200 dark:border-white/10 rounded px-2 py-1 text-slate-900 dark:text-white text-center focus:ring-1 focus:ring-brand-500 outline-none"
@@ -346,13 +359,15 @@ const Players = () => {
                     </td>
                     {isAdmin && (
                       <td className="px-6 py-4 whitespace-nowrap text-right">
-                        <button
-                          onClick={() => navigate('/admin/players', { state: { editPlayer: player } })}
-                          className="p-2 bg-brand-500/10 text-brand-500 hover:bg-brand-500 hover:text-white rounded-lg transition-all"
-                          title="Edit Player Details"
-                        >
-                          <Edit2 size={14} />
-                        </button>
+                        {canEditPlayer(player) && (
+                          <button
+                            onClick={() => navigate('/admin/players', { state: { editPlayer: player } })}
+                            className="p-2 bg-brand-500/10 text-brand-500 hover:bg-brand-500 hover:text-white rounded-lg transition-all"
+                            title="Edit Player Details"
+                          >
+                            <Edit2 size={14} />
+                          </button>
+                        )}
                       </td>
                     )}
                   </tr>

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { doc, getDoc, collection, query, where, getDocs, limit, orderBy } from 'firebase/firestore';
 import { db } from '../firebase';
@@ -25,8 +25,8 @@ import { cn } from '../utils/cn';
 const PlayerDetail = () => {
     const { id } = useParams();
     const navigate = useNavigate();
-    const { isAdmin } = useAuth();
-    const { teams, matches, lineups, loading: dataLoading } = useData();
+    const { isAdmin, isSuperAdmin, currentUser } = useAuth();
+    const { teams, matches, lineups, tournaments, loading: dataLoading } = useData();
     const [player, setPlayer] = useState(null);
     const [team, setTeam] = useState(null);
     const [loading, setLoading] = useState(true);
@@ -135,6 +135,19 @@ const PlayerDetail = () => {
         fetchPlayerData();
     }, [id, dataLoading, teams, matches, lineups]);
 
+    // Determine if this user is allowed to edit THIS player (must be before early returns)
+    const canEdit = useMemo(() => {
+        if (!isAdmin || !player) return false;
+        if (isSuperAdmin) return true;
+
+        const playerTeamName = player.team;
+        return tournaments.some(t => {
+            const isAssignedToMe = t.createdBy === currentUser?.uid;
+            const isTeamInTournament = Array.isArray(t.teamsList) && t.teamsList.includes(playerTeamName);
+            return isAssignedToMe && isTeamInTournament;
+        });
+    }, [isAdmin, isSuperAdmin, currentUser, player, tournaments]);
+
     if (loading) {
         return (
             <div className="flex h-[80vh] items-center justify-center">
@@ -172,7 +185,7 @@ const PlayerDetail = () => {
                     <span className="font-semibold">Back to Players</span>
                 </Link>
 
-                {isAdmin && (
+                {canEdit && (
                     <button
                         onClick={() => navigate('/admin/players', { state: { editPlayer: player } })}
                         className="flex items-center gap-2 px-4 py-2 bg-brand-500/10 text-brand-500 hover:bg-brand-500 hover:text-white rounded-xl text-sm font-bold transition-all shadow-sm"

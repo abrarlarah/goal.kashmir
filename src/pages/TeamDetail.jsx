@@ -16,12 +16,14 @@ import {
     Clock
 } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
+import { useData } from '../context/DataContext';
 import { cn } from '../utils/cn';
 
 const TeamDetail = () => {
     const { id } = useParams();
     const navigate = useNavigate();
-    const { isAdmin } = useAuth();
+    const { isAdmin, isSuperAdmin, currentUser } = useAuth();
+    const { tournaments } = useData();
     const [team, setTeam] = useState(null);
     const [players, setPlayers] = useState([]);
     const [matches, setMatches] = useState([]);
@@ -89,6 +91,22 @@ const TeamDetail = () => {
         );
     }
 
+    // Determine if this user is allowed to edit THIS team
+    const canEditTeam = () => {
+        if (!isAdmin || !team) return false;
+        if (isSuperAdmin) return true;
+
+        // Check if team is part of any tournament this admin created
+        const tTournaments = Array.isArray(team.tournaments)
+            ? team.tournaments
+            : (typeof team.tournaments === 'string' ? team.tournaments.split(',').map(t => t.trim()) : []);
+
+        return tTournaments.some(teamTournamentName => {
+            const tournament = tournaments.find(t => t.name === teamTournamentName);
+            return tournament && tournament.createdBy === currentUser?.uid;
+        });
+    };
+
     return (
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
             <div className="flex justify-between items-center mb-8">
@@ -100,7 +118,7 @@ const TeamDetail = () => {
                     <span className="font-semibold">Back to Clubs</span>
                 </Link>
 
-                {isAdmin && (
+                {canEditTeam() && (
                     <button
                         onClick={() => navigate('/admin/teams', { state: { editTeam: team } })}
                         className="flex items-center gap-2 px-4 py-2 bg-brand-500/10 text-brand-500 hover:bg-brand-500 hover:text-white rounded-xl text-sm font-bold transition-all shadow-sm"
@@ -309,7 +327,7 @@ const TeamDetail = () => {
                                             <div className="text-[10px] text-slate-500 uppercase tracking-wide">{player.position} • #{player.number || '--'}</div>
                                         </div>
                                         <div className="flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
-                                            {isAdmin && (
+                                            {canEditTeam() && (
                                                 <button
                                                     onClick={(e) => {
                                                         e.preventDefault();

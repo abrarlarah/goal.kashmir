@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { collection, addDoc, updateDoc, deleteDoc, doc } from 'firebase/firestore';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage';
@@ -8,6 +8,7 @@ import { Upload, X, User, Image as ImageIcon, Folders, Search, Filter, Edit3, Ch
 import AssetPicker from '../../components/admin/AssetPicker';
 import { registerAsset } from '../../utils/assetRegistry';
 import { calculateAge } from '../../utils/ageUtils';
+import { useAuth } from '../../context/AuthContext';
 
 // Districts of Jammu and Kashmir
 const DISTRICTS = {
@@ -16,7 +17,8 @@ const DISTRICTS = {
 };
 
 const ManagePlayers = () => {
-    const { players, teams } = useData();
+    const { players, teams, tournaments } = useData();
+    const { currentUser, isSuperAdmin } = useAuth();
     const location = useLocation();
     const navigate = useNavigate();
     const [loading, setLoading] = useState(false); // Form loading
@@ -200,7 +202,32 @@ const ManagePlayers = () => {
         }
     };
 
-    const filteredPlayers = players.filter(p => {
+    // Scope players: superadmin sees all, admin sees only players on teams in their tournaments
+    const myTournamentNames = useMemo(() => {
+        if (isSuperAdmin) return null;
+        return tournaments
+            .filter(t => t.createdBy === currentUser?.uid)
+            .map(t => t.name);
+    }, [tournaments, currentUser, isSuperAdmin]);
+
+    const allowedTeamNames = useMemo(() => {
+        if (!myTournamentNames) return null; // superadmin
+        return teams
+            .filter(team => {
+                const teamTournaments = Array.isArray(team.tournaments)
+                    ? team.tournaments
+                    : (typeof team.tournaments === 'string' ? team.tournaments.split(',').map(t => t.trim()) : []);
+                return teamTournaments.some(tn => myTournamentNames.includes(tn));
+            })
+            .map(t => t.name);
+    }, [teams, myTournamentNames]);
+
+    const scopedPlayers = useMemo(() => {
+        if (!allowedTeamNames) return players; // superadmin
+        return players.filter(p => allowedTeamNames.includes(p.team));
+    }, [players, allowedTeamNames]);
+
+    const filteredPlayers = scopedPlayers.filter(p => {
         const matchesSearch = p.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
             p.team.toLowerCase().includes(searchTerm.toLowerCase());
         const matchesTeam = teamFilter === 'All' || p.team === teamFilter;
@@ -656,8 +683,8 @@ const ManagePlayers = () => {
                                             key={pageNum}
                                             onClick={() => paginate(pageNum)}
                                             className={`w-10 h-10 rounded-xl text-sm font-bold transition-all ${currentPage === pageNum
-                                                    ? "bg-brand-500 text-slate-900 dark:text-white shadow-lg shadow-brand-500/20"
-                                                    : "bg-gray-800 border border-white/5 text-gray-400 hover:text-white"
+                                                ? "bg-brand-500 text-slate-900 dark:text-white shadow-lg shadow-brand-500/20"
+                                                : "bg-gray-800 border border-white/5 text-gray-400 hover:text-white"
                                                 }`}
                                         >
                                             {pageNum}

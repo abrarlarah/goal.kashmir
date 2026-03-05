@@ -7,7 +7,7 @@ import { cn } from '../../utils/cn';
 import ThemeToggle from './ThemeToggle';
 
 const Navbar = () => {
-  const { currentUser, logout } = useAuth();
+  const { currentUser, isAdmin, logout } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -41,7 +41,7 @@ const Navbar = () => {
     { name: 'Leaderboard', path: '/leaderboard', icon: BarChart2 },
   ];
 
-  if (currentUser) {
+  if (isAdmin) {
     navItems.push({ name: 'Admin', path: '/admin', icon: User });
   }
 

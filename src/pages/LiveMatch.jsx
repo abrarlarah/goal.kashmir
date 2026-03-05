@@ -25,8 +25,16 @@ const LiveMatch = () => {
   const [error, setError] = useState('');
   const [isEditingTeams, setIsEditingTeams] = useState(false);
   const [editFormData, setEditFormData] = useState({ teamA: '', teamB: '', date: '', time: '', stadium: '' });
-  const { isAdmin } = useAuth();
-  const { players, lineups, teams, matches } = useData();
+  const { isAdmin, isSuperAdmin, currentUser } = useAuth();
+  const { players, lineups, teams, matches, tournaments } = useData();
+
+  // Determine if this user is allowed to edit THIS match
+  const canEditMatch = useMemo(() => {
+    if (!isAdmin || !match) return false;
+    if (isSuperAdmin) return true;
+    const tournament = tournaments?.find(t => t.name === match.competition || t.id === match.tournamentId);
+    return tournament ? tournament.createdBy === currentUser?.uid : false;
+  }, [isAdmin, isSuperAdmin, currentUser, match, tournaments]);
 
   // Filter teams to only show those registered in THIS tournament
   const tournamentTeams = useMemo(() => {
@@ -508,7 +516,7 @@ const LiveMatch = () => {
       <div className="max-w-4xl mx-auto">
 
         {/* Admin Controls */}
-        {isAdmin && (
+        {canEditMatch && (
           <div className="bg-gray-800 p-4 rounded-lg mb-6 border border-green-600">
             <h3 className="text-green-400 font-bold mb-2">Admin Controls (Live Updates)</h3>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-center">
@@ -901,7 +909,7 @@ const LiveMatch = () => {
               <span className="w-1.5 h-6 bg-brand-500 rounded-full"></span>
               Team Lineups
             </h3>
-            {isAdmin && (
+            {canEditMatch && (
               <Link
                 to={`/admin/lineups/${matchId}`}
                 className="flex items-center gap-2 px-3 py-1.5 bg-brand-500/10 hover:bg-brand-500/20 text-brand-500 rounded-lg text-xs font-black uppercase tracking-wider transition-all border border-brand-500/20"
@@ -917,7 +925,7 @@ const LiveMatch = () => {
                 <div key={lineup.id} className="space-y-4">
                   <div className="flex justify-between items-center">
                     <h4 className="text-lg font-semibold text-slate-900 dark:text-white">{lineup.teamName}</h4>
-                    {isAdmin && match.status === 'live' && (
+                    {canEditMatch && match.status === 'live' && (
                       <button
                         onClick={() => setShowSubstitution(showSubstitution === lineup.id ? null : lineup.id)}
                         className="bg-yellow-600 hover:bg-yellow-700 text-slate-900 dark:text-white px-3 py-1 rounded text-[10px] font-black uppercase tracking-widest transition-all"
@@ -928,7 +936,7 @@ const LiveMatch = () => {
                   </div>
 
                   {/* Substitution Manager */}
-                  {isAdmin && showSubstitution === lineup.id && (
+                  {canEditMatch && showSubstitution === lineup.id && (
                     <div className="bg-black/20 p-4 rounded-xl border border-white/5 mb-4">
                       <SubstitutionManager
                         lineup={lineup}
@@ -947,7 +955,7 @@ const LiveMatch = () => {
             <div className="py-12 border border-dashed border-white/10 rounded-xl flex flex-col items-center justify-center text-center">
               <UserPlus className="w-10 h-10 text-slate-600 mb-3 opacity-20" />
               <p className="text-slate-500 text-sm mb-4">No lineups have been added for this match yet.</p>
-              {isAdmin && (
+              {canEditMatch && (
                 <Link
                   to={`/admin/lineups/${matchId}`}
                   className="px-6 py-2 bg-brand-500 text-slate-900 rounded-lg font-bold text-sm hover:bg-brand-400 transition-colors shadow-lg shadow-brand-500/20"

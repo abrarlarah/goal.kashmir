@@ -11,7 +11,7 @@ import AssetPicker from '../../components/admin/AssetPicker';
 import { registerAsset } from '../../utils/assetRegistry';
 
 const ManageNews = () => {
-    const { isAdmin } = useAuth();
+    const { isAdmin, isSuperAdmin } = useAuth();
     const [news, setNews] = useState([]);
     const [loading, setLoading] = useState(true);
     const [uploading, setUploading] = useState(false);

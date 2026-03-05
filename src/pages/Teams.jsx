@@ -15,9 +15,25 @@ const DISTRICTS = {
 const Teams = () => {
   const { teams, tournaments, matches, loading } = useData();
   const navigate = useNavigate();
-  const { isAdmin } = useAuth();
+  const { isAdmin, isSuperAdmin, currentUser } = useAuth();
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedDistrict, setSelectedDistrict] = useState('Baramulla');
+
+  // Determine if this user is allowed to edit a specific team
+  const canEditTeam = (team) => {
+    if (!isAdmin || !team) return false;
+    if (isSuperAdmin) return true;
+
+    // Check if team is part of any tournament this admin created
+    const tTournaments = Array.isArray(team.tournaments)
+      ? team.tournaments
+      : (typeof team.tournaments === 'string' ? team.tournaments.split(',').map(t => t.trim()) : []);
+
+    return tTournaments.some(teamTournamentName => {
+      const tournament = tournaments.find(t => t.name === teamTournamentName);
+      return tournament && tournament.createdBy === currentUser?.uid;
+    });
+  };
 
   const container = {
     hidden: { opacity: 0 },
@@ -109,7 +125,7 @@ const Teams = () => {
               </select>
             </div>
 
-            {isAdmin && (
+            {isSuperAdmin && (
               <Link
                 to="/admin/teams"
                 className="flex items-center gap-2 px-5 py-2.5 bg-brand-600 hover:bg-brand-500 text-slate-900 dark:text-white rounded-xl text-sm font-semibold transition-all shadow-lg shadow-brand-500/20 hover:scale-105 active:scale-95"
@@ -227,9 +243,12 @@ const Teams = () => {
                   <Trophy size={14} />
                   <span>Tournaments: {Array.isArray(team.tournaments) ? team.tournaments.length : 0}</span>
                 </div>
-                {isAdmin && (
+                {canEditTeam(team) && (
                   <button
-                    onClick={() => navigate('/admin/teams', { state: { editTeam: team } })}
+                    onClick={(e) => {
+                      e.preventDefault();
+                      navigate('/admin/teams', { state: { editTeam: team } });
+                    }}
                     className="p-1.5 bg-brand-500/10 text-brand-500 hover:bg-brand-500 hover:text-white rounded-lg transition-all"
                     title="Edit Team Details"
                   >

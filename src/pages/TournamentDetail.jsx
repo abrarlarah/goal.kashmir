@@ -13,7 +13,7 @@ import { generateKnockoutMatches, generatePoolMatches, generateDualKnockoutMatch
 const TournamentDetail = () => {
     const { id } = useParams();
     const { tournaments, matches, teams, loading } = useData();
-    const { isAdmin } = useAuth();
+    const { isAdmin, isSuperAdmin, currentUser } = useAuth();
     const [activeTab, setActiveTab] = useState('fixtures');
     const [showAddTeam, setShowAddTeam] = useState(false);
     const [showScheduleMatch, setShowScheduleMatch] = useState(false);
@@ -35,6 +35,13 @@ const TournamentDetail = () => {
     const [successMessage, setSuccessMessage] = useState('');
 
     const tournament = useMemo(() => tournaments.find(t => t.id === id), [tournaments, id]);
+
+    // Determine if this user is allowed to edit THIS tournament
+    const canEditTournament = useMemo(() => {
+        if (!isAdmin || !tournament) return false;
+        if (isSuperAdmin) return true;
+        return tournament.createdBy === currentUser?.uid;
+    }, [isAdmin, isSuperAdmin, currentUser, tournament]);
 
     const tournamentMatches = useMemo(() => {
         if (!tournament) return [];
@@ -429,9 +436,9 @@ const TournamentDetail = () => {
                                 <span className="h-6 w-1 bg-brand-500 rounded-full"></span>
                                 Match Schedule
                             </h3>
-                            {isAdmin && (
+                            {canEditTournament && (
                                 <div className="flex gap-2">
-                                    {tournamentMatches.length > 0 && isAdmin && (
+                                    {tournamentMatches.length > 0 && canEditTournament && (
                                         <button
                                             onClick={handleSyncTeamNames}
                                             className="flex items-center gap-2 px-4 py-2 bg-indigo-500/10 text-indigo-500 rounded-xl font-bold text-sm hover:bg-indigo-500 hover:text-white transition-all border border-indigo-500/20"
@@ -478,7 +485,7 @@ const TournamentDetail = () => {
                                                     to={`/live/${match.id}`}
                                                     className="group relative bg-slate-900 border border-slate-200 dark:border-white/5 rounded-2xl p-5 hover:border-brand-500/30 transition-all shadow-lg"
                                                 >
-                                                    {isAdmin && (
+                                                    {canEditTournament && (
                                                         <div className="absolute top-2 right-2 p-2 bg-brand-500 text-slate-900 rounded-lg opacity-0 group-hover:opacity-100 transition-all z-20">
                                                             <Edit3 size={14} />
                                                         </div>
@@ -812,7 +819,7 @@ const TournamentDetail = () => {
 
                 {activeTab === 'bracket' && (
                     <div className="space-y-6">
-                        {isAdmin && (
+                        {canEditTournament && (
                             <div className="flex justify-end gap-3 mb-4">
                                 {tournamentMatches.length > 0 && (
                                     <button
@@ -848,7 +855,7 @@ const TournamentDetail = () => {
                             </div>
                         )}
 
-                        {tournamentMatches.length === 0 && !isAdmin && (
+                        {tournamentMatches.length === 0 && !canEditTournament && (
                             <div className="text-center py-20 text-slate-500 italic">
                                 Bracket has not been initialized by admin yet.
                             </div>
@@ -867,7 +874,7 @@ const TournamentDetail = () => {
                                 <span className="h-6 w-1 bg-brand-500 rounded-full"></span>
                                 Participating Teams ({tournamentTeams.length})
                             </h3>
-                            {isAdmin && (
+                            {canEditTournament && (
                                 <button
                                     onClick={() => setShowAddTeam(true)}
                                     className="flex items-center gap-2 px-4 py-2 bg-brand-500 text-slate-900 dark:text-white rounded-xl font-bold text-sm hover:bg-brand-600 transition-all shadow-lg shadow-brand-500/20"
@@ -885,7 +892,7 @@ const TournamentDetail = () => {
                                     to={`/teams/${team.id}`}
                                     className="relative group bg-slate-900 border border-slate-200 dark:border-white/5 p-6 rounded-3xl hover:border-brand-500/20 transition-all text-center flex flex-col items-center shadow-lg"
                                 >
-                                    {isAdmin && (
+                                    {canEditTournament && (
                                         <button
                                             onClick={(e) => {
                                                 e.preventDefault(); // Prevent navigating to team detail

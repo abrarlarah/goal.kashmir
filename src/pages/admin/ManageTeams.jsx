@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { collection, addDoc, updateDoc, deleteDoc, doc, query, where, getDocs, writeBatch } from 'firebase/firestore';
 import { useLocation } from 'react-router-dom';
 import { ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage';
@@ -7,9 +7,11 @@ import { useData } from '../../context/DataContext';
 import { Upload, X, Image as ImageIcon, Folders, Search, ChevronLeft, ChevronRight, ChevronsLeft, ChevronsRight } from 'lucide-react';
 import AssetPicker from '../../components/admin/AssetPicker';
 import { registerAsset } from '../../utils/assetRegistry';
+import { useAuth } from '../../context/AuthContext';
 
 const ManageTeams = () => {
     const { teams, tournaments } = useData();
+    const { currentUser, isSuperAdmin } = useAuth();
     const location = useLocation();
     const [loading, setLoading] = useState(false); // Loading for form submission
     const [formData, setFormData] = useState({
@@ -207,7 +209,25 @@ const ManageTeams = () => {
         setFormData(prev => ({ ...prev, logoUrl: '' }));
     };
 
-    const filteredTeams = teams.filter(team =>
+    // Scope teams: superadmin sees all, admin sees only teams in their tournaments
+    const myTournamentNames = useMemo(() => {
+        if (isSuperAdmin) return null;
+        return tournaments
+            .filter(t => t.createdBy === currentUser?.uid)
+            .map(t => t.name);
+    }, [tournaments, currentUser, isSuperAdmin]);
+
+    const scopedTeams = useMemo(() => {
+        if (!myTournamentNames) return teams; // superadmin
+        return teams.filter(team => {
+            const teamTournaments = Array.isArray(team.tournaments)
+                ? team.tournaments
+                : (typeof team.tournaments === 'string' ? team.tournaments.split(',').map(t => t.trim()) : []);
+            return teamTournaments.some(tn => myTournamentNames.includes(tn));
+        });
+    }, [teams, myTournamentNames]);
+
+    const filteredTeams = scopedTeams.filter(team =>
         team.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
         team.shortName.toLowerCase().includes(searchTerm.toLowerCase())
     );

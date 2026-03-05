@@ -1,13 +1,15 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { Search } from 'lucide-react';
 import { useParams } from 'react-router-dom';
 import { collection, addDoc, updateDoc, deleteDoc, doc, query, where, getDocs } from 'firebase/firestore';
 import { db } from '../../firebase';
 import { useData } from '../../context/DataContext';
+import { useAuth } from '../../context/AuthContext';
 
 const ManageLineups = () => {
     const { matchId, teamName } = useParams();
-    const { matches, players, teams, lineups } = useData();
+    const { matches, players, teams, lineups, tournaments } = useData();
+    const { currentUser, isSuperAdmin } = useAuth();
     const [selectedMatch, setSelectedMatch] = useState('');
     const [selectedTeam, setSelectedTeam] = useState('');
     const [lineup, setLineup] = useState({
@@ -32,6 +34,15 @@ const ManageLineups = () => {
 
     // Get match details
     const currentMatch = matches.find(m => m.id === selectedMatch);
+
+    // Scope matches: tournament admin only sees their tournament's matches
+    const scopedMatches = useMemo(() => {
+        if (isSuperAdmin) return matches;
+        const myTournamentNames = tournaments
+            .filter(t => t.createdBy === currentUser?.uid)
+            .map(t => t.name);
+        return matches.filter(m => myTournamentNames.includes(m.competition));
+    }, [matches, tournaments, currentUser, isSuperAdmin]);
 
     // Get players for the selected team with search
     const teamPlayers = players.filter(p => {
@@ -168,7 +179,7 @@ const ManageLineups = () => {
                     className="bg-gray-700 p-3 rounded text-slate-900 dark:text-white w-full mb-4"
                 >
                     <option value="">Select a match</option>
-                    {matches.filter(m => m.status !== 'finished').map(match => (
+                    {scopedMatches.filter(m => m.status !== 'finished').map(match => (
                         <option key={match.id} value={match.id}>
                             {match.competition} - {match.teamA} vs {match.teamB}
                             {match.date && ` (${new Date(match.date).toLocaleDateString()})`}

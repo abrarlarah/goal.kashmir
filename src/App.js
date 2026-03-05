@@ -16,6 +16,7 @@ import ManagePlayers from './pages/admin/ManagePlayers';
 import ManageTournaments from './pages/admin/ManageTournaments';
 import ManageLineups from './pages/admin/ManageLineups';
 import ManageNews from './pages/admin/ManageNews'; // Admin News
+import ManageUsers from './pages/admin/ManageUsers'; // Admin User Management
 import News from './pages/News'; // Public News
 import NewsDetail from './pages/NewsDetail'; // Public News Detail
 import TournamentDetail from './pages/TournamentDetail';
@@ -104,6 +105,14 @@ function App() {
                 element={
                   <PrivateRoute>
                     <ManageNews />
+                  </PrivateRoute>
+                }
+              />
+              <Route
+                path="/admin/users"
+                element={
+                  <PrivateRoute requireSuperAdmin>
+                    <ManageUsers />
                   </PrivateRoute>
                 }
               />

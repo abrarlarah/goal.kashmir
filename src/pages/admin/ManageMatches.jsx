@@ -1,11 +1,13 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import { collection, addDoc, updateDoc, deleteDoc, doc } from 'firebase/firestore';
 import { db } from '../../firebase';
 import { useData } from '../../context/DataContext';
+import { useAuth } from '../../context/AuthContext';
 import { ChevronLeft, ChevronRight, ChevronsLeft, ChevronsRight } from 'lucide-react';
 
 const ManageMatches = () => {
   const { matches, teams, tournaments } = useData();
+  const { currentUser, isSuperAdmin } = useAuth();
   const [loading, setLoading] = useState(false); // Form loading
   const [formData, setFormData] = useState({
     teamA: '',
@@ -150,8 +152,21 @@ const ManageMatches = () => {
     }
   };
 
-  const liveMatches = matches.filter(m => m.status === 'live');
-  const otherMatches = matches.filter(m => m.status !== 'live');
+  // Filter matches based on role (superadmin sees all, admin sees only their tournaments' matches)
+  const myTournamentNames = useMemo(() => {
+    if (isSuperAdmin) return null; // null = show all
+    return tournaments
+      .filter(t => t.createdBy === currentUser?.uid)
+      .map(t => t.name);
+  }, [tournaments, currentUser, isSuperAdmin]);
+
+  const scopedMatches = useMemo(() => {
+    if (!myTournamentNames) return matches; // superadmin
+    return matches.filter(m => myTournamentNames.includes(m.competition));
+  }, [matches, myTournamentNames]);
+
+  const liveMatches = scopedMatches.filter(m => m.status === 'live');
+  const otherMatches = scopedMatches.filter(m => m.status !== 'live');
 
   // Pagination Logic
   const [currentPage, setCurrentPage] = useState(1);
@@ -493,8 +508,8 @@ const ManageMatches = () => {
                       key={pageNum}
                       onClick={() => paginate(pageNum)}
                       className={`w-10 h-10 rounded-xl text-sm font-bold transition-all ${currentPage === pageNum
-                          ? "bg-brand-500 text-slate-900 shadow-lg shadow-brand-500/20"
-                          : "bg-gray-800 border border-white/5 text-gray-400 hover:text-white"
+                        ? "bg-brand-500 text-slate-900 shadow-lg shadow-brand-500/20"
+                        : "bg-gray-800 border border-white/5 text-gray-400 hover:text-white"
                         }`}
                     >
                       {pageNum}

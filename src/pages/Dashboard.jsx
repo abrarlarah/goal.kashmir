@@ -16,12 +16,20 @@ const DISTRICTS = {
 };
 
 const Dashboard = () => {
-  const { matches, players, teams, tournaments, lineups, loading } = useData();
-  const { isAdmin } = useAuth();
+  const { isAdmin, isSuperAdmin, currentUser } = useAuth();
+  const { matches, players, tournaments, lineups, teams, loading } = useData();
   const [dashboardCompetitionId, setDashboardCompetitionId] = useState('All');
   const [selectedDistrict, setSelectedDistrict] = useState('Baramulla');
   const [selectedYear, setSelectedYear] = useState(new Date().getFullYear().toString());
   const [expandedMatch, setExpandedMatch] = useState(null);
+
+  // Determine if this user is allowed to edit a specific match
+  const canEditMatch = (match) => {
+    if (!isAdmin || !match) return false;
+    if (isSuperAdmin) return true;
+    const tournament = tournaments?.find(t => t.name === match.competition || t.id === match.tournamentId);
+    return tournament ? tournament.createdBy === currentUser?.uid : false;
+  };
 
   // Animation constants
   const container = {
@@ -373,7 +381,7 @@ const Dashboard = () => {
                               <Shirt size={16} /> {isExpanded ? 'Hide Lineups' : 'Lineups'}
                             </button>
                           )}
-                          {isAdmin && (
+                          {canEditMatch(match) && (
                             <Link
                               to={`/admin/lineups/${match.id}`}
                               className="flex items-center gap-2 px-5 py-2 bg-indigo-600/20 hover:bg-indigo-600/40 text-indigo-400 rounded-lg text-sm font-semibold transition-all border border-indigo-500/30"
