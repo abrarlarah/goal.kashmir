@@ -227,6 +227,7 @@ const Players = () => {
                 <th className="px-6 py-4 text-left text-xs font-bold text-slate-600 dark:text-slate-400 uppercase tracking-wider">Player</th>
                 <th className="px-6 py-4 text-left text-xs font-bold text-slate-600 dark:text-slate-400 uppercase tracking-wider">Team</th>
                 <th className="px-6 py-4 text-left text-xs font-bold text-slate-600 dark:text-slate-400 uppercase tracking-wider">Position</th>
+                <th className="px-6 py-4 text-center text-xs font-bold text-slate-600 dark:text-slate-400 uppercase tracking-wider">Kit #</th>
                 <th className="px-6 py-4 text-center text-xs font-bold text-slate-600 dark:text-slate-400 uppercase tracking-wider">Age</th>
                 <th className="px-6 py-4 text-center text-xs font-bold text-slate-600 dark:text-slate-400 uppercase tracking-wider">Matches</th>
                 <th className="px-6 py-4 text-center text-xs font-bold text-slate-600 dark:text-slate-400 uppercase tracking-wider">Goals</th>
@@ -269,6 +270,11 @@ const Players = () => {
                               "bg-green-500/10 text-green-400 border-green-500/20"
                       )}>
                         {player.position}
+                      </span>
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap text-center">
+                      <span className="text-sm font-bold text-brand-500">
+                        {player.number ? `#${player.number}` : '--'}
                       </span>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-center">

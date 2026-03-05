@@ -36,7 +36,10 @@ const ManagePlayers = () => {
         goals: 0,
         assists: 0,
         yellowCards: 0,
-        redCards: 0
+        redCards: 0,
+        number: '',
+        bio: '',
+        cleanSheets: 0
     });
     const [editingId, setEditingId] = useState(null);
     const [uploadProgress, setUploadProgress] = useState(0);
@@ -58,7 +61,7 @@ const ManagePlayers = () => {
     const handleInputChange = (e) => {
         const { name, value } = e.target;
         // Helper to determine if field should be a number
-        const numberFields = ['age', 'matches', 'goals', 'assists', 'yellowCards', 'redCards'];
+        const numberFields = ['age', 'matches', 'goals', 'assists', 'yellowCards', 'redCards', 'number', 'cleanSheets'];
 
         setFormData(prev => {
             const newData = {
@@ -159,7 +162,10 @@ const ManagePlayers = () => {
             goals: 0,
             assists: 0,
             yellowCards: 0,
-            redCards: 0
+            redCards: 0,
+            number: '',
+            bio: '',
+            cleanSheets: 0
         });
         setEditingId(null);
 
@@ -169,7 +175,15 @@ const ManagePlayers = () => {
     };
 
     const handleEdit = (player) => {
-        setFormData(player);
+        setFormData({
+            ...player,
+            nationality: player.nationality || '',
+            district: player.district || '',
+            dob: player.dob || '',
+            bio: player.bio || '',
+            number: player.number || '',
+            cleanSheets: player.cleanSheets || 0
+        });
         setEditingId(player.id);
         setSuccessMessage('');
     };
@@ -343,6 +357,17 @@ const ManagePlayers = () => {
                         </select>
                     </div>
                     <div>
+                        <label className="text-xs text-gray-400 block mb-1">Kit Number</label>
+                        <input
+                            type="number"
+                            name="number"
+                            placeholder="e.g. 10"
+                            value={formData.number}
+                            onChange={handleInputChange}
+                            className="bg-gray-700 p-2 rounded text-slate-900 dark:text-white w-full"
+                        />
+                    </div>
+                    <div>
                         <label className="text-xs text-gray-400 block mb-1">Nationality</label>
                         <input
                             type="text"
@@ -372,6 +397,17 @@ const ManagePlayers = () => {
                             value={formData.age}
                             readOnly
                             className="bg-gray-700/50 p-2 rounded text-gray-400 w-full cursor-not-allowed"
+                        />
+                    </div>
+                    <div>
+                        <label className="text-xs text-gray-400 block mb-1">Clean Sheets (GK)</label>
+                        <input
+                            type="number"
+                            name="cleanSheets"
+                            placeholder="0"
+                            value={formData.cleanSheets}
+                            onChange={handleInputChange}
+                            className="bg-gray-700 p-2 rounded text-slate-900 dark:text-white w-full"
                         />
                     </div>
                     <div>
@@ -430,6 +466,18 @@ const ManagePlayers = () => {
                         />
                     </div>
 
+                    <div className="md:col-span-2 lg:col-span-4">
+                        <label className="text-xs text-gray-400 block mb-1">Player Biography</label>
+                        <textarea
+                            name="bio"
+                            placeholder="Tell us about the player or their career..."
+                            value={formData.bio}
+                            onChange={handleInputChange}
+                            rows={4}
+                            className="bg-gray-700 p-2 rounded text-slate-900 dark:text-white w-full outline-none focus:ring-2 focus:ring-brand-500"
+                        ></textarea>
+                    </div>
+
                     <button
                         type="submit"
                         disabled={loading}
@@ -453,7 +501,8 @@ const ManagePlayers = () => {
                                     goals: 0,
                                     assists: 0,
                                     yellowCards: 0,
-                                    redCards: 0
+                                    redCards: 0,
+                                    number: ''
                                 });
                             }}
                             className="bg-gray-600 hover:bg-gray-500 p-2 rounded text-slate-900 dark:text-white col-span-full"
@@ -499,6 +548,7 @@ const ManagePlayers = () => {
                             <th className="px-4 py-3">Name</th>
                             <th className="px-4 py-3">Team</th>
                             <th className="px-4 py-3">District</th>
+                            <th className="px-4 py-3">Kit #</th>
                             <th className="px-4 py-3">Pos</th>
                             <th className="px-4 py-3">Stats</th>
                             <th className="px-4 py-3">Action</th>
@@ -513,6 +563,9 @@ const ManagePlayers = () => {
                                     <span className="text-xs bg-brand-500/20 text-brand-400 px-2 py-1 rounded">
                                         {player.district || 'N/A'}
                                     </span>
+                                </td>
+                                <td className="px-4 py-3">
+                                    <span className="font-bold text-brand-500">#{player.number || '--'}</span>
                                 </td>
                                 <td className="px-4 py-3">{player.position}</td>
                                 <td className="px-4 py-3">
@@ -540,11 +593,13 @@ const ManagePlayers = () => {
                         ))}
                     </tbody>
                 </table>
-                {filteredPlayers.length === 0 && !loading && (
-                    <p className="text-center text-gray-400 mt-4">No players found matching your criteria.</p>
-                )}
-            </div>
-        </div>
+                {
+                    filteredPlayers.length === 0 && !loading && (
+                        <p className="text-center text-gray-400 mt-4">No players found matching your criteria.</p>
+                    )
+                }
+            </div >
+        </div >
     );
 };
 

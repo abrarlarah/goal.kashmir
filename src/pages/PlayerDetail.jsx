@@ -220,6 +220,12 @@ const PlayerDetail = () => {
                                 <span className="text-[10px] text-slate-500 uppercase font-black tracking-wider block mb-1">Age</span>
                                 <span className="text-xl font-display font-bold text-slate-900 dark:text-white">{age}</span>
                             </div>
+                            {player.nationality && (
+                                <div className="p-3 rounded-2xl bg-white/5 border border-white/5 md:col-span-2">
+                                    <span className="text-[10px] text-slate-500 uppercase font-black tracking-wider block mb-1">Nationality</span>
+                                    <span className="text-sm font-bold text-slate-900 dark:text-white">{player.nationality}</span>
+                                </div>
+                            )}
                         </div>
 
                         <div className="space-y-4">
