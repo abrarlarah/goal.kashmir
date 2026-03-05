@@ -5,15 +5,15 @@ import { calculateStandings } from '../utils/soccerUtils';
 import LineupDisplay from '../components/common/LineupDisplay';
 import MatchTimer from '../components/common/MatchTimer';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Calendar, Clock, MapPin, Shirt, ChevronRight, Trophy, TrendingUp, Users, Activity, MapPinned, ExternalLink, UserPlus } from 'lucide-react';
+import { Calendar, Clock, MapPin, Shirt, ChevronRight, Trophy, Activity, MapPinned, UserPlus, Zap, Target } from 'lucide-react';
 import { cn } from '../utils/cn';
 import { useAuth } from '../context/AuthContext';
 
-// Districts of Jammu and Kashmir
 const DISTRICTS = {
   JAMMU: ['Jammu', 'Samba', 'Kathua', 'Udhampur', 'Reasi', 'Rajouri', 'Poonch', 'Doda', 'Ramban', 'Kishtwar'],
   KASHMIR: ['Srinagar', 'Ganderbal', 'Budgam', 'Baramulla', 'Bandipora', 'Kupwara', 'Pulwama', 'Shopian', 'Kulgam', 'Anantnag']
 };
+
 
 const Dashboard = () => {
   const { isAdmin, isSuperAdmin, currentUser } = useAuth();
@@ -23,7 +23,6 @@ const Dashboard = () => {
   const [selectedYear, setSelectedYear] = useState(new Date().getFullYear().toString());
   const [expandedMatch, setExpandedMatch] = useState(null);
 
-  // Determine if this user is allowed to edit a specific match
   const canEditMatch = (match) => {
     if (!isAdmin || !match) return false;
     if (isSuperAdmin) return true;
@@ -31,41 +30,21 @@ const Dashboard = () => {
     return tournament ? tournament.createdBy === currentUser?.uid : false;
   };
 
-  // Animation constants
-  const container = {
-    hidden: { opacity: 0 },
-    show: {
-      opacity: 1,
-      transition: { staggerChildren: 0.1 }
-    }
-  };
+  const container = { hidden: { opacity: 0 }, show: { opacity: 1, transition: { staggerChildren: 0.07 } } };
+  const item = { hidden: { opacity: 0, y: 20 }, show: { opacity: 1, y: 0, transition: { duration: 0.4 } } };
 
-  const item = {
-    hidden: { opacity: 0, y: 20 },
-    show: { opacity: 1, y: 0 }
-  };
-
-  // Filter tournaments by district and year
   const availableYears = useMemo(() => {
-    const years = tournaments
-      .map(t => t.startDate ? new Date(t.startDate).getFullYear().toString() : null)
-      .filter(Boolean);
-    const uniqueYears = [...new Set(years)].sort((a, b) => b - a);
-    return uniqueYears;
+    const years = tournaments.map(t => t.startDate ? new Date(t.startDate).getFullYear().toString() : null).filter(Boolean);
+    return [...new Set(years)].sort((a, b) => b - a);
   }, [tournaments]);
 
   const filteredTournaments = useMemo(() => {
     let ts = tournaments;
-    if (selectedDistrict !== 'All') {
-      ts = ts.filter(t => t.district === selectedDistrict);
-    }
-    if (selectedYear !== 'All') {
-      ts = ts.filter(t => t.startDate && new Date(t.startDate).getFullYear().toString() === selectedYear);
-    }
+    if (selectedDistrict !== 'All') ts = ts.filter(t => t.district === selectedDistrict);
+    if (selectedYear !== 'All') ts = ts.filter(t => t.startDate && new Date(t.startDate).getFullYear().toString() === selectedYear);
     return ts;
   }, [tournaments, selectedDistrict, selectedYear]);
 
-  // Auto-select a tournament only if necessary (initial load or current selection gone)
   useEffect(() => {
     const isCurrentInFiltered = filteredTournaments.some(t => t.id === dashboardCompetitionId);
     if (!isCurrentInFiltered && dashboardCompetitionId !== 'All' && filteredTournaments.length > 0) {
@@ -73,638 +52,382 @@ const Dashboard = () => {
     }
   }, [filteredTournaments, dashboardCompetitionId]);
 
-  // Data Filtering
   const filteredMatches = useMemo(() => {
     if (dashboardCompetitionId && dashboardCompetitionId !== 'All') {
       const tourney = tournaments.find(t => t.id === dashboardCompetitionId);
       return matches.filter(m => (m.tournamentId === dashboardCompetitionId) || (!m.tournamentId && m.competition === tourney?.name));
     }
-
-    // If 'All' is selected, filter matches by the currently filtered tournaments (District/Year aware)
     const activeTourneyIds = new Set(filteredTournaments.map(t => t.id));
     const activeTourneyNames = new Set(filteredTournaments.map(t => t.name));
-
-    return matches.filter(m =>
-      activeTourneyIds.has(m.tournamentId) ||
-      (!m.tournamentId && activeTourneyNames.has(m.competition))
-    );
+    return matches.filter(m => activeTourneyIds.has(m.tournamentId) || (!m.tournamentId && activeTourneyNames.has(m.competition)));
   }, [matches, dashboardCompetitionId, filteredTournaments, tournaments]);
 
   const relevantTeamNames = dashboardCompetitionId && dashboardCompetitionId !== 'All'
     ? teams.filter(team => {
-      const teamTournaments = Array.isArray(team.tournaments)
-        ? team.tournaments
-        : (typeof team.tournaments === 'string' ? team.tournaments.split(',').map(t => t.trim()) : []);
+      const teamTournaments = Array.isArray(team.tournaments) ? team.tournaments : (typeof team.tournaments === 'string' ? team.tournaments.split(',').map(t => t.trim()) : []);
       const tourney = tournaments.find(t => t.id === dashboardCompetitionId);
       return tourney && teamTournaments.includes(tourney.name);
-    }).map(t => t.name)
-    : null;
+    }).map(t => t.name) : null;
 
-  const filteredPlayers = relevantTeamNames
-    ? players.filter(p => relevantTeamNames.includes(p.team))
-    : players;
-
+  const filteredPlayers = relevantTeamNames ? players.filter(p => relevantTeamNames.includes(p.team)) : players;
   const liveMatches = filteredMatches.filter(m => m.status === 'live');
   const upcomingMatches = filteredMatches.filter(m => m.status === 'scheduled');
   const finishedMatches = filteredMatches.filter(m => m.status === 'finished').slice(0, 5);
-
-  const topScorers = [...filteredPlayers]
-    .sort((a, b) => (b.goals || 0) - (a.goals || 0))
-    .slice(0, 5);
-
-  const standings = (dashboardCompetitionId && dashboardCompetitionId !== 'All')
-    ? calculateStandings(teams, matches, tournaments.find(t => t.id === dashboardCompetitionId)?.name)
-    : [];
+  const topScorers = [...filteredPlayers].sort((a, b) => (b.goals || 0) - (a.goals || 0)).slice(0, 5);
+  const standings = (dashboardCompetitionId && dashboardCompetitionId !== 'All') ? calculateStandings(teams, matches, tournaments.find(t => t.id === dashboardCompetitionId)?.name) : [];
   const topTeams = standings.slice(0, 5);
-
   const getMatchLineups = (matchId) => lineups.filter(l => l.matchId === matchId);
   const getTeamInfo = (teamName) => teams.find(t => t.name === teamName) || {};
   const getTournamentId = (name) => tournaments.find(t => t.name === name)?.id;
 
-  // Dashboard Enhancements Logic
   const today = new Date().toISOString().split('T')[0];
-  const nextWeek = new Date();
-  nextWeek.setDate(nextWeek.getDate() + 7);
+  const nextWeek = new Date(); nextWeek.setDate(nextWeek.getDate() + 7);
   const nextWeekStr = nextWeek.toISOString().split('T')[0];
-
-  const todayMatches = matches.filter(m => m.date === today);
   const weeklyFixtures = matches.filter(m => m.date > today && m.date <= nextWeekStr).sort((a, b) => a.date.localeCompare(b.date));
 
   const districtStats = useMemo(() => {
     const stats = {};
-    // Get unique districts from tournaments
     const availableDistricts = [...new Set(tournaments.map(t => t.district))].filter(Boolean);
-
-    availableDistricts.forEach(d => {
-      stats[d] = { matches: 0, tournaments: 0, teams: 0 };
-    });
-
-    tournaments.forEach(t => {
-      if (stats[t.district]) stats[t.district].tournaments++;
-    });
-
-    matches.forEach(m => {
-      const tourney = tournaments.find(t => t.name === m.competition);
-      if (tourney && tourney.district && stats[tourney.district]) stats[tourney.district].matches++;
-    });
-
+    availableDistricts.forEach(d => { stats[d] = { matches: 0, tournaments: 0, teams: 0 }; });
+    tournaments.forEach(t => { if (stats[t.district]) stats[t.district].tournaments++; });
+    matches.forEach(m => { const tourney = tournaments.find(t => t.name === m.competition); if (tourney && tourney.district && stats[tourney.district]) stats[tourney.district].matches++; });
     teams.forEach(team => {
       const tourneyNames = Array.isArray(team.tournaments) ? team.tournaments : [];
       const teamDistricts = new Set();
-      tourneyNames.forEach(tn => {
-        const tourney = tournaments.find(t => t.name === tn);
-        if (tourney && tourney.district) teamDistricts.add(tourney.district);
-      });
-      teamDistricts.forEach(d => {
-        if (stats[d]) stats[d].teams++;
-      });
+      tourneyNames.forEach(tn => { const tourney = tournaments.find(t => t.name === tn); if (tourney && tourney.district) teamDistricts.add(tourney.district); });
+      teamDistricts.forEach(d => { if (stats[d]) stats[d].teams++; });
     });
-
-    return Object.entries(stats)
-      .filter(([_, data]) => data.tournaments > 0 || data.matches > 0)
-      .sort((a, b) => b[1].matches - a[1].matches);
+    return Object.entries(stats).filter(([_, data]) => data.tournaments > 0 || data.matches > 0).sort((a, b) => b[1].matches - a[1].matches);
   }, [tournaments, matches, teams]);
 
   if (loading && matches.length === 0) {
     return (
       <div className="flex h-[80vh] items-center justify-center">
         <div className="flex flex-col items-center gap-4">
-          <div className="h-10 w-10 animate-spin rounded-full border-4 border-brand-500 border-t-transparent"></div>
-          <div className="text-slate-600 dark:text-slate-400 font-medium animate-pulse">Loading Match Data...</div>
+          <div className="relative">
+            <div className="h-14 w-14 animate-spin rounded-full border-4 border-brand-500/30 border-t-brand-500"></div>
+            <Zap className="absolute inset-0 m-auto text-brand-400" size={20} />
+          </div>
+          <div className="text-slate-400 font-medium animate-pulse">Loading Match Data...</div>
         </div>
       </div>
     );
   }
 
+
+
+  const TeamLogo = ({ teamName, size = 'md' }) => {
+    const team = getTeamInfo(teamName);
+    const sizes = { sm: 'h-7 w-7', md: 'h-10 w-10', lg: 'h-14 w-14' };
+    return (
+      <div className={cn(sizes[size], "rounded-full bg-slate-800/80 flex items-center justify-center ring-2 ring-white/10 overflow-hidden flex-shrink-0")}>
+        {team.logoUrl ? <img src={team.logoUrl} alt={teamName} className="h-full w-full object-contain p-1.5 bg-white" /> : <span className="text-[10px] font-bold text-slate-400">{teamName?.substring(0, 2).toUpperCase()}</span>}
+      </div>
+    );
+  };
+
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
+    <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 py-4 sm:py-8 space-y-5 sm:space-y-8">
 
-      {/* Header & Filters */}
-      <motion.div
-        initial={{ opacity: 0, y: -20 }}
-        animate={{ opacity: 1, y: 0 }}
-        className="flex flex-col gap-6"
-      >
-        <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
-          <div>
-            <h1 className="text-3xl md:text-4xl font-display font-bold text-slate-900 dark:text-white mb-2">Match Center</h1>
-            <p className="text-slate-600 dark:text-slate-400">Track live scores, fixtures, and statistics in real-time.</p>
-          </div>
-
-          {/* Filters */}
-          <div className="flex flex-wrap items-center gap-3">
-            {/* Year Filter */}
-            <div className="flex items-center gap-2">
-              <Clock className="text-brand-400" size={18} />
-              <select
-                value={selectedYear}
-                onChange={(e) => {
-                  setSelectedYear(e.target.value);
-                  setDashboardCompetitionId('All');
-                }}
-                className="bg-white dark:bg-dark-card/50 backdrop-blur-sm border border-slate-200 dark:border-white/10 rounded-xl px-4 py-2 text-sm font-medium text-slate-900 dark:text-white focus:ring-2 focus:ring-brand-500 outline-none transition-all"
-              >
-                <option value="All">All Years</option>
-                {availableYears.map(year => (
-                  <option key={year} value={year}>{year}</option>
-                ))}
-              </select>
+      {/* ═══ HERO HEADER ═══ */}
+      <motion.div initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }} className="relative overflow-hidden rounded-2xl sm:rounded-3xl bg-gradient-to-br from-slate-900 via-brand-950 to-slate-900 border border-white/10">
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,rgba(14,165,233,0.15),transparent_60%)]" />
+        <div className="absolute top-0 right-0 w-40 h-40 bg-brand-500/10 rounded-full blur-3xl" />
+        <div className="absolute bottom-0 left-0 w-32 h-32 bg-cyan-500/10 rounded-full blur-3xl" />
+        <div className="relative px-4 sm:px-8 py-6 sm:py-10">
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 sm:gap-6">
+            <div className="hidden sm:block">
+              <div className="flex items-center gap-2 mb-2">
+                {liveMatches.length > 0 && <span className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-red-500/20 border border-red-500/30 text-red-400 text-[11px] font-bold uppercase tracking-wider"><span className="h-1.5 w-1.5 rounded-full bg-red-500 animate-pulse" />{liveMatches.length} Live</span>}
+              </div>
+              <h1 className="text-2xl sm:text-4xl font-display font-bold text-white mb-1">Match Center</h1>
+              <p className="text-slate-400 text-sm sm:text-base">Track live scores, fixtures and statistics in real-time.</p>
             </div>
 
-            {/* District Filter */}
-            <div className="flex items-center gap-2">
-              <MapPinned className="text-brand-400" size={18} />
-              <select
-                value={selectedDistrict}
-                onChange={(e) => {
-                  setSelectedDistrict(e.target.value);
-                  setDashboardCompetitionId('All');
-                }}
-                className="bg-white dark:bg-dark-card/50 backdrop-blur-sm border border-slate-200 dark:border-white/10 rounded-xl px-4 py-2 text-sm font-medium text-slate-900 dark:text-white focus:ring-2 focus:ring-brand-500 outline-none transition-all min-w-[140px]"
-              >
-                <option value="All">All Districts</option>
-                <optgroup label="Jammu Division">
-                  {DISTRICTS.JAMMU.map(district => (
-                    <option key={district} value={district}>{district}</option>
-                  ))}
-                </optgroup>
-                <optgroup label="Kashmir Division">
-                  {DISTRICTS.KASHMIR.map(district => (
-                    <option key={district} value={district}>{district}</option>
-                  ))}
-                </optgroup>
-              </select>
-            </div>
-
-            {/* Competition Filter */}
-            <div className="flex items-center gap-2">
-              <Trophy className="text-brand-400" size={18} />
-              <div className="flex items-center gap-1 group">
-                <select
-                  value={dashboardCompetitionId}
-                  onChange={(e) => setDashboardCompetitionId(e.target.value)}
-                  className="bg-white dark:bg-dark-card/50 backdrop-blur-sm border border-slate-200 dark:border-white/10 rounded-xl px-4 py-2 text-sm font-medium text-slate-900 dark:text-white focus:ring-2 focus:ring-brand-500 outline-none transition-all max-w-[200px]"
-                >
-                  <option value="All">All Tournaments</option>
-                  {filteredTournaments.map(t => (
-                    <option key={t.id} value={t.id}>
-                      {t.name} {t.startDate ? `(${new Date(t.startDate).getFullYear()})` : ''}
-                    </option>
-                  ))}
-                </select>
-                {dashboardCompetitionId !== 'All' && (
-                  <Link
-                    to={`/tournaments/${dashboardCompetitionId}`}
-                    className="p-2 bg-brand-500/10 text-brand-500 rounded-lg hover:bg-brand-500 hover:text-white transition-all shadow-sm"
-                    title="View Details"
-                  >
-                    <ExternalLink size={14} />
-                  </Link>
-                )}
+            {/* ═══ FILTERS ═══ */}
+            <div className="mt-4 sm:mt-0 flex items-center gap-2 sm:gap-4 w-full sm:w-auto max-w-full overflow-x-auto scrollbar-none pb-1 sm:pb-0">
+              {/* Year filter row */}
+              <div className="flex items-center gap-2 flex-shrink-0 relative">
+                <Clock className="text-cyan-500 hidden sm:block" size={16} />
+                <div className="relative">
+                  <select value={selectedYear} onChange={(e) => { setSelectedYear(e.target.value); setDashboardCompetitionId('All'); }} className="bg-slate-800/80 border border-slate-700/50 rounded-xl pl-3 pr-8 py-2 text-xs sm:text-sm font-semibold text-white focus:ring-2 focus:ring-brand-500 focus:border-brand-500 outline-none transition-all cursor-pointer appearance-none shadow-sm h-9 sm:h-10 min-w-[80px]">
+                    <option value="All">All Years</option>
+                    {availableYears.map(y => <option key={y} value={y}>{y}</option>)}
+                  </select>
+                  <ChevronRight size={14} className="absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-400 rotate-90 pointer-events-none" />
+                </div>
+              </div>
+              {/* District filter row */}
+              <div className="flex items-center gap-2 flex-shrink-0 relative">
+                <MapPin className="text-cyan-500 hidden sm:block" size={16} />
+                <div className="relative">
+                  <select value={selectedDistrict} onChange={(e) => { setSelectedDistrict(e.target.value); setDashboardCompetitionId('All'); }} className="bg-slate-800/80 border border-slate-700/50 rounded-xl pl-3 pr-8 py-2 text-xs sm:text-sm font-semibold text-white focus:ring-2 focus:ring-brand-500 focus:border-brand-500 outline-none transition-all cursor-pointer appearance-none shadow-sm h-9 sm:h-10">
+                    <option value="All">All Districts</option>
+                    <optgroup label="Kashmir">{DISTRICTS.KASHMIR.map(d => <option key={d} value={d}>{d}</option>)}</optgroup>
+                    <optgroup label="Jammu">{DISTRICTS.JAMMU.map(d => <option key={d} value={d}>{d}</option>)}</optgroup>
+                  </select>
+                  <ChevronRight size={14} className="absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-400 rotate-90 pointer-events-none" />
+                </div>
+              </div>
+              {/* Tournament filter row */}
+              <div className="flex flex-1 sm:flex-none items-center gap-2 min-w-[140px] flex-shrink-0 relative">
+                <Trophy className="text-cyan-500 hidden sm:block" size={16} />
+                <div className="relative w-full sm:w-auto">
+                  <select value={dashboardCompetitionId} onChange={(e) => setDashboardCompetitionId(e.target.value)} className="w-full bg-slate-800/80 border border-slate-700/50 rounded-xl pl-3 pr-8 py-2 text-xs sm:text-sm font-semibold text-white focus:ring-2 focus:ring-brand-500 focus:border-brand-500 outline-none transition-all cursor-pointer appearance-none shadow-sm h-9 sm:h-10 sm:min-w-[180px]">
+                    <option value="All">All Tournaments</option>
+                    {filteredTournaments.map(t => <option key={t.id} value={t.id}>{t.name} {t.startDate ? `(${new Date(t.startDate).getFullYear()})` : ''}</option>)}
+                  </select>
+                  <ChevronRight size={14} className="absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-400 rotate-90 pointer-events-none" />
+                </div>
               </div>
             </div>
           </div>
         </div>
-
       </motion.div>
 
-      <motion.div
-        variants={container}
-        initial="hidden"
-        animate="show"
-        className="grid grid-cols-1 lg:grid-cols-12 gap-8"
-      >
 
-        {/* LEFT COLUMN: Matches (8 cols) */}
-        <div className="lg:col-span-8 space-y-8">
+      {/* ═══ MAIN GRID ═══ */}
+      <motion.div variants={container} initial="hidden" animate="show" className="grid grid-cols-1 lg:grid-cols-12 gap-5 sm:gap-8">
 
-          {/* Live Matches Section */}
+        {/* LEFT COLUMN */}
+        <div className="lg:col-span-8 space-y-5 sm:space-y-8">
+
+          {/* ── LIVE MATCHES ── */}
           <motion.section variants={item}>
-            <div className="flex items-center gap-3 mb-4">
-              <div className="relative">
-                <span className="h-3 w-3 absolute -top-1 -right-1 bg-red-500 rounded-full animate-ping" />
-                <Activity className="text-red-500" />
-              </div>
-              <h2 className="text-xl font-display font-bold text-slate-900 dark:text-white">Live Now</h2>
+            <div className="flex items-center gap-2.5 mb-3 sm:mb-4">
+              <div className="relative"><span className="h-2.5 w-2.5 absolute -top-0.5 -right-0.5 bg-red-500 rounded-full animate-ping opacity-75" /><Activity className="text-red-500" size={20} /></div>
+              <h2 className="text-lg sm:text-xl font-display font-bold text-white">Live Now</h2>
             </div>
 
             {liveMatches.length > 0 ? (
-              <div className="grid gap-4">
+              <div className="space-y-4">
                 {liveMatches.map(match => {
                   const isExpanded = expandedMatch === match.id;
                   const matchLineups = getMatchLineups(match.id);
-                  const teamA = getTeamInfo(match.teamA);
-                  const teamB = getTeamInfo(match.teamB);
-
                   return (
-                    <motion.div
-                      layout
-                      key={match.id}
-                      className="glass-card rounded-2xl overflow-hidden group hover:border-brand-500/30 transition-colors"
-                    >
-                      {/* Match Header */}
-                      <div className="p-5 md:p-6">
-                        <div className="flex justify-between items-start mb-6">
-                          <span className="px-3 py-1 rounded-full bg-red-500/10 text-red-500 text-xs font-bold uppercase tracking-wider border border-red-500/20 flex items-center gap-2">
-                            <span className="h-1.5 w-1.5 rounded-full bg-red-500 animate-pulse" />
-                            Live • <MatchTimer match={match} />
+                    <motion.div layout key={match.id} className="rounded-2xl overflow-hidden bg-gradient-to-br from-slate-900/80 to-slate-800/50 border border-white/10 hover:border-brand-500/30 transition-all shadow-xl shadow-black/20">
+                      <div className="p-4 sm:p-6">
+                        {/* Status bar */}
+                        <div className="flex justify-between items-center mb-4 sm:mb-6">
+                          <span className="px-2.5 py-1 rounded-full bg-red-500/15 text-red-400 text-[11px] font-bold uppercase tracking-wider border border-red-500/20 flex items-center gap-1.5">
+                            <span className="h-1.5 w-1.5 rounded-full bg-red-500 animate-pulse" /> Live • <MatchTimer match={match} />
                           </span>
-                          <div className="hidden md:flex items-center gap-4 text-xs font-medium text-slate-600 dark:text-slate-400">
-                            {match.stadium && (
-                              <span className="flex items-center gap-1.5">
-                                <MapPin size={14} /> {match.stadium}
-                              </span>
-                            )}
-                            {getTournamentId(match.competition) ? (
-                              <Link to={`/tournaments/${getTournamentId(match.competition)}`} className="px-2 py-1 bg-brand-500/10 hover:bg-brand-500/20 text-brand-500 rounded transition-colors">
-                                {match.competition}
-                              </Link>
-                            ) : (
-                              <span className="px-2 py-1 bg-white/5 rounded text-slate-700 dark:text-slate-300">{match.competition}</span>
-                            )}
+                          <div className="flex items-center gap-2 text-[11px] text-slate-500">
+                            {match.stadium && <span className="hidden sm:flex items-center gap-1"><MapPin size={12} />{match.stadium}</span>}
+                            {getTournamentId(match.competition) ? <Link to={`/tournaments/${getTournamentId(match.competition)}`} className="px-2 py-0.5 bg-brand-500/10 text-brand-400 rounded-md hover:bg-brand-500/20 transition-colors font-semibold">{match.competition}</Link> : <span className="text-slate-500">{match.competition}</span>}
                           </div>
                         </div>
-
-                        {/* Score Board */}
-                        <div className="flex items-center justify-between gap-4 md:gap-8">
-                          {/* Team A */}
-                          <div className="flex-1 flex flex-col items-center md:flex-row md:items-center gap-4 text-center md:text-left">
-                            <div className="h-12 w-12 md:h-14 md:w-14 rounded-full bg-slate-800 flex items-center justify-center text-xl font-bold text-slate-600 dark:text-slate-400 ring-2 ring-white/5 overflow-hidden">
-                              {teamA.logoUrl ? (
-                                <img src={teamA.logoUrl} alt={match.teamA} className="h-full w-full object-contain p-2 bg-white" />
-                              ) : (
-                                match.teamA.charAt(0)
-                              )}
-                            </div>
-                            <div>
-                              <div className="text-lg md:text-xl font-bold text-slate-900 dark:text-white">{match.teamA}</div>
-                              {teamA.manager && <div className="text-xs text-slate-500 hidden md:block">Mgr: {teamA.manager}</div>}
-                            </div>
+                        {/* Scoreboard */}
+                        <div className="flex items-center justify-between gap-2 sm:gap-6">
+                          <div className="flex-1 flex flex-col items-center gap-2 min-w-0">
+                            <TeamLogo teamName={match.teamA} size="lg" />
+                            <span className="text-sm sm:text-base font-bold text-white text-center truncate w-full">{match.teamA}</span>
                           </div>
-
-                          {/* Score */}
-                          <div className="px-6 py-3 bg-black/40 rounded-xl border border-slate-200 dark:border-white/5 backdrop-blur-md">
-                            <span className="font-impact text-4xl md:text-5xl tracking-wider text-slate-900 dark:text-white">
-                              {match.scoreA} <span className="text-slate-600 mx-2">-</span> {match.scoreB}
-                            </span>
+                          <div className="px-4 sm:px-8 py-3 bg-black/40 rounded-2xl border border-white/5 backdrop-blur-md flex-shrink-0">
+                            <span className="font-impact text-3xl sm:text-5xl tracking-wider text-white">{match.scoreA}<span className="text-slate-600 mx-1.5 sm:mx-3">-</span>{match.scoreB}</span>
                           </div>
-
-                          {/* Team B */}
-                          <div className="flex-1 flex flex-col items-center md:flex-row-reverse md:items-center gap-4 text-center md:text-right">
-                            <div className="h-12 w-12 md:h-14 md:w-14 rounded-full bg-slate-800 flex items-center justify-center text-xl font-bold text-slate-600 dark:text-slate-400 ring-2 ring-white/5 overflow-hidden">
-                              {teamB.logoUrl ? (
-                                <img src={teamB.logoUrl} alt={match.teamB} className="h-full w-full object-contain p-2 bg-white" />
-                              ) : (
-                                match.teamB.charAt(0)
-                              )}
-                            </div>
-                            <div>
-                              <div className="text-lg md:text-xl font-bold text-slate-900 dark:text-white">{match.teamB}</div>
-                              {teamB.manager && <div className="text-xs text-slate-500 hidden md:block">Mgr: {teamB.manager}</div>}
-                            </div>
+                          <div className="flex-1 flex flex-col items-center gap-2 min-w-0">
+                            <TeamLogo teamName={match.teamB} size="lg" />
+                            <span className="text-sm sm:text-base font-bold text-white text-center truncate w-full">{match.teamB}</span>
                           </div>
                         </div>
-
                         {/* Actions */}
-                        <div className="mt-6 flex justify-center gap-3">
-                          <Link
-                            to={`/live/${match.id}`}
-                            className="flex items-center gap-2 px-5 py-2 bg-brand-600 hover:bg-brand-500 text-slate-900 dark:text-white rounded-lg text-sm font-semibold transition-all shadow-lg shadow-brand-500/20"
-                          >
-                            <Activity size={16} /> Match Center
+                        <div className="mt-4 sm:mt-6 flex justify-center gap-2 sm:gap-3 flex-wrap">
+                          <Link to={`/live/${match.id}`} className="flex items-center gap-1.5 px-4 py-2 bg-gradient-to-r from-brand-600 to-brand-500 hover:from-brand-500 hover:to-brand-400 text-white rounded-xl text-xs sm:text-sm font-bold transition-all shadow-lg shadow-brand-500/25 active:scale-95">
+                            <Activity size={14} /> Match Center
                           </Link>
-                          {matchLineups.length > 0 && (
-                            <button
-                              onClick={() => setExpandedMatch(isExpanded ? null : match.id)}
-                              className="flex items-center gap-2 px-5 py-2 bg-white/5 hover:bg-white/10 text-slate-900 dark:text-white rounded-lg text-sm font-semibold transition-all border border-slate-200 dark:border-white/5"
-                            >
-                              <Shirt size={16} /> {isExpanded ? 'Hide Lineups' : 'Lineups'}
-                            </button>
-                          )}
-                          {canEditMatch(match) && (
-                            <Link
-                              to={`/admin/lineups/${match.id}`}
-                              className="flex items-center gap-2 px-5 py-2 bg-indigo-600/20 hover:bg-indigo-600/40 text-indigo-400 rounded-lg text-sm font-semibold transition-all border border-indigo-500/30"
-                            >
-                              <UserPlus size={16} /> Add Lineup
-                            </Link>
-                          )}
+                          {matchLineups.length > 0 && <button onClick={() => setExpandedMatch(isExpanded ? null : match.id)} className="flex items-center gap-1.5 px-4 py-2 bg-white/5 hover:bg-white/10 text-slate-300 rounded-xl text-xs sm:text-sm font-semibold border border-white/10 transition-all active:scale-95"><Shirt size={14} /> {isExpanded ? 'Hide' : 'Lineups'}</button>}
+                          {canEditMatch(match) && <Link to={`/admin/lineups/${match.id}`} className="flex items-center gap-1.5 px-4 py-2 bg-indigo-600/20 hover:bg-indigo-600/30 text-indigo-400 rounded-xl text-xs sm:text-sm font-semibold border border-indigo-500/30 transition-all active:scale-95"><UserPlus size={14} /> Lineup</Link>}
                         </div>
                       </div>
-
-                      {/* Lineups Expansion */}
                       <AnimatePresence>
                         {isExpanded && (
-                          <motion.div
-                            initial={{ height: 0, opacity: 0 }}
-                            animate={{ height: 'auto', opacity: 1 }}
-                            exit={{ height: 0, opacity: 0 }}
-                            className="border-t border-slate-200 dark:border-white/5 bg-black/20"
-                          >
-                            <div className="p-6 grid md:grid-cols-2 gap-8">
-                              {matchLineups.map(lineup => (
-                                <div key={lineup.id}>
-                                  <h4 className="text-sm font-bold text-slate-600 dark:text-slate-400 uppercase tracking-wider mb-4 border-b border-slate-200 dark:border-white/5 pb-2">
-                                    {lineup.teamName} XI
-                                  </h4>
-                                  <LineupDisplay lineup={lineup} players={players} />
-                                </div>
-                              ))}
+                          <motion.div initial={{ height: 0, opacity: 0 }} animate={{ height: 'auto', opacity: 1 }} exit={{ height: 0, opacity: 0 }} className="border-t border-white/5 bg-black/20">
+                            <div className="p-4 sm:p-6 grid sm:grid-cols-2 gap-6">
+                              {matchLineups.map(lineup => (<div key={lineup.id}><h4 className="text-xs font-bold text-slate-500 uppercase tracking-wider mb-3 border-b border-white/5 pb-2">{lineup.teamName} XI</h4><LineupDisplay lineup={lineup} players={players} /></div>))}
                             </div>
                           </motion.div>
                         )}
                       </AnimatePresence>
                     </motion.div>
-                  )
+                  );
                 })}
               </div>
             ) : (
-              <div className="p-8 rounded-2xl border border-dashed border-slate-200 dark:border-white/10 bg-white/5 flex flex-col items-center justify-center text-center">
-                <Clock className="w-10 h-10 text-slate-500 mb-3" />
-                <h3 className="text-slate-700 dark:text-slate-300 font-medium">No Live Matches</h3>
-                <p className="text-slate-500 text-sm">Check upcoming fixtures below.</p>
+              <div className="p-6 sm:p-8 rounded-2xl border border-dashed border-white/10 bg-white/[0.02] flex flex-col items-center justify-center text-center">
+                <div className="w-12 h-12 rounded-full bg-slate-800 flex items-center justify-center mb-3"><Clock className="text-slate-500" size={22} /></div>
+                <h3 className="text-slate-300 font-semibold text-sm">No Live Matches</h3>
+                <p className="text-slate-500 text-xs mt-1">Check upcoming fixtures below</p>
               </div>
             )}
           </motion.section>
 
-          {/* Upcoming Matches */}
+          {/* ── UPCOMING MATCHES ── */}
           <motion.section variants={item}>
-            <div className="flex items-center justify-between mb-4">
-              <h2 className="text-xl font-display font-bold text-slate-900 dark:text-white flex items-center gap-2">
-                <Calendar className="text-brand-400" size={20} /> Upcoming
-              </h2>
-            </div>
-
-            <div className="grid gap-3 max-h-[400px] overflow-y-auto pr-2 scrollbar-thin scrollbar-thumb-white/10 scrollbar-track-transparent">
+            <h2 className="text-lg sm:text-xl font-display font-bold text-white mb-3 sm:mb-4 flex items-center gap-2"><Calendar className="text-brand-400" size={20} /> Upcoming</h2>
+            <div className="space-y-2.5 max-h-[420px] overflow-y-auto pr-1 scrollbar-thin scrollbar-thumb-white/10 scrollbar-track-transparent">
               {upcomingMatches.length > 0 ? upcomingMatches.map(match => (
-                <div key={match.id} className="group relative bg-white dark:bg-dark-card hover:bg-slate-50 dark:bg-dark-surface p-4 rounded-xl border border-slate-200 dark:border-white/5 hover:border-brand-500/30 transition-all duration-300 flex flex-col sm:flex-row items-center justify-between gap-4 shrink-0">
-                  {/* Date Badge */}
-                  <div className="flex-shrink-0 flex sm:flex-col items-center gap-2 sm:gap-0 px-3 py-2 bg-white/5 rounded-lg border border-slate-200 dark:border-white/5 min-w-[70px] text-center">
-                    <span className="text-xs font-bold text-brand-400 uppercase">
-                      {match.date ? new Date(match.date).toLocaleDateString('en-US', { month: 'short' }) : 'TBA'}
-                    </span>
-                    <span className="text-lg font-bold text-slate-900 dark:text-white">
-                      {match.date ? new Date(match.date).toLocaleDateString('en-US', { day: 'numeric' }) : '-'}
-                    </span>
-                    <span className="text-[10px] text-slate-600 dark:text-slate-400 mt-0.5">{match.time || 'TBD'}</span>
-                  </div>
-
-                  {/* Match Info */}
-                  <div className="flex-grow flex flex-col md:flex-row items-center gap-6 justify-center">
-                    <div className="flex items-center gap-3 w-1/3 justify-end text-right">
-                      <span className="font-bold text-slate-800 dark:text-slate-200">{match.teamA}</span>
-                      <div className="h-8 w-8 rounded-full bg-white/5 flex items-center justify-center overflow-hidden border border-slate-200 dark:border-white/10">
-                        {teams.find(t => t.name === match.teamA)?.logoUrl ? (
-                          <img src={teams.find(t => t.name === match.teamA).logoUrl} alt="" className="h-full w-full object-contain p-1" />
-                        ) : (
-                          <span className="text-[10px] text-slate-500">{match.teamA.substring(0, 2).toUpperCase()}</span>
-                        )}
+                <Link to={`/live/${match.id}`} key={match.id} className="group block">
+                  <div className="flex items-center gap-3 p-3 sm:p-4 rounded-xl bg-slate-900/50 border border-white/5 hover:border-brand-500/30 hover:bg-slate-800/50 transition-all">
+                    {/* Date */}
+                    <div className="flex-shrink-0 w-12 text-center px-1 py-1.5 bg-white/5 rounded-lg border border-white/5">
+                      <div className="text-[10px] font-bold text-brand-400 uppercase">{match.date ? new Date(match.date).toLocaleDateString('en-US', { month: 'short' }) : 'TBA'}</div>
+                      <div className="text-lg font-bold text-white leading-tight">{match.date ? new Date(match.date).getDate() : '-'}</div>
+                      <div className="text-[9px] text-slate-500">{match.time || 'TBD'}</div>
+                    </div>
+                    {/* Teams */}
+                    <div className="flex-1 min-w-0 flex items-center gap-2">
+                      <div className="flex-1 flex items-center gap-2 justify-end min-w-0">
+                        <span className="text-xs sm:text-sm font-semibold text-slate-200 truncate">{match.teamA}</span>
+                        <TeamLogo teamName={match.teamA} size="sm" />
+                      </div>
+                      <span className="px-2 py-0.5 bg-white/5 rounded text-[10px] font-bold text-slate-500 flex-shrink-0">VS</span>
+                      <div className="flex-1 flex items-center gap-2 min-w-0">
+                        <TeamLogo teamName={match.teamB} size="sm" />
+                        <span className="text-xs sm:text-sm font-semibold text-slate-200 truncate">{match.teamB}</span>
                       </div>
                     </div>
-
-                    <div className="px-3 py-1 bg-black/30 rounded text-xs font-medium text-slate-500">VS</div>
-
-                    <div className="flex items-center gap-3 w-1/3 justify-start text-left">
-                      <div className="h-8 w-8 rounded-full bg-white/5 flex items-center justify-center overflow-hidden border border-slate-200 dark:border-white/10">
-                        {teams.find(t => t.name === match.teamB)?.logoUrl ? (
-                          <img src={teams.find(t => t.name === match.teamB).logoUrl} alt="" className="h-full w-full object-contain p-1" />
-                        ) : (
-                          <span className="text-[10px] text-slate-500">{match.teamB.substring(0, 2).toUpperCase()}</span>
-                        )}
-                      </div>
-                      <span className="font-bold text-slate-800 dark:text-slate-200">{match.teamB}</span>
-                    </div>
+                    <ChevronRight size={14} className="text-slate-600 group-hover:text-brand-400 flex-shrink-0 transition-colors" />
                   </div>
-
-                  {/* Meta */}
-                  <div className="flex-shrink-0 flex items-center gap-3 opacity-50 group-hover:opacity-100 transition-opacity">
-                    {getTournamentId(match.competition) ? (
-                      <Link to={`/tournaments/${getTournamentId(match.competition)}`} className="text-xs text-brand-400 font-bold bg-brand-500/5 px-2 py-1 rounded hover:bg-brand-500/10 transition-colors">
-                        {match.competition}
-                      </Link>
-                    ) : (
-                      <span className="text-xs text-slate-600 dark:text-slate-400 bg-white/5 px-2 py-1 rounded">{match.competition}</span>
-                    )}
-                  </div>
-
-                  <Link to={`/live/${match.id}`} className="absolute inset-0" />
-                </div>
-              )) : (
-                <div className="text-slate-500 text-sm text-center py-6">No upcoming matches scheduled.</div>
-              )}
+                </Link>
+              )) : <div className="text-slate-500 text-sm text-center py-8">No upcoming matches scheduled.</div>}
             </div>
           </motion.section>
 
-          {/* Recent Results Preview (Horizontal) */}
+          {/* ── RECENT RESULTS ── */}
           <motion.section variants={item}>
-            <h2 className="text-xl font-display font-bold text-slate-900 dark:text-white mb-4 flex items-center gap-2">
-              <Clock className="text-slate-600 dark:text-slate-400" size={20} /> Recent Results
-            </h2>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <h2 className="text-lg sm:text-xl font-display font-bold text-white mb-3 sm:mb-4 flex items-center gap-2"><Clock className="text-slate-400" size={20} /> Recent Results</h2>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               {finishedMatches.length > 0 ? finishedMatches.map(match => (
-                <div key={match.id} className="p-4 rounded-xl bg-white dark:bg-dark-card border border-slate-200 dark:border-white/5 flex flex-col gap-3 group hover:bg-slate-50 dark:bg-dark-surface hover:border-brand-500/30 transition-all cursor-pointer">
-                  <Link to={`/live/${match.id}`} className="block">
-                    <div className="flex justify-between text-xs text-slate-500 mb-1">
-                      {getTournamentId(match.competition) ? (
-                        <span className="text-brand-400 font-bold">{match.competition}</span>
-                      ) : (
-                        <span>{match.competition}</span>
-                      )}
+                <Link to={`/live/${match.id}`} key={match.id} className="block group">
+                  <div className="p-3.5 sm:p-4 rounded-xl bg-slate-900/50 border border-white/5 hover:border-brand-500/30 hover:bg-slate-800/50 transition-all">
+                    <div className="flex justify-between text-[10px] text-slate-500 mb-2.5">
+                      <span className="text-brand-400 font-bold">{match.competition}</span>
                       <span>{match.date && new Date(match.date).toLocaleDateString()}</span>
                     </div>
-                    <div className="flex justify-between items-center">
-                      <div className="flex flex-col gap-2 w-full">
-                        <div className="flex justify-between items-center">
-                          <span className={cn("font-medium", match.scoreA > match.scoreB ? "text-slate-900 dark:text-white" : "text-slate-600 dark:text-slate-400")}>{match.teamA}</span>
-                          <span className={cn("font-bold px-2 py-0.5 rounded", match.scoreA > match.scoreB ? "bg-brand-500/10 text-brand-400" : "bg-white/5 text-slate-500")}>{match.scoreA}</span>
-                        </div>
-                        <div className="flex justify-between items-center">
-                          <span className={cn("font-medium", match.scoreB > match.scoreA ? "text-slate-900 dark:text-white" : "text-slate-600 dark:text-slate-400")}>{match.teamB}</span>
-                          <span className={cn("font-bold px-2 py-0.5 rounded", match.scoreB > match.scoreA ? "bg-brand-500/10 text-brand-400" : "bg-white/5 text-slate-500")}>{match.scoreB}</span>
-                        </div>
+                    <div className="space-y-1.5">
+                      <div className="flex justify-between items-center">
+                        <div className="flex items-center gap-2"><TeamLogo teamName={match.teamA} size="sm" /><span className={cn("text-xs sm:text-sm font-semibold", match.scoreA > match.scoreB ? "text-white" : "text-slate-500")}>{match.teamA}</span></div>
+                        <span className={cn("text-sm font-bold px-2 py-0.5 rounded", match.scoreA > match.scoreB ? "bg-brand-500/15 text-brand-400" : "bg-white/5 text-slate-500")}>{match.scoreA}</span>
+                      </div>
+                      <div className="flex justify-between items-center">
+                        <div className="flex items-center gap-2"><TeamLogo teamName={match.teamB} size="sm" /><span className={cn("text-xs sm:text-sm font-semibold", match.scoreB > match.scoreA ? "text-white" : "text-slate-500")}>{match.teamB}</span></div>
+                        <span className={cn("text-sm font-bold px-2 py-0.5 rounded", match.scoreB > match.scoreA ? "bg-brand-500/15 text-brand-400" : "bg-white/5 text-slate-500")}>{match.scoreB}</span>
                       </div>
                     </div>
-                    <div className="mt-3 pt-2 border-t border-slate-200 dark:border-white/5 text-center">
-                      <span className="text-[10px] font-bold text-brand-400 uppercase tracking-widest group-hover:text-brand-300 transition-colors">Match Report &rarr;</span>
-                    </div>
-                  </Link>
-                </div>
-              )) : (
-                <div className="text-slate-500 text-sm">No recent matches.</div>
-              )}
+                    <div className="mt-2.5 pt-2 border-t border-white/5 text-center"><span className="text-[10px] font-bold text-brand-400/70 uppercase tracking-widest group-hover:text-brand-400 transition-colors">Match Report →</span></div>
+                  </div>
+                </Link>
+              )) : <div className="text-slate-500 text-sm">No recent matches.</div>}
             </div>
           </motion.section>
         </div>
 
-        {/* RIGHT COLUMN: Stats & Standings (4 cols) */}
-        <div className="lg:col-span-4 space-y-8">
+        {/* RIGHT COLUMN */}
+        <div className="lg:col-span-4 space-y-5 sm:space-y-6">
 
-          {/* Standings Widget */}
-          <motion.div variants={item} className="glass-card rounded-2xl p-6">
-            <div className="flex items-center justify-between mb-6">
-              <h3 className="font-display font-bold text-slate-900 dark:text-white flex items-center gap-2">
-                <Trophy size={18} className="text-yellow-500" /> Standings
-              </h3>
-              <div className="flex items-center gap-3">
-                {dashboardCompetitionId !== 'All' && (
-                  <Link
-                    to={`/tournaments/${dashboardCompetitionId}`}
-                    className="text-[10px] font-black uppercase tracking-widest text-brand-400 hover:text-brand-300 flex items-center bg-brand-500/5 px-2 py-1 rounded-lg border border-brand-500/10"
-                  >
-                    Details
-                  </Link>
-                )}
-                <Link to="/leaderboard" className="text-xs text-slate-400 hover:text-slate-300 font-medium flex items-center">
-                  All <ChevronRight size={14} />
-                </Link>
+          {/* Standings */}
+          <motion.div variants={item} className="rounded-2xl bg-slate-900/60 border border-white/5 overflow-hidden">
+            <div className="flex items-center justify-between p-4 sm:p-5 border-b border-white/5">
+              <h3 className="font-display font-bold text-white flex items-center gap-2 text-sm sm:text-base"><Trophy size={16} className="text-yellow-500" /> Standings</h3>
+              <div className="flex items-center gap-2">
+                {dashboardCompetitionId !== 'All' && <Link to={`/tournaments/${dashboardCompetitionId}`} className="text-[10px] font-bold uppercase tracking-wider text-brand-400 hover:text-brand-300 bg-brand-500/5 px-2 py-1 rounded-lg border border-brand-500/10">Details</Link>}
+                <Link to="/leaderboard" className="text-xs text-slate-500 hover:text-slate-300 font-medium flex items-center">All <ChevronRight size={14} /></Link>
               </div>
             </div>
-
-            {dashboardCompetitionId === 'All' ? (
-              <div className="text-center py-8 px-4 bg-white/5 rounded-xl border border-dashed border-slate-200 dark:border-white/10">
-                <p className="text-sm text-slate-600 dark:text-slate-400 mb-2">Select a tournament filter</p>
-                <p className="text-xs text-slate-500">Choose a competition from the top to view its table.</p>
-              </div>
-            ) : topTeams.length > 0 ? (
-              <div className="overflow-hidden rounded-xl border border-slate-200 dark:border-white/5">
-                <table className="w-full text-sm">
-                  <thead className="bg-white/5 text-slate-600 dark:text-slate-400 text-xs uppercase">
-                    <tr>
-                      <th className="py-2.5 px-3 text-left font-semibold">Club</th>
-                      <th className="py-2.5 px-3 text-center font-semibold">P</th>
-                      <th className="py-2.5 px-3 text-center font-semibold text-slate-900 dark:text-white">Pts</th>
-                    </tr>
-                  </thead>
-                  <tbody className="divide-y divide-white/5 bg-black/20">
-                    {topTeams.map((team, idx) => (
-                      <tr key={team.id} className="hover:bg-white/5 transition-colors">
-                        <td className="py-2.5 px-3">
-                          <div className="flex items-center gap-2">
-                            <span className={cn(
-                              "text-xs font-bold w-4 text-slate-500",
-                              idx === 0 && "text-yellow-500",
-                              idx === 1 && "text-slate-700 dark:text-slate-300",
-                              idx === 2 && "text-amber-700"
-                            )}>{idx + 1}</span>
-                            <div className="h-6 w-6 rounded-full bg-white/10 flex items-center justify-center overflow-hidden border border-slate-200 dark:border-white/5">
-                              {team.logoUrl ? (
-                                <img src={team.logoUrl} alt="" className="h-full w-full object-contain p-0.5" />
-                              ) : (
-                                <span className="text-[8px] text-slate-600 dark:text-slate-400">{team.name.substring(0, 2)}</span>
-                              )}
-                            </div>
-                            <span className="font-medium text-slate-800 dark:text-slate-200 truncate max-w-[80px]">{team.name}</span>
-                          </div>
-                        </td>
-                        <td className="py-2.5 px-3 text-center text-slate-600 dark:text-slate-400 text-xs">{team.played}</td>
-                        <td className="py-2.5 px-3 text-center font-bold text-slate-900 dark:text-white">{team.points}</td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
-            ) : (
-              <div className="text-slate-500 text-sm text-center">No standings data.</div>
-            )}
+            <div className="p-3 sm:p-4">
+              {dashboardCompetitionId === 'All' ? (
+                <div className="text-center py-6 px-3"><p className="text-xs text-slate-500">Select a tournament to view standings</p></div>
+              ) : topTeams.length > 0 ? (
+                <div className="space-y-1">
+                  {topTeams.map((team, idx) => (
+                    <div key={team.id} className="flex items-center justify-between p-2.5 rounded-lg hover:bg-white/5 transition-colors">
+                      <div className="flex items-center gap-2.5">
+                        <span className={cn("text-xs font-bold w-5 text-center", idx === 0 ? "text-yellow-500" : idx === 1 ? "text-slate-300" : idx === 2 ? "text-amber-700" : "text-slate-600")}>{idx + 1}</span>
+                        <div className="h-6 w-6 rounded-full bg-white/10 flex items-center justify-center overflow-hidden border border-white/5">{team.logoUrl ? <img src={team.logoUrl} alt="" className="h-full w-full object-contain p-0.5" /> : <span className="text-[8px] text-slate-500">{team.name.substring(0, 2)}</span>}</div>
+                        <span className="text-xs sm:text-sm font-medium text-slate-200 truncate max-w-[100px]">{team.name}</span>
+                      </div>
+                      <div className="flex items-center gap-4 text-xs">
+                        <span className="text-slate-500">{team.played}P</span>
+                        <span className="font-bold text-white min-w-[24px] text-right">{team.points}</span>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              ) : <div className="text-slate-500 text-xs text-center py-4">No standings data.</div>}
+            </div>
           </motion.div>
 
-          {/* Top Scorers Widget */}
-          <motion.div variants={item} className="glass-card rounded-2xl p-6">
-            <h3 className="font-display font-bold text-slate-900 dark:text-white mb-6 flex items-center gap-2">
-              <TrendingUp size={18} className="text-brand-400" /> Top Performers
-            </h3>
-
-            <div className="space-y-4">
+          {/* Top Scorers */}
+          <motion.div variants={item} className="rounded-2xl bg-slate-900/60 border border-white/5 overflow-hidden">
+            <div className="flex items-center justify-between p-4 sm:p-5 border-b border-white/5">
+              <h3 className="font-display font-bold text-white flex items-center gap-2 text-sm sm:text-base"><Target size={16} className="text-brand-400" /> Top Scorers</h3>
+              <Link to="/players" className="text-xs text-slate-500 hover:text-slate-300 font-medium flex items-center">All <ChevronRight size={14} /></Link>
+            </div>
+            <div className="p-3 sm:p-4 space-y-1">
               {topScorers.length > 0 ? topScorers.map((player, idx) => (
-                <div key={player.id} className="flex items-center justify-between group">
-                  <div className="flex items-center gap-3">
-                    <div className="relative">
-                      <div className="h-10 w-10 rounded-full bg-slate-700 flex items-center justify-center text-slate-700 dark:text-slate-300 font-bold border border-slate-200 dark:border-white/5 overflow-hidden">
-                        {player.photoUrl ? (
-                          <img src={player.photoUrl} alt={player.name} className="h-full w-full object-cover" />
-                        ) : (
-                          player.name.charAt(0)
-                        )}
+                <div key={player.id} className="flex items-center justify-between p-2.5 rounded-lg hover:bg-white/5 transition-colors group">
+                  <div className="flex items-center gap-2.5">
+                    <div className="relative flex-shrink-0">
+                      <div className="h-9 w-9 rounded-full bg-slate-800 flex items-center justify-center font-bold border border-white/10 overflow-hidden text-slate-400 text-xs">
+                        {player.photoUrl ? <img src={player.photoUrl} alt={player.name} className="h-full w-full object-cover" /> : player.name.charAt(0)}
                       </div>
-                      <div className="absolute -bottom-1 -right-1 h-4 w-4 rounded-full bg-dark-bg border border-slate-200 dark:border-white/10 flex items-center justify-center text-[10px] text-slate-600 dark:text-slate-400 font-bold">
-                        {idx + 1}
-                      </div>
+                      <div className="absolute -bottom-0.5 -right-0.5 h-4 w-4 rounded-full bg-slate-900 border border-white/10 flex items-center justify-center text-[9px] text-slate-500 font-bold">{idx + 1}</div>
                     </div>
-                    <div>
-                      <div className="font-bold text-sm text-slate-900 dark:text-white group-hover:text-brand-400 transition-colors">{player.name}</div>
-                      <div className="text-xs text-slate-500">{player.team}</div>
+                    <div className="min-w-0">
+                      <div className="text-xs sm:text-sm font-semibold text-white group-hover:text-brand-400 transition-colors truncate">{player.name}</div>
+                      <div className="text-[10px] text-slate-500 truncate">{player.team}</div>
                     </div>
                   </div>
-                  <div className="text-right">
+                  <div className="text-right flex-shrink-0">
                     <span className="text-lg font-impact text-brand-500">{player.goals}</span>
-                    <span className="block text-[10px] text-slate-500 uppercase font-bold">Goals</span>
+                    <span className="block text-[9px] text-slate-500 uppercase font-bold">Goals</span>
                   </div>
                 </div>
-              )) : (
-                <div className="text-slate-500 text-sm">No player stats available.</div>
-              )}
-            </div>
-
-            <div className="mt-6 pt-4 border-t border-slate-200 dark:border-white/5">
-              <Link to="/players" className="block w-full text-center py-2 text-xs font-medium text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:text-white bg-white/5 hover:bg-white/10 rounded-lg transition-colors">
-                View Player Stats
-              </Link>
+              )) : <div className="text-slate-500 text-xs text-center py-4">No player stats available.</div>}
             </div>
           </motion.div>
 
-          {/* District Statistics Widget */}
-          <motion.div variants={item} className="glass-card rounded-2xl p-6 bg-gradient-to-br from-slate-900 to-brand-950/20">
-            <h3 className="font-display font-bold text-slate-900 dark:text-white mb-6 flex items-center gap-2">
-              <MapPinned size={18} className="text-brand-400" /> District Stats
-            </h3>
-            <div className="space-y-4">
-              {districtStats.slice(0, 6).map(([district, data]) => (
-                <div key={district} className="group flex flex-col gap-2">
-                  <div className="flex justify-between items-end">
-                    <span className="text-sm font-bold text-slate-900 dark:text-white">{district}</span>
-                    <span className="text-xs text-slate-500">{data.matches} Matches</span>
+          {/* District Stats */}
+          <motion.div variants={item} className="rounded-2xl bg-gradient-to-br from-slate-900/80 to-brand-950/30 border border-white/5 overflow-hidden">
+            <div className="p-4 sm:p-5 border-b border-white/5">
+              <h3 className="font-display font-bold text-white flex items-center gap-2 text-sm sm:text-base"><MapPinned size={16} className="text-brand-400" /> District Stats</h3>
+            </div>
+            <div className="p-3 sm:p-4 space-y-3.5">
+              {districtStats.slice(0, 5).map(([district, data]) => (
+                <div key={district} className="group">
+                  <div className="flex justify-between items-end mb-1.5">
+                    <span className="text-xs sm:text-sm font-bold text-white">{district}</span>
+                    <span className="text-[10px] text-slate-500">{data.matches} matches</span>
                   </div>
                   <div className="h-1.5 w-full bg-white/5 rounded-full overflow-hidden">
-                    <div
-                      className="h-full bg-brand-500 rounded-full group-hover:bg-brand-400 transition-all"
-                      style={{ width: `${Math.min(100, (data.matches / (districtStats[0]?.[1]?.matches || 1)) * 100)}%` }}
-                    />
+                    <div className="h-full bg-gradient-to-r from-brand-500 to-cyan-500 rounded-full group-hover:from-brand-400 group-hover:to-cyan-400 transition-all" style={{ width: `${Math.min(100, (data.matches / (districtStats[0]?.[1]?.matches || 1)) * 100)}%` }} />
                   </div>
-                  <div className="flex gap-3 text-[10px] font-bold text-slate-500 uppercase tracking-widest">
-                    <span>{data.tournaments} Tourneys</span>
-                    <span>•</span>
-                    <span>{data.teams} Teams</span>
-                  </div>
+                  <div className="flex gap-3 text-[10px] font-semibold text-slate-500 mt-1">{data.tournaments} Tourneys • {data.teams} Teams</div>
                 </div>
               ))}
             </div>
           </motion.div>
 
-          {/* This Week's Fixtures Calendar */}
-          <motion.div variants={item} className="glass-card rounded-2xl p-6">
-            <h3 className="font-display font-bold text-slate-900 dark:text-white mb-6 flex items-center gap-2">
-              <Calendar size={18} className="text-indigo-400" /> This Week
-            </h3>
-            <div className="space-y-3 max-h-[210px] overflow-y-auto pr-2 scrollbar-thin scrollbar-thumb-white/10 scrollbar-track-transparent">
+          {/* This Week */}
+          <motion.div variants={item} className="rounded-2xl bg-slate-900/60 border border-white/5 overflow-hidden">
+            <div className="p-4 sm:p-5 border-b border-white/5">
+              <h3 className="font-display font-bold text-white flex items-center gap-2 text-sm sm:text-base"><Calendar size={16} className="text-indigo-400" /> This Week</h3>
+            </div>
+            <div className="p-3 sm:p-4 space-y-2 max-h-[220px] overflow-y-auto scrollbar-thin scrollbar-thumb-white/10 scrollbar-track-transparent">
               {weeklyFixtures.length > 0 ? weeklyFixtures.map(match => (
-                <Link to={`/live/${match.id}`} key={match.id} className="block group">
-                  <div className="flex gap-4 p-3 rounded-xl hover:bg-white/5 transition-all border border-transparent hover:border-slate-200 dark:border-white/10">
-                    <div className="flex-shrink-0 w-10 text-center">
-                      <div className="text-[10px] uppercase font-black text-indigo-400">{new Date(match.date).toLocaleDateString('en-US', { weekday: 'short' })}</div>
-                      <div className="text-lg font-black text-slate-900 dark:text-white">{new Date(match.date).getDate()}</div>
-                    </div>
-                    <div className="flex-1 flex flex-col justify-center">
-                      <div className="flex items-center justify-between gap-1">
-                        <span className="text-xs font-bold text-slate-800 dark:text-slate-200 truncate">{match.teamA} vs {match.teamB}</span>
-                        <span className="text-[10px] text-slate-500 font-medium">{match.time}</span>
-                      </div>
-                      <div className="text-[10px] text-slate-500 truncate">{match.competition} • {match.stadium || 'TBA'}</div>
-                    </div>
+                <Link to={`/live/${match.id}`} key={match.id} className="flex items-center gap-3 p-2.5 rounded-xl hover:bg-white/5 transition-all group">
+                  <div className="flex-shrink-0 w-9 text-center">
+                    <div className="text-[9px] uppercase font-black text-indigo-400">{new Date(match.date).toLocaleDateString('en-US', { weekday: 'short' })}</div>
+                    <div className="text-sm font-black text-white leading-tight">{new Date(match.date).getDate()}</div>
                   </div>
+                  <div className="flex-1 min-w-0">
+                    <div className="text-xs font-semibold text-slate-200 truncate">{match.teamA} vs {match.teamB}</div>
+                    <div className="text-[10px] text-slate-500 truncate">{match.time || 'TBD'} • {match.competition}</div>
+                  </div>
+                  <ChevronRight size={12} className="text-slate-600 group-hover:text-indigo-400 flex-shrink-0 transition-colors" />
                 </Link>
-              )) : (
-                <p className="text-slate-500 text-sm italic text-center py-4">No fixtures for the next 7 days.</p>
-              )}
+              )) : <p className="text-slate-500 text-xs text-center py-4 italic">No fixtures this week</p>}
             </div>
           </motion.div>
 

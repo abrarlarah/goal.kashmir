@@ -116,6 +116,15 @@
     -webkit-overflow-scrolling: touch;
   }
 
+  /* Hide scrollbar utility */
+  .scrollbar-none {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  .scrollbar-none::-webkit-scrollbar {
+    display: none;
+  }
+
   /* Better focus states for accessibility */
   *:focus-visible {
     outline: 2px solid #10b981;
