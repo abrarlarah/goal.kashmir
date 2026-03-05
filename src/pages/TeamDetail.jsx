@@ -192,6 +192,20 @@ const TeamDetail = () => {
                             <span className="text-slate-500 flex items-center gap-2"><MapPin size={14} /> Home Grounds</span>
                             <span className="font-bold text-slate-900 dark:text-white">{team.stadium || 'N/A'}</span>
                         </div>
+                        <div className="pt-2">
+                            <span className="text-slate-500 flex items-center gap-2 text-sm mb-2"><Trophy size={14} /> Registered In</span>
+                            <div className="flex flex-wrap gap-1.5">
+                                {Array.isArray(team.tournaments) && team.tournaments.length > 0 ? (
+                                    team.tournaments.map((t, idx) => (
+                                        <span key={idx} className="px-2 py-0.5 bg-brand-500/10 text-brand-400 rounded-md text-[10px] font-bold border border-brand-500/10">
+                                            {t}
+                                        </span>
+                                    ))
+                                ) : (
+                                    <span className="text-slate-500 text-[10px] italic">No tournaments registered</span>
+                                )}
+                            </div>
+                        </div>
                     </div>
                 </motion.div>
 
@@ -202,7 +216,7 @@ const TeamDetail = () => {
                             { label: 'Squad Size', value: players.length, icon: <Users className="text-blue-500" /> },
                             { label: 'Total Matches', value: matches.length, icon: <Activity className="text-green-500" /> },
                             { label: 'Trophies', value: team.trophies || 0, icon: <Trophy className="text-yellow-500" /> },
-                            { label: 'Season Rank', value: '#1', icon: <Clock className="text-purple-500" /> }
+                            { label: 'Tournaments', value: Array.isArray(team.tournaments) ? team.tournaments.length : 0, icon: <Calendar className="text-purple-500" /> }
                         ].map((stat, idx) => (
                             <motion.div
                                 key={idx}

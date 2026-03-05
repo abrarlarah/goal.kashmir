@@ -223,6 +223,10 @@ const Teams = () => {
                   <Shield size={14} />
                   <span>Squad: {team.players || 0}</span>
                 </div>
+                <div className="flex items-center gap-2 text-xs text-slate-600 dark:text-slate-400">
+                  <Trophy size={14} />
+                  <span>Tournaments: {Array.isArray(team.tournaments) ? team.tournaments.length : 0}</span>
+                </div>
                 {isAdmin && (
                   <button
                     onClick={() => navigate('/admin/teams', { state: { editTeam: team } })}

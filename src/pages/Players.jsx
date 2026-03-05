@@ -21,6 +21,8 @@ const Players = () => {
   const [positionFilter, setPositionFilter] = useState('All');
   const [selectedDistrict, setSelectedDistrict] = useState('Baramulla');
   const [searchQuery, setSearchQuery] = useState('');
+  const [currentPage, setCurrentPage] = useState(1);
+  const playersPerPage = 8;
   const { isAdmin } = useAuth();
 
   const [editMode, setEditMode] = useState(false);
@@ -68,6 +70,17 @@ const Players = () => {
 
     return matchesPosition && matchesSearch && matchesDistrict;
   });
+
+  // Pagination logic
+  const totalPages = Math.ceil(filteredPlayers.length / playersPerPage);
+  const indexOfLastPlayer = currentPage * playersPerPage;
+  const indexOfFirstPlayer = indexOfLastPlayer - playersPerPage;
+  const currentPlayers = filteredPlayers.slice(indexOfFirstPlayer, indexOfLastPlayer);
+
+  const paginate = (pageNumber) => {
+    setCurrentPage(pageNumber);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
 
   if (loading && players.length === 0) {
     return (
@@ -172,7 +185,10 @@ const Players = () => {
             placeholder="Search players or teams..."
             className="block w-full pl-10 pr-3 py-2.5 border border-slate-200 dark:border-white/10 rounded-xl leading-5 bg-white/5 text-slate-700 dark:text-slate-300 placeholder-slate-500 focus:outline-none focus:bg-white/10 focus:ring-1 focus:ring-brand-500/50 focus:border-brand-500/50 sm:text-sm transition-colors"
             value={searchQuery}
-            onChange={e => setSearchQuery(e.target.value)}
+            onChange={e => {
+              setSearchQuery(e.target.value);
+              setCurrentPage(1);
+            }}
           />
         </div>
 
@@ -183,7 +199,10 @@ const Players = () => {
           <select
             className="block w-full pl-9 pr-10 py-2.5 border border-slate-200 dark:border-white/10 rounded-xl leading-5 bg-white dark:bg-dark-card text-slate-700 dark:text-slate-300 focus:outline-none focus:ring-1 focus:ring-brand-500/50 sm:text-sm appearance-none cursor-pointer"
             value={positionFilter}
-            onChange={e => setPositionFilter(e.target.value)}
+            onChange={e => {
+              setPositionFilter(e.target.value);
+              setCurrentPage(1);
+            }}
           >
             {positions.map(pos => (
               <option key={pos} value={pos}>
@@ -217,7 +236,7 @@ const Players = () => {
               </tr>
             </thead>
             <tbody className="divide-y divide-white/5 bg-transparent">
-              {filteredPlayers.map((player) => {
+              {currentPlayers.map((player) => {
                 const edited = editedPlayers[player.id];
                 const display = { ...player, ...edited };
 
@@ -344,6 +363,59 @@ const Players = () => {
             </div>
             <h3 className="text-lg font-medium text-slate-900 dark:text-white mb-1">No players found</h3>
             <p className="text-slate-600 dark:text-slate-400">Try adjusting your filters.</p>
+          </div>
+        )}
+
+        {/* Pagination Controls */}
+        {totalPages > 1 && (
+          <div className="px-6 py-6 flex flex-col sm:flex-row items-center justify-between gap-4 border-t border-white/5 bg-white/2">
+            <div className="text-xs text-slate-500 font-bold uppercase tracking-widest">
+              Showing <span className="text-brand-400">{indexOfFirstPlayer + 1}</span> to <span className="text-brand-400">{Math.min(indexOfLastPlayer, filteredPlayers.length)}</span> of <span className="text-brand-400">{filteredPlayers.length}</span> players
+            </div>
+
+            <div className="flex items-center gap-1.5">
+              <button
+                onClick={() => paginate(1)}
+                disabled={currentPage === 1}
+                className="px-3 py-2 rounded-lg bg-white/5 border border-white/5 text-xs font-bold text-slate-400 hover:bg-white/10 disabled:opacity-30 disabled:cursor-not-allowed transition-all"
+              >
+                First
+              </button>
+
+              <div className="flex items-center gap-1">
+                {Array.from({ length: totalPages }, (_, i) => i + 1)
+                  .filter(page => {
+                    // Show current page, and pages around it
+                    return page === 1 || page === totalPages || Math.abs(page - currentPage) <= 1;
+                  })
+                  .map((page, index, array) => (
+                    <React.Fragment key={page}>
+                      {index > 0 && array[index - 1] !== page - 1 && (
+                        <span className="text-slate-600 px-1">...</span>
+                      )}
+                      <button
+                        onClick={() => paginate(page)}
+                        className={cn(
+                          "w-9 h-9 flex items-center justify-center rounded-lg text-sm font-bold transition-all",
+                          currentPage === page
+                            ? "bg-brand-500 text-slate-900 shadow-lg shadow-brand-500/20"
+                            : "bg-white/5 border border-white/5 text-slate-400 hover:bg-white/10"
+                        )}
+                      >
+                        {page}
+                      </button>
+                    </React.Fragment>
+                  ))}
+              </div>
+
+              <button
+                onClick={() => paginate(totalPages)}
+                disabled={currentPage === totalPages}
+                className="px-3 py-2 rounded-lg bg-white/5 border border-white/5 text-xs font-bold text-slate-400 hover:bg-white/10 disabled:opacity-30 disabled:cursor-not-allowed transition-all"
+              >
+                Last
+              </button>
+            </div>
           </div>
         )}
       </motion.div>
