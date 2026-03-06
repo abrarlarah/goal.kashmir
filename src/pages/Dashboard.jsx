@@ -146,7 +146,7 @@ const Dashboard = () => {
             </div>
 
             {/* ═══ FILTERS ═══ */}
-            <div className="mt-4 sm:mt-0 flex items-center gap-2 sm:gap-4 w-full sm:w-auto max-w-full overflow-x-auto scrollbar-none pb-1 sm:pb-0">
+            <div className="mt-4 sm:mt-0 flex items-center gap-2 sm:gap-4 w-full sm:w-auto overflow-x-auto scrollbar-none pb-1 sm:pb-0">
               {/* Year filter row */}
               <div className="flex items-center gap-2 flex-shrink-0 relative">
                 <Clock className="text-cyan-500 hidden sm:block" size={16} />
@@ -170,11 +170,10 @@ const Dashboard = () => {
                   <ChevronRight size={14} className="absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-400 rotate-90 pointer-events-none" />
                 </div>
               </div>
-              {/* Tournament filter row */}
-              <div className="flex flex-1 sm:flex-none items-center gap-2 min-w-[140px] flex-shrink-0 relative">
+              <div className="flex flex-1 sm:flex-none items-center gap-2 min-w-[150px] sm:min-w-0 flex-shrink-0 relative">
                 <Trophy className="text-cyan-500 hidden sm:block" size={16} />
                 <div className="relative w-full sm:w-auto">
-                  <select value={dashboardCompetitionId} onChange={(e) => setDashboardCompetitionId(e.target.value)} className="w-full bg-slate-800/80 border border-slate-700/50 rounded-xl pl-3 pr-8 py-2 text-xs sm:text-sm font-semibold text-white focus:ring-2 focus:ring-brand-500 focus:border-brand-500 outline-none transition-all cursor-pointer appearance-none shadow-sm h-9 sm:h-10 sm:min-w-[180px]">
+                  <select value={dashboardCompetitionId} onChange={(e) => setDashboardCompetitionId(e.target.value)} className="w-full bg-slate-800/80 border border-slate-700/50 rounded-xl pl-3 pr-8 py-2 text-[10px] sm:text-sm font-semibold text-white focus:ring-2 focus:ring-brand-500 focus:border-brand-500 outline-none transition-all cursor-pointer appearance-none shadow-sm h-9 sm:h-10 sm:min-w-[180px]">
                     <option value="All">All Tournaments</option>
                     {filteredTournaments.map(t => <option key={t.id} value={t.id}>{t.name} {t.startDate ? `(${new Date(t.startDate).getFullYear()})` : ''}</option>)}
                   </select>
@@ -266,7 +265,7 @@ const Dashboard = () => {
           {/* ── UPCOMING MATCHES ── */}
           <motion.section variants={item}>
             <h2 className="text-lg sm:text-xl font-display font-bold text-white mb-3 sm:mb-4 flex items-center gap-2"><Calendar className="text-brand-400" size={20} /> Upcoming</h2>
-            <div className="space-y-2.5 max-h-[420px] overflow-y-auto pr-1 scrollbar-thin scrollbar-thumb-white/10 scrollbar-track-transparent">
+            <div className="space-y-2.5 max-h-[280px] overflow-y-auto pr-1 scrollbar-thin scrollbar-thumb-white/10 scrollbar-track-transparent">
               {upcomingMatches.length > 0 ? upcomingMatches.map(match => (
                 <Link to={`/live/${match.id}`} key={match.id} className="group block">
                   <div className="flex items-center gap-3 p-3 sm:p-4 rounded-xl bg-slate-900/50 border border-white/5 hover:border-brand-500/30 hover:bg-slate-800/50 transition-all">
