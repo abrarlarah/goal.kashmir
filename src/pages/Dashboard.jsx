@@ -146,39 +146,45 @@ const Dashboard = () => {
             </div>
 
             {/* ═══ FILTERS ═══ */}
-            <div className="mt-4 sm:mt-0 flex items-center gap-2 sm:gap-4 w-full sm:w-auto overflow-x-auto scrollbar-none pb-1 sm:pb-0">
-              {/* Year filter row */}
-              <div className="flex items-center gap-2 flex-shrink-0 relative">
-                <Clock className="text-cyan-500 hidden sm:block" size={16} />
-                <div className="relative">
-                  <select value={selectedYear} onChange={(e) => { setSelectedYear(e.target.value); setDashboardCompetitionId('All'); }} className="bg-slate-800/80 border border-slate-700/50 rounded-xl pl-3 pr-8 py-2 text-xs sm:text-sm font-semibold text-white focus:ring-2 focus:ring-brand-500 focus:border-brand-500 outline-none transition-all cursor-pointer appearance-none shadow-sm h-9 sm:h-10 min-w-[80px]">
-                    <option value="All">All Years</option>
-                    {availableYears.map(y => <option key={y} value={y}>{y}</option>)}
-                  </select>
-                  <ChevronRight size={14} className="absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-400 rotate-90 pointer-events-none" />
-                </div>
+            <div className="mt-6 flex items-center justify-center gap-2 sm:gap-4 w-full overflow-x-auto scrollbar-none pb-1">
+              {/* Year filter */}
+              <div className="relative flex-shrink-0">
+                <select
+                  value={selectedYear}
+                  onChange={(e) => { setSelectedYear(e.target.value); setDashboardCompetitionId('All'); }}
+                  className="bg-slate-800/80 border border-slate-700/50 rounded-xl pl-3 pr-8 py-2 text-[11px] sm:text-sm font-bold text-white focus:ring-2 focus:ring-brand-500 outline-none transition-all cursor-pointer appearance-none shadow-sm h-10 min-w-[80px]"
+                >
+                  <option value="All">Year</option>
+                  {availableYears.map(y => <option key={y} value={y}>{y}</option>)}
+                </select>
+                <ChevronRight size={12} className="absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-400 rotate-90 pointer-events-none" />
               </div>
-              {/* District filter row */}
-              <div className="flex items-center gap-2 flex-shrink-0 relative">
-                <MapPin className="text-cyan-500 hidden sm:block" size={16} />
-                <div className="relative">
-                  <select value={selectedDistrict} onChange={(e) => { setSelectedDistrict(e.target.value); setDashboardCompetitionId('All'); }} className="bg-slate-800/80 border border-slate-700/50 rounded-xl pl-3 pr-8 py-2 text-xs sm:text-sm font-semibold text-white focus:ring-2 focus:ring-brand-500 focus:border-brand-500 outline-none transition-all cursor-pointer appearance-none shadow-sm h-9 sm:h-10">
-                    <option value="All">All Districts</option>
-                    <optgroup label="Kashmir">{DISTRICTS.KASHMIR.map(d => <option key={d} value={d}>{d}</option>)}</optgroup>
-                    <optgroup label="Jammu">{DISTRICTS.JAMMU.map(d => <option key={d} value={d}>{d}</option>)}</optgroup>
-                  </select>
-                  <ChevronRight size={14} className="absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-400 rotate-90 pointer-events-none" />
-                </div>
+
+              {/* District filter */}
+              <div className="relative flex-shrink-0">
+                <select
+                  value={selectedDistrict}
+                  onChange={(e) => { setSelectedDistrict(e.target.value); setDashboardCompetitionId('All'); }}
+                  className="bg-slate-800/80 border border-slate-700/50 rounded-xl pl-3 pr-8 py-2 text-[11px] sm:text-sm font-bold text-white focus:ring-2 focus:ring-brand-500 outline-none transition-all cursor-pointer appearance-none shadow-sm h-10 min-w-[110px]"
+                >
+                  <option value="All">District</option>
+                  <optgroup label="Kashmir">{DISTRICTS.KASHMIR.map(d => <option key={d} value={d}>{d}</option>)}</optgroup>
+                  <optgroup label="Jammu">{DISTRICTS.JAMMU.map(d => <option key={d} value={d}>{d}</option>)}</optgroup>
+                </select>
+                <ChevronRight size={12} className="absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-400 rotate-90 pointer-events-none" />
               </div>
-              <div className="flex flex-1 sm:flex-none items-center gap-2 min-w-[150px] sm:min-w-0 flex-shrink-0 relative">
-                <Trophy className="text-cyan-500 hidden sm:block" size={16} />
-                <div className="relative w-full sm:w-auto">
-                  <select value={dashboardCompetitionId} onChange={(e) => setDashboardCompetitionId(e.target.value)} className="w-full bg-slate-800/80 border border-slate-700/50 rounded-xl pl-3 pr-8 py-2 text-[10px] sm:text-sm font-semibold text-white focus:ring-2 focus:ring-brand-500 focus:border-brand-500 outline-none transition-all cursor-pointer appearance-none shadow-sm h-9 sm:h-10 sm:min-w-[180px]">
-                    <option value="All">All Tournaments</option>
-                    {filteredTournaments.map(t => <option key={t.id} value={t.id}>{t.name} {t.startDate ? `(${new Date(t.startDate).getFullYear()})` : ''}</option>)}
-                  </select>
-                  <ChevronRight size={14} className="absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-400 rotate-90 pointer-events-none" />
-                </div>
+
+              {/* Tournament filter */}
+              <div className="relative flex-shrink-0">
+                <select
+                  value={dashboardCompetitionId}
+                  onChange={(e) => setDashboardCompetitionId(e.target.value)}
+                  className="bg-slate-800/80 border border-slate-700/50 rounded-xl pl-3 pr-8 py-2 text-[11px] sm:text-sm font-bold text-white focus:ring-2 focus:ring-brand-500 outline-none transition-all cursor-pointer appearance-none shadow-sm h-10 min-w-[130px] max-w-[160px] sm:max-w-none"
+                >
+                  <option value="All">Tournament</option>
+                  {filteredTournaments.map(t => <option key={t.id} value={t.id}>{t.name}</option>)}
+                </select>
+                <ChevronRight size={12} className="absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-400 rotate-90 pointer-events-none" />
               </div>
             </div>
           </div>
