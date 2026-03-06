@@ -9,6 +9,13 @@ const AssetPicker = ({ isOpen, onClose, onSelect, category }) => {
     const [searchQuery, setSearchQuery] = useState('');
     const [dynamicAssets, setDynamicAssets] = useState([]);
     const [loading, setLoading] = useState(true);
+    const [activeCategory, setActiveCategory] = useState(category || 'All');
+
+    useEffect(() => {
+        if (isOpen) {
+            setActiveCategory(category || 'All');
+        }
+    }, [isOpen, category]);
 
     useEffect(() => {
         if (!isOpen) return;
@@ -30,9 +37,11 @@ const AssetPicker = ({ isOpen, onClose, onSelect, category }) => {
 
     const filteredAssets = allAssets.filter(asset => {
         const matchesSearch = asset.name.toLowerCase().includes(searchQuery.toLowerCase());
-        const matchesCategory = !category || asset.category === category;
+        const matchesCategory = activeCategory === 'All' || asset.category === activeCategory;
         return matchesSearch && matchesCategory;
     });
+
+    const categories = ['All', 'Teams', 'Players', 'News', 'Sponsors', ...new Set(dynamicAssets.map(a => a.category))].filter((v, i, a) => a.indexOf(v) === i);
 
     return (
         <AnimatePresence>
@@ -55,18 +64,27 @@ const AssetPicker = ({ isOpen, onClose, onSelect, category }) => {
                             </button>
                         </div>
 
-                        {/* Search */}
-                        <div className="p-4 border-b border-slate-200 dark:border-white/5 bg-gray-900/20">
-                            <div className="relative">
+                        {/* Search and Filter */}
+                        <div className="p-4 border-b border-slate-200 dark:border-white/5 bg-gray-900/20 flex flex-col sm:flex-row gap-3">
+                            <div className="relative flex-1">
                                 <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500" size={18} />
                                 <input
                                     type="text"
-                                    placeholder={`Search ${category || 'repository'} assets...`}
+                                    placeholder={`Search assets...`}
                                     value={searchQuery}
                                     onChange={(e) => setSearchQuery(e.target.value)}
                                     className="w-full bg-black/20 border border-slate-200 dark:border-white/10 rounded-xl pl-10 pr-4 py-2 text-slate-900 dark:text-white focus:ring-2 focus:ring-brand-500 outline-none"
                                 />
                             </div>
+                            <select
+                                value={activeCategory}
+                                onChange={(e) => setActiveCategory(e.target.value)}
+                                className="bg-black/20 border border-slate-200 dark:border-white/10 rounded-xl px-4 py-2 text-slate-900 dark:text-white focus:ring-2 focus:ring-brand-500 outline-none w-full sm:w-auto min-w-[140px]"
+                            >
+                                {categories.map(cat => (
+                                    <option key={cat} value={cat}>{cat}</option>
+                                ))}
+                            </select>
                         </div>
 
                         {/* Grid */}

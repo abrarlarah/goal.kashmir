@@ -5,7 +5,7 @@ import { useData } from '../../context/DataContext';
 import { useAuth } from '../../context/AuthContext';
 import { generateKnockoutMatches, generatePoolMatches, generateDualKnockoutMatches, generateLeagueMatches, calcMatchesCount } from '../../utils/bracketGenerator';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Trophy, Calendar, MapPin, Users, Swords, Crown, Plus, Edit3, Trash2, RefreshCw, ChevronDown, CheckCircle, Clock, Flag, X, Shield } from 'lucide-react';
+import { Trophy, Calendar, MapPin, Users, Swords, Crown, Plus, Edit3, Trash2, RefreshCw, ChevronDown, CheckCircle, Clock, Flag, X, Shield, Download } from 'lucide-react';
 
 // Districts of Jammu and Kashmir
 const DISTRICTS = {
@@ -200,6 +200,36 @@ const ManageTournaments = () => {
     const totalTeams = scopedTournaments.reduce((acc, t) => acc + (t.teamsCount || 0), 0);
     const ongoingCount = scopedTournaments.filter(t => t.status === 'ongoing').length;
 
+    const handleExportCSV = () => {
+        if (scopedTournaments.length === 0) return alert('No tournaments to export');
+
+        const headers = ['Tournament Name', 'District', 'Start Date', 'End Date', 'Status', 'Format', 'Teams Count', 'Matches Count'];
+        const csvRows = [headers.join(',')];
+
+        scopedTournaments.forEach(t => {
+            const row = [
+                `"${t.name || ''}"`,
+                `"${t.district || ''}"`,
+                `"${t.startDate || ''}"`,
+                `"${t.endDate || ''}"`,
+                `"${t.status || ''}"`,
+                `"${t.type || ''}"`,
+                t.teamsCount || 0,
+                t.matchesCount || 0
+            ];
+            csvRows.push(row.join(','));
+        });
+
+        const csvContent = "data:text/csv;charset=utf-8," + csvRows.join('\n');
+        const encodedUri = encodeURI(csvContent);
+        const link = document.createElement("a");
+        link.setAttribute("href", encodedUri);
+        link.setAttribute("download", `tournaments_export_${new Date().toISOString().split('T')[0]}.csv`);
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+    };
+
     return (
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
             {/* Header */}
@@ -215,16 +245,26 @@ const ManageTournaments = () => {
                         {isSuperAdmin ? 'Create and manage all tournaments' : 'Manage your assigned tournaments'}
                     </p>
                 </div>
-                {isSuperAdmin && !showForm && (
+                <div className="flex gap-2">
                     <motion.button
                         whileHover={{ scale: 1.03 }}
                         whileTap={{ scale: 0.97 }}
-                        onClick={() => { setShowForm(true); setEditingId(null); }}
-                        className="flex items-center gap-2 px-5 py-2.5 bg-gradient-to-r from-brand-600 to-brand-500 hover:from-brand-500 hover:to-brand-400 text-white rounded-xl text-sm font-bold transition-all shadow-lg shadow-brand-500/25"
+                        onClick={handleExportCSV}
+                        className="flex items-center gap-2 px-5 py-2.5 bg-slate-800 hover:bg-slate-700 text-white rounded-xl text-sm font-bold transition-all shadow-lg border border-slate-700"
                     >
-                        <Plus size={18} /> New Tournament
+                        <Download size={18} /> Export CSV
                     </motion.button>
-                )}
+                    {isSuperAdmin && !showForm && (
+                        <motion.button
+                            whileHover={{ scale: 1.03 }}
+                            whileTap={{ scale: 0.97 }}
+                            onClick={() => { setShowForm(true); setEditingId(null); }}
+                            className="flex items-center gap-2 px-5 py-2.5 bg-gradient-to-r from-brand-600 to-brand-500 hover:from-brand-500 hover:to-brand-400 text-white rounded-xl text-sm font-bold transition-all shadow-lg shadow-brand-500/25"
+                        >
+                            <Plus size={18} /> New Tournament
+                        </motion.button>
+                    )}
+                </div>
             </div>
 
             {/* Success Banner */}

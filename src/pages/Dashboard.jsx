@@ -4,6 +4,7 @@ import { useData } from '../context/DataContext';
 import { calculateStandings } from '../utils/soccerUtils';
 import LineupDisplay from '../components/common/LineupDisplay';
 import MatchTimer from '../components/common/MatchTimer';
+import SponsorsCarousel from '../components/common/SponsorsCarousel';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Calendar, Clock, MapPin, Shirt, ChevronRight, Trophy, Activity, MapPinned, UserPlus, Zap, Target } from 'lucide-react';
 import { cn } from '../utils/cn';
@@ -433,6 +434,9 @@ const Dashboard = () => {
 
         </div>
       </motion.div>
+
+      {/* ═══ SPONSORS CAROUSEL ═══ */}
+      <SponsorsCarousel />
     </div>
   );
 };

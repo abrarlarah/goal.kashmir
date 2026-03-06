@@ -4,7 +4,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage';
 import { db, storage } from '../../firebase';
 import { useData } from '../../context/DataContext';
-import { Upload, X, User, Image as ImageIcon, Folders, Search, Filter, Edit3, ChevronLeft, ChevronRight, ChevronsLeft, ChevronsRight } from 'lucide-react';
+import { Upload, X, User, Image as ImageIcon, Folders, Search, Filter, Edit3, ChevronLeft, ChevronRight, ChevronsLeft, ChevronsRight, Download } from 'lucide-react';
 import AssetPicker from '../../components/admin/AssetPicker';
 import { registerAsset } from '../../utils/assetRegistry';
 import { calculateAge } from '../../utils/ageUtils';
@@ -249,14 +249,54 @@ const ManagePlayers = () => {
         if (listElement) listElement.scrollIntoView({ behavior: 'smooth' });
     };
 
-    // Reset to page 1 on filter/search change
     useEffect(() => {
         setCurrentPage(1);
     }, [searchTerm, teamFilter]);
 
+    const handleExportCSV = () => {
+        if (filteredPlayers.length === 0) return alert('No players to export');
+
+        const headers = ['Name', 'Team', 'District', 'Kit #', 'Position', 'Goals', 'Assists', 'Matches', 'Yellow Cards', 'Red Cards', 'Nationality'];
+        const csvRows = [headers.join(',')];
+
+        filteredPlayers.forEach(p => {
+            const row = [
+                `"${p.name || ''}"`,
+                `"${p.team || ''}"`,
+                `"${p.district || ''}"`,
+                p.number || '',
+                `"${p.position || ''}"`,
+                p.goals || 0,
+                p.assists || 0,
+                p.matches || 0,
+                p.yellowCards || 0,
+                p.redCards || 0,
+                `"${p.nationality || ''}"`
+            ];
+            csvRows.push(row.join(','));
+        });
+
+        const csvContent = "data:text/csv;charset=utf-8," + csvRows.join('\n');
+        const encodedUri = encodeURI(csvContent);
+        const link = document.createElement("a");
+        link.setAttribute("href", encodedUri);
+        link.setAttribute("download", `players_export_${new Date().toISOString().split('T')[0]}.csv`);
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+    };
+
     return (
         <div className="container mx-auto px-4 py-8 text-slate-900 dark:text-white">
-            <h2 className="text-2xl font-bold mb-6">Manage Players</h2>
+            <div className="flex justify-between items-center mb-6">
+                <h2 className="text-2xl font-bold">Manage Players</h2>
+                <button
+                    onClick={handleExportCSV}
+                    className="flex items-center gap-2 px-4 py-2 bg-slate-800 hover:bg-slate-700 text-white border border-slate-700 rounded-lg text-sm transition-colors"
+                >
+                    <Download size={16} /> Export to CSV
+                </button>
+            </div>
 
             {successMessage && (
                 <div className="bg-green-600 text-slate-900 dark:text-white p-3 rounded mb-4 animate-pulse">

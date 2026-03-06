@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
-import { Shield, Trophy, Users, Swords, LayoutList, Newspaper, UserCog, Crown, ShieldCheck } from 'lucide-react';
+import { Shield, Trophy, Users, Swords, LayoutList, Newspaper, UserCog, Crown, ShieldCheck, Star } from 'lucide-react';
 
 const Admin = () => {
   const { isSuperAdmin, userRole, userProfile } = useAuth();
@@ -12,6 +12,7 @@ const Admin = () => {
     { to: '/admin/players', icon: LayoutList, title: 'Manage Players', desc: 'Update player stats and info', color: 'from-purple-500/20 to-purple-600/5 border-purple-500/20' },
     { to: '/admin/lineups', icon: Shield, title: '⚽ Manage Lineups', desc: 'Set starting 11 and bench players for matches', color: 'from-teal-500/20 to-teal-600/5 border-teal-500/20' },
     { to: '/admin/tournaments', icon: Trophy, title: 'Manage Tournaments', desc: 'Create and manage tournaments', color: 'from-yellow-500/20 to-yellow-600/5 border-yellow-500/20' },
+    { to: '/admin/sponsors', icon: Star, title: 'Manage Sponsors', desc: 'Add/update tournament sponsors', color: 'from-indigo-500/20 to-indigo-600/5 border-indigo-500/20' },
   ];
 
   // News management is super admin only

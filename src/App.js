@@ -1,6 +1,7 @@
 import React from 'react';
 import { Routes, Route } from 'react-router-dom';
 import Navbar from './components/layout/Navbar';
+import Footer from './components/layout/Footer';
 import Dashboard from './pages/Dashboard';
 import Tournaments from './pages/Tournaments';
 import Teams from './pages/Teams';
@@ -16,6 +17,7 @@ import ManagePlayers from './pages/admin/ManagePlayers';
 import ManageTournaments from './pages/admin/ManageTournaments';
 import ManageLineups from './pages/admin/ManageLineups';
 import ManageNews from './pages/admin/ManageNews'; // Admin News
+import ManageSponsors from './pages/admin/ManageSponsors'; // Admin Sponsors
 import ManageUsers from './pages/admin/ManageUsers'; // Admin User Management
 import News from './pages/News'; // Public News
 import NewsDetail from './pages/NewsDetail'; // Public News Detail
@@ -109,6 +111,14 @@ function App() {
                 }
               />
               <Route
+                path="/admin/sponsors"
+                element={
+                  <PrivateRoute>
+                    <ManageSponsors />
+                  </PrivateRoute>
+                }
+              />
+              <Route
                 path="/admin/users"
                 element={
                   <PrivateRoute requireSuperAdmin>
@@ -118,6 +128,7 @@ function App() {
               />
             </Routes>
           </main>
+          <Footer />
         </div>
       </DataProvider>
     </ThemeProvider>

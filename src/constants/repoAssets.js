@@ -27,6 +27,7 @@ const processContext = (context, category) => {
 let teams = [];
 let players = [];
 let news = [];
+let sponsors = [];
 
 try {
     const teamsCtx = require.context('../assets/images/teams', false, /\.(png|jpe?g|svg|webp)$/);
@@ -49,4 +50,11 @@ try {
     console.warn('News image folder not found or empty');
 }
 
-export const REPO_ASSETS = [...teams, ...players, ...news];
+try {
+    const sponsorsCtx = require.context('../assets/images/sponsors', false, /\.(png|jpe?g|svg|webp)$/);
+    sponsors = processContext(sponsorsCtx, 'Sponsors');
+} catch (e) {
+    console.warn('Sponsors image folder not found or empty');
+}
+
+export const REPO_ASSETS = [...teams, ...players, ...news, ...sponsors];

@@ -31,6 +31,7 @@ const PlayerDetail = () => {
     const [team, setTeam] = useState(null);
     const [loading, setLoading] = useState(true);
     const [recentEvents, setRecentEvents] = useState([]);
+    const [tournamentStats, setTournamentStats] = useState([]);
 
     useEffect(() => {
         const fetchPlayerData = async () => {
@@ -124,6 +125,43 @@ const PlayerDetail = () => {
                     const uniqueActivity = Array.from(new Map(activity.map(item => [item.id, item])).values());
 
                     setRecentEvents(uniqueActivity.sort((a, b) => b.timestamp - a.timestamp).slice(0, 10));
+
+                    // Calculate Tournament Stats
+                    const registeredT = (tournaments || []).filter(t => t.teamsList?.includes(playerData.team));
+                    const statsMap = {};
+
+                    registeredT.forEach(t => {
+                        statsMap[t.id] = { id: t.id, name: t.name, matches: 0, goals: 0, registered: true };
+                    });
+
+                    playerLineups.forEach(l => {
+                        const match = matches.find(m => m.id === l.matchId);
+                        if (match) {
+                            const tId = match.tournamentId || match.competition;
+                            if (tId) {
+                                if (!statsMap[tId]) {
+                                    const t = tournaments.find(t => t.id === tId || t.name === tId);
+                                    statsMap[tId] = { id: tId, name: t ? t.name : tId, matches: 0, goals: 0, registered: false };
+                                }
+                                statsMap[tId].matches += 1;
+                            }
+                        }
+                    });
+
+                    flattenedEvents.forEach(e => {
+                        if (e.type === 'goal') {
+                            const tId = e.match.tournamentId || e.match.competition;
+                            if (tId) {
+                                if (!statsMap[tId]) {
+                                    const t = tournaments.find(t => t.id === tId || t.name === tId);
+                                    statsMap[tId] = { id: tId, name: t ? t.name : tId, matches: 0, goals: 0, registered: false };
+                                }
+                                statsMap[tId].goals += 1;
+                            }
+                        }
+                    });
+
+                    setTournamentStats(Object.values(statsMap));
                 }
             } catch (error) {
                 console.error("Error fetching player details:", error);
@@ -370,6 +408,48 @@ const PlayerDetail = () => {
                             </div>
                         </motion.div>
                     </div>
+
+                    {/* Tournament Stats */}
+                    <motion.div
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ delay: 0.25 }}
+                        className="glass-card p-6 rounded-3xl border border-slate-200 dark:border-white/5"
+                    >
+                        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
+                            <h3 className="text-lg font-bold flex items-center gap-2 text-slate-900 dark:text-white">
+                                <Trophy size={20} className="text-brand-500" />
+                                Tournament Breakdown
+                            </h3>
+                            <span className="px-3 py-1 bg-brand-500/10 text-brand-500 rounded-full text-xs font-bold w-fit">
+                                Registered in {tournamentStats.filter(t => t.registered).length} Tournaments
+                            </span>
+                        </div>
+                        <div className="space-y-4">
+                            {tournamentStats.length > 0 ? tournamentStats.map(t => (
+                                <div key={t.id} className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 p-4 rounded-2xl bg-white/5 border border-white/5 hover:border-brand-500/30 transition-colors">
+                                    <div>
+                                        <div className="font-bold text-slate-900 dark:text-white text-sm">{t.name}</div>
+                                        <div className="text-xs text-slate-500 mt-1">{t.registered ? 'Registered / Active' : 'Played Matches Here'}</div>
+                                    </div>
+                                    <div className="flex gap-6">
+                                        <div className="text-center">
+                                            <div className="text-lg font-bold text-slate-900 dark:text-white leading-none">{t.matches}</div>
+                                            <div className="text-[10px] text-slate-500 uppercase tracking-wider font-bold mt-1">Matches</div>
+                                        </div>
+                                        <div className="text-center">
+                                            <div className="text-lg font-bold text-slate-900 dark:text-white leading-none">{t.goals}</div>
+                                            <div className="text-[10px] text-slate-500 uppercase tracking-wider font-bold mt-1">Goals</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            )) : (
+                                <div className="text-center py-8 text-slate-500 italic text-xs">
+                                    No tournament statistics available yet.
+                                </div>
+                            )}
+                        </div>
+                    </motion.div>
 
                     {/* Biography / Full Stats Detail */}
                     <motion.div
