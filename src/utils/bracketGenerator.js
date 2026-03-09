@@ -1,14 +1,29 @@
 /**
- * Standard utility to get round names based on the number of teams participating in that stage.
+ * Standard utility to get round names based on the number of teams
+ * participating in that round (NOT total tournament teams).
+ *
+ * Convention (used by FIFA, UEFA, etc.):
+ *   2  teams → Final        (1 match)
+ *   4  teams → Semi-Final   (2 matches)
+ *   8  teams → Quarter-Final(4 matches)
+ *  16  teams → Round of 16  (8 matches)
+ *  32  teams → Round of 32  (16 matches)
+ *  64  teams → Round of 64  (32 matches)
+ * 128  teams → Round of 128 (64 matches)
+ *
+ * For non-power-of-2 preliminary rounds, a qualifying label is used.
  */
-const getStandardRoundName = (teamsCount) => {
-    if (teamsCount <= 2) return 'Final';
-    if (teamsCount <= 4) return 'Semi-Final';
-    if (teamsCount <= 8) return 'Quarter-Final';
-    if (teamsCount <= 16) return 'Round of 16';
-    if (teamsCount <= 32) return 'Round of 32';
-    if (teamsCount <= 64) return 'Round of 64';
-    return `Round of ${teamsCount}`;
+const getStandardRoundName = (teamsInThisRound) => {
+    const roundNames = {
+        2:   'Final',
+        4:   'Semi-Final',
+        8:   'Quarter-Final',
+        16:  'Round of 16',
+        32:  'Round of 32',
+        64:  'Round of 64',
+        128: 'Round of 128',
+    };
+    return roundNames[teamsInThisRound] || `Round of ${teamsInThisRound}`;
 };
 
 /**
@@ -36,8 +51,8 @@ export const generateKnockoutMatches = (n, tournamentName, tournamentId, startDa
 
     // Phase 1: Play-in Round
     if (playInCount > 0) {
-        const nextRoundTeams = powerOf2;
-        const subRoundName = `Preliminary / ${getStandardRoundName(nextRoundTeams)}`;
+        // Instead of "Preliminary", use the actual technical round name (e.g. Round of 16 for an 8-slot bracket base)
+        const subRoundName = getStandardRoundName(powerOf2 * 2);
 
         for (let i = 0; i < playInCount; i++) {
             const idxA = teamCounter++;
@@ -237,9 +252,45 @@ export const generateLeagueMatches = (n, tournamentName, tournamentId, startDate
         time: '12:00', scoreA: 0, scoreB: 0, status: 'scheduled', currentMinute: 0
     }));
 };
+/**
+ * Shift a pool's internal round name up by one level.
+ * Because the Grand Final sits above each pool's bracket,
+ * the pool's "Final" is really a Semi-Final, etc.
+ */
+const shiftRoundUp = (poolRoundName) => {
+    const shiftMap = {
+        'Final':          'Semi-Final',
+        'Semi-Final':     'Quarter-Final',
+        'Quarter-Final':  'Round of 16',
+        'Round of 16':    'Round of 32',
+        'Round of 32':    'Round of 64',
+        'Round of 64':    'Round of 128',
+    };
+    if (poolRoundName.toLowerCase().includes('preliminary')) return poolRoundName;
+    return shiftMap[poolRoundName] || poolRoundName;
+};
+
+/**
+ * Recalculate roundOrder after shifting names.
+ */
+const getRoundOrder = (roundName) => {
+    const orderMap = {
+        'Preliminary': 0,
+        'Round of 128': 1,
+        'Round of 64': 2,
+        'Round of 32': 3,
+        'Round of 16': 4,
+        'Quarter-Final': 5,
+        'Semi-Final': 6,
+        'Final': 99,
+    };
+    return orderMap[roundName] ?? 3;
+};
 
 /**
  * Generates a dual-pool knockout structure (Left Wing vs Right Wing).
+ * Round names use the standard convention for the OVERALL tournament,
+ * not per-pool (e.g. pool's "Final" becomes "Semi-Final").
  */
 export const generateDualKnockoutMatches = (n, tournamentName, tournamentId, startDate, actualTeams = []) => {
     if (n < 4) return [];
@@ -250,13 +301,19 @@ export const generateDualKnockoutMatches = (n, tournamentName, tournamentId, sta
     const poolA = actualTeams.slice(0, nA);
     const poolB = actualTeams.slice(nA);
 
-    // Reuse generateKnockoutMatches logic but internally offset them
     const wingA = generateKnockoutMatches(nA, tournamentName, tournamentId, startDate, poolA);
     const wingB = generateKnockoutMatches(nB, tournamentName, tournamentId, startDate, poolB);
 
+    // Shift every pool round name UP by one level
     const merged = [
-        ...wingA.map(m => ({ ...m, pool: 'A' })),
-        ...wingB.map(m => ({ ...m, pool: 'B', matchOrder: m.matchOrder + 100 }))
+        ...wingA.map(m => {
+            const newRound = shiftRoundUp(m.round);
+            return { ...m, pool: 'A', round: newRound, roundOrder: getRoundOrder(newRound) };
+        }),
+        ...wingB.map(m => {
+            const newRound = shiftRoundUp(m.round);
+            return { ...m, pool: 'B', matchOrder: m.matchOrder + 100, round: newRound, roundOrder: getRoundOrder(newRound) };
+        })
     ];
 
     // Grand Final (Winner A vs Winner B)

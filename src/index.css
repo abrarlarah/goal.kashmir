@@ -64,15 +64,32 @@
       monospace;
   }
 
-  /* Ensure all buttons and interactive elements have proper touch targets (min 44x44px for iOS) */
+  /* Ensure all buttons and interactive elements have proper touch targets (min 44px for iOS) */
   button,
   a,
   input,
-  select,
   textarea {
     min-height: 44px;
     touch-action: manipulation;
-    /* Disable double-tap zoom on buttons */
+  }
+
+  select {
+    min-height: 44px;
+    touch-action: manipulation;
+  }
+
+  /* Fix: Native browser dropdowns always render with light backgrounds,
+     so option text must be dark to be readable in dark mode */
+  option,
+  optgroup {
+    background-color: #ffffff;
+    color: #1e293b;
+    min-height: auto;
+  }
+
+  option:checked {
+    background-color: #e0f2fe;
+    color: #0c4a6e;
   }
 
   /* Improve tap highlight for mobile */

@@ -317,7 +317,26 @@ const TournamentDetail = () => {
     // Group matches by Round for Brackets or Schedule
     const matchesByRound = useMemo(() => {
         const groups = {};
-        tournamentMatches.forEach(m => {
+
+        // First pass: normalize round names for legacy dual knockout data
+        // where pool-specific finals were also named "Final"
+        const normalizedMatches = tournamentMatches.map(m => {
+            // For dual_knockout tournaments, fix legacy data where pool-specific
+            // finals share the round name 'Final' with the Grand Final
+            if (tournament?.type === 'dual_knockout' && m.round === 'Final') {
+                // The true Grand Final has 'Winner Pool A' / 'Winner Pool B' as team names
+                const isGrandFinal = 
+                    m.teamA === 'Winner Pool A' || m.teamB === 'Winner Pool B';
+                
+                if (!isGrandFinal) {
+                    // Pool's "Final" is really a Semi-Final of the overall tournament
+                    return { ...m, round: 'Semi-Final', roundOrder: 6 };
+                }
+            }
+            return m;
+        });
+
+        normalizedMatches.forEach(m => {
             const round = m.round || 'General';
             if (!groups[round]) groups[round] = [];
             groups[round].push(m);
@@ -329,7 +348,7 @@ const TournamentDetail = () => {
         });
 
         return groups;
-    }, [tournamentMatches]);
+    }, [tournamentMatches, tournament]);
 
     if (loading) return <div className="flex h-screen items-center justify-center text-slate-900 dark:text-white">Loading...</div>;
     if (!tournament) return <div className="text-slate-900 dark:text-white p-20 text-center">Tournament not found</div>;
@@ -469,7 +488,23 @@ const TournamentDetail = () => {
                         </div>
 
                         {Object.keys(matchesByRound).length > 0 ? (
-                            Object.entries(matchesByRound).map(([round, matches]) => (
+                            Object.entries(matchesByRound)
+                                .sort(([roundA, matchesA], [roundB, matchesB]) => {
+                                    // Sort by roundOrder from match data, then by known priority
+                                    const orderA = matchesA[0]?.roundOrder;
+                                    const orderB = matchesB[0]?.roundOrder;
+                                    if (orderA !== undefined && orderB !== undefined) return orderA - orderB;
+                                    const priority = {
+                                        'Preliminary': 0, 'Qualifying': 0,
+                                        'Round of 128': 0.5,
+                                        'Round of 64': 1, 'Round of 32': 2,
+                                        'Round of 16': 3, 'Quarter-Final': 4,
+                                        'Semi-Final': 5,
+                                        'Final': 6, 'Pool A': -1, 'Pool B': -1,
+                                    };
+                                    return (priority[roundA] ?? 3) - (priority[roundB] ?? 3);
+                                })
+                                .map(([round, matches]) => (
                                 <div key={round} className="space-y-4">
                                     <h3 className="text-xl font-display font-black text-slate-900 dark:text-white flex items-center gap-3">
                                         <span className="h-6 w-1 bg-brand-500 rounded-full"></span>
@@ -860,10 +895,21 @@ const TournamentDetail = () => {
                                 Bracket has not been initialized by admin yet.
                             </div>
                         )}
-                        <MatchBracket
-                            matchesByRound={tournament.type === 'pool' ? knockoutMatchesByRound : matchesByRound}
-                            tournamentTeams={tournamentTeams}
-                        />
+                        {/* Full-width bracket — perfectly centered breaking out of max-w-7xl without scrollbars */}
+                        <div 
+                            className="relative" 
+                            style={{ 
+                                width: '100vw', 
+                                maxWidth: '100%', // Prevent spillover
+                                left: '50%', 
+                                transform: 'translateX(-50%)'
+                            }}
+                        >
+                            <MatchBracket
+                                matchesByRound={tournament.type === 'pool' ? knockoutMatchesByRound : matchesByRound}
+                                tournamentTeams={tournamentTeams}
+                            />
+                        </div>
                     </div>
                 )}
 

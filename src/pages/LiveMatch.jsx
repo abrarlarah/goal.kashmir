@@ -10,7 +10,7 @@ import SubstitutionManager from '../components/common/SubstitutionManager';
 import MatchPredictions from '../components/common/MatchPredictions';
 import MatchTimer from '../components/common/MatchTimer';
 import { cn } from '../utils/cn';
-import { UserPlus, Settings } from 'lucide-react';
+import { UserPlus, Settings, Play, Pause, Square, Info, ShieldAlert, Plus, Minus, RotateCcw, Edit3, X, Check, Activity, Shield, Trash2, Clock, Trophy, AlertTriangle } from 'lucide-react';
 
 const LiveMatch = () => {
   const { matchId } = useParams();
@@ -515,85 +515,209 @@ const LiveMatch = () => {
     <div className="container mx-auto px-4 py-8">
       <div className="max-w-4xl mx-auto">
 
-        {/* Admin Controls */}
+        {/* Admin Controls (Match Control Center) */}
         {canEditMatch && (
-          <div className="bg-gray-800 p-4 rounded-lg mb-6 border border-green-600">
-            <h3 className="text-green-400 font-bold mb-2">Admin Controls (Live Updates)</h3>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-center">
-
-              {/* Team A Controls */}
-              <div className="p-2 border border-gray-600 rounded">
-                <p className="text-slate-900 dark:text-white mb-2">{match.teamA}</p>
-                <button onClick={() => updateScore('A', 1)} className="bg-green-600 text-slate-900 dark:text-white px-3 py-1 rounded mx-1 hover:bg-green-700">+ Goal</button>
-                <button onClick={() => updateScore('A', -1)} className="bg-red-600 text-slate-900 dark:text-white px-3 py-1 rounded mx-1 hover:bg-red-700">- Goal</button>
-              </div>
-
-              {/* Clock Controls */}
-              <div className="p-2 border border-gray-600 rounded">
-                <p className="text-slate-900 dark:text-white mb-2 font-mono text-3xl font-bold">
-                  <MatchTimer match={match} /> {match.timerRunning && <span className="text-red-500 animate-pulse text-sm">LIVE</span>}
-                </p>
-                <div className="flex justify-center gap-1 mb-3">
-                  <button onClick={() => updateMinute(-1)} className="bg-gray-700 text-slate-900 dark:text-white px-3 py-1.5 rounded-lg hover:bg-gray-600 transition-colors text-sm font-bold">-1m</button>
-                  <button onClick={() => updateMinute(1)} className="bg-gray-700 text-slate-900 dark:text-white px-3 py-1.5 rounded-lg hover:bg-gray-600 transition-colors text-sm font-bold">+1m</button>
-                  <button onClick={() => updateMinute(5)} className="bg-gray-700 text-slate-900 dark:text-white px-3 py-1.5 rounded-lg hover:bg-gray-600 transition-colors text-sm font-bold">+5m</button>
+          <div className="mb-8 rounded-3xl overflow-hidden bg-slate-900/80 backdrop-blur-xl border border-white/10 shadow-[0_0_40px_rgba(0,0,0,0.5)]">
+            <div className="bg-gradient-to-r from-slate-800 to-slate-900 p-4 border-b border-white/5 flex items-center justify-between">
+              <div className="flex items-center gap-3">
+                <div className="p-2 bg-brand-500/20 text-brand-400 rounded-lg border border-brand-500/30">
+                  <Activity size={20} className={match.status === 'live' ? "animate-pulse" : ""} />
                 </div>
-                <div className="flex flex-col gap-1.5">
-                  <button
-                    onClick={() => {
-                      setIsEditingTeams(!isEditingTeams);
-                      setEditFormData({
-                        teamA: match.teamA,
-                        teamB: match.teamB,
-                        date: match.date || '',
-                        time: match.time || '',
-                        stadium: match.stadium || ''
-                      });
-                    }}
-                    className="w-full py-1.5 bg-slate-700 hover:bg-slate-600 rounded text-[10px] font-black uppercase tracking-widest text-brand-400 border border-brand-500/20"
-                  >
-                    🛠️ Edit Match Details
-                  </button>
-                  <button
-                    onClick={toggleTimer}
-                    className={`w-full py-2 rounded font-bold text-slate-900 dark:text-white transition-colors ${match.timerRunning ? 'bg-yellow-600 hover:bg-yellow-700' : 'bg-green-600 hover:bg-green-700'}`}
-                  >
-                    {match.timerRunning ? '⏸ Pause Timer' : '▶️ Start Timer'}
-                  </button>
-                  <button
-                    onClick={toggleMatchStatus}
-                    className={`w-full py-1 rounded text-xs font-bold text-slate-900 dark:text-white transition-colors ${match.status === 'live' ? 'bg-red-900/50 hover:bg-red-800 border border-red-500/30' : 'bg-green-900/50 hover:bg-green-800 border border-green-500/30'}`}
-                  >
-                    {match.status === 'live' ? 'END MATCH' : 'START MATCH'}
-                  </button>
-                  <button
-                    onClick={resetTimer}
-                    className="w-full py-1 rounded text-[10px] font-bold text-gray-400 hover:text-slate-900 dark:text-white hover:bg-white/5 border border-slate-200 dark:border-white/10 transition-colors uppercase tracking-widest"
-                  >
-                    Reset Clock
-                  </button>
-                </div>
+                <h3 className="text-white font-black uppercase tracking-widest text-lg drop-shadow-md">Match Control Center</h3>
               </div>
-
-              <div className="p-2 border border-gray-600 rounded">
-                <p className="text-slate-900 dark:text-white mb-2">{match.teamB}</p>
-                <button onClick={() => updateScore('B', 1)} className="bg-green-600 text-slate-900 dark:text-white px-3 py-1 rounded mx-1 hover:bg-green-700">+ Goal</button>
-                <button onClick={() => updateScore('B', -1)} className="bg-red-600 text-slate-900 dark:text-white px-3 py-1 rounded mx-1 hover:bg-red-700">- Goal</button>
+              <div className="flex items-center gap-2">
+                <span className={cn(
+                  "px-3 py-1 text-xs font-black uppercase tracking-widest rounded-full border",
+                  match.status === 'live' ? "bg-red-500/10 text-red-400 border-red-500/30 animate-pulse" : 
+                  match.status === 'finished' ? "bg-green-500/10 text-green-400 border-green-500/30" : 
+                  "bg-slate-500/10 text-slate-400 border-slate-500/30"
+                )}>
+                  {match.status === 'live' ? "Live Now" : match.status === 'finished' ? "Match Ended" : "Scheduled"}
+                </span>
+                <button
+                  onClick={() => {
+                    setIsEditingTeams(!isEditingTeams);
+                    setEditFormData({
+                      teamA: match.teamA,
+                      teamB: match.teamB,
+                      date: match.date || '',
+                      time: match.time || '',
+                      stadium: match.stadium || ''
+                    });
+                  }}
+                  className="p-2 hover:bg-white/10 rounded-lg text-slate-400 hover:text-white transition-colors border border-transparent hover:border-white/10"
+                  title="Edit Match Details"
+                >
+                  <Edit3 size={18} />
+                </button>
               </div>
             </div>
 
-            {/* Match Information Editing Inline UI */}
-            {isEditingTeams && (
-              <div className="mt-4 p-4 bg-gray-900 rounded-xl border border-brand-500/50 shadow-2xl">
-                <h4 className="text-xs font-black uppercase tracking-widest text-brand-400 mb-4">Edit Match Details</h4>
+            <div className="p-5">
+              <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-                  <div>
-                    <label className="text-[10px] text-gray-500 uppercase font-bold mb-1 block">Team A (Home)</label>
+                {/* Team A Score Controls */}
+                <div className="bg-slate-950/50 rounded-2xl p-5 border border-white/5 relative overflow-hidden group">
+                  <div className="absolute top-0 right-0 p-4 opacity-5 pointer-events-none group-hover:scale-110 transition-transform duration-500">
+                    <Trophy size={64} />
+                  </div>
+                  <div className="text-center mb-6">
+                    <span className="text-xs font-bold text-slate-500 uppercase tracking-widest">Home Team</span>
+                    <h2 className="text-2xl font-black text-white truncate leading-tight mt-1" title={match.teamA}>{match.teamA}</h2>
+                    <div className="text-6xl font-black text-brand-400 my-4 drop-shadow-[0_0_15px_rgba(14,165,233,0.3)]">{match.scoreA || 0}</div>
+                  </div>
+                  
+                  <div className="grid grid-cols-2 gap-2 mb-4">
+                    <button 
+                      onClick={() => updateScore('A', -1)} 
+                      className="flex items-center justify-center gap-1 bg-red-500/10 text-red-500 hover:bg-red-500/20 border border-red-500/20 py-3 rounded-xl font-bold transition-all"
+                    >
+                      <Minus size={16} /> Goal
+                    </button>
+                    <button 
+                      onClick={() => updateScore('A', 1)} 
+                      className="flex items-center justify-center gap-1 bg-brand-500/10 text-brand-400 hover:bg-brand-500/20 border border-brand-500/30 py-3 rounded-xl font-bold transition-all shadow-[0_0_20px_rgba(14,165,233,0.1)] hover:shadow-[0_0_20px_rgba(14,165,233,0.3)]"
+                    >
+                      <Plus size={16} /> Goal
+                    </button>
+                  </div>
+
+                  <div className="flex gap-2 border-t border-white/5 pt-4">
+                    <button 
+                      onClick={() => setShowCardSelect({ team: 'A', type: 'yellow' })} 
+                      className="flex-1 flex items-center justify-center gap-1 bg-yellow-500/10 text-yellow-500 hover:bg-yellow-500/20 border border-yellow-500/30 py-2 rounded-lg text-xs font-bold transition-all"
+                    >
+                      <AlertTriangle size={14} /> Yellow
+                    </button>
+                    <button 
+                      onClick={() => setShowCardSelect({ team: 'A', type: 'red' })} 
+                      className="flex-1 flex items-center justify-center gap-1 bg-red-600/10 text-red-500 hover:bg-red-600/20 border border-red-600/30 py-2 rounded-lg text-xs font-bold transition-all"
+                    >
+                      <ShieldAlert size={14} /> Red
+                    </button>
+                  </div>
+                </div>
+
+                {/* Main Match / Clock Controls */}
+                <div className="flex flex-col gap-4">
+                  {/* Timer Display */}
+                  <div className="bg-slate-950/80 rounded-2xl p-6 border-2 border-slate-800 text-center flex flex-col items-center justify-center shadow-inner relative overflow-hidden">
+                    <div className="absolute inset-0 bg-gradient-to-br from-brand-500/5 to-transparent pointer-events-none" />
+                    
+                    <span className="text-xs font-bold text-slate-500 uppercase tracking-widest mb-2 flex items-center gap-2">
+                       <Clock size={14} /> Match Clock
+                    </span>
+                    
+                    <div className={cn(
+                      "text-6xl font-mono font-black tracking-tighter tabular-nums drop-shadow-xl",
+                      match.timerRunning ? "text-brand-400" : "text-white"
+                    )}>
+                      <MatchTimer match={match} />
+                    </div>
+
+                    {/* Clock manipulation */}
+                    <div className="flex items-center justify-center gap-2 mt-6">
+                      <button onClick={() => updateMinute(-1)} className="w-12 h-10 flex items-center justify-center bg-slate-800 hover:bg-slate-700 text-slate-300 rounded-lg text-sm font-bold border border-slate-700 transition-colors">-1</button>
+                      <button onClick={() => updateMinute(1)} className="w-12 h-10 flex items-center justify-center bg-slate-800 hover:bg-slate-700 text-slate-300 rounded-lg text-sm font-bold border border-slate-700 transition-colors">+1</button>
+                      <button onClick={() => updateMinute(5)} className="px-3 h-10 flex items-center justify-center bg-slate-800 hover:bg-slate-700 text-slate-300 rounded-lg text-sm font-bold border border-slate-700 transition-colors">+5m</button>
+                      <button onClick={resetTimer} className="w-10 h-10 flex items-center justify-center bg-slate-800 hover:bg-red-500/20 text-slate-500 hover:text-red-400 rounded-lg border border-slate-700 hover:border-red-500/30 transition-colors ml-2" title="Reset Clock to 00:00">
+                        <RotateCcw size={16} />
+                      </button>
+                    </div>
+                  </div>
+
+                  {/* Play/Pause & Match Status */}
+                  <div className="grid grid-cols-2 gap-3 h-full">
+                    <button
+                      onClick={toggleTimer}
+                      className={cn(
+                        "flex flex-col items-center justify-center gap-2 py-4 rounded-2xl font-black uppercase tracking-wider transition-all border shadow-lg",
+                        match.timerRunning 
+                          ? "bg-yellow-500/10 text-yellow-500 border-yellow-500/30 hover:bg-yellow-500/20" 
+                          : "bg-brand-500/10 text-brand-400 border-brand-500/30 hover:bg-brand-500/20 shadow-[0_0_20px_rgba(14,165,233,0.1)] hover:shadow-[0_0_20px_rgba(14,165,233,0.2)]"
+                      )}
+                    >
+                      {match.timerRunning ? <Pause size={28} /> : <Play size={28} />}
+                      <span className="text-[10px]">{match.timerRunning ? 'Pause Timer' : 'Start Timer'}</span>
+                    </button>
+                    
+                    <button
+                      onClick={toggleMatchStatus}
+                      className={cn(
+                        "flex flex-col items-center justify-center gap-2 py-4 rounded-2xl font-black uppercase tracking-wider transition-all border shadow-lg",
+                        match.status === 'live' 
+                          ? "bg-red-500/10 text-red-500 border-red-500/30 hover:bg-red-500/20 shadow-[0_0_20px_rgba(239,68,68,0.1)] hover:shadow-[0_0_20px_rgba(239,68,68,0.2)]" 
+                          : "bg-green-500/10 text-green-400 border-green-500/30 hover:bg-green-500/20"
+                      )}
+                    >
+                      {match.status === 'live' ? <Square size={26} fill="currentColor" /> : <Play size={28} />}
+                      <span className="text-[10px]">{match.status === 'live' ? 'End Match' : 'Start Match'}</span>
+                    </button>
+                  </div>
+                </div>
+
+                {/* Team B Score Controls */}
+                <div className="bg-slate-950/50 rounded-2xl p-5 border border-white/5 relative overflow-hidden group">
+                  <div className="absolute top-0 right-0 p-4 opacity-5 pointer-events-none group-hover:scale-110 transition-transform duration-500">
+                    <Trophy size={64} />
+                  </div>
+                  <div className="text-center mb-6">
+                    <span className="text-xs font-bold text-slate-500 uppercase tracking-widest">Away Team</span>
+                    <h2 className="text-2xl font-black text-white truncate leading-tight mt-1" title={match.teamB}>{match.teamB}</h2>
+                    <div className="text-6xl font-black text-brand-400 my-4 drop-shadow-[0_0_15px_rgba(14,165,233,0.3)]">{match.scoreB || 0}</div>
+                  </div>
+                  
+                  <div className="grid grid-cols-2 gap-2 mb-4">
+                    <button 
+                      onClick={() => updateScore('B', -1)} 
+                      className="flex items-center justify-center gap-1 bg-red-500/10 text-red-500 hover:bg-red-500/20 border border-red-500/20 py-3 rounded-xl font-bold transition-all"
+                    >
+                      <Minus size={16} /> Goal
+                    </button>
+                    <button 
+                      onClick={() => updateScore('B', 1)} 
+                      className="flex items-center justify-center gap-1 bg-brand-500/10 text-brand-400 hover:bg-brand-500/20 border border-brand-500/30 py-3 rounded-xl font-bold transition-all shadow-[0_0_20px_rgba(14,165,233,0.1)] hover:shadow-[0_0_20px_rgba(14,165,233,0.3)]"
+                    >
+                      <Plus size={16} /> Goal
+                    </button>
+                  </div>
+
+                  <div className="flex gap-2 border-t border-white/5 pt-4">
+                    <button 
+                      onClick={() => setShowCardSelect({ team: 'B', type: 'yellow' })} 
+                      className="flex-1 flex items-center justify-center gap-1 bg-yellow-500/10 text-yellow-500 hover:bg-yellow-500/20 border border-yellow-500/30 py-2 rounded-lg text-xs font-bold transition-all"
+                    >
+                      <AlertTriangle size={14} /> Yellow
+                    </button>
+                    <button 
+                      onClick={() => setShowCardSelect({ team: 'B', type: 'red' })} 
+                      className="flex-1 flex items-center justify-center gap-1 bg-red-600/10 text-red-500 hover:bg-red-600/20 border border-red-600/30 py-2 rounded-lg text-xs font-bold transition-all"
+                    >
+                      <ShieldAlert size={14} /> Red
+                    </button>
+                  </div>
+                </div>
+
+              </div>
+            </div>
+
+            {/* Editing Teams Panel (Drops down when hitting edit) */}
+            {isEditingTeams && (
+              <div className="border-t border-brand-500/30 bg-slate-900/90 p-6 animate-in slide-in-from-top-4 relative">
+                <button onClick={() => setIsEditingTeams(false)} className="absolute top-4 right-4 p-2 text-slate-500 hover:text-white rounded-full hover:bg-white/5 transition-colors">
+                  <X size={20} />
+                </button>
+                <h4 className="flex items-center gap-2 text-sm font-black uppercase tracking-widest text-brand-400 mb-6">
+                  <Settings size={16} /> Edit Match Details
+                </h4>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
+                  <div className="lg:col-span-2">
+                    <label className="text-[10px] text-gray-400 uppercase font-bold mb-1.5 block">Home Team</label>
                     <select
                       value={editFormData.teamA}
                       onChange={(e) => setEditFormData({ ...editFormData, teamA: e.target.value })}
-                      className="w-full bg-slate-800 border border-slate-700 rounded-lg p-2 text-slate-900 dark:text-white text-sm"
+                      className="w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-white focus:border-brand-500 focus:ring-1 focus:ring-brand-500 transition-all outline-none"
                     >
                       <option value="">Select Home Team</option>
                       {tournamentTeams.map(t => (
@@ -604,12 +728,12 @@ const LiveMatch = () => {
                       )}
                     </select>
                   </div>
-                  <div>
-                    <label className="text-[10px] text-gray-500 uppercase font-bold mb-1 block">Team B (Away)</label>
+                  <div className="lg:col-span-2">
+                    <label className="text-[10px] text-gray-400 uppercase font-bold mb-1.5 block">Away Team</label>
                     <select
                       value={editFormData.teamB}
                       onChange={(e) => setEditFormData({ ...editFormData, teamB: e.target.value })}
-                      className="w-full bg-slate-800 border border-slate-700 rounded-lg p-2 text-slate-900 dark:text-white text-sm"
+                      className="w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-white focus:border-brand-500 focus:ring-1 focus:ring-brand-500 transition-all outline-none"
                     >
                       <option value="">Select Away Team</option>
                       {tournamentTeams.map(t => (
@@ -620,181 +744,136 @@ const LiveMatch = () => {
                       )}
                     </select>
                   </div>
-                </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
-                  <div>
-                    <label className="text-[10px] text-gray-500 uppercase font-bold mb-1 block">Match Date</label>
+                  <div className="flex items-end">
+                     <button
+                        onClick={handleUpdateTeams}
+                        className="w-full h-[50px] bg-brand-500 hover:bg-brand-400 text-slate-900 rounded-xl font-black uppercase tracking-widest text-xs transition-colors shadow-lg shadow-brand-500/20 flex items-center justify-center gap-2"
+                      >
+                        <Check size={16} /> Save
+                      </button>
+                  </div>
+
+                  <div className="lg:col-span-2">
+                    <label className="text-[10px] text-gray-400 uppercase font-bold mb-1.5 block">Date</label>
                     <input
                       type="date"
                       value={editFormData.date}
                       onChange={(e) => setEditFormData({ ...editFormData, date: e.target.value })}
-                      className="w-full bg-slate-800 border border-slate-700 rounded-lg p-2 text-slate-900 dark:text-white text-sm"
+                      className="w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-white focus:border-brand-500 outline-none"
                     />
                   </div>
-                  <div>
-                    <label className="text-[10px] text-gray-500 uppercase font-bold mb-1 block">Match Time</label>
+                  <div className="lg:col-span-1">
+                    <label className="text-[10px] text-gray-400 uppercase font-bold mb-1.5 block">Time</label>
                     <input
                       type="time"
                       value={editFormData.time}
                       onChange={(e) => setEditFormData({ ...editFormData, time: e.target.value })}
-                      className="w-full bg-slate-800 border border-slate-700 rounded-lg p-2 text-slate-900 dark:text-white text-sm"
+                      className="w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-white focus:border-brand-500 outline-none"
                     />
                   </div>
-                  <div>
-                    <label className="text-[10px] text-gray-500 uppercase font-bold mb-1 block">Stadium / Venue</label>
+                  <div className="lg:col-span-2">
+                    <label className="text-[10px] text-gray-400 uppercase font-bold mb-1.5 block">Venue</label>
                     <input
                       type="text"
-                      placeholder="Enter stadium name"
+                      placeholder="Stadium"
                       value={editFormData.stadium}
                       onChange={(e) => setEditFormData({ ...editFormData, stadium: e.target.value })}
-                      className="w-full bg-slate-800 border border-slate-700 rounded-lg p-2 text-slate-900 dark:text-white text-sm"
+                      className="w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-white focus:border-brand-500 outline-none"
                     />
                   </div>
                 </div>
-
-                <div className="mt-4 flex gap-2">
-                  <button
-                    onClick={handleUpdateTeams}
-                    className="bg-brand-500 text-slate-900 px-4 py-2 rounded-lg font-bold text-sm"
-                  >
-                    Save All Changes
-                  </button>
-                  <button
-                    onClick={() => setIsEditingTeams(false)}
-                    className="bg-slate-700 text-slate-900 dark:text-white px-4 py-2 rounded-lg text-sm"
-                  >
-                    Cancel
-                  </button>
-                </div>
               </div>
             )}
 
-            {/* Card Controls */}
-            <div className="grid grid-cols-2 gap-4 mt-4">
-              <div className="flex justify-center gap-2">
-                <button onClick={() => setShowCardSelect({ team: 'A', type: 'yellow' })} className="bg-yellow-500 text-black font-bold px-3 py-1 rounded text-xs">Y-Card (A)</button>
-                <button onClick={() => setShowCardSelect({ team: 'A', type: 'red' })} className="bg-red-600 text-slate-900 dark:text-white font-bold px-3 py-1 rounded text-xs">R-Card (A)</button>
-              </div>
-              <div className="flex justify-center gap-2">
-                <button onClick={() => setShowCardSelect({ team: 'B', type: 'yellow' })} className="bg-yellow-500 text-black font-bold px-3 py-1 rounded text-xs">Y-Card (B)</button>
-                <button onClick={() => setShowCardSelect({ team: 'B', type: 'red' })} className="bg-red-600 text-slate-900 dark:text-white font-bold px-3 py-1 rounded text-xs">R-Card (B)</button>
-              </div>
-            </div>
-
-            {/* Goal Scorer Selection UI */}
-            {showScorerSelect && (
-              <div className="mt-4 p-4 bg-gray-700 rounded-lg border border-yellow-500 shadow-xl">
-                <div className="flex justify-between items-center mb-4">
-                  <h4 className="text-yellow-400 font-bold uppercase tracking-wider">
-                    Select Scorer for {showScorerSelect.team === 'A' ? match.teamA : match.teamB}
-                  </h4>
-                  <button
-                    onClick={() => setShowScorerSelect(null)}
-                    className="text-gray-400 hover:text-slate-900 dark:text-white"
-                  >
-                    <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" /></svg>
-                  </button>
-                </div>
-
-                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-2 max-h-48 overflow-y-auto pr-2 custom-scrollbar">
-                  {players
-                    .filter(p => p.team === (showScorerSelect.team === 'A' ? match.teamA : match.teamB))
-                    .sort((a, b) => a.name.localeCompare(b.name))
-                    .map(player => (
-                      <button
-                        key={player.id}
-                        onClick={() => confirmGoal(showScorerSelect.team, player)}
-                        className="bg-gray-600 hover:bg-green-600 text-slate-900 dark:text-white text-xs py-2 px-3 rounded transition-colors text-left truncate"
-                        title={player.name}
-                      >
-                        {player.name}
-                      </button>
-                    ))}
-                  <button
-                    onClick={() => confirmGoal(showScorerSelect.team, null)}
-                    className="bg-gray-500 hover:bg-gray-400 text-slate-900 dark:text-white text-xs py-2 px-3 rounded transition-colors"
-                  >
-                    Unknown Player
-                  </button>
-                </div>
-              </div>
-            )}
-
-            {/* Card Selection UI */}
-            {showCardSelect && (
-              <div className="mt-4 p-4 bg-gray-700 rounded-lg border border-red-500 shadow-xl">
-                <div className="flex justify-between items-center mb-4">
-                  <h4 className={`${showCardSelect.type === 'yellow' ? 'text-yellow-400' : 'text-red-500'} font-bold uppercase tracking-wider`}>
-                    Select Player for {showCardSelect.type.toUpperCase()} Card ({showCardSelect.team === 'A' ? match.teamA : match.teamB})
-                  </h4>
-                  <button
-                    onClick={() => setShowCardSelect(null)}
-                    className="text-gray-400 hover:text-slate-900 dark:text-white"
-                  >
-                    <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" /></svg>
-                  </button>
-                </div>
-
-                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-2 max-h-48 overflow-y-auto pr-2 custom-scrollbar">
-                  {players
-                    .filter(p => p.team === (showCardSelect.team === 'A' ? match.teamA : match.teamB))
-                    .sort((a, b) => a.name.localeCompare(b.name))
-                    .map(player => (
-                      <button
-                        key={player.id}
-                        onClick={() => confirmCard(showCardSelect.team, player, showCardSelect.type)}
-                        className="bg-gray-600 hover:bg-brand-500 text-slate-900 dark:text-white text-xs py-2 px-3 rounded transition-colors text-left truncate"
-                        title={player.name}
-                      >
-                        {player.name}
-                      </button>
-                    ))}
-                </div>
-              </div>
-            )}
-
-            {/* Goal Cancellation UI */}
-            {showCancelSelect && (
-              <div className="mt-4 p-4 bg-gray-700 rounded-lg border border-red-500 shadow-xl">
-                <div className="flex justify-between items-center mb-4">
-                  <h4 className="text-red-400 font-bold uppercase tracking-wider">
-                    Cancel Goal for {showCancelSelect.team === 'A' ? match.teamA : match.teamB}
-                  </h4>
-                  <button
-                    onClick={() => setShowCancelSelect(null)}
-                    className="text-gray-400 hover:text-slate-900 dark:text-white"
-                  >
-                    <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" /></svg>
-                  </button>
-                </div>
-
-                <div className="space-y-2 max-h-48 overflow-y-auto pr-2 custom-scrollbar">
-                  {events
-                    .filter(e => e.type === 'goal' && e.team === (showCancelSelect.team === 'A' ? match.teamA : match.teamB))
-                    .length > 0 ? (
-                    events
-                      .filter(e => e.type === 'goal' && e.team === (showCancelSelect.team === 'A' ? match.teamA : match.teamB))
-                      .map(goal => (
-                        <div key={goal.id} className="flex justify-between items-center bg-gray-600 p-2 rounded">
-                          <span className="text-sm text-slate-900 dark:text-white">
-                            {goal.player} ({goal.minute}')
-                          </span>
-                          <button
-                            onClick={() => confirmCancelGoal(goal)}
-                            className="bg-red-600 hover:bg-red-700 text-slate-900 dark:text-white text-[10px] py-1 px-3 rounded font-bold uppercase transition-colors"
-                          >
-                            Revoke
-                          </button>
-                        </div>
-                      ))
-                  ) : (
-                    <div className="text-center text-gray-400 py-4 text-sm">
-                      No goal events found to cancel.
+            {/* Dynamic Popups for Goal Scorer and Cards */}
+            {(showScorerSelect || showCardSelect || showCancelSelect) && (
+              <div className="border-t border-white/10 bg-slate-950/80 p-6 animate-in slide-in-from-bottom-4 relative">
+                
+                {/* Cancel Goal Context */}
+                {showCancelSelect && (
+                  <div className="border border-red-500/30 bg-red-500/5 rounded-2xl p-5">
+                    <div className="flex justify-between items-center mb-5">
+                      <h4 className="text-red-400 font-bold flex items-center gap-2">
+                        <Trash2 size={18} /> Cancel Goal for {showCancelSelect.team === 'A' ? match.teamA : match.teamB}
+                      </h4>
+                      <button onClick={() => setShowCancelSelect(null)} className="p-1.5 bg-slate-800 hover:bg-slate-700 rounded-lg text-slate-400"><X size={16} /></button>
                     </div>
-                  )
-                  }
-                </div>
+
+                    <div className="space-y-2 max-h-48 overflow-y-auto pr-2 custom-scrollbar">
+                      {events.filter(e => e.type === 'goal' && e.team === (showCancelSelect.team === 'A' ? match.teamA : match.teamB)).length > 0 ? (
+                        events.filter(e => e.type === 'goal' && e.team === (showCancelSelect.team === 'A' ? match.teamA : match.teamB)).map(goal => (
+                          <div key={goal.id} className="flex justify-between items-center bg-slate-900 border border-white/5 p-3 rounded-xl hover:border-red-500/30 transition-colors">
+                            <span className="text-sm font-bold text-white flex items-center gap-2">
+                              <span className="text-brand-400 p-1 bg-brand-500/10 rounded">{goal.minute}'</span> {goal.player}
+                            </span>
+                            <button
+                              onClick={() => confirmCancelGoal(goal)}
+                              className="bg-red-500/20 hover:bg-red-500 border border-red-500/50 hover:text-slate-900 text-red-500 text-xs py-1.5 px-4 rounded-lg font-black uppercase tracking-widest transition-all"
+                            >
+                              Revoke Goal
+                            </button>
+                          </div>
+                        ))
+                      ) : (
+                        <div className="text-center text-slate-500 py-6 border border-dashed border-white/10 rounded-xl font-bold">
+                          No goal events recorded yet.
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                )}
+
+                {/* Confirm Goal / Card Scorer Context */}
+                {(showScorerSelect || showCardSelect) && (
+                  <div className={cn(
+                    "border rounded-2xl p-5",
+                    showScorerSelect ? "bg-brand-500/5 border-brand-500/30" :
+                    showCardSelect?.type === 'yellow' ? "bg-yellow-500/5 border-yellow-500/30" : "bg-red-500/5 border-red-500/30"
+                  )}>
+                    <div className="flex justify-between items-center mb-5">
+                      <h4 className={cn(
+                        "font-bold flex items-center gap-2 text-lg",
+                        showScorerSelect ? "text-brand-400" : showCardSelect?.type === 'yellow' ? "text-yellow-500" : "text-red-500"
+                      )}>
+                        {showScorerSelect ? <Trophy size={20} /> : <AlertTriangle size={20} />}
+                        Select Player for {showScorerSelect ? 'Goal' : `${showCardSelect.type} Card`}
+                        <span className="text-white ml-2 opacity-50 px-2 py-0.5 bg-slate-800 rounded text-xs uppercase tracking-widest border border-white/10">
+                          {showScorerSelect ? (showScorerSelect.team === 'A' ? match.teamA : match.teamB) : (showCardSelect.team === 'A' ? match.teamA : match.teamB)}
+                        </span>
+                      </h4>
+                      <button onClick={() => {setShowScorerSelect(null); setShowCardSelect(null)}} className="p-1.5 bg-slate-800 hover:bg-slate-700 rounded-lg text-slate-400"><X size={16} /></button>
+                    </div>
+
+                    <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3 max-h-60 overflow-y-auto pr-2 custom-scrollbar">
+                      {players
+                        .filter(p => p.team === (showScorerSelect ? (showScorerSelect.team === 'A' ? match.teamA : match.teamB) : (showCardSelect.team === 'A' ? match.teamA : match.teamB)))
+                        .sort((a, b) => a.name.localeCompare(b.name))
+                        .map(player => (
+                          <button
+                            key={player.id}
+                            onClick={() => showScorerSelect ? confirmGoal(showScorerSelect.team, player) : confirmCard(showCardSelect.team, player, showCardSelect.type)}
+                            className={cn(
+                              "text-left p-3 rounded-xl border font-bold text-sm transition-all flex items-center gap-2 truncate",
+                              showScorerSelect ? "bg-slate-900 border-white/5 hover:border-brand-500 text-slate-300 hover:text-brand-400" :
+                              showCardSelect?.type === 'yellow' ? "bg-slate-900 border-white/5 hover:border-yellow-500 text-slate-300 hover:text-yellow-500" :
+                              "bg-slate-900 border-white/5 hover:border-red-500 text-slate-300 hover:text-red-500"
+                            )}
+                            title={player.name}
+                          >
+                            <span className="w-6 h-6 shrink-0 bg-slate-800 rounded-md flex items-center justify-center text-[10px] text-slate-500">{player.number || '#'}</span>
+                            <span className="truncate">{player.name}</span>
+                          </button>
+                        ))}
+                      <button
+                        onClick={() => showScorerSelect ? confirmGoal(showScorerSelect.team, null) : confirmCard(showCardSelect.team, null, showCardSelect.type)}
+                        className="p-3 rounded-xl border border-dashed border-white/20 hover:border-white/50 bg-transparent text-slate-400 hover:text-white font-bold text-sm transition-all flex items-center justify-center italic"
+                      >
+                        Select Unknown / Other
+                      </button>
+                    </div>
+                  </div>
+                )}
               </div>
             )}
           </div>
