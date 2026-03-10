@@ -65,7 +65,7 @@ function App() {
               <Route
                 path="/admin/matches"
                 element={
-                  <PrivateRoute>
+                  <PrivateRoute requireTournamentAdmin>
                     <ManageMatches />
                   </PrivateRoute>
                 }
@@ -73,7 +73,7 @@ function App() {
               <Route
                 path="/admin/teams"
                 element={
-                  <PrivateRoute>
+                  <PrivateRoute requireTournamentAdmin>
                     <ManageTeams />
                   </PrivateRoute>
                 }
@@ -81,7 +81,7 @@ function App() {
               <Route
                 path="/admin/players"
                 element={
-                  <PrivateRoute>
+                  <PrivateRoute requireTournamentAdmin>
                     <ManagePlayers />
                   </PrivateRoute>
                 }
@@ -89,7 +89,7 @@ function App() {
               <Route
                 path="/admin/lineups/:matchId?/:teamName?"
                 element={
-                  <PrivateRoute>
+                  <PrivateRoute requireTournamentAdmin>
                     <ManageLineups />
                   </PrivateRoute>
                 }
@@ -97,7 +97,7 @@ function App() {
               <Route
                 path="/admin/tournaments"
                 element={
-                  <PrivateRoute>
+                  <PrivateRoute requireTournamentAdmin>
                     <ManageTournaments />
                   </PrivateRoute>
                 }
@@ -105,7 +105,7 @@ function App() {
               <Route
                 path="/admin/news"
                 element={
-                  <PrivateRoute>
+                  <PrivateRoute requireNewsAdmin>
                     <ManageNews />
                   </PrivateRoute>
                 }
@@ -113,7 +113,7 @@ function App() {
               <Route
                 path="/admin/sponsors"
                 element={
-                  <PrivateRoute>
+                  <PrivateRoute requireTournamentAdmin>
                     <ManageSponsors />
                   </PrivateRoute>
                 }

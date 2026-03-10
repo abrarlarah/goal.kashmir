@@ -11,7 +11,7 @@ import AssetPicker from '../../components/admin/AssetPicker';
 import { registerAsset } from '../../utils/assetRegistry';
 
 const ManageNews = () => {
-    const { isAdmin, isSuperAdmin } = useAuth();
+    const { isNewsAdmin, isSuperAdmin } = useAuth();
     const [news, setNews] = useState([]);
     const [loading, setLoading] = useState(true);
     const [uploading, setUploading] = useState(false);
@@ -312,7 +312,7 @@ const ManageNews = () => {
         }
     };
 
-    if (!isAdmin) return <div className="text-slate-900 dark:text-white text-center py-20">Access Denied</div>;
+    if (!isNewsAdmin && !isSuperAdmin) return <div className="text-slate-900 dark:text-white text-center py-20">Access Denied</div>;
 
     return (
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">

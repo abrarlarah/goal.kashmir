@@ -100,6 +100,8 @@ export function AuthProvider({ children }) {
     userProfile,
     isSuperAdmin: userRole === 'superadmin',
     isAdmin: userRole === 'superadmin' || userRole === 'admin',
+    isNewsAdmin: userRole === 'superadmin' || userRole === 'newsadmin',
+    hasAnyAdminAccess: userRole === 'superadmin' || userRole === 'admin' || userRole === 'newsadmin',
     isLoggedIn: !!currentUser,
     signup,
     login,

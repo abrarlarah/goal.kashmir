@@ -1,8 +1,8 @@
 import { Navigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 
-export default function PrivateRoute({ children, requireSuperAdmin = false }) {
-  const { currentUser, isAdmin, isSuperAdmin } = useAuth();
+export default function PrivateRoute({ children, requireSuperAdmin = false, requireTournamentAdmin = false, requireNewsAdmin = false }) {
+  const { currentUser, isAdmin, isSuperAdmin, isNewsAdmin, hasAnyAdminAccess } = useAuth();
   const location = useLocation();
 
   if (!currentUser) {
@@ -11,8 +11,8 @@ export default function PrivateRoute({ children, requireSuperAdmin = false }) {
     return <Navigate to="/login" state={{ from: location }} replace />;
   }
 
-  // Check if user has admin role
-  if (!isAdmin) {
+  // Check if user has ANY admin role before letting them into base generic admin routes
+  if (!hasAnyAdminAccess) {
     return (
       <div className="min-h-[60vh] flex flex-col items-center justify-center text-center px-4">
         <div className="text-6xl mb-4">🔒</div>
@@ -22,6 +22,15 @@ export default function PrivateRoute({ children, requireSuperAdmin = false }) {
         </p>
       </div>
     );
+  }
+
+  // Check specific required modes
+  if (requireTournamentAdmin && !isAdmin) { // isAdmin acts as tournament admin
+      return <Navigate to="/admin" replace />;
+  }
+
+  if (requireNewsAdmin && !isNewsAdmin) { 
+      return <Navigate to="/admin" replace />;
   }
 
   // Check if super admin is required

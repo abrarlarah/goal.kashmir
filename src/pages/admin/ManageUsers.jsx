@@ -2,12 +2,13 @@ import React, { useState, useEffect } from 'react';
 import { collection, getDocs, doc, updateDoc, deleteDoc } from 'firebase/firestore';
 import { db } from '../../firebase';
 import { useAuth } from '../../context/AuthContext';
-import { Shield, ShieldAlert, ShieldCheck, Users, Search, Crown, UserX, ChevronRight } from 'lucide-react';
+import { Shield, ShieldAlert, ShieldCheck, Users, Search, Crown, UserX, ChevronRight, Newspaper } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 
 const ROLE_CONFIG = {
     superadmin: { label: 'Super Admin', color: 'text-yellow-400 bg-yellow-400/10 border-yellow-400/20', icon: Crown },
     admin: { label: 'Tournament Admin', color: 'text-blue-400 bg-blue-400/10 border-blue-400/20', icon: ShieldCheck },
+    newsadmin: { label: 'News Admin', color: 'text-pink-400 bg-pink-400/10 border-pink-400/20', icon: Newspaper },
     null: { label: 'User', color: 'text-gray-400 bg-gray-400/10 border-gray-400/20', icon: Users }
 };
 
@@ -109,12 +110,15 @@ const ManageUsers = () => {
                     <p className="text-gray-400 text-sm mt-1">Assign roles to control who can manage tournaments and data.</p>
                 </div>
 
-                <div className="flex items-center gap-3 text-xs font-bold">
+                <div className="flex items-center gap-3 text-xs font-bold flex-wrap">
                     <span className="px-3 py-1.5 rounded-lg border bg-yellow-400/10 border-yellow-400/20 text-yellow-400">
                         <Crown size={12} className="inline mr-1" /> Super Admin: Full Access
                     </span>
                     <span className="px-3 py-1.5 rounded-lg border bg-blue-400/10 border-blue-400/20 text-blue-400">
                         <ShieldCheck size={12} className="inline mr-1" /> Admin: Own Tournaments
+                    </span>
+                    <span className="px-3 py-1.5 rounded-lg border bg-pink-400/10 border-pink-400/20 text-pink-400">
+                        <Newspaper size={12} className="inline mr-1" /> News Admin: Manage News
                     </span>
                 </div>
             </div>
@@ -138,7 +142,7 @@ const ManageUsers = () => {
             </div>
 
             {/* Stats */}
-            <div className="grid grid-cols-3 gap-4 mb-8">
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
                 <div className="bg-gray-800/50 p-4 rounded-2xl border border-white/5 text-center">
                     <div className="text-2xl font-black text-white">{users.length}</div>
                     <div className="text-[10px] text-gray-500 uppercase font-black tracking-widest">Total Users</div>
@@ -150,6 +154,10 @@ const ManageUsers = () => {
                 <div className="bg-gray-800/50 p-4 rounded-2xl border border-white/5 text-center">
                     <div className="text-2xl font-black text-blue-400">{users.filter(u => u.role === 'admin').length}</div>
                     <div className="text-[10px] text-gray-500 uppercase font-black tracking-widest">Admins</div>
+                </div>
+                <div className="bg-gray-800/50 p-4 rounded-2xl border border-white/5 text-center">
+                    <div className="text-2xl font-black text-pink-400">{users.filter(u => u.role === 'newsadmin').length}</div>
+                    <div className="text-[10px] text-gray-500 uppercase font-black tracking-widest">News Admins</div>
                 </div>
             </div>
 
@@ -198,6 +206,7 @@ const ManageUsers = () => {
                                                 className="bg-gray-700 border border-gray-600 rounded-xl px-3 py-2 text-sm text-white outline-none focus:ring-2 focus:ring-brand-500"
                                             >
                                                 <option value="">Regular User</option>
+                                                <option value="newsadmin">News Admin</option>
                                                 <option value="admin">Tournament Admin</option>
                                                 <option value="superadmin">Super Admin</option>
                                             </select>

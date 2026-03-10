@@ -9,12 +9,13 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Calendar, Clock, MapPin, Shirt, ChevronRight, Trophy, Activity, MapPinned, UserPlus, Zap, Target } from 'lucide-react';
 import { cn } from '../utils/cn';
 import { useAuth } from '../context/AuthContext';
+import { collection, query, where, getDocs } from 'firebase/firestore';
+import { db } from '../firebase';
 
 const DISTRICTS = {
   JAMMU: ['Jammu', 'Samba', 'Kathua', 'Udhampur', 'Reasi', 'Rajouri', 'Poonch', 'Doda', 'Ramban', 'Kishtwar'],
   KASHMIR: ['Srinagar', 'Ganderbal', 'Budgam', 'Baramulla', 'Bandipora', 'Kupwara', 'Pulwama', 'Shopian', 'Kulgam', 'Anantnag']
 };
-
 
 const Dashboard = () => {
   const { isAdmin, isSuperAdmin, currentUser } = useAuth();
@@ -23,6 +24,37 @@ const Dashboard = () => {
   const [selectedDistrict, setSelectedDistrict] = useState('Baramulla');
   const [selectedYear, setSelectedYear] = useState(new Date().getFullYear().toString());
   const [expandedMatch, setExpandedMatch] = useState(null);
+  const [liveMatchEvents, setLiveMatchEvents] = useState({});
+
+  useEffect(() => {
+    // Fetch events (like goals) for live matches so we can display them
+    const fetchLiveEvents = async () => {
+      if (!matches) return;
+      
+      const currentLive = matches.filter(m => m.status === 'live');
+      if (currentLive.length === 0) return;
+      
+      const newEvents = {};
+      for (const m of currentLive) {
+        try {
+          // Getting events collection for each live match to find goals
+          const eventsRef = collection(db, 'matches', m.id, 'events');
+          const q = query(eventsRef, where('type', '==', 'goal'));
+          const snapshot = await getDocs(q);
+          const goals = snapshot.docs.map(doc => doc.data()).sort((a, b) => a.minute - b.minute);
+          newEvents[m.id] = goals;
+        } catch (error) {
+           console.error("Error fetching live events:", error);
+        }
+      }
+      setLiveMatchEvents(newEvents);
+    };
+    
+    fetchLiveEvents();
+    // Poll every 30 seconds for live event updates
+    const interval = setInterval(fetchLiveEvents, 30000);
+    return () => clearInterval(interval);
+  }, [matches]);
 
   const canEditMatch = (match) => {
     if (!isAdmin || !match) return false;
@@ -119,10 +151,10 @@ const Dashboard = () => {
 
   const TeamLogo = ({ teamName, size = 'md' }) => {
     const team = getTeamInfo(teamName);
-    const sizes = { sm: 'h-7 w-7', md: 'h-10 w-10', lg: 'h-14 w-14' };
+    const sizes = { sm: 'h-6 w-6', md: 'h-8 w-8', lg: 'h-10 w-10 text-xs' };
     return (
       <div className={cn(sizes[size], "rounded-full bg-slate-800/80 flex items-center justify-center ring-2 ring-white/10 overflow-hidden flex-shrink-0")}>
-        {team.logoUrl ? <img src={team.logoUrl} alt={teamName} className="h-full w-full object-contain p-1.5 bg-white" /> : <span className="text-[10px] font-bold text-slate-400">{teamName?.substring(0, 2).toUpperCase()}</span>}
+        {team.logoUrl ? <img src={team.logoUrl} alt={teamName} className="h-full w-full object-contain p-1 bg-white" /> : <span className="font-bold text-slate-400">{teamName?.substring(0, 2).toUpperCase()}</span>}
       </div>
     );
   };
@@ -211,40 +243,88 @@ const Dashboard = () => {
                   const isExpanded = expandedMatch === match.id;
                   const matchLineups = getMatchLineups(match.id);
                   return (
-                    <motion.div layout key={match.id} className="rounded-2xl overflow-hidden bg-gradient-to-br from-slate-900/80 to-slate-800/50 border border-white/10 hover:border-brand-500/30 transition-all shadow-xl shadow-black/20">
-                      <div className="p-4 sm:p-6">
-                        {/* Status bar */}
-                        <div className="flex justify-between items-center mb-4 sm:mb-6">
-                          <span className="px-2.5 py-1 rounded-full bg-red-500/15 text-red-400 text-[11px] font-bold uppercase tracking-wider border border-red-500/20 flex items-center gap-1.5">
-                            <span className="h-1.5 w-1.5 rounded-full bg-red-500 animate-pulse" /> Live • <MatchTimer match={match} />
-                          </span>
-                          <div className="flex items-center gap-2 text-[11px] text-slate-500">
-                            {match.stadium && <span className="hidden sm:flex items-center gap-1"><MapPin size={12} />{match.stadium}</span>}
-                            {getTournamentId(match.competition) ? <Link to={`/tournaments/${getTournamentId(match.competition)}`} className="px-2 py-0.5 bg-brand-500/10 text-brand-400 rounded-md hover:bg-brand-500/20 transition-colors font-semibold">{match.competition}</Link> : <span className="text-slate-500">{match.competition}</span>}
+                    <motion.div layout key={match.id} className="relative rounded-2xl overflow-hidden bg-slate-900 border border-slate-700/50 hover:border-brand-500/50 transition-all shadow-2xl shadow-black/40 group">
+                      {/* Premium Top Glow */}
+                      <div className="absolute top-0 inset-x-0 h-[2px] bg-gradient-to-r from-transparent via-red-500 to-transparent opacity-70 group-hover:opacity-100 transition-opacity"></div>
+                      
+                      <div className="p-3 sm:p-5 relative z-10">
+                        {/* Status bar with Actions - Single Line Layout */}
+                        <div className="flex flex-row justify-between items-center gap-1.5 sm:gap-2 mb-3 bg-slate-800/40 p-1.5 sm:p-2.5 rounded-xl border border-white/5 shadow-inner">
+                          {/* Left: Status */}
+                          <div className="flex items-center flex-shrink-0">
+                            <span className="px-1.5 py-0.5 sm:px-2.5 sm:py-1 rounded-md bg-red-500/20 text-red-400 text-[9px] sm:text-[10px] font-black uppercase tracking-widest border border-red-500/30 flex items-center gap-1 sm:gap-1.5 shadow-[0_0_10px_rgba(239,68,68,0.2)]">
+                              <span className="h-1.5 w-1.5 rounded-full bg-red-500 animate-pulse" /> <span className="hidden xs:inline">Live • </span><MatchTimer match={match} />
+                            </span>
+                          </div>
+                          
+                          {/* Center: Tournament Name */}
+                          <div className="flex-1 flex justify-center items-center text-center px-1 overflow-hidden min-w-[50px]">
+                            {getTournamentId(match.competition) ? (
+                              <Link to={`/tournaments/${getTournamentId(match.competition)}`} className="text-[9px] sm:text-[10px] font-bold sm:font-black uppercase tracking-wider sm:tracking-[0.2em] text-transparent bg-clip-text bg-gradient-to-r from-brand-300 to-brand-500 hover:from-brand-200 hover:to-brand-400 transition-colors drop-shadow-sm truncate max-w-full">
+                                {match.competition}
+                              </Link>
+                            ) : (
+                              <span className="text-[9px] sm:text-[10px] font-bold sm:font-black uppercase tracking-wider sm:tracking-[0.2em] text-slate-400 truncate max-w-full">
+                                {match.competition}
+                              </span>
+                            )}
+                          </div>
+                          
+                          {/* Right: Actions - Icons only on Mobile */}
+                          <div className="flex justify-end items-center gap-1 sm:gap-1.5 flex-shrink-0">
+                            <Link to={`/live/${match.id}`} className="flex items-center justify-center p-1.5 sm:px-2.5 sm:py-1.5 bg-brand-500/10 hover:bg-brand-500/20 text-brand-400 border border-brand-500/20 rounded-md sm:rounded-lg transition-all shadow-sm active:scale-95" title="Match Center">
+                              <Activity size={12} /> <span className="hidden md:inline ml-1.5 text-[10px] font-bold">Match Center</span>
+                            </Link>
+                            {matchLineups.length > 0 && (
+                              <button onClick={() => setExpandedMatch(isExpanded ? null : match.id)} className="flex items-center justify-center p-1.5 sm:px-2.5 sm:py-1.5 bg-slate-800 hover:bg-slate-700 border border-slate-600 text-slate-300 rounded-md sm:rounded-lg transition-all active:scale-95" title={isExpanded ? 'Hide Lineups' : 'Show Lineups'}>
+                                <Shirt size={12} /> <span className="hidden md:inline ml-1.5 text-[10px] font-bold">{isExpanded ? 'Hide Lineups' : 'Lineups'}</span>
+                              </button>
+                            )}
+                            {canEditMatch(match) && (
+                              <Link to={`/admin/lineups/${match.id}`} className="flex items-center justify-center p-1.5 sm:px-2.5 sm:py-1.5 bg-indigo-500/10 hover:bg-indigo-500/20 border border-indigo-500/20 text-indigo-400 rounded-md sm:rounded-lg transition-all active:scale-95" title="Edit Lineup">
+                                <UserPlus size={12} /> <span className="hidden md:inline ml-1.5 text-[10px] font-bold">Edit Lineup</span>
+                              </Link>
+                            )}
                           </div>
                         </div>
+
                         {/* Scoreboard */}
-                        <div className="flex items-center justify-between gap-2 sm:gap-6">
-                          <div className="flex-1 flex flex-col items-center gap-2 min-w-0">
-                            <TeamLogo teamName={match.teamA} size="lg" />
-                            <span className="text-sm sm:text-base font-bold text-white text-center truncate w-full">{match.teamA}</span>
+                        <div className="flex items-center justify-center gap-3 sm:gap-6 w-full max-w-sm mx-auto">
+                          <div className="flex-1 flex flex-col items-center gap-1.5 min-w-0">
+                            <TeamLogo teamName={match.teamA} size="md" />
+                            <span className="text-xs font-bold text-white text-center truncate w-full">{match.teamA}</span>
                           </div>
-                          <div className="px-4 sm:px-8 py-3 bg-black/40 rounded-2xl border border-white/5 backdrop-blur-md flex-shrink-0">
-                            <span className="font-impact text-3xl sm:text-5xl tracking-wider text-white">{match.scoreA}<span className="text-slate-600 mx-1.5 sm:mx-3">-</span>{match.scoreB}</span>
+                          <div className="px-3 sm:px-4 py-1.5 bg-black/40 rounded-xl border border-white/5 backdrop-blur-md flex-shrink-0">
+                            <span className="font-impact text-xl sm:text-3xl tracking-wider text-white">{match.scoreA}<span className="text-slate-600 mx-1 sm:mx-2">-</span>{match.scoreB}</span>
                           </div>
-                          <div className="flex-1 flex flex-col items-center gap-2 min-w-0">
-                            <TeamLogo teamName={match.teamB} size="lg" />
-                            <span className="text-sm sm:text-base font-bold text-white text-center truncate w-full">{match.teamB}</span>
+                          <div className="flex-1 flex flex-col items-center gap-1.5 min-w-0">
+                            <TeamLogo teamName={match.teamB} size="md" />
+                            <span className="text-xs font-bold text-white text-center truncate w-full">{match.teamB}</span>
                           </div>
                         </div>
-                        {/* Actions */}
-                        <div className="mt-4 sm:mt-6 flex justify-center gap-2 sm:gap-3 flex-wrap">
-                          <Link to={`/live/${match.id}`} className="flex items-center gap-1.5 px-4 py-2 bg-gradient-to-r from-brand-600 to-brand-500 hover:from-brand-500 hover:to-brand-400 text-white rounded-xl text-xs sm:text-sm font-bold transition-all shadow-lg shadow-brand-500/25 active:scale-95">
-                            <Activity size={14} /> Match Center
-                          </Link>
-                          {matchLineups.length > 0 && <button onClick={() => setExpandedMatch(isExpanded ? null : match.id)} className="flex items-center gap-1.5 px-4 py-2 bg-white/5 hover:bg-white/10 text-slate-300 rounded-xl text-xs sm:text-sm font-semibold border border-white/10 transition-all active:scale-95"><Shirt size={14} /> {isExpanded ? 'Hide' : 'Lineups'}</button>}
-                          {canEditMatch(match) && <Link to={`/admin/lineups/${match.id}`} className="flex items-center gap-1.5 px-4 py-2 bg-indigo-600/20 hover:bg-indigo-600/30 text-indigo-400 rounded-xl text-xs sm:text-sm font-semibold border border-indigo-500/30 transition-all active:scale-95"><UserPlus size={14} /> Lineup</Link>}
-                        </div>
+                        
+                        {/* Goal Events Display */}
+                        {liveMatchEvents[match.id] && liveMatchEvents[match.id].length > 0 && (
+                          <div className="mt-3 flex justify-between px-2 sm:px-6 max-w-sm mx-auto">
+                            {/* Team A Goals */}
+                            <div className="flex-1 pr-1.5 text-right">
+                              {liveMatchEvents[match.id].filter(e => e.team === match.teamA).map((goal, idx) => (
+                                <div key={idx} className="text-[9px] sm:text-[10px] text-slate-300 font-medium truncate">
+                                  {goal.player} <span className="text-brand-400 font-bold ml-1">{goal.minute}'</span>
+                                </div>
+                              ))}
+                            </div>
+                            <div className="w-12 sm:w-16 flex-shrink-0" /> {/* Spacer under score */}
+                            {/* Team B Goals */}
+                            <div className="flex-1 pl-1.5 text-left">
+                              {liveMatchEvents[match.id].filter(e => e.team === match.teamB).map((goal, idx) => (
+                                <div key={idx} className="text-[9px] sm:text-[10px] text-slate-300 font-medium truncate">
+                                  <span className="text-brand-400 font-bold mr-1">{goal.minute}'</span> {goal.player}
+                                </div>
+                              ))}
+                            </div>
+                          </div>
+                        )}
                       </div>
                       <AnimatePresence>
                         {isExpanded && (
