@@ -553,32 +553,32 @@ const LiveMatch = () => {
               </div>
             </div>
 
-            <div className="p-5">
-              <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            <div className="p-2 sm:p-5">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2 sm:gap-6">
 
                 {/* Team A Score Controls */}
-                <div className="bg-slate-950/50 rounded-2xl p-5 border border-white/5 relative overflow-hidden group">
+                <div className="bg-slate-950/50 rounded-xl sm:rounded-2xl p-3 sm:p-5 border border-white/5 relative overflow-hidden group">
                   <div className="absolute top-0 right-0 p-4 opacity-5 pointer-events-none group-hover:scale-110 transition-transform duration-500">
                     <Trophy size={64} />
                   </div>
-                  <div className="text-center mb-6">
-                    <span className="text-xs font-bold text-slate-500 uppercase tracking-widest">Home Team</span>
-                    <h2 className="text-2xl font-black text-white truncate leading-tight mt-1" title={match.teamA}>{match.teamA}</h2>
-                    <div className="text-6xl font-black text-brand-400 my-4 drop-shadow-[0_0_15px_rgba(14,165,233,0.3)]">{match.scoreA || 0}</div>
+                  <div className="text-center mb-3 sm:mb-6">
+                    <span className="text-[9px] sm:text-xs font-bold text-slate-500 uppercase tracking-widest">Home Team</span>
+                    <h2 className="text-lg sm:text-2xl font-black text-white truncate leading-tight mt-0.5 sm:mt-1" title={match.teamA}>{match.teamA}</h2>
+                    <div className="text-3xl sm:text-6xl font-black text-brand-400 my-2 sm:my-4 drop-shadow-[0_0_15px_rgba(14,165,233,0.3)]">{match.scoreA || 0}</div>
                   </div>
                   
-                  <div className="grid grid-cols-2 gap-2 mb-4">
+                  <div className="grid grid-cols-2 gap-1.5 sm:gap-2 mb-2 sm:mb-4">
                     <button 
                       onClick={() => updateScore('A', -1)} 
-                      className="flex items-center justify-center gap-1 bg-red-500/10 text-red-500 hover:bg-red-500/20 border border-red-500/20 py-3 rounded-xl font-bold transition-all"
+                      className="flex items-center justify-center gap-1 bg-red-500/10 text-red-500 hover:bg-red-500/20 border border-red-500/20 py-2 sm:py-3 rounded-lg sm:rounded-xl font-bold transition-all text-[10px] sm:text-base"
                     >
-                      <Minus size={16} /> Goal
+                      <Minus size={12} className="sm:w-4 sm:h-4" /> Goal
                     </button>
                     <button 
                       onClick={() => updateScore('A', 1)} 
-                      className="flex items-center justify-center gap-1 bg-brand-500/10 text-brand-400 hover:bg-brand-500/20 border border-brand-500/30 py-3 rounded-xl font-bold transition-all shadow-[0_0_20px_rgba(14,165,233,0.1)] hover:shadow-[0_0_20px_rgba(14,165,233,0.3)]"
+                      className="flex items-center justify-center gap-1 bg-brand-500/10 text-brand-400 hover:bg-brand-500/20 border border-brand-500/30 py-2 sm:py-3 rounded-lg sm:rounded-xl font-bold transition-all shadow-[0_0_20px_rgba(14,165,233,0.1)] hover:shadow-[0_0_20px_rgba(14,165,233,0.3)] text-[10px] sm:text-base"
                     >
-                      <Plus size={16} /> Goal
+                      <Plus size={12} className="sm:w-4 sm:h-4" /> Goal
                     </button>
                   </div>
 
@@ -599,9 +599,9 @@ const LiveMatch = () => {
                 </div>
 
                 {/* Main Match / Clock Controls */}
-                <div className="flex flex-col gap-4">
+                <div className="flex flex-col gap-2 sm:gap-4 order-first lg:order-none sm:col-span-2 lg:col-span-1">
                   {/* Timer Display */}
-                  <div className="bg-slate-950/80 rounded-2xl p-6 border-2 border-slate-800 text-center flex flex-col items-center justify-center shadow-inner relative overflow-hidden">
+                  <div className="bg-slate-950/80 rounded-xl sm:rounded-2xl p-3 sm:p-6 border-2 border-slate-800 text-center flex flex-col items-center justify-center shadow-inner relative overflow-hidden">
                     <div className="absolute inset-0 bg-gradient-to-br from-brand-500/5 to-transparent pointer-events-none" />
                     
                     <span className="text-xs font-bold text-slate-500 uppercase tracking-widest mb-2 flex items-center gap-2">
@@ -609,76 +609,75 @@ const LiveMatch = () => {
                     </span>
                     
                     <div className={cn(
-                      "text-6xl font-mono font-black tracking-tighter tabular-nums drop-shadow-xl",
+                      "text-3xl sm:text-6xl font-mono font-black tracking-tighter tabular-nums drop-shadow-xl",
                       match.timerRunning ? "text-brand-400" : "text-white"
                     )}>
                       <MatchTimer match={match} />
                     </div>
 
                     {/* Clock manipulation */}
-                    <div className="flex items-center justify-center gap-2 mt-6">
-                      <button onClick={() => updateMinute(-1)} className="w-12 h-10 flex items-center justify-center bg-slate-800 hover:bg-slate-700 text-slate-300 rounded-lg text-sm font-bold border border-slate-700 transition-colors">-1</button>
-                      <button onClick={() => updateMinute(1)} className="w-12 h-10 flex items-center justify-center bg-slate-800 hover:bg-slate-700 text-slate-300 rounded-lg text-sm font-bold border border-slate-700 transition-colors">+1</button>
-                      <button onClick={() => updateMinute(5)} className="px-3 h-10 flex items-center justify-center bg-slate-800 hover:bg-slate-700 text-slate-300 rounded-lg text-sm font-bold border border-slate-700 transition-colors">+5m</button>
-                      <button onClick={resetTimer} className="w-10 h-10 flex items-center justify-center bg-slate-800 hover:bg-red-500/20 text-slate-500 hover:text-red-400 rounded-lg border border-slate-700 hover:border-red-500/30 transition-colors ml-2" title="Reset Clock to 00:00">
-                        <RotateCcw size={16} />
+                    <div className="flex items-center justify-center gap-1 sm:gap-2 mt-2 sm:mt-6 w-full">
+                      <button onClick={() => updateMinute(-1)} className="flex-1 h-8 sm:h-10 flex items-center justify-center bg-slate-800 hover:bg-slate-700 text-slate-300 rounded sm:rounded-lg text-[10px] sm:text-sm font-bold border border-slate-700 transition-colors">-1</button>
+                      <button onClick={() => updateMinute(1)} className="flex-1 h-8 sm:h-10 flex items-center justify-center bg-slate-800 hover:bg-slate-700 text-slate-300 rounded sm:rounded-lg text-[10px] sm:text-sm font-bold border border-slate-700 transition-colors">+1</button>
+                      <button onClick={() => updateMinute(5)} className="flex-1 h-8 sm:h-10 flex items-center justify-center bg-slate-800 hover:bg-slate-700 text-slate-300 rounded sm:rounded-lg text-[10px] sm:text-sm font-bold border border-slate-700 transition-colors">+5m</button>
+                      <button onClick={resetTimer} className="flex-1 h-8 sm:h-10 flex items-center justify-center bg-slate-800 hover:bg-red-500/20 text-slate-500 hover:text-red-400 rounded sm:rounded-lg border border-slate-700 hover:border-red-500/30 transition-colors" title="Reset Clock to 00:00">
+                        <RotateCcw size={12} className="sm:w-4 sm:h-4" />
                       </button>
                     </div>
                   </div>
 
-                  {/* Play/Pause & Match Status */}
-                  <div className="grid grid-cols-2 gap-3 h-full">
+                  <div className="grid grid-cols-2 gap-2 h-full">
                     <button
                       onClick={toggleTimer}
                       className={cn(
-                        "flex flex-col items-center justify-center gap-2 py-4 rounded-2xl font-black uppercase tracking-wider transition-all border shadow-lg",
+                        "flex flex-col items-center justify-center gap-1 py-2 sm:py-4 rounded-xl sm:rounded-2xl font-black uppercase tracking-wider transition-all border shadow-lg",
                         match.timerRunning 
                           ? "bg-yellow-500/10 text-yellow-500 border-yellow-500/30 hover:bg-yellow-500/20" 
                           : "bg-brand-500/10 text-brand-400 border-brand-500/30 hover:bg-brand-500/20 shadow-[0_0_20px_rgba(14,165,233,0.1)] hover:shadow-[0_0_20px_rgba(14,165,233,0.2)]"
                       )}
                     >
-                      {match.timerRunning ? <Pause size={28} /> : <Play size={28} />}
-                      <span className="text-[10px]">{match.timerRunning ? 'Pause Timer' : 'Start Timer'}</span>
+                      {match.timerRunning ? <Pause size={16} className="sm:w-[28px] sm:h-[28px]" /> : <Play size={16} className="sm:w-[28px] sm:h-[28px]" />}
+                      <span className="text-[8px] sm:text-[10px]">{match.timerRunning ? 'Pause Clock' : 'Current Time'}</span>
                     </button>
                     
                     <button
                       onClick={toggleMatchStatus}
                       className={cn(
-                        "flex flex-col items-center justify-center gap-2 py-4 rounded-2xl font-black uppercase tracking-wider transition-all border shadow-lg",
+                        "flex flex-col items-center justify-center gap-1 py-2 sm:py-4 rounded-xl sm:rounded-2xl font-black uppercase tracking-wider transition-all border shadow-lg",
                         match.status === 'live' 
                           ? "bg-red-500/10 text-red-500 border-red-500/30 hover:bg-red-500/20 shadow-[0_0_20px_rgba(239,68,68,0.1)] hover:shadow-[0_0_20px_rgba(239,68,68,0.2)]" 
                           : "bg-green-500/10 text-green-400 border-green-500/30 hover:bg-green-500/20"
                       )}
                     >
-                      {match.status === 'live' ? <Square size={26} fill="currentColor" /> : <Play size={28} />}
-                      <span className="text-[10px]">{match.status === 'live' ? 'End Match' : 'Start Match'}</span>
+                      {match.status === 'live' ? <Square size={16} fill="currentColor" className="sm:w-[26px] sm:h-[26px]" /> : <Play size={16} className="sm:w-[28px] sm:h-[28px]" />}
+                      <span className="text-[8px] sm:text-[10px]">{match.status === 'live' ? 'End Match' : 'Start Match'}</span>
                     </button>
                   </div>
                 </div>
 
                 {/* Team B Score Controls */}
-                <div className="bg-slate-950/50 rounded-2xl p-5 border border-white/5 relative overflow-hidden group">
+                <div className="bg-slate-950/50 rounded-xl sm:rounded-2xl p-3 sm:p-5 border border-white/5 relative overflow-hidden group">
                   <div className="absolute top-0 right-0 p-4 opacity-5 pointer-events-none group-hover:scale-110 transition-transform duration-500">
                     <Trophy size={64} />
                   </div>
-                  <div className="text-center mb-6">
-                    <span className="text-xs font-bold text-slate-500 uppercase tracking-widest">Away Team</span>
-                    <h2 className="text-2xl font-black text-white truncate leading-tight mt-1" title={match.teamB}>{match.teamB}</h2>
-                    <div className="text-6xl font-black text-brand-400 my-4 drop-shadow-[0_0_15px_rgba(14,165,233,0.3)]">{match.scoreB || 0}</div>
+                  <div className="text-center mb-3 sm:mb-6">
+                    <span className="text-[9px] sm:text-xs font-bold text-slate-500 uppercase tracking-widest">Away Team</span>
+                    <h2 className="text-lg sm:text-2xl font-black text-white truncate leading-tight mt-0.5 sm:mt-1" title={match.teamB}>{match.teamB}</h2>
+                    <div className="text-3xl sm:text-6xl font-black text-brand-400 my-2 sm:my-4 drop-shadow-[0_0_15px_rgba(14,165,233,0.3)]">{match.scoreB || 0}</div>
                   </div>
                   
-                  <div className="grid grid-cols-2 gap-2 mb-4">
+                  <div className="grid grid-cols-2 gap-1.5 sm:gap-2 mb-2 sm:mb-4">
                     <button 
                       onClick={() => updateScore('B', -1)} 
-                      className="flex items-center justify-center gap-1 bg-red-500/10 text-red-500 hover:bg-red-500/20 border border-red-500/20 py-3 rounded-xl font-bold transition-all"
+                      className="flex items-center justify-center gap-1 bg-red-500/10 text-red-500 hover:bg-red-500/20 border border-red-500/20 py-2 sm:py-3 rounded-lg sm:rounded-xl font-bold transition-all text-[10px] sm:text-base"
                     >
-                      <Minus size={16} /> Goal
+                      <Minus size={12} className="sm:w-4 sm:h-4" /> Goal
                     </button>
                     <button 
                       onClick={() => updateScore('B', 1)} 
-                      className="flex items-center justify-center gap-1 bg-brand-500/10 text-brand-400 hover:bg-brand-500/20 border border-brand-500/30 py-3 rounded-xl font-bold transition-all shadow-[0_0_20px_rgba(14,165,233,0.1)] hover:shadow-[0_0_20px_rgba(14,165,233,0.3)]"
+                      className="flex items-center justify-center gap-1 bg-brand-500/10 text-brand-400 hover:bg-brand-500/20 border border-brand-500/30 py-2 sm:py-3 rounded-lg sm:rounded-xl font-bold transition-all shadow-[0_0_20px_rgba(14,165,233,0.1)] hover:shadow-[0_0_20px_rgba(14,165,233,0.3)] text-[10px] sm:text-base"
                     >
-                      <Plus size={16} /> Goal
+                      <Plus size={12} className="sm:w-4 sm:h-4" /> Goal
                     </button>
                   </div>
 
