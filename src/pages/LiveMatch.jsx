@@ -118,10 +118,10 @@ const LiveMatch = () => {
 
   // Admin Functions
   const handleGoalScored = (team) => {
-    setShowScorerSelect({ team });
+    setShowScorerSelect({ team, step: 'scorer', scorer: null, goalType: 'regular' });
   };
 
-  const confirmGoal = async (team, player) => {
+  const confirmGoal = async (team, scorerPlayer, assistPlayer = null, goalType = 'regular') => {
     const field = team === 'A' ? 'scoreA' : 'scoreB';
     const newScore = (match[field] || 0) + 1;
 
@@ -138,18 +138,35 @@ const LiveMatch = () => {
         team: team === 'A' ? match.teamA : match.teamB,
         minute: getMinuteOnly(currentSecs),
         seconds: currentSecs, // Exact seconds for precision sorting
-        player: player ? player.name : 'Unknown Player',
-        playerId: player ? player.id : null,
+        player: scorerPlayer ? scorerPlayer.name : 'Unknown Player',
+        playerId: scorerPlayer ? scorerPlayer.id : null,
+        assist: assistPlayer ? assistPlayer.name : null,
+        assistId: assistPlayer ? assistPlayer.id : null,
+        goalType: goalType,
+        isFreekick: goalType === 'freekick',
+        isPenalty: goalType === 'penalty',
         timestamp: Date.now()
       });
 
-      // 3. Update Player Total Goals (if player selected)
-      if (player && player.id) {
-        const playerRef = doc(db, 'players', player.id);
-        const currentPlayer = players.find(p => p.id === player.id);
-        await updateDoc(playerRef, {
-          goals: (currentPlayer?.goals || 0) + 1
-        });
+      // 3. Update Player Total Goals and Assists
+      if (scorerPlayer && scorerPlayer.id) {
+        const playerRef = doc(db, 'players', scorerPlayer.id);
+        const currentPlayer = players.find(p => p.id === scorerPlayer.id);
+        if (currentPlayer) {
+          await updateDoc(playerRef, {
+            goals: (currentPlayer.goals || 0) + 1
+          });
+        }
+      }
+
+      if (assistPlayer && assistPlayer.id) {
+        const assistRef = doc(db, 'players', assistPlayer.id);
+        const currentAssistPlayer = players.find(p => p.id === assistPlayer.id);
+        if (currentAssistPlayer) {
+          await updateDoc(assistRef, {
+            assists: (currentAssistPlayer.assists || 0) + 1
+          });
+        }
       }
 
       setShowScorerSelect(null);
@@ -215,6 +232,17 @@ const LiveMatch = () => {
         if (currentPlayer) {
           await updateDoc(playerRef, {
             goals: Math.max(0, (currentPlayer.goals || 0) - 1)
+          });
+        }
+      }
+
+      // 4. Decrement Assist (if assistId exists)
+      if (goalEvent.assistId) {
+        const assistRef = doc(db, 'players', goalEvent.assistId);
+        const currentAssistPlayer = players.find(p => p.id === goalEvent.assistId);
+        if (currentAssistPlayer) {
+          await updateDoc(assistRef, {
+            assists: Math.max(0, (currentAssistPlayer.assists || 0) - 1)
           });
         }
       }
@@ -451,7 +479,11 @@ const LiveMatch = () => {
   };
 
   const toggleMatchStatus = async () => {
-    const isEnding = match.status === 'live';
+    // Current rotation: Scheduled -> Live -> Half Time -> Live -> Finished -> Scheduled
+    // But since this button starts/ends, we might want a separate Half Time button.
+    // Let's modify toggleMatchStatus to be Start/End, and add a separate toggleHalfTime.
+    
+    const isEnding = match.status === 'live' || match.status === 'halftime';
     const newStatus = isEnding ? 'finished' : 'live';
 
     const updates = { status: newStatus };
@@ -476,12 +508,35 @@ const LiveMatch = () => {
       // Auto-propagate winner in brackets
       if (newStatus === 'finished') {
         await propagateWinner(match);
-      } else if (newStatus === 'live') {
-        // If moving back to live, optionally clear the winner from the next round
-        // await propagateWinner(match, true);
       }
     } catch (err) {
       console.error("Error updating status:", err);
+    }
+  };
+
+  const toggleHalfTime = async () => {
+    const isCurrentlyHT = match.status === 'halftime';
+    const newStatus = isCurrentlyHT ? 'live' : 'halftime';
+
+    const updates = { status: newStatus };
+
+    // If entering Halftime, stop timer
+    if (!isCurrentlyHT && match.timerRunning) {
+      const elapsedMs = Date.now() - (match.timerLastStarted || Date.now());
+      const additionalSeconds = Math.floor(elapsedMs / 1000);
+      const currentBaseSeconds = match.elapsedSeconds !== undefined ? match.elapsedSeconds : (match.currentMinute || 0) * 60;
+      const totalSeconds = currentBaseSeconds + additionalSeconds;
+      updates.elapsedSeconds = totalSeconds;
+      updates.currentMinute = Math.floor(totalSeconds / 60);
+      updates.timerRunning = false;
+      updates.timerLastStarted = null;
+    } 
+    // If ending halftime, don't automatically restart clock, let user press play
+
+    try {
+      await updateDoc(doc(db, 'matches', matchId), updates);
+    } catch (err) {
+      console.error("Error toggling halftime:", err);
     }
   };
 
@@ -626,7 +681,7 @@ const LiveMatch = () => {
                     </div>
                   </div>
 
-                  <div className="grid grid-cols-2 gap-2 h-full">
+                  <div className="grid grid-cols-3 gap-2 h-full">
                     <button
                       onClick={toggleTimer}
                       className={cn(
@@ -641,16 +696,31 @@ const LiveMatch = () => {
                     </button>
                     
                     <button
+                      onClick={toggleHalfTime}
+                      className={cn(
+                        "flex flex-col items-center justify-center gap-1 py-1 sm:py-2 rounded-xl sm:rounded-2xl font-black uppercase tracking-wider transition-all border shadow-lg",
+                        match.status === 'halftime' 
+                          ? "bg-orange-500/10 text-orange-500 border-orange-500/30 hover:bg-orange-500/20 shadow-[0_0_20px_rgba(249,115,22,0.1)] hover:shadow-[0_0_20px_rgba(249,115,22,0.2)]" 
+                          : "bg-slate-700/30 text-slate-300 border-slate-600/30 hover:bg-slate-600/40"
+                      )}
+                    >
+                      <Clock size={16} className="sm:w-[26px] sm:h-[26px]" />
+                      <span className="text-[8px] sm:text-[10px] text-center leading-tight">
+                        {match.status === 'halftime' ? 'End HalfTime' : 'Half Time'}
+                      </span>
+                    </button>
+
+                    <button
                       onClick={toggleMatchStatus}
                       className={cn(
                         "flex flex-col items-center justify-center gap-1 py-2 sm:py-4 rounded-xl sm:rounded-2xl font-black uppercase tracking-wider transition-all border shadow-lg",
-                        match.status === 'live' 
+                        (match.status === 'live' || match.status === 'halftime')
                           ? "bg-red-500/10 text-red-500 border-red-500/30 hover:bg-red-500/20 shadow-[0_0_20px_rgba(239,68,68,0.1)] hover:shadow-[0_0_20px_rgba(239,68,68,0.2)]" 
                           : "bg-green-500/10 text-green-400 border-green-500/30 hover:bg-green-500/20"
                       )}
                     >
-                      {match.status === 'live' ? <Square size={16} fill="currentColor" className="sm:w-[26px] sm:h-[26px]" /> : <Play size={16} className="sm:w-[28px] sm:h-[28px]" />}
-                      <span className="text-[8px] sm:text-[10px]">{match.status === 'live' ? 'End Match' : 'Start Match'}</span>
+                      {(match.status === 'live' || match.status === 'halftime') ? <Square size={16} fill="currentColor" className="sm:w-[26px] sm:h-[26px]" /> : <Play size={16} className="sm:w-[28px] sm:h-[28px]" />}
+                      <span className="text-[8px] sm:text-[10px]">{(match.status === 'live' || match.status === 'halftime') ? 'End Match' : 'Start Match'}</span>
                     </button>
                   </div>
                 </div>
@@ -823,39 +893,124 @@ const LiveMatch = () => {
                   </div>
                 )}
 
-                {/* Confirm Goal / Card Scorer Context */}
-                {(showScorerSelect || showCardSelect) && (
-                  <div className={cn(
-                    "border rounded-2xl p-5",
-                    showScorerSelect ? "bg-brand-500/5 border-brand-500/30" :
-                    showCardSelect?.type === 'yellow' ? "bg-yellow-500/5 border-yellow-500/30" : "bg-red-500/5 border-red-500/30"
-                  )}>
+                {/* Confirm Goal Scorer Context */}
+                {showScorerSelect && (
+                  <div className="border border-brand-500/30 bg-brand-500/5 rounded-2xl p-5 mb-4">
                     <div className="flex justify-between items-center mb-5">
-                      <h4 className={cn(
-                        "font-bold flex items-center gap-2 text-lg",
-                        showScorerSelect ? "text-brand-400" : showCardSelect?.type === 'yellow' ? "text-yellow-500" : "text-red-500"
-                      )}>
-                        {showScorerSelect ? <Trophy size={20} /> : <AlertTriangle size={20} />}
-                        Select Player for {showScorerSelect ? 'Goal' : `${showCardSelect.type} Card`}
+                      <h4 className="font-bold flex items-center gap-2 text-lg text-brand-400">
+                        <Trophy size={20} />
+                        {showScorerSelect.step === 'scorer' ? 'Select Goal Scorer' : 'Select Assist'}
                         <span className="text-white ml-2 opacity-50 px-2 py-0.5 bg-slate-800 rounded text-xs uppercase tracking-widest border border-white/10">
-                          {showScorerSelect ? (showScorerSelect.team === 'A' ? match.teamA : match.teamB) : (showCardSelect.team === 'A' ? match.teamA : match.teamB)}
+                          {showScorerSelect.team === 'A' ? match.teamA : match.teamB}
                         </span>
                       </h4>
-                      <button onClick={() => {setShowScorerSelect(null); setShowCardSelect(null)}} className="p-1.5 bg-slate-800 hover:bg-slate-700 rounded-lg text-slate-400"><X size={16} /></button>
+                      <button onClick={() => setShowScorerSelect(null)} className="p-1.5 bg-slate-800 hover:bg-slate-700 rounded-lg text-slate-400"><X size={16} /></button>
                     </div>
+
+                    {showScorerSelect.step === 'scorer' && (
+                      <div className="mb-4 flex flex-wrap gap-2">
+                        <label className={cn("flex flex-1 items-center justify-center gap-2 text-xs sm:text-sm font-bold p-3 rounded-xl border cursor-pointer transition-colors min-w-[100px]", showScorerSelect.goalType === 'regular' || !showScorerSelect.goalType ? "bg-brand-500/10 border-brand-500/30 text-brand-400" : "bg-slate-900/50 border-white/5 text-slate-400 hover:border-brand-500/30")}>
+                          <input 
+                            type="radio" 
+                            name="goalType"
+                            className="hidden"
+                            checked={showScorerSelect.goalType === 'regular' || !showScorerSelect.goalType}
+                            onChange={() => setShowScorerSelect(prev => ({ ...prev, goalType: 'regular' }))}
+                          />
+                          Regular Goal
+                        </label>
+                        <label className={cn("flex flex-1 items-center justify-center gap-2 text-xs sm:text-sm font-bold p-3 rounded-xl border cursor-pointer transition-colors min-w-[100px]", showScorerSelect.goalType === 'freekick' ? "bg-orange-500/10 border-orange-500/30 text-orange-400" : "bg-slate-900/50 border-white/5 text-slate-400 hover:border-orange-500/30")}>
+                          <input 
+                            type="radio" 
+                            name="goalType"
+                            className="hidden"
+                            checked={showScorerSelect.goalType === 'freekick'}
+                            onChange={() => setShowScorerSelect(prev => ({ ...prev, goalType: 'freekick' }))}
+                          />
+                          Free Kick
+                        </label>
+                        <label className={cn("flex flex-1 items-center justify-center gap-2 text-xs sm:text-sm font-bold p-3 rounded-xl border cursor-pointer transition-colors min-w-[100px]", showScorerSelect.goalType === 'penalty' ? "bg-red-500/10 border-red-500/30 text-red-400" : "bg-slate-900/50 border-white/5 text-slate-400 hover:border-red-500/30")}>
+                          <input 
+                            type="radio" 
+                            name="goalType"
+                            className="hidden"
+                            checked={showScorerSelect.goalType === 'penalty'}
+                            onChange={() => setShowScorerSelect(prev => ({ ...prev, goalType: 'penalty' }))}
+                          />
+                          Penalty Goal
+                        </label>
+                      </div>
+                    )}
 
                     <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3 max-h-60 overflow-y-auto pr-2 custom-scrollbar">
                       {players
-                        .filter(p => p.team === (showScorerSelect ? (showScorerSelect.team === 'A' ? match.teamA : match.teamB) : (showCardSelect.team === 'A' ? match.teamA : match.teamB)))
+                        .filter(p => p.team === (showScorerSelect.team === 'A' ? match.teamA : match.teamB))
+                        .filter(p => showScorerSelect.step === 'scorer' || p.id !== showScorerSelect.scorer?.id)
                         .sort((a, b) => a.name.localeCompare(b.name))
                         .map(player => (
                           <button
                             key={player.id}
-                            onClick={() => showScorerSelect ? confirmGoal(showScorerSelect.team, player) : confirmCard(showCardSelect.team, player, showCardSelect.type)}
+                            onClick={() => {
+                              if (showScorerSelect.step === 'scorer') {
+                                setShowScorerSelect(prev => ({ ...prev, step: 'assist', scorer: player }));
+                              } else {
+                                confirmGoal(showScorerSelect.team, showScorerSelect.scorer, player, showScorerSelect.goalType || 'regular');
+                              }
+                            }}
+                            className="text-left p-3 rounded-xl border font-bold text-sm transition-all flex items-center gap-2 truncate bg-slate-900 border-white/5 hover:border-brand-500 text-slate-300 hover:text-brand-400"
+                            title={player.name}
+                          >
+                            <span className="w-6 h-6 shrink-0 bg-slate-800 rounded-md flex items-center justify-center text-[10px] text-slate-500">{player.number || '#'}</span>
+                            <span className="truncate">{player.name}</span>
+                          </button>
+                        ))}
+                      <button
+                        onClick={() => {
+                          if (showScorerSelect.step === 'scorer') {
+                            setShowScorerSelect(prev => ({ ...prev, step: 'assist', scorer: null }));
+                          } else {
+                            confirmGoal(showScorerSelect.team, showScorerSelect.scorer, null, showScorerSelect.goalType || 'regular');
+                          }
+                        }}
+                        className="p-3 rounded-xl border border-dashed border-white/20 hover:border-white/50 bg-transparent text-slate-400 hover:text-white font-bold text-sm transition-all flex items-center justify-center italic"
+                      >
+                        {showScorerSelect.step === 'scorer' ? 'Select Unknown / Other' : 'No Assist'}
+                      </button>
+                    </div>
+                  </div>
+                )}
+
+                {/* Confirm Card Context */}
+                {showCardSelect && (
+                  <div className={cn(
+                    "border rounded-2xl p-5 mb-4",
+                    showCardSelect.type === 'yellow' ? "bg-yellow-500/5 border-yellow-500/30" : "bg-red-500/5 border-red-500/30"
+                  )}>
+                    <div className="flex justify-between items-center mb-5">
+                      <h4 className={cn(
+                        "font-bold flex items-center gap-2 text-lg",
+                        showCardSelect.type === 'yellow' ? "text-yellow-500" : "text-red-500"
+                      )}>
+                        <AlertTriangle size={20} />
+                        Select Player for {showCardSelect.type} Card
+                        <span className="text-white ml-2 opacity-50 px-2 py-0.5 bg-slate-800 rounded text-xs uppercase tracking-widest border border-white/10">
+                          {showCardSelect.team === 'A' ? match.teamA : match.teamB}
+                        </span>
+                      </h4>
+                      <button onClick={() => setShowCardSelect(null)} className="p-1.5 bg-slate-800 hover:bg-slate-700 rounded-lg text-slate-400"><X size={16} /></button>
+                    </div>
+
+                    <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3 max-h-60 overflow-y-auto pr-2 custom-scrollbar">
+                      {players
+                        .filter(p => p.team === (showCardSelect.team === 'A' ? match.teamA : match.teamB))
+                        .sort((a, b) => a.name.localeCompare(b.name))
+                        .map(player => (
+                          <button
+                            key={player.id}
+                            onClick={() => confirmCard(showCardSelect.team, player, showCardSelect.type)}
                             className={cn(
                               "text-left p-3 rounded-xl border font-bold text-sm transition-all flex items-center gap-2 truncate",
-                              showScorerSelect ? "bg-slate-900 border-white/5 hover:border-brand-500 text-slate-300 hover:text-brand-400" :
-                              showCardSelect?.type === 'yellow' ? "bg-slate-900 border-white/5 hover:border-yellow-500 text-slate-300 hover:text-yellow-500" :
+                              showCardSelect.type === 'yellow' ? "bg-slate-900 border-white/5 hover:border-yellow-500 text-slate-300 hover:text-yellow-500" :
                               "bg-slate-900 border-white/5 hover:border-red-500 text-slate-300 hover:text-red-500"
                             )}
                             title={player.name}
@@ -865,7 +1020,7 @@ const LiveMatch = () => {
                           </button>
                         ))}
                       <button
-                        onClick={() => showScorerSelect ? confirmGoal(showScorerSelect.team, null) : confirmCard(showCardSelect.team, null, showCardSelect.type)}
+                        onClick={() => confirmCard(showCardSelect.team, null, showCardSelect.type)}
                         className="p-3 rounded-xl border border-dashed border-white/20 hover:border-white/50 bg-transparent text-slate-400 hover:text-white font-bold text-sm transition-all flex items-center justify-center italic"
                       >
                         Select Unknown / Other
@@ -880,8 +1035,11 @@ const LiveMatch = () => {
 
         {/* Match Header */}
         <div className="bg-gray-800 rounded-t-lg p-6 text-center shadow-lg border-b border-gray-700">
-          <div className="text-sm text-gray-400 mb-2 uppercase tracking-[0.2em]">
-            {match.competition} • {match.status === 'live' ? 'Live' : 'Finished'}
+          <div className="text-sm text-gray-400 mb-2 uppercase tracking-[0.2em] flex items-center justify-center gap-2">
+            {match.competition} • 
+            {match.status === 'live' ? <span className="text-red-400 font-bold">Live</span> : 
+             match.status === 'halftime' ? <span className="text-orange-400 font-bold">Half Time</span> :
+             <span>Finished</span>}
           </div>
           <div className="text-[11px] text-gray-500 mb-4 flex items-center justify-center gap-1">
             <span>🏟️ {match.stadium || getTeamInfo(match.teamA).stadium || 'Unknown Stadium'}</span>
@@ -899,7 +1057,10 @@ const LiveMatch = () => {
                   .sort((a, b) => a.minute - b.minute)
                   .map((goal, idx) => (
                     <div key={idx} className="text-[11px] text-gray-300 flex items-center justify-end gap-1.5">
-                      <span>{goal.player}</span>
+                      <span className="truncate max-w-[120px]" title={goal.player}>{goal.player}</span>
+                      {goal.isFreekick && <span className="text-orange-400 font-bold mx-0.5" title="Free Kick">(FK)</span>}
+                      {goal.isPenalty && <span className="text-red-400 font-bold mx-0.5" title="Penalty">(PK)</span>}
+                      {goal.assist && <span className="text-slate-500 text-[9px] truncate max-w-[80px]" title={`Assist: ${goal.assist}`}>({goal.assist})</span>}
                       <span className="text-gray-500 font-mono">{goal.minute}'</span>
                       <span className="text-yellow-500">⚽</span>
                     </div>
@@ -913,13 +1074,15 @@ const LiveMatch = () => {
                 {match.scoreA} - {match.scoreB}
               </div>
               <div className="text-sm">
-                {match.status === 'live' ? (
-                  <div className="inline-flex items-center gap-2 bg-red-900/30 text-red-500 px-3 py-1 rounded-full font-bold border border-red-500/20">
-                    <span className="relative flex h-2 w-2">
-                      <span className={cn("absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75", match.timerRunning && "animate-ping")}></span>
-                      <span className="relative inline-flex rounded-full h-2 w-2 bg-red-500"></span>
-                    </span>
-                    <MatchTimer match={match} />
+                {(match.status === 'live' || match.status === 'halftime') ? (
+                  <div className={cn("inline-flex items-center gap-2 px-3 py-1 rounded-full font-bold border", match.status === 'halftime' ? "bg-orange-900/30 text-orange-500 border-orange-500/20" : "bg-red-900/30 text-red-500 border-red-500/20")}>
+                    {match.status === 'live' && (
+                      <span className="relative flex h-2 w-2">
+                        <span className={cn("absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75", match.timerRunning && "animate-ping")}></span>
+                        <span className="relative inline-flex rounded-full h-2 w-2 bg-red-500"></span>
+                      </span>
+                    )}
+                    {match.status === 'halftime' ? <span>HT</span> : <MatchTimer match={match} />}
                   </div>
                 ) : (
                   <span className="bg-gray-700 text-gray-300 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-widest">Full Time</span>
@@ -940,8 +1103,11 @@ const LiveMatch = () => {
                   .map((goal, idx) => (
                     <div key={idx} className="text-[11px] text-gray-300 flex items-center justify-start gap-1.5">
                       <span className="text-yellow-500">⚽</span>
-                      <span>{goal.player}</span>
                       <span className="text-gray-500 font-mono">{goal.minute}'</span>
+                      <span className="truncate max-w-[120px]" title={goal.player}>{goal.player}</span>
+                      {goal.isFreekick && <span className="text-orange-400 font-bold mx-0.5" title="Free Kick">(FK)</span>}
+                      {goal.isPenalty && <span className="text-red-400 font-bold mx-0.5" title="Penalty">(PK)</span>}
+                      {goal.assist && <span className="text-slate-500 text-[9px] truncate max-w-[80px]" title={`Assist: ${goal.assist}`}>({goal.assist})</span>}
                     </div>
                   ))}
               </div>
@@ -1070,8 +1236,14 @@ const LiveMatch = () => {
                         <div className="flex items-center gap-3">
                           <span className="text-xl">⚽</span>
                           <div>
-                            <span className="font-bold text-slate-900 dark:text-white text-lg">{event.player}</span>
-                            <span className="text-gray-400 ml-2 block text-xs uppercase tracking-wider">Goal for {event.team}</span>
+                            <span className="font-bold text-slate-900 dark:text-white text-lg">
+                              {event.player} 
+                              {event.isFreekick && <span className="text-orange-400 text-sm ml-2 font-bold">(Free Kick)</span>}
+                              {event.isPenalty && <span className="text-red-400 text-sm ml-2 font-bold">(Penalty)</span>}
+                            </span>
+                            <span className="text-gray-400 ml-2 block text-xs uppercase tracking-wider">
+                              Goal for {event.team} {event.assist && `• Assist: ${event.assist}`}
+                            </span>
                           </div>
                         </div>
                       )}

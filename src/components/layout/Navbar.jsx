@@ -53,8 +53,8 @@ const Navbar = () => {
         className={cn(
           "fixed top-0 inset-x-0 z-50 transition-all duration-300 border-b",
           scrolled
-            ? "bg-white/80 dark:bg-dark-bg/80 backdrop-blur-xl border-slate-200 dark:border-white/5 shadow-lg shadow-black/5 dark:shadow-black/20"
-            : "bg-transparent backdrop-blur-sm border-transparent"
+            ? "bg-gradient-to-r from-slate-900/95 via-brand-900/90 to-slate-900/95 backdrop-blur-xl border-brand-500/20 shadow-[0_4px_30px_rgba(14,165,233,0.15)]"
+            : "bg-gradient-to-r from-slate-900/70 via-brand-900/50 to-slate-900/70 backdrop-blur-md border-brand-500/10 shadow-[0_4px_30px_rgba(14,165,233,0.05)]"
         )}
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">

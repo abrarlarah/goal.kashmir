@@ -31,13 +31,13 @@ const Dashboard = () => {
     const fetchLiveEvents = async () => {
       if (!matches) return;
       
-      const currentLive = matches.filter(m => m.status === 'live');
+      const currentLive = matches.filter(m => m.status === 'live' || m.status === 'halftime');
       if (currentLive.length === 0) return;
       
       const newEvents = {};
       for (const m of currentLive) {
         try {
-          // Getting events collection for each live match to find goals
+          // Getting events collection for each live/halftime match to find goals
           const eventsRef = collection(db, 'matches', m.id, 'events');
           const q = query(eventsRef, where('type', '==', 'goal'));
           const snapshot = await getDocs(q);
@@ -103,10 +103,11 @@ const Dashboard = () => {
     }).map(t => t.name) : null;
 
   const filteredPlayers = relevantTeamNames ? players.filter(p => relevantTeamNames.includes(p.team)) : players;
-  const liveMatches = filteredMatches.filter(m => m.status === 'live');
+  const liveMatches = filteredMatches.filter(m => m.status === 'live' || m.status === 'halftime');
   const upcomingMatches = filteredMatches.filter(m => m.status === 'scheduled');
   const finishedMatches = filteredMatches.filter(m => m.status === 'finished').slice(0, 5);
   const topScorers = [...filteredPlayers].sort((a, b) => (b.goals || 0) - (a.goals || 0)).slice(0, 5);
+  const topAssists = [...filteredPlayers].sort((a, b) => (b.assists || 0) - (a.assists || 0)).slice(0, 5);
   const standings = (dashboardCompetitionId && dashboardCompetitionId !== 'All') ? calculateStandings(teams, matches, tournaments.find(t => t.id === dashboardCompetitionId)?.name) : [];
   const topTeams = standings.slice(0, 5);
   const getMatchLineups = (matchId) => lineups.filter(l => l.matchId === matchId);
@@ -252,9 +253,15 @@ const Dashboard = () => {
                         <div className="flex flex-row justify-between items-center gap-1.5 sm:gap-2 mb-3 bg-slate-800/40 p-1.5 sm:p-2.5 rounded-xl border border-white/5 shadow-inner">
                           {/* Left: Status */}
                           <div className="flex items-center flex-shrink-0">
-                            <span className="px-1.5 py-0.5 sm:px-2.5 sm:py-1 rounded-md bg-red-500/20 text-red-400 text-[9px] sm:text-[10px] font-black uppercase tracking-widest border border-red-500/30 flex items-center gap-1 sm:gap-1.5 shadow-[0_0_10px_rgba(239,68,68,0.2)]">
-                              <span className="h-1.5 w-1.5 rounded-full bg-red-500 animate-pulse" /> <span className="hidden xs:inline">Live • </span><MatchTimer match={match} />
-                            </span>
+                            {match.status === 'halftime' ? (
+                              <span className="px-1.5 py-0.5 sm:px-2.5 sm:py-1 rounded-md bg-orange-500/20 text-orange-400 text-[9px] sm:text-[10px] font-black uppercase tracking-widest border border-orange-500/30 flex items-center gap-1 sm:gap-1.5 shadow-[0_0_10px_rgba(249,115,22,0.2)]">
+                                Half Time
+                              </span>
+                            ) : (
+                              <span className="px-1.5 py-0.5 sm:px-2.5 sm:py-1 rounded-md bg-red-500/20 text-red-400 text-[9px] sm:text-[10px] font-black uppercase tracking-widest border border-red-500/30 flex items-center gap-1 sm:gap-1.5 shadow-[0_0_10px_rgba(239,68,68,0.2)]">
+                                <span className="h-1.5 w-1.5 rounded-full bg-red-500 animate-pulse" /> <span className="hidden xs:inline">Live • </span><MatchTimer match={match} />
+                              </span>
+                            )}
                           </div>
                           
                           {/* Center: Tournament Name */}
@@ -310,7 +317,11 @@ const Dashboard = () => {
                             <div className="flex-1 pr-1.5 text-right">
                               {liveMatchEvents[match.id].filter(e => e.team === match.teamA).map((goal, idx) => (
                                 <div key={idx} className="text-[9px] sm:text-[10px] text-slate-300 font-medium truncate">
-                                  {goal.player} <span className="text-brand-400 font-bold ml-1">{goal.minute}'</span>
+                                  {goal.player}
+                                  {goal.isFreekick && <span className="text-orange-400 font-bold ml-0.5" title="Free Kick">(FK)</span>}
+                                  {goal.isPenalty && <span className="text-red-400 font-bold ml-0.5" title="Penalty">(PK)</span>}
+                                  {goal.assist && <span className="text-slate-500 ml-1 text-[8px]" title="Assist">({goal.assist})</span>}
+                                  <span className="text-brand-400 font-bold ml-1">{goal.minute}'</span>
                                 </div>
                               ))}
                             </div>
@@ -319,7 +330,11 @@ const Dashboard = () => {
                             <div className="flex-1 pl-1.5 text-left">
                               {liveMatchEvents[match.id].filter(e => e.team === match.teamB).map((goal, idx) => (
                                 <div key={idx} className="text-[9px] sm:text-[10px] text-slate-300 font-medium truncate">
-                                  <span className="text-brand-400 font-bold mr-1">{goal.minute}'</span> {goal.player}
+                                  <span className="text-brand-400 font-bold mr-1">{goal.minute}'</span> 
+                                  {goal.player}
+                                  {goal.isFreekick && <span className="text-orange-400 font-bold ml-0.5" title="Free Kick">(FK)</span>}
+                                  {goal.isPenalty && <span className="text-red-400 font-bold ml-0.5" title="Penalty">(PK)</span>}
+                                  {goal.assist && <span className="text-slate-500 ml-1 text-[8px]" title="Assist">({goal.assist})</span>}
                                 </div>
                               ))}
                             </div>
@@ -471,6 +486,42 @@ const Dashboard = () => {
                   </div>
                 </div>
               )) : <div className="text-slate-500 text-xs text-center py-4">No player stats available.</div>}
+            </div>
+          </motion.div>
+
+          {/* Top Assists */}
+          <motion.div variants={item} className="rounded-2xl bg-slate-900/60 border border-white/5 overflow-hidden">
+            <div className="flex items-center justify-between p-4 sm:p-5 border-b border-white/5">
+              <h3 className="font-display font-bold text-white flex items-center gap-2 text-sm sm:text-base">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-brand-400">
+                  <path d="M12 2v20"></path>
+                  <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
+                </svg>
+                Top Assists
+              </h3>
+              <Link to="/players" className="text-xs text-slate-500 hover:text-slate-300 font-medium flex items-center">All <ChevronRight size={14} /></Link>
+            </div>
+            <div className="p-3 sm:p-4 space-y-1">
+              {topAssists.length > 0 && topAssists[0].assists > 0 ? topAssists.filter(p => p.assists > 0).slice(0, 5).map((player, idx) => (
+                <div key={player.id} className="flex items-center justify-between p-2.5 rounded-lg hover:bg-white/5 transition-colors group">
+                  <div className="flex items-center gap-2.5">
+                    <div className="relative flex-shrink-0">
+                      <div className="h-9 w-9 rounded-full bg-slate-800 flex items-center justify-center font-bold border border-white/10 overflow-hidden text-slate-400 text-xs">
+                        {player.photoUrl ? <img src={player.photoUrl} alt={player.name} className="h-full w-full object-cover" /> : player.name.charAt(0)}
+                      </div>
+                      <div className="absolute -bottom-0.5 -right-0.5 h-4 w-4 rounded-full bg-slate-900 border border-white/10 flex items-center justify-center text-[9px] text-slate-500 font-bold">{idx + 1}</div>
+                    </div>
+                    <div className="min-w-0">
+                      <div className="text-xs sm:text-sm font-semibold text-white group-hover:text-brand-400 transition-colors truncate">{player.name}</div>
+                      <div className="text-[10px] text-slate-500 truncate">{player.team}</div>
+                    </div>
+                  </div>
+                  <div className="text-right flex-shrink-0">
+                    <span className="text-lg font-impact text-brand-500">{player.assists}</span>
+                    <span className="block text-[9px] text-slate-500 uppercase font-bold">Assists</span>
+                  </div>
+                </div>
+              )) : <div className="text-slate-500 text-xs text-center py-4">No assist stats available.</div>}
             </div>
           </motion.div>
 

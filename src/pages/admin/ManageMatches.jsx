@@ -165,8 +165,8 @@ const ManageMatches = () => {
     return matches.filter(m => myTournamentNames.includes(m.competition));
   }, [matches, myTournamentNames]);
 
-  const liveMatches = scopedMatches.filter(m => m.status === 'live');
-  const otherMatches = scopedMatches.filter(m => m.status !== 'live');
+  const liveMatches = scopedMatches.filter(m => m.status === 'live' || m.status === 'halftime');
+  const otherMatches = scopedMatches.filter(m => m.status !== 'live' && m.status !== 'halftime');
 
   // Pagination Logic
   const [currentPage, setCurrentPage] = useState(1);
@@ -198,13 +198,15 @@ const ManageMatches = () => {
         <div className="mb-8 p-4 bg-gray-800 rounded-lg border border-green-500">
           <h3 className="text-xl font-bold mb-4 text-green-400 flex items-center">
             <span className="w-3 h-3 bg-green-500 rounded-full mr-2 animate-pulse"></span>
-            Live Matches Control
+            Active Matches Control
           </h3>
           <div className="grid gap-4">
             {liveMatches.map(match => (
               <div key={match.id} className="bg-gray-700 p-4 rounded flex flex-col md:flex-row justify-between items-center gap-4">
                 <div className="text-center md:text-left flex-1">
-                  <div className="font-medium text-gray-300">{match.competition} - {match.currentMinute}'</div>
+                  <div className="font-medium text-gray-300">
+                    {match.competition} - {match.status === 'halftime' ? <span className="text-orange-400">Half Time</span> : <span className="text-red-400">Live {match.currentMinute}'</span>}
+                  </div>
                   <div className="flex items-center justify-center md:justify-start gap-4 text-2xl font-bold mt-2">
                     <div className="flex flex-col items-center gap-1">
                       <span>{match.teamA}</span>
@@ -389,6 +391,7 @@ const ManageMatches = () => {
               >
                 <option value="scheduled">Scheduled</option>
                 <option value="live">Live</option>
+                <option value="halftime">Half Time</option>
                 <option value="finished">Finished</option>
               </select>
             </div>
