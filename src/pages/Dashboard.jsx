@@ -164,7 +164,7 @@ const Dashboard = () => {
     <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 py-4 sm:py-8 space-y-5 sm:space-y-8">
 
       {/* ═══ HERO HEADER ═══ */}
-      <motion.div initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }} className="relative overflow-hidden rounded-2xl sm:rounded-3xl bg-white dark:bg-gradient-to-br dark:from-slate-900 dark:via-brand-950 dark:to-slate-900 border border-slate-200 dark:border-white/10 shadow-sm">
+      <motion.div initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }} className="relative overflow-hidden rounded-2xl sm:rounded-3xl bg-gradient-to-br from-white via-slate-50 to-brand-50/50 dark:from-[#020617] dark:via-[#1e1b4b] dark:to-[#0f172a] border border-slate-200/80 dark:border-brand-500/20 shadow-xl dark:shadow-2xl dark:shadow-brand-900/40">
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,rgba(14,165,233,0.15),transparent_60%)]" />
         <div className="absolute top-0 right-0 w-40 h-40 bg-brand-500/10 rounded-full blur-3xl" />
         <div className="absolute bottom-0 left-0 w-32 h-32 bg-cyan-500/10 rounded-full blur-3xl" />
@@ -176,20 +176,20 @@ const Dashboard = () => {
                   <div className="flex items-center gap-2 mb-2">
                     {liveMatches.length > 0 && <span className="flex items-center w-fit gap-1.5 px-2.5 py-1 rounded-full bg-red-500/20 border border-red-500/30 text-red-400 text-[11px] font-bold uppercase tracking-wider"><span className="h-1.5 w-1.5 rounded-full bg-red-500 animate-pulse" />{liveMatches.length} Live</span>}
                   </div>
-                  <h1 className="text-2xl sm:text-4xl font-display font-bold text-slate-900 dark:text-white mb-1">Match Center</h1>
+                  <h1 className="text-2xl sm:text-4xl font-display font-black text-slate-900 dark:text-white drop-shadow-sm dark:drop-shadow-lg mb-1">Match <span className="text-transparent bg-clip-text bg-gradient-to-r from-brand-500 to-cyan-500 dark:from-brand-400 dark:to-cyan-400">Center</span></h1>
                   <p className="text-slate-500 dark:text-slate-400 text-sm sm:text-base">Track live scores, fixtures and statistics in real-time.</p>
                 </div>
               </div>
             </div>
 
             {/* ═══ FILTERS ═══ */}
-            <div className="mt-6 flex flex-wrap items-center gap-2 sm:gap-4 w-full">
+            <div className="mt-6 flex flex-nowrap overflow-x-auto items-center gap-2 sm:gap-4 w-full pb-2 scrollbar-none">
               {/* Year filter */}
-              <div className="relative flex-1 min-w-[80px]">
+              <div className="relative flex-none min-w-[75px] sm:min-w-[80px]">
                 <select
                   value={selectedYear}
                   onChange={(e) => { setSelectedYear(e.target.value); setDashboardCompetitionId('All'); }}
-                  className="w-full bg-slate-50/80 dark:bg-slate-800/80 border border-slate-200/50 dark:border-slate-700/50 rounded-xl pl-3 pr-8 py-2 text-[11px] sm:text-sm font-bold text-slate-900 dark:text-white focus:ring-2 focus:ring-brand-500 outline-none transition-all cursor-pointer appearance-none shadow-sm h-10"
+                  className="w-full bg-white/90 dark:bg-white/10 backdrop-blur-md border border-slate-200/80 dark:border-white/20 hover:border-brand-400 dark:hover:border-white/30 rounded-xl pl-3 pr-8 py-2 text-[11px] sm:text-sm font-bold text-slate-900 dark:text-white focus:ring-2 focus:ring-brand-500 outline-none transition-all cursor-pointer appearance-none shadow-sm dark:shadow-lg h-10 [&>option]:text-slate-900"
                 >
                   <option value="All">Year</option>
                   {availableYears.map(y => <option key={y} value={y}>{y}</option>)}
@@ -198,11 +198,11 @@ const Dashboard = () => {
               </div>
 
               {/* District filter */}
-              <div className="relative flex-1 min-w-[110px]">
+              <div className="relative flex-none min-w-[90px] sm:min-w-[110px]">
                 <select
                   value={selectedDistrict}
                   onChange={(e) => { setSelectedDistrict(e.target.value); setDashboardCompetitionId('All'); }}
-                  className="w-full bg-slate-50/80 dark:bg-slate-800/80 border border-slate-200/50 dark:border-slate-700/50 rounded-xl pl-3 pr-8 py-2 text-[11px] sm:text-sm font-bold text-slate-900 dark:text-white focus:ring-2 focus:ring-brand-500 outline-none transition-all cursor-pointer appearance-none shadow-sm h-10"
+                  className="w-full bg-white/90 dark:bg-white/10 backdrop-blur-md border border-slate-200/80 dark:border-white/20 hover:border-brand-400 dark:hover:border-white/30 rounded-xl pl-3 pr-8 py-2 text-[11px] sm:text-sm font-bold text-slate-900 dark:text-white focus:ring-2 focus:ring-brand-500 outline-none transition-all cursor-pointer appearance-none shadow-sm dark:shadow-lg h-10 [&>option]:text-slate-900"
                 >
                   <option value="All">District</option>
                   <optgroup label="Kashmir">{DISTRICTS.KASHMIR.map(d => <option key={d} value={d}>{d}</option>)}</optgroup>
@@ -212,11 +212,11 @@ const Dashboard = () => {
               </div>
 
               {/* Tournament filter */}
-              <div className="relative flex-1 min-w-[130px]">
+              <div className="relative flex-1 min-w-[120px] sm:min-w-[130px]">
                 <select
                   value={dashboardCompetitionId}
                   onChange={(e) => setDashboardCompetitionId(e.target.value)}
-                  className="w-full bg-slate-50/80 dark:bg-slate-800/80 border border-slate-200/50 dark:border-slate-700/50 rounded-xl pl-3 pr-8 py-2 text-[11px] sm:text-sm font-bold text-slate-900 dark:text-white focus:ring-2 focus:ring-brand-500 outline-none transition-all cursor-pointer appearance-none shadow-sm h-10"
+                  className="w-full bg-white/90 dark:bg-white/10 backdrop-blur-md border border-slate-200/80 dark:border-white/20 hover:border-brand-400 dark:hover:border-white/30 rounded-xl pl-3 pr-8 py-2 text-[11px] sm:text-sm font-bold text-slate-900 dark:text-white focus:ring-2 focus:ring-brand-500 outline-none transition-all cursor-pointer appearance-none shadow-sm dark:shadow-lg h-10 [&>option]:text-slate-900"
                 >
                   <option value="All">Tournament</option>
                   {filteredTournaments.map(t => <option key={t.id} value={t.id}>{t.name}</option>)}
@@ -239,7 +239,7 @@ const Dashboard = () => {
           <motion.section variants={item}>
             <div className="flex items-center gap-2.5 mb-3 sm:mb-4">
               <div className="relative"><span className="h-2.5 w-2.5 absolute -top-0.5 -right-0.5 bg-red-500 rounded-full animate-ping opacity-75" /><Activity className="text-red-500" size={20} /></div>
-              <h2 className="text-lg sm:text-xl font-display font-bold text-slate-900 dark:text-white">Live Now</h2>
+              <h2 className="text-lg sm:text-xl font-display font-black text-slate-900 dark:text-white drop-shadow-sm">Live Now</h2>
             </div>
 
             {liveMatches.length > 0 ? (
@@ -248,13 +248,13 @@ const Dashboard = () => {
                   const isExpanded = expandedMatch === match.id;
                   const matchLineups = getMatchLineups(match.id);
                   return (
-                    <motion.div layout key={match.id} className="relative rounded-2xl overflow-hidden bg-white dark:bg-slate-900 border border-slate-200/50 dark:border-slate-700/50 hover:border-brand-500/50 transition-all shadow-2xl shadow-black/40 group">
+                    <motion.div layout key={match.id} className="relative rounded-2xl overflow-hidden bg-gradient-to-br from-white to-slate-50 dark:from-[#020617] dark:via-[#0f172a] dark:to-[#020617] ring-1 ring-slate-200/80 dark:ring-white/10 hover:ring-2 hover:ring-brand-500/50 transition-all shadow-xl dark:shadow-2xl dark:hover:shadow-brand-500/20 group text-slate-900 dark:text-white">
                       {/* Premium Top Glow */}
                       <div className="absolute top-0 inset-x-0 h-[2px] bg-gradient-to-r from-transparent via-red-500 to-transparent opacity-70 group-hover:opacity-100 transition-opacity"></div>
                       
                       <div className="p-3 sm:p-5 relative z-10">
                         {/* Status bar with Actions - Single Line Layout */}
-                        <div className="flex flex-row justify-between items-center gap-1.5 sm:gap-2 mb-3 bg-slate-50/40 dark:bg-slate-800/40 p-1.5 sm:p-2.5 rounded-xl border border-slate-200/5 dark:border-white/5 shadow-inner">
+                        <div className="flex flex-row justify-between items-center gap-1.5 sm:gap-2 mb-3 bg-white/60 dark:bg-slate-800/60 p-1.5 sm:p-2.5 rounded-xl border border-slate-200/80 dark:border-white/5 shadow-inner dark:shadow-none">
                           {/* Left: Status */}
                           <div className="flex items-center flex-shrink-0">
                             {match.status === 'halftime' ? (
@@ -305,7 +305,7 @@ const Dashboard = () => {
                             <TeamLogo teamName={match.teamA} size="md" />
                             <span className="text-xs font-bold text-slate-900 dark:text-white text-center truncate w-full">{match.teamA}</span>
                           </div>
-                          <div className="px-3 sm:px-4 py-1.5 bg-black/40 rounded-xl border border-slate-200/5 dark:border-white/5 backdrop-blur-md flex-shrink-0">
+                          <div className="px-3 sm:px-4 py-1.5 bg-slate-100/80 dark:bg-black/40 rounded-xl border border-slate-200/80 dark:border-white/5 backdrop-blur-md flex-shrink-0">
                             <span className="font-impact text-xl sm:text-3xl tracking-wider text-slate-900 dark:text-white">{match.scoreA}<span className="text-slate-600 mx-1 sm:mx-2">-</span>{match.scoreB}</span>
                           </div>
                           <div className="flex-1 flex flex-col items-center gap-1.5 min-w-0">
@@ -369,11 +369,11 @@ const Dashboard = () => {
 
           {/* ── UPCOMING MATCHES ── */}
           <motion.section variants={item}>
-            <h2 className="text-lg sm:text-xl font-display font-bold text-slate-900 dark:text-white mb-3 sm:mb-4 flex items-center gap-2"><Calendar className="text-brand-400" size={20} /> Upcoming</h2>
+            <h2 className="text-lg sm:text-xl font-display font-black text-slate-900 dark:text-white drop-shadow-sm mb-3 sm:mb-4 flex items-center gap-2"><Calendar className="text-brand-400" size={20} /> Upcoming</h2>
             <div className="space-y-2.5 max-h-[280px] overflow-y-auto pr-1 scrollbar-thin scrollbar-thumb-white/10 scrollbar-track-transparent">
               {upcomingMatches.length > 0 ? upcomingMatches.map(match => (
                 <Link to={`/live/${match.id}`} key={match.id} className="group block">
-                  <div className="flex items-center gap-3 p-3 sm:p-4 rounded-xl bg-white/50 dark:bg-slate-900/50 border border-slate-200/50 dark:border-white/5 hover:border-brand-500/30 hover:bg-slate-50/50 dark:hover:bg-slate-800/50 transition-all">
+                  <div className="flex items-center gap-3 p-3 sm:p-4 rounded-xl bg-gradient-to-r from-white to-slate-50 dark:from-[#0f172a] dark:to-[#020617] ring-1 ring-slate-200/80 dark:ring-white/5 hover:shadow-lg hover:ring-2 hover:ring-brand-500/30 dark:hover:shadow-cyan-500/10 transition-all shadow-sm dark:shadow-md">
                     {/* Date */}
                     <div className="flex-shrink-0 w-12 text-center px-1 py-1.5 bg-slate-100/50 dark:bg-white/5 rounded-lg border border-slate-200/50 dark:border-white/5">
                       <div className="text-[10px] font-bold text-brand-500 dark:text-brand-400 uppercase">{match.date ? new Date(match.date).toLocaleDateString('en-US', { month: 'short' }) : 'TBA'}</div>
@@ -401,11 +401,11 @@ const Dashboard = () => {
 
           {/* ── RECENT RESULTS ── */}
           <motion.section variants={item}>
-            <h2 className="text-lg sm:text-xl font-display font-bold text-slate-900 dark:text-white mb-3 sm:mb-4 flex items-center gap-2"><Clock className="text-slate-500 dark:text-slate-400" size={20} /> Recent Results</h2>
+            <h2 className="text-lg sm:text-xl font-display font-black text-slate-900 dark:text-white drop-shadow-sm mb-3 sm:mb-4 flex items-center gap-2"><Clock className="text-slate-500 dark:text-slate-400" size={20} /> Recent Results</h2>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               {finishedMatches.length > 0 ? finishedMatches.map(match => (
                 <Link to={`/live/${match.id}`} key={match.id} className="block group">
-                  <div className="p-3.5 sm:p-4 rounded-xl bg-white/50 dark:bg-slate-900/50 border border-slate-200/5 dark:border-white/5 hover:border-brand-500/30 hover:bg-slate-50/50 dark:bg-slate-800/50 transition-all">
+                  <div className="p-3.5 sm:p-4 rounded-xl bg-gradient-to-br from-white to-slate-50 dark:from-[#0f172a] dark:to-[#020617] ring-1 ring-slate-200/80 dark:ring-white/5 hover:shadow-lg hover:ring-2 hover:ring-brand-500/30 dark:hover:shadow-cyan-500/10 hover:-translate-y-0.5 transition-all duration-300 shadow-sm dark:shadow-md">
                     <div className="flex justify-between text-[10px] text-slate-500 mb-2.5">
                       <span className="text-brand-400 font-bold">{match.competition}</span>
                       <span>{match.date && new Date(match.date).toLocaleDateString()}</span>
@@ -432,7 +432,7 @@ const Dashboard = () => {
         <div className="lg:col-span-4 space-y-5 sm:space-y-6">
 
           {/* Standings */}
-          <motion.div variants={item} className="rounded-2xl bg-white/60 dark:bg-slate-900/60 border border-slate-200/5 dark:border-white/5 overflow-hidden">
+          <motion.div variants={item} className="rounded-2xl bg-gradient-to-br from-white to-slate-50 dark:from-[#0f172a] dark:via-[#020617] dark:to-[#0f172a] ring-1 ring-slate-200/80 dark:ring-white/5 overflow-hidden shadow-xl dark:shadow-2xl dark:hover:shadow-brand-500/5 transition-all duration-300">
             <div className="flex items-center justify-between p-4 sm:p-5 border-b border-slate-200/5 dark:border-white/5">
               <h3 className="font-display font-bold text-slate-900 dark:text-white flex items-center gap-2 text-sm sm:text-base"><Trophy size={16} className="text-yellow-500" /> Standings</h3>
               <div className="flex items-center gap-2">
@@ -447,14 +447,14 @@ const Dashboard = () => {
                 <div className="space-y-1">
                   {topTeams.map((team, idx) => (
                     <div key={team.id} className="flex items-center justify-between p-2.5 rounded-lg hover:bg-white/5 transition-colors">
-                      <div className="flex items-center gap-2.5">
-                        <span className={cn("text-xs font-bold w-5 text-center", idx === 0 ? "text-yellow-500" : idx === 1 ? "text-slate-600 dark:text-slate-300" : idx === 2 ? "text-amber-700" : "text-slate-600")}>{idx + 1}</span>
-                        <div className="h-6 w-6 rounded-full bg-white/10 flex items-center justify-center overflow-hidden border border-slate-200/5 dark:border-white/5">{team.logoUrl ? <img src={team.logoUrl} alt="" className="h-full w-full object-contain p-0.5" /> : <span className="text-[8px] text-slate-500">{team.name.substring(0, 2)}</span>}</div>
-                        <span className="text-xs sm:text-sm font-medium text-slate-200 truncate max-w-[100px]">{team.name}</span>
+                      <div className="flex items-center gap-2.5 flex-1 min-w-0 pr-2">
+                        <span className={cn("text-xs font-bold w-5 text-center shrink-0", idx === 0 ? "text-yellow-500" : idx === 1 ? "text-slate-400 dark:text-slate-300" : idx === 2 ? "text-amber-700" : "text-slate-400")}>{idx + 1}</span>
+                        <div className="h-6 w-6 rounded-full bg-slate-200/50 dark:bg-white/10 flex items-center justify-center overflow-hidden border border-slate-200/80 dark:border-white/5 shrink-0">{team.logoUrl ? <img src={team.logoUrl} alt="" className="h-full w-full object-contain p-0.5" /> : <span className="text-[8px] text-slate-500">{team.name.substring(0, 2)}</span>}</div>
+                        <span className="text-xs sm:text-sm font-medium text-slate-900 dark:text-slate-200 truncate">{team.name}</span>
                       </div>
-                      <div className="flex items-center gap-4 text-xs">
-                        <span className="text-slate-500">{team.played}P</span>
-                        <span className="font-bold text-slate-900 dark:text-white min-w-[24px] text-right">{team.points}</span>
+                      <div className="flex items-center gap-3 text-xs shrink-0">
+                        <span className="text-slate-500 w-5 text-center">{team.played}</span>
+                        <span className="font-bold text-slate-900 dark:text-white w-6 text-right">{team.points}</span>
                       </div>
                     </div>
                   ))}
@@ -464,7 +464,7 @@ const Dashboard = () => {
           </motion.div>
 
           {/* Top Scorers */}
-          <motion.div variants={item} className="rounded-2xl bg-white/60 dark:bg-slate-900/60 border border-slate-200/5 dark:border-white/5 overflow-hidden">
+          <motion.div variants={item} className="rounded-2xl bg-gradient-to-br from-white to-slate-50 dark:from-[#0f172a] dark:via-[#020617] dark:to-[#0f172a] ring-1 ring-slate-200/80 dark:ring-white/5 overflow-hidden shadow-xl dark:shadow-2xl dark:hover:shadow-brand-500/5 transition-all duration-300">
             <div className="flex items-center justify-between p-4 sm:p-5 border-b border-slate-200/5 dark:border-white/5">
               <h3 className="font-display font-bold text-slate-900 dark:text-white flex items-center gap-2 text-sm sm:text-base"><Target size={16} className="text-brand-400" /> Top Scorers</h3>
               <Link to="/players" className="text-xs text-slate-500 hover:text-slate-600 dark:text-slate-300 font-medium flex items-center">All <ChevronRight size={14} /></Link>
@@ -494,7 +494,7 @@ const Dashboard = () => {
           </motion.div>
 
           {/* Top Assists */}
-          <motion.div variants={item} className="rounded-2xl bg-white/60 dark:bg-slate-900/60 border border-slate-200/5 dark:border-white/5 overflow-hidden">
+          <motion.div variants={item} className="rounded-2xl bg-gradient-to-br from-white to-slate-50 dark:from-[#0f172a] dark:via-[#020617] dark:to-[#0f172a] ring-1 ring-slate-200/80 dark:ring-white/5 overflow-hidden shadow-xl dark:shadow-2xl dark:hover:shadow-brand-500/5 transition-all duration-300">
             <div className="flex items-center justify-between p-4 sm:p-5 border-b border-slate-200/5 dark:border-white/5">
               <h3 className="font-display font-bold text-slate-900 dark:text-white flex items-center gap-2 text-sm sm:text-base">
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-brand-400">
@@ -530,8 +530,8 @@ const Dashboard = () => {
           </motion.div>
 
           {/* District Stats */}
-          <motion.div variants={item} className="rounded-2xl bg-gradient-to-br from-slate-900/80 to-brand-950/30 border border-slate-200/5 dark:border-white/5 overflow-hidden">
-            <div className="p-4 sm:p-5 border-b border-slate-200/5 dark:border-white/5">
+          <motion.div variants={item} className="rounded-2xl bg-gradient-to-br from-white to-slate-50 dark:from-[#0f172a] dark:via-[#020617] dark:to-[#0f172a] ring-1 ring-slate-200/80 dark:ring-white/5 overflow-hidden shadow-xl dark:shadow-2xl dark:hover:shadow-brand-500/5 transition-all duration-300">
+            <div className="p-4 sm:p-5 border-b border-slate-200/10 dark:border-white/5">
               <h3 className="font-display font-bold text-slate-900 dark:text-white flex items-center gap-2 text-sm sm:text-base"><MapPinned size={16} className="text-brand-400" /> District Stats</h3>
             </div>
             <div className="p-3 sm:p-4 space-y-3.5">
@@ -541,7 +541,7 @@ const Dashboard = () => {
                     <span className="text-xs sm:text-sm font-bold text-slate-900 dark:text-white">{district}</span>
                     <span className="text-[10px] text-slate-500">{data.matches} matches</span>
                   </div>
-                  <div className="h-1.5 w-full bg-white/5 rounded-full overflow-hidden">
+                  <div className="h-1.5 w-full bg-slate-200 dark:bg-white/5 rounded-full overflow-hidden">
                     <div className="h-full bg-gradient-to-r from-brand-500 to-cyan-500 rounded-full group-hover:from-brand-400 group-hover:to-cyan-400 transition-all" style={{ width: `${Math.min(100, (data.matches / (districtStats[0]?.[1]?.matches || 1)) * 100)}%` }} />
                   </div>
                   <div className="flex gap-3 text-[10px] font-semibold text-slate-500 mt-1">{data.tournaments} Tourneys • {data.teams} Teams</div>
@@ -551,19 +551,19 @@ const Dashboard = () => {
           </motion.div>
 
           {/* This Week */}
-          <motion.div variants={item} className="rounded-2xl bg-white/60 dark:bg-slate-900/60 border border-slate-200/5 dark:border-white/5 overflow-hidden">
-            <div className="p-4 sm:p-5 border-b border-slate-200/5 dark:border-white/5">
-              <h3 className="font-display font-bold text-slate-900 dark:text-white flex items-center gap-2 text-sm sm:text-base"><Calendar size={16} className="text-indigo-400" /> This Week</h3>
+          <motion.div variants={item} className="rounded-2xl bg-gradient-to-br from-white to-slate-50 dark:from-[#0f172a] dark:via-[#020617] dark:to-[#0f172a] ring-1 ring-slate-200/80 dark:ring-white/5 overflow-hidden shadow-xl dark:shadow-2xl dark:hover:shadow-brand-500/5 transition-all duration-300">
+            <div className="p-4 sm:p-5 border-b border-slate-200/10 dark:border-white/5">
+              <h3 className="font-display font-bold text-slate-900 dark:text-white flex items-center gap-2 text-sm sm:text-base"><Calendar size={16} className="text-indigo-500 dark:text-indigo-400" /> This Week</h3>
             </div>
             <div className="p-3 sm:p-4 space-y-2 max-h-[220px] overflow-y-auto scrollbar-thin scrollbar-thumb-white/10 scrollbar-track-transparent">
               {weeklyFixtures.length > 0 ? weeklyFixtures.map(match => (
                 <Link to={`/live/${match.id}`} key={match.id} className="flex items-center gap-3 p-2.5 rounded-xl hover:bg-white/5 transition-all group">
                   <div className="flex-shrink-0 w-9 text-center">
-                    <div className="text-[9px] uppercase font-black text-indigo-400">{new Date(match.date).toLocaleDateString('en-US', { weekday: 'short' })}</div>
+                    <div className="text-[9px] uppercase font-black text-indigo-500 dark:text-indigo-400">{new Date(match.date).toLocaleDateString('en-US', { weekday: 'short' })}</div>
                     <div className="text-sm font-black text-slate-900 dark:text-white leading-tight">{new Date(match.date).getDate()}</div>
                   </div>
                   <div className="flex-1 min-w-0">
-                    <div className="text-xs font-semibold text-slate-200 truncate">{match.teamA} vs {match.teamB}</div>
+                    <div className="text-xs font-semibold text-slate-700 dark:text-slate-200 truncate">{match.teamA} vs {match.teamB}</div>
                     <div className="text-[10px] text-slate-500 truncate">{match.time || 'TBD'} • {match.competition}</div>
                   </div>
                   <ChevronRight size={12} className="text-slate-600 group-hover:text-indigo-400 flex-shrink-0 transition-colors" />
