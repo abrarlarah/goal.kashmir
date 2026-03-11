@@ -251,7 +251,7 @@ const Leaderboard = () => {
 
       {
         activeTab === 'table' && (
-          <div className="glass-card rounded-3xl border border-slate-200/10 dark:border-white/10 overflow-hidden shadow-2xl">
+          <div className="rounded-3xl bg-gradient-to-br from-white to-slate-50 dark:from-[#0f172a] dark:to-[#020617] ring-1 ring-slate-200/80 dark:ring-white/5 overflow-hidden shadow-xl dark:shadow-2xl dark:shadow-brand-500/5 transition-all duration-300">
             <div className="overflow-x-auto">
               <table className="min-w-full divide-y divide-white/5">
                 <thead className="bg-white/5">
@@ -325,7 +325,7 @@ const Leaderboard = () => {
               <Link
                 key={player.id}
                 to={`/players/${player.id}`}
-                className="glass-card p-6 rounded-3xl border border-slate-200/5 dark:border-white/5 flex items-center gap-6 hover:border-brand-500/30 group transition-all shadow-xl"
+                className="rounded-3xl p-6 bg-gradient-to-br from-white to-slate-50 dark:from-[#0f172a] dark:to-[#020617] ring-1 ring-slate-200/80 dark:ring-white/5 flex items-center gap-6 group transition-all duration-300 hover:shadow-xl dark:shadow-md hover:ring-2 hover:ring-brand-500/30 dark:hover:shadow-cyan-500/10 hover:-translate-y-1"
               >
                 <div className="relative">
                   <div className="absolute -top-3 -left-3 w-8 h-8 rounded-full bg-brand-500 flex items-center justify-center text-slate-900 dark:text-white font-black text-xs shadow-lg z-10">
@@ -370,7 +370,7 @@ const Leaderboard = () => {
               <Link
                 key={player.id}
                 to={`/players/${player.id}`}
-                className="glass-card p-6 rounded-3xl border border-slate-200/5 dark:border-white/5 flex items-center gap-6 hover:border-brand-500/30 group transition-all shadow-xl"
+                className="rounded-3xl p-6 bg-gradient-to-br from-white to-slate-50 dark:from-[#0f172a] dark:to-[#020617] ring-1 ring-slate-200/80 dark:ring-white/5 flex items-center gap-6 group transition-all duration-300 hover:shadow-xl dark:shadow-md hover:ring-2 hover:ring-brand-500/30 dark:hover:shadow-cyan-500/10 hover:-translate-y-1"
               >
                 <div className="relative">
                   <div className="absolute -top-3 -left-3 w-8 h-8 rounded-full bg-slate-50 dark:bg-slate-800 flex items-center justify-center text-slate-600 font-black text-xs shadow-lg z-10 border border-slate-200/10 dark:border-white/10">

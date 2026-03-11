@@ -168,7 +168,7 @@ const Teams = () => {
             key={team.id}
             variants={item}
             whileHover={{ y: -5 }}
-            className="group relative glass-card rounded-2xl overflow-hidden hover:border-brand-500/30 transition-all duration-300"
+            className="group relative rounded-2xl bg-gradient-to-br from-white to-slate-50 dark:from-[#0f172a] dark:to-[#020617] ring-1 ring-slate-200/80 dark:ring-white/5 overflow-hidden transition-all duration-300 hover:shadow-xl dark:shadow-md hover:ring-2 hover:ring-brand-500/30 dark:hover:shadow-cyan-500/10"
           >
             <Link to={`/teams/${team.id}`} className="block">
               {/* Background Glow */}
@@ -233,7 +233,7 @@ const Teams = () => {
             </Link>
 
             {/* Footer Stats/Status */}
-            <div className="px-6 py-4 border-t border-slate-200/5 dark:border-white/5 bg-black/20 flex justify-between items-center relative z-10">
+            <div className="px-6 py-4 border-t border-slate-200/80 dark:border-white/5 bg-slate-100/50 dark:bg-black/20 flex justify-between items-center relative z-10">
               <div className="flex items-center gap-3">
                 <div className="flex items-center gap-2 text-xs text-slate-600 dark:text-slate-400">
                   <Shield size={14} />

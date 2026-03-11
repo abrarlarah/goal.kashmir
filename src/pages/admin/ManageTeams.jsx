@@ -191,6 +191,7 @@ const ManageTeams = () => {
         });
         setEditingId(team.id);
         setSuccessMessage('');
+        window.scrollTo({ top: 0, behavior: 'smooth' });
     };
 
     const handleDelete = async (id) => {
@@ -263,8 +264,8 @@ const ManageTeams = () => {
             )}
 
             {/* Form */}
-            <div className="bg-slate-50 dark:bg-gray-800 p-6 rounded-lg mb-8">
-                <h3 className="text-xl mb-4">{editingId ? 'Edit Team' : 'Add New Team'}</h3>
+            <div className="rounded-2xl bg-gradient-to-br from-white to-slate-50 dark:from-[#0f172a] dark:to-[#020617] ring-1 ring-slate-200/80 dark:ring-white/5 overflow-hidden shadow-xl dark:shadow-2xl dark:shadow-brand-500/5 transition-all p-6 mb-8">
+                <h3 className="text-xl mb-4 font-bold">{editingId ? 'Edit Team' : 'Add New Team'}</h3>
                 <form onSubmit={handleSubmit} className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     {/* Logo Upload Section */}
                     <div className="md:col-span-2 flex flex-col items-center p-4 border-2 border-dashed border-gray-600 rounded-xl bg-slate-100/30 dark:bg-gray-700/30">
@@ -353,7 +354,7 @@ const ManageTeams = () => {
                             type="number"
                             name="founded"
                             placeholder="Year"
-                            value={formData.founded}
+                            value={formData.founded === 0 ? '' : formData.founded}
                             onChange={handleInputChange}
                             className="bg-slate-100 dark:bg-gray-700 p-2 rounded text-slate-900 dark:text-white w-full"
                         />
@@ -386,7 +387,7 @@ const ManageTeams = () => {
                             type="number"
                             name="players"
                             placeholder="0"
-                            value={formData.players}
+                            value={formData.players === 0 ? '' : formData.players}
                             onChange={handleInputChange}
                             className="bg-slate-100 dark:bg-gray-700 p-2 rounded text-slate-900 dark:text-white w-full"
                         />
@@ -432,7 +433,7 @@ const ManageTeams = () => {
                             type="number"
                             name="trophies"
                             placeholder="0"
-                            value={formData.trophies || 0}
+                            value={formData.trophies === 0 ? '' : formData.trophies}
                             onChange={handleInputChange}
                             className="bg-slate-100 dark:bg-gray-700 p-2 rounded text-slate-900 dark:text-white w-full"
                         />

@@ -188,6 +188,7 @@ const ManagePlayers = () => {
         });
         setEditingId(player.id);
         setSuccessMessage('');
+        window.scrollTo({ top: 0, behavior: 'smooth' });
     };
 
     const handleDelete = async (id) => {
@@ -305,8 +306,8 @@ const ManagePlayers = () => {
             )}
 
             {/* Form */}
-            <div className="bg-slate-50 dark:bg-gray-800 p-6 rounded-lg mb-8">
-                <h3 className="text-xl mb-4">{editingId ? 'Edit Player' : 'Add New Player'}</h3>
+            <div className="rounded-2xl bg-gradient-to-br from-white to-slate-50 dark:from-[#0f172a] dark:to-[#020617] ring-1 ring-slate-200/80 dark:ring-white/5 overflow-hidden shadow-xl dark:shadow-2xl dark:shadow-brand-500/5 transition-all p-6 mb-8">
+                <h3 className="text-xl mb-4 font-bold">{editingId ? 'Edit Player' : 'Add New Player'}</h3>
                 <form onSubmit={handleSubmit} className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
                     {/* Player Photo Upload */}
                     <div className="lg:col-span-4 flex flex-col items-center p-4 border-2 border-dashed border-gray-600 rounded-xl bg-slate-100/30 dark:bg-gray-700/30">
@@ -481,7 +482,7 @@ const ManagePlayers = () => {
                             type="number"
                             name="age"
                             placeholder="0"
-                            value={formData.age}
+                            value={formData.age === 0 ? '' : formData.age}
                             readOnly
                             className="bg-slate-100/50 dark:bg-gray-700/50 p-2 rounded text-slate-500 dark:text-gray-400 w-full cursor-not-allowed"
                         />
@@ -492,7 +493,7 @@ const ManagePlayers = () => {
                             type="number"
                             name="cleanSheets"
                             placeholder="0"
-                            value={formData.cleanSheets}
+                            value={formData.cleanSheets === 0 ? '' : formData.cleanSheets}
                             onChange={handleInputChange}
                             className="bg-slate-100 dark:bg-gray-700 p-2 rounded text-slate-900 dark:text-white w-full"
                         />
@@ -503,7 +504,7 @@ const ManagePlayers = () => {
                             type="number"
                             name="matches"
                             placeholder="0"
-                            value={formData.matches}
+                            value={formData.matches === 0 ? '' : formData.matches}
                             onChange={handleInputChange}
                             className="bg-slate-100 dark:bg-gray-700 p-2 rounded text-slate-900 dark:text-white w-full"
                         />
@@ -514,7 +515,7 @@ const ManagePlayers = () => {
                             type="number"
                             name="goals"
                             placeholder="0"
-                            value={formData.goals}
+                            value={formData.goals === 0 ? '' : formData.goals}
                             onChange={handleInputChange}
                             className="bg-slate-100 dark:bg-gray-700 p-2 rounded text-slate-900 dark:text-white w-full"
                         />
@@ -525,7 +526,7 @@ const ManagePlayers = () => {
                             type="number"
                             name="assists"
                             placeholder="0"
-                            value={formData.assists}
+                            value={formData.assists === 0 ? '' : formData.assists}
                             onChange={handleInputChange}
                             className="bg-slate-100 dark:bg-gray-700 p-2 rounded text-slate-900 dark:text-white w-full"
                         />
@@ -536,7 +537,7 @@ const ManagePlayers = () => {
                             type="number"
                             name="yellowCards"
                             placeholder="0"
-                            value={formData.yellowCards}
+                            value={formData.yellowCards === 0 ? '' : formData.yellowCards}
                             onChange={handleInputChange}
                             className="bg-slate-100 dark:bg-gray-700 p-2 rounded text-slate-900 dark:text-white w-full"
                         />
@@ -547,7 +548,7 @@ const ManagePlayers = () => {
                             type="number"
                             name="redCards"
                             placeholder="0"
-                            value={formData.redCards}
+                            value={formData.redCards === 0 ? '' : formData.redCards}
                             onChange={handleInputChange}
                             className="bg-slate-100 dark:bg-gray-700 p-2 rounded text-slate-900 dark:text-white w-full"
                         />

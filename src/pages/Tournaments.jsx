@@ -1,11 +1,11 @@
 import React, { useState, useMemo } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { useData } from '../context/DataContext';
 import { motion } from 'framer-motion';
 import {
   Calendar, MapPin, Users, Trophy, ChevronRight, Search,
-  Swords, Flag, Clock, CheckCircle, Filter, Plus, ArrowRight
+  Swords, Flag, Clock, CheckCircle, Filter, Plus, ArrowRight, Edit3
 } from 'lucide-react';
 
 const statusConfig = {
@@ -33,7 +33,8 @@ const item = {
 
 const Tournaments = () => {
   const { tournaments, matches, loading } = useData();
-  const { isSuperAdmin } = useAuth();
+  const { isSuperAdmin, currentUser } = useAuth();
+  const navigate = useNavigate();
   const [selectedYear, setSelectedYear] = useState('All');
   const [selectedDistrict, setSelectedDistrict] = useState('All');
   const [searchQuery, setSearchQuery] = useState('');
@@ -87,7 +88,7 @@ const Tournaments = () => {
       <motion.div
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
-        className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-brand-600/20 via-brand-500/10 to-transparent border border-brand-500/10 p-8 md:p-10"
+        className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-white via-slate-50 to-brand-50/50 dark:from-[#020617] dark:via-[#1e1b4b] dark:to-[#0f172a] border border-slate-200/80 dark:border-brand-500/20 shadow-xl dark:shadow-2xl dark:shadow-brand-900/40 p-8 md:p-10"
       >
         <div className="absolute -top-20 -right-20 w-64 h-64 bg-brand-500/5 rounded-full blur-3xl" />
         <div className="absolute -bottom-20 -left-20 w-48 h-48 bg-yellow-500/5 rounded-full blur-3xl" />
@@ -130,7 +131,7 @@ const Tournaments = () => {
         initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.1 }}
-        className="glass-card rounded-2xl border border-slate-200/5 dark:border-white/5 p-4"
+        className="rounded-2xl bg-gradient-to-br from-white to-slate-50 dark:from-[#0f172a] dark:to-[#020617] ring-1 ring-slate-200/80 dark:ring-white/5 shadow-sm p-4"
       >
         <div className="flex flex-col lg:flex-row items-start lg:items-center gap-4">
           {/* Search */}
@@ -214,7 +215,7 @@ const Tournaments = () => {
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          className="text-center py-20 glass-card rounded-3xl border border-slate-200/5 dark:border-white/5"
+          className="text-center py-20 rounded-3xl bg-gradient-to-br from-white to-slate-50 dark:from-[#0f172a] dark:to-[#020617] ring-1 ring-slate-200/80 dark:ring-white/5 shadow-sm"
         >
           <Trophy size={56} className="mx-auto text-slate-600 dark:text-slate-300 dark:text-slate-700 mb-4" strokeWidth={1.5} />
           <h3 className="text-xl font-display font-bold text-slate-900 dark:text-white mb-2">No Tournaments Found</h3>
@@ -238,7 +239,7 @@ const Tournaments = () => {
               <motion.div key={tournament.id} variants={item}>
                 <Link
                   to={`/tournaments/${tournament.id}`}
-                  className="block glass-card rounded-3xl border border-slate-200/10 dark:border-white/10 overflow-hidden group hover:border-brand-500/30 transition-all duration-300 hover:shadow-xl hover:shadow-brand-500/5 hover:-translate-y-1"
+                  className="block rounded-3xl bg-gradient-to-br from-white to-slate-50 dark:from-[#0f172a] dark:to-[#020617] ring-1 ring-slate-200/80 dark:ring-white/5 overflow-hidden group transition-all duration-300 hover:shadow-xl dark:shadow-md hover:ring-2 hover:ring-brand-500/30 dark:hover:shadow-cyan-500/10 hover:-translate-y-1"
                 >
                   {/* Card Top Gradient Bar */}
                   <div className={`h-1.5 bg-gradient-to-r ${type.gradient}`} />
@@ -250,9 +251,23 @@ const Tournaments = () => {
                         <div className={`w-1.5 h-1.5 rounded-full ${status.dot}`} />
                         {status.label}
                       </div>
-                      <span className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-lg text-[10px] font-bold bg-white/5 text-slate-500 dark:text-slate-400 border border-slate-200/5 dark:border-white/5`}>
-                        {type.icon} {type.label}
-                      </span>
+                      <div className="flex items-center gap-2">
+                        {(isSuperAdmin || (currentUser && tournament.createdBy === currentUser.uid)) && (
+                          <button
+                            onClick={(e) => {
+                              e.preventDefault();
+                              navigate('/admin/tournaments', { state: { editTournament: tournament } });
+                            }}
+                            className="p-1.5 rounded-lg bg-white/5 hover:bg-brand-500/20 text-slate-500 hover:text-brand-400 border border-slate-200/5 dark:border-white/5 transition-colors shadow-sm"
+                            title="Edit Tournament"
+                          >
+                            <Edit3 size={14} />
+                          </button>
+                        )}
+                        <span className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-lg text-[10px] font-bold bg-white/5 text-slate-500 dark:text-slate-400 border border-slate-200/5 dark:border-white/5`}>
+                          {type.icon} {type.label}
+                        </span>
+                      </div>
                     </div>
 
                     {/* Title */}

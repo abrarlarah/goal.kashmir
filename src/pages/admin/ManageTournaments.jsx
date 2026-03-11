@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useLocation } from 'react-router-dom';
 import { collection, addDoc, updateDoc, deleteDoc, doc, query, where, getDocs } from 'firebase/firestore';
 import { db } from '../../firebase';
 import { useData } from '../../context/DataContext';
@@ -29,6 +30,7 @@ const typeConfig = {
 const ManageTournaments = () => {
     const { tournaments, matches: allMatches } = useData();
     const { currentUser, isSuperAdmin } = useAuth();
+    const location = useLocation();
     const [adminUsers, setAdminUsers] = useState([]);
     const [loading, setLoading] = useState(false);
     const [successMessage, setSuccessMessage] = useState('');
@@ -61,6 +63,15 @@ const ManageTournaments = () => {
             fetchAdmins();
         }
     }, [isSuperAdmin]);
+
+    // Check location state for pre-filling edit form
+    useEffect(() => {
+        if (location.state && location.state.editTournament) {
+            handleEdit(location.state.editTournament);
+            // Clear state so it doesn't repeatedly set edit if we navigate back and forth
+            window.history.replaceState({}, document.title)
+        }
+    }, [location.state]);
 
     const generateTeamsList = (count) => {
         const n = Number(count) || 0;
