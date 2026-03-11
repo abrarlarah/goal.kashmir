@@ -368,14 +368,14 @@ const TournamentDetail = () => {
         <div className="max-w-7xl mx-auto px-4 py-8 space-y-8">
             {successMessage && (
                 <div className="fixed top-24 right-4 z-50 animate-bounce">
-                    <div className="bg-green-500 text-white px-6 py-3 rounded-2xl shadow-2xl font-black text-sm border border-white/20 flex items-center gap-3">
+                    <div className="bg-green-500 text-slate-900 dark:text-white px-6 py-3 rounded-2xl shadow-2xl font-black text-sm border border-slate-200/20 dark:border-white/20 flex items-center gap-3">
                         <div className="h-2 w-2 rounded-full bg-white animate-pulse" />
                         {successMessage}
                     </div>
                 </div>
             )}
             {/* Hero Header */}
-            <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-brand-900 to-slate-900 border border-slate-200 dark:border-white/10 p-8 shadow-2xl">
+            <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-brand-900 to-slate-900 border border-slate-200/10 dark:border-white/10 p-8 shadow-2xl">
                 <div className="absolute top-0 right-0 p-12 opacity-10">
                     <Trophy size={200} />
                 </div>
@@ -415,11 +415,11 @@ const TournamentDetail = () => {
                     </div>
 
                     <div className="grid grid-cols-2 gap-4">
-                        <div className="bg-white/5 backdrop-blur-sm rounded-2xl p-4 border border-slate-200 dark:border-white/5 text-center">
+                        <div className="bg-white/5 backdrop-blur-sm rounded-2xl p-4 border border-slate-200/5 dark:border-white/5 text-center">
                             <div className="text-2xl font-black text-slate-900 dark:text-white">{tournament.teamsCount || 0}</div>
                             <div className="text-[10px] text-slate-500 uppercase font-bold">Teams</div>
                         </div>
-                        <div className="bg-white/5 backdrop-blur-sm rounded-2xl p-4 border border-slate-200 dark:border-white/5 text-center">
+                        <div className="bg-white/5 backdrop-blur-sm rounded-2xl p-4 border border-slate-200/5 dark:border-white/5 text-center">
                             <div className="text-2xl font-black text-slate-900 dark:text-white">{tournamentMatches.length || tournament.matchesCount || 0}</div>
                             <div className="text-[10px] text-slate-500 uppercase font-bold">Matches</div>
                         </div>
@@ -460,7 +460,7 @@ const TournamentDetail = () => {
                                     {tournamentMatches.length > 0 && canEditTournament && (
                                         <button
                                             onClick={handleSyncTeamNames}
-                                            className="flex items-center gap-2 px-4 py-2 bg-indigo-500/10 text-indigo-500 rounded-xl font-bold text-sm hover:bg-indigo-500 hover:text-white transition-all border border-indigo-500/20"
+                                            className="flex items-center gap-2 px-4 py-2 bg-indigo-500/10 text-indigo-500 rounded-xl font-bold text-sm hover:bg-indigo-500 hover:text-slate-900 dark:text-white transition-all border border-indigo-500/20"
                                             title="Sync 'Team 1, 2...' with actual team names"
                                         >
                                             <Users size={18} />
@@ -470,7 +470,7 @@ const TournamentDetail = () => {
                                     {tournamentMatches.length === 0 && (
                                         <button
                                             onClick={handleSeedBracket}
-                                            className="flex items-center gap-2 px-4 py-2 bg-indigo-600 text-white rounded-xl font-bold text-sm hover:bg-indigo-700 transition-all shadow-lg shadow-indigo-500/20"
+                                            className="flex items-center gap-2 px-4 py-2 bg-indigo-600 text-slate-900 dark:text-white rounded-xl font-bold text-sm hover:bg-indigo-700 transition-all shadow-lg shadow-indigo-500/20"
                                         >
                                             <List size={18} />
                                             Generate {tournament.type === 'league' ? 'League' : 'Bracket'}
@@ -518,7 +518,7 @@ const TournamentDetail = () => {
                                                 <Link
                                                     key={match.id}
                                                     to={`/live/${match.id}`}
-                                                    className="group relative bg-slate-900 border border-slate-200 dark:border-white/5 rounded-2xl p-5 hover:border-brand-500/30 transition-all shadow-lg"
+                                                    className="group relative bg-white dark:bg-slate-900 border border-slate-200/5 dark:border-white/5 rounded-2xl p-5 hover:border-brand-500/30 transition-all shadow-lg"
                                                 >
                                                     {canEditTournament && (
                                                         <div className="absolute top-2 right-2 p-2 bg-brand-500 text-slate-900 rounded-lg opacity-0 group-hover:opacity-100 transition-all z-20">
@@ -527,7 +527,7 @@ const TournamentDetail = () => {
                                                     )}
                                                     <div className="flex items-center justify-between gap-4">
                                                         <div className="flex-1 flex flex-col items-center">
-                                                            <div className="w-12 h-12 bg-white/5 rounded-full flex items-center justify-center mb-2 overflow-hidden border border-slate-200 dark:border-white/5 group-hover:border-brand-500/30 transition-colors p-2">
+                                                            <div className="w-12 h-12 bg-white/5 rounded-full flex items-center justify-center mb-2 overflow-hidden border border-slate-200/5 dark:border-white/5 group-hover:border-brand-500/30 transition-colors p-2">
                                                                 {teamA?.logoUrl ? (
                                                                     <img src={teamA.logoUrl} alt="" className="w-full h-full object-contain" />
                                                                 ) : (
@@ -556,7 +556,7 @@ const TournamentDetail = () => {
                                                         </div>
 
                                                         <div className="flex-1 flex flex-col items-center">
-                                                            <div className="w-12 h-12 bg-white/5 rounded-full flex items-center justify-center mb-2 overflow-hidden border border-slate-200 dark:border-white/5 group-hover:border-brand-500/30 transition-colors p-2">
+                                                            <div className="w-12 h-12 bg-white/5 rounded-full flex items-center justify-center mb-2 overflow-hidden border border-slate-200/5 dark:border-white/5 group-hover:border-brand-500/30 transition-colors p-2">
                                                                 {teamB?.logoUrl ? (
                                                                     <img src={teamB.logoUrl} alt="" className="w-full h-full object-contain" />
                                                                 ) : (
@@ -573,7 +573,7 @@ const TournamentDetail = () => {
                                 </div>
                             ))
                         ) : (
-                            <div className="text-center py-20 bg-white/5 rounded-3xl border border-dashed border-slate-200 dark:border-white/10">
+                            <div className="text-center py-20 bg-white/5 rounded-3xl border border-dashed border-slate-200/10 dark:border-white/10">
                                 <Calendar size={48} className="mx-auto text-slate-600 mb-4" />
                                 <h3 className="text-lg font-bold text-slate-900 dark:text-white">No fixtures found</h3>
                                 <p className="text-slate-500">Wait for the organizers to schedule matches.</p>
@@ -582,8 +582,8 @@ const TournamentDetail = () => {
                         {/* Schedule Match Modal */}
                         {showScheduleMatch && (
                             <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-sm">
-                                <div className="bg-slate-900 border border-slate-200 dark:border-white/10 rounded-3xl shadow-2xl w-full max-w-xl overflow-hidden">
-                                    <div className="p-6 border-b border-slate-200 dark:border-white/5 flex justify-between items-center bg-brand-500/5">
+                                <div className="bg-white dark:bg-slate-900 border border-slate-200/10 dark:border-white/10 rounded-3xl shadow-2xl w-full max-w-xl overflow-hidden">
+                                    <div className="p-6 border-b border-slate-200/5 dark:border-white/5 flex justify-between items-center bg-brand-500/5">
                                         <h3 className="text-xl font-black text-slate-900 dark:text-white italic">Schedule New Match</h3>
                                         <button onClick={() => setShowScheduleMatch(false)} className="text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:text-white transition-colors">
                                             <X size={24} />
@@ -598,7 +598,7 @@ const TournamentDetail = () => {
                                                     name="teamA"
                                                     value={matchFormData.teamA}
                                                     onChange={handleMatchInputChange}
-                                                    className="w-full bg-slate-800 border border-slate-200 dark:border-white/5 rounded-xl p-3 text-slate-900 dark:text-white outline-none focus:border-brand-500 transition-all"
+                                                    className="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200/5 dark:border-white/5 rounded-xl p-3 text-slate-900 dark:text-white outline-none focus:border-brand-500 transition-all"
                                                     required
                                                 >
                                                     <option value="">Select Home Team</option>
@@ -615,7 +615,7 @@ const TournamentDetail = () => {
                                                     name="teamB"
                                                     value={matchFormData.teamB}
                                                     onChange={handleMatchInputChange}
-                                                    className="w-full bg-slate-800 border border-slate-200 dark:border-white/5 rounded-xl p-3 text-slate-900 dark:text-white outline-none focus:border-brand-500 transition-all"
+                                                    className="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200/5 dark:border-white/5 rounded-xl p-3 text-slate-900 dark:text-white outline-none focus:border-brand-500 transition-all"
                                                     required
                                                 >
                                                     <option value="">Select Away Team</option>
@@ -636,7 +636,7 @@ const TournamentDetail = () => {
                                                     name="date"
                                                     value={matchFormData.date}
                                                     onChange={handleMatchInputChange}
-                                                    className="w-full bg-slate-800 border border-slate-200 dark:border-white/5 rounded-xl p-3 text-slate-900 dark:text-white outline-none focus:border-brand-500 transition-all"
+                                                    className="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200/5 dark:border-white/5 rounded-xl p-3 text-slate-900 dark:text-white outline-none focus:border-brand-500 transition-all"
                                                     required
                                                 />
                                             </div>
@@ -647,7 +647,7 @@ const TournamentDetail = () => {
                                                     name="time"
                                                     value={matchFormData.time}
                                                     onChange={handleMatchInputChange}
-                                                    className="w-full bg-slate-800 border border-slate-200 dark:border-white/5 rounded-xl p-3 text-slate-900 dark:text-white outline-none focus:border-brand-500 transition-all"
+                                                    className="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200/5 dark:border-white/5 rounded-xl p-3 text-slate-900 dark:text-white outline-none focus:border-brand-500 transition-all"
                                                     required
                                                 />
                                             </div>
@@ -659,7 +659,7 @@ const TournamentDetail = () => {
                                                 name="round"
                                                 value={matchFormData.round}
                                                 onChange={handleMatchInputChange}
-                                                className="w-full bg-slate-800 border border-slate-200 dark:border-white/5 rounded-xl p-3 text-slate-900 dark:text-white outline-none focus:border-brand-500 transition-all"
+                                                className="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200/5 dark:border-white/5 rounded-xl p-3 text-slate-900 dark:text-white outline-none focus:border-brand-500 transition-all"
                                                 required
                                             >
                                                 <option value="">Select Stage</option>
@@ -698,9 +698,9 @@ const TournamentDetail = () => {
                 )}
 
                 {activeTab === 'standings' && (
-                    <div className="bg-slate-900 rounded-3xl border border-slate-200 dark:border-white/10 overflow-hidden">
+                    <div className="bg-white dark:bg-slate-900 rounded-3xl border border-slate-200/10 dark:border-white/10 overflow-hidden">
                         <table className="w-full text-left">
-                            <thead className="bg-white/5 border-b border-slate-200 dark:border-white/10 text-[10px] uppercase font-black text-slate-500 tracking-widest">
+                            <thead className="bg-white/5 border-b border-slate-200/10 dark:border-white/10 text-[10px] uppercase font-black text-slate-500 tracking-widest">
                                 <tr>
                                     <th className="px-6 py-4">Pos</th>
                                     <th className="px-6 py-4">Team</th>
@@ -746,15 +746,15 @@ const TournamentDetail = () => {
                     <div className="space-y-8">
                         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
                             {/* Pool A */}
-                            <div className="bg-slate-900 rounded-3xl border border-white/10 overflow-hidden">
-                                <div className="px-6 py-4 bg-indigo-500/10 border-b border-white/5">
-                                    <h3 className="text-lg font-display font-black text-white flex items-center gap-2">
-                                        <span className="h-6 w-6 bg-indigo-500 rounded-lg flex items-center justify-center text-xs font-black text-white">A</span>
+                            <div className="bg-white dark:bg-slate-900 rounded-3xl border border-slate-200/10 dark:border-white/10 overflow-hidden">
+                                <div className="px-6 py-4 bg-indigo-500/10 border-b border-slate-200/5 dark:border-white/5">
+                                    <h3 className="text-lg font-display font-black text-slate-900 dark:text-white flex items-center gap-2">
+                                        <span className="h-6 w-6 bg-indigo-500 rounded-lg flex items-center justify-center text-xs font-black text-slate-900 dark:text-white">A</span>
                                         Pool A
                                     </h3>
                                 </div>
                                 <table className="w-full text-left">
-                                    <thead className="bg-white/5 border-b border-white/10 text-[10px] uppercase font-black text-slate-500 tracking-widest">
+                                    <thead className="bg-white/5 border-b border-slate-200/10 dark:border-white/10 text-[10px] uppercase font-black text-slate-500 tracking-widest">
                                         <tr>
                                             <th className="px-4 py-3">#</th>
                                             <th className="px-4 py-3">Team</th>
@@ -774,15 +774,15 @@ const TournamentDetail = () => {
                                             )}>
                                                 <td className="px-4 py-3 font-black text-slate-500">{idx + 1}</td>
                                                 <td className="px-4 py-3">
-                                                    <span className="font-bold text-white">{team.name}</span>
+                                                    <span className="font-bold text-slate-900 dark:text-white">{team.name}</span>
                                                     {idx < 2 && <span className="ml-2 text-[8px] bg-green-500/10 text-green-400 px-1.5 py-0.5 rounded-full font-bold">Q</span>}
                                                 </td>
-                                                <td className="px-3 py-3 text-center text-slate-400">{team.played}</td>
-                                                <td className="px-3 py-3 text-center text-slate-400">{team.wins}</td>
-                                                <td className="px-3 py-3 text-center text-slate-400">{team.draws}</td>
-                                                <td className="px-3 py-3 text-center text-slate-400">{team.losses}</td>
+                                                <td className="px-3 py-3 text-center text-slate-500 dark:text-slate-400">{team.played}</td>
+                                                <td className="px-3 py-3 text-center text-slate-500 dark:text-slate-400">{team.wins}</td>
+                                                <td className="px-3 py-3 text-center text-slate-500 dark:text-slate-400">{team.draws}</td>
+                                                <td className="px-3 py-3 text-center text-slate-500 dark:text-slate-400">{team.losses}</td>
                                                 <td className="px-3 py-3 text-center font-bold text-brand-400">{team.gd}</td>
-                                                <td className="px-4 py-3 text-center font-black text-white bg-brand-500/5">{team.pts}</td>
+                                                <td className="px-4 py-3 text-center font-black text-slate-900 dark:text-white bg-brand-500/5">{team.pts}</td>
                                             </tr>
                                         ))}
                                         {poolAStandings.length === 0 && (
@@ -793,15 +793,15 @@ const TournamentDetail = () => {
                             </div>
 
                             {/* Pool B */}
-                            <div className="bg-slate-900 rounded-3xl border border-white/10 overflow-hidden">
-                                <div className="px-6 py-4 bg-orange-500/10 border-b border-white/5">
-                                    <h3 className="text-lg font-display font-black text-white flex items-center gap-2">
-                                        <span className="h-6 w-6 bg-orange-500 rounded-lg flex items-center justify-center text-xs font-black text-white">B</span>
+                            <div className="bg-white dark:bg-slate-900 rounded-3xl border border-slate-200/10 dark:border-white/10 overflow-hidden">
+                                <div className="px-6 py-4 bg-orange-500/10 border-b border-slate-200/5 dark:border-white/5">
+                                    <h3 className="text-lg font-display font-black text-slate-900 dark:text-white flex items-center gap-2">
+                                        <span className="h-6 w-6 bg-orange-500 rounded-lg flex items-center justify-center text-xs font-black text-slate-900 dark:text-white">B</span>
                                         Pool B
                                     </h3>
                                 </div>
                                 <table className="w-full text-left">
-                                    <thead className="bg-white/5 border-b border-white/10 text-[10px] uppercase font-black text-slate-500 tracking-widest">
+                                    <thead className="bg-white/5 border-b border-slate-200/10 dark:border-white/10 text-[10px] uppercase font-black text-slate-500 tracking-widest">
                                         <tr>
                                             <th className="px-4 py-3">#</th>
                                             <th className="px-4 py-3">Team</th>
@@ -821,15 +821,15 @@ const TournamentDetail = () => {
                                             )}>
                                                 <td className="px-4 py-3 font-black text-slate-500">{idx + 1}</td>
                                                 <td className="px-4 py-3">
-                                                    <span className="font-bold text-white">{team.name}</span>
+                                                    <span className="font-bold text-slate-900 dark:text-white">{team.name}</span>
                                                     {idx < 2 && <span className="ml-2 text-[8px] bg-green-500/10 text-green-400 px-1.5 py-0.5 rounded-full font-bold">Q</span>}
                                                 </td>
-                                                <td className="px-3 py-3 text-center text-slate-400">{team.played}</td>
-                                                <td className="px-3 py-3 text-center text-slate-400">{team.wins}</td>
-                                                <td className="px-3 py-3 text-center text-slate-400">{team.draws}</td>
-                                                <td className="px-3 py-3 text-center text-slate-400">{team.losses}</td>
+                                                <td className="px-3 py-3 text-center text-slate-500 dark:text-slate-400">{team.played}</td>
+                                                <td className="px-3 py-3 text-center text-slate-500 dark:text-slate-400">{team.wins}</td>
+                                                <td className="px-3 py-3 text-center text-slate-500 dark:text-slate-400">{team.draws}</td>
+                                                <td className="px-3 py-3 text-center text-slate-500 dark:text-slate-400">{team.losses}</td>
                                                 <td className="px-3 py-3 text-center font-bold text-brand-400">{team.gd}</td>
-                                                <td className="px-4 py-3 text-center font-black text-white bg-brand-500/5">{team.pts}</td>
+                                                <td className="px-4 py-3 text-center font-black text-slate-900 dark:text-white bg-brand-500/5">{team.pts}</td>
                                             </tr>
                                         ))}
                                         {poolBStandings.length === 0 && (
@@ -841,10 +841,10 @@ const TournamentDetail = () => {
                         </div>
 
                         {/* Qualification Info */}
-                        <div className="flex items-center justify-center gap-6 py-3 bg-white/5 rounded-2xl border border-white/5">
+                        <div className="flex items-center justify-center gap-6 py-3 bg-white/5 rounded-2xl border border-slate-200/5 dark:border-white/5">
                             <div className="flex items-center gap-2">
                                 <div className="w-3 h-1 bg-green-500 rounded" />
-                                <span className="text-[10px] text-slate-400 font-bold uppercase tracking-wider">Qualifies to Semi-Finals</span>
+                                <span className="text-[10px] text-slate-500 dark:text-slate-400 font-bold uppercase tracking-wider">Qualifies to Semi-Finals</span>
                             </div>
                             <span className="text-slate-600">•</span>
                             <span className="text-[10px] text-slate-500">Semi-Finals: A1 vs B2, B1 vs A2 → Final</span>
@@ -873,7 +873,7 @@ const TournamentDetail = () => {
                                                 }
                                             }
                                         }}
-                                        className="px-4 py-2 bg-red-500/10 text-red-500 rounded-xl font-bold text-xs hover:bg-red-500 hover:text-white transition-all border border-red-500/20"
+                                        className="px-4 py-2 bg-red-500/10 text-red-500 rounded-xl font-bold text-xs hover:bg-red-500 hover:text-slate-900 dark:text-white transition-all border border-red-500/20"
                                     >
                                         Delete & Reset Bracket
                                     </button>
@@ -936,7 +936,7 @@ const TournamentDetail = () => {
                                 <Link
                                     key={team.id}
                                     to={`/teams/${team.id}`}
-                                    className="relative group bg-slate-900 border border-slate-200 dark:border-white/5 p-6 rounded-3xl hover:border-brand-500/20 transition-all text-center flex flex-col items-center shadow-lg"
+                                    className="relative group bg-white dark:bg-slate-900 border border-slate-200/5 dark:border-white/5 p-6 rounded-3xl hover:border-brand-500/20 transition-all text-center flex flex-col items-center shadow-lg"
                                 >
                                     {canEditTournament && (
                                         <button
@@ -965,8 +965,8 @@ const TournamentDetail = () => {
                         {/* Add Team Modal */}
                         {showAddTeam && (
                             <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-sm">
-                                <div className="bg-slate-900 border border-slate-200 dark:border-white/10 rounded-3xl shadow-2xl w-full max-w-lg overflow-hidden">
-                                    <div className="p-6 border-b border-slate-200 dark:border-white/5 flex justify-between items-center bg-brand-500/5">
+                                <div className="bg-white dark:bg-slate-900 border border-slate-200/10 dark:border-white/10 rounded-3xl shadow-2xl w-full max-w-lg overflow-hidden">
+                                    <div className="p-6 border-b border-slate-200/5 dark:border-white/5 flex justify-between items-center bg-brand-500/5">
                                         <h3 className="text-xl font-black text-slate-900 dark:text-white italic">Add Team to {tournament.name}</h3>
                                         <button onClick={() => setShowAddTeam(false)} className="text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:text-white transition-colors">
                                             <X size={24} />
@@ -981,7 +981,7 @@ const TournamentDetail = () => {
                                                 placeholder="Search available teams..."
                                                 value={searchTerm}
                                                 onChange={(e) => setSearchTerm(e.target.value)}
-                                                className="w-full bg-slate-800 border border-slate-200 dark:border-white/5 rounded-2xl py-3 pl-10 pr-4 text-slate-900 dark:text-white placeholder:text-slate-500 focus:border-brand-500 focus:ring-1 focus:ring-brand-500 outline-none transition-all"
+                                                className="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200/5 dark:border-white/5 rounded-2xl py-3 pl-10 pr-4 text-slate-900 dark:text-white placeholder:text-slate-500 focus:border-brand-500 focus:ring-1 focus:ring-brand-500 outline-none transition-all"
                                             />
                                         </div>
 
@@ -994,7 +994,7 @@ const TournamentDetail = () => {
                                                             onClick={() => handleAddTeam(team)}
                                                             className="flex items-center gap-4 p-3 rounded-2xl bg-white/5 hover:bg-brand-500/10 border border-transparent hover:border-brand-500/20 transition-all text-left"
                                                         >
-                                                            <div className="w-10 h-10 bg-slate-800 rounded-xl flex items-center justify-center border border-slate-200 dark:border-white/5">
+                                                            <div className="w-10 h-10 bg-slate-50 dark:bg-slate-800 rounded-xl flex items-center justify-center border border-slate-200/5 dark:border-white/5">
                                                                 {team.logoUrl ? (
                                                                     <img src={team.logoUrl} className="w-6 h-6 object-contain" alt="" />
                                                                 ) : (

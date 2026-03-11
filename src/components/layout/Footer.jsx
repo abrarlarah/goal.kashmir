@@ -3,7 +3,7 @@ import { Heart } from 'lucide-react';
 
 const Footer = () => {
     return (
-        <footer className="w-full border-t border-slate-200 dark:border-white/10 bg-white dark:bg-dark-bg mt-auto">
+        <footer className="w-full border-t border-slate-200/10 dark:border-white/10 bg-white dark:bg-dark-bg mt-auto">
             <div className="container mx-auto px-4 py-6">
                 <div className="flex flex-col md:flex-row items-center justify-center gap-2 text-sm text-slate-500 font-medium">
                     <Heart size={14} fill="currentColor" className="text-red-500 animate-pulse" />

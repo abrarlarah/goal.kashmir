@@ -172,7 +172,7 @@ const ManageSponsors = () => {
         switch (tier) {
             case 'Premium': return 'bg-purple-500/20 text-purple-400 border-purple-500/30';
             case 'Gold': return 'bg-yellow-500/20 text-yellow-400 border-yellow-500/30';
-            case 'Silver': return 'bg-gray-400/20 text-gray-300 border-gray-400/30';
+            case 'Silver': return 'bg-gray-400/20 text-slate-600 dark:text-gray-300 border-gray-400/30';
             case 'Bronze': return 'bg-orange-700/20 text-orange-500 border-orange-700/30';
             default: return 'bg-blue-500/20 text-blue-400 border-blue-500/30';
         }
@@ -207,7 +207,7 @@ const ManageSponsors = () => {
                                 <input
                                     type="text"
                                     required
-                                    className="w-full bg-black/20 border border-slate-200 dark:border-white/10 rounded-lg px-4 py-2 text-slate-900 dark:text-white focus:ring-1 focus:ring-brand-500 outline-none"
+                                    className="w-full bg-black/20 border border-slate-200/10 dark:border-white/10 rounded-lg px-4 py-2 text-slate-900 dark:text-white focus:ring-1 focus:ring-brand-500 outline-none"
                                     value={formData.name}
                                     onChange={e => setFormData({ ...formData, name: e.target.value })}
                                 />
@@ -217,7 +217,7 @@ const ManageSponsors = () => {
                                 <label className="block text-sm font-medium text-slate-600 dark:text-slate-400 mb-1">Website URL (Optional)</label>
                                 <input
                                     type="url"
-                                    className="w-full bg-black/20 border border-slate-200 dark:border-white/10 rounded-lg px-4 py-2 text-slate-900 dark:text-white focus:ring-1 focus:ring-brand-500 outline-none"
+                                    className="w-full bg-black/20 border border-slate-200/10 dark:border-white/10 rounded-lg px-4 py-2 text-slate-900 dark:text-white focus:ring-1 focus:ring-brand-500 outline-none"
                                     value={formData.websiteUrl}
                                     onChange={e => setFormData({ ...formData, websiteUrl: e.target.value })}
                                     placeholder="https://..."
@@ -228,7 +228,7 @@ const ManageSponsors = () => {
                                 <div>
                                     <label className="block text-sm font-medium text-slate-600 dark:text-slate-400 mb-1">Tier</label>
                                     <select
-                                        className="w-full bg-black/20 border border-slate-200 dark:border-white/10 rounded-lg px-4 py-2 text-slate-900 dark:text-white focus:ring-1 focus:ring-brand-500 outline-none"
+                                        className="w-full bg-black/20 border border-slate-200/10 dark:border-white/10 rounded-lg px-4 py-2 text-slate-900 dark:text-white focus:ring-1 focus:ring-brand-500 outline-none"
                                         value={formData.tier}
                                         onChange={e => setFormData({ ...formData, tier: e.target.value })}
                                     >
@@ -241,7 +241,7 @@ const ManageSponsors = () => {
                                 <div>
                                     <label className="block text-sm font-medium text-slate-600 dark:text-slate-400 mb-1">Target</label>
                                     <select
-                                        className="w-full bg-black/20 border border-slate-200 dark:border-white/10 rounded-lg px-4 py-2 text-slate-900 dark:text-white focus:ring-1 focus:ring-brand-500 outline-none"
+                                        className="w-full bg-black/20 border border-slate-200/10 dark:border-white/10 rounded-lg px-4 py-2 text-slate-900 dark:text-white focus:ring-1 focus:ring-brand-500 outline-none"
                                         value={formData.target}
                                         onChange={e => setFormData({ ...formData, target: e.target.value })}
                                     >
@@ -267,7 +267,7 @@ const ManageSponsors = () => {
                                     <input
                                         type="text"
                                         placeholder="Or paste image URL..."
-                                        className="w-full bg-black/20 border border-slate-200 dark:border-white/10 rounded-lg px-4 py-2 text-slate-900 dark:text-white focus:ring-1 focus:ring-brand-500 outline-none text-sm"
+                                        className="w-full bg-black/20 border border-slate-200/10 dark:border-white/10 rounded-lg px-4 py-2 text-slate-900 dark:text-white focus:ring-1 focus:ring-brand-500 outline-none text-sm"
                                         value={formData.logoUrl}
                                         onChange={e => setFormData({ ...formData, logoUrl: e.target.value })}
                                         required
@@ -278,7 +278,7 @@ const ManageSponsors = () => {
                                             type="button"
                                             onClick={triggerFileInput}
                                             disabled={uploading}
-                                            className="flex-1 flex items-center justify-center gap-2 px-4 py-2 bg-white/5 hover:bg-white/10 border border-slate-200 dark:border-white/10 rounded-lg text-sm text-slate-700 dark:text-slate-300 transition-colors w-full"
+                                            className="flex-1 flex items-center justify-center gap-2 px-4 py-2 bg-white/5 hover:bg-white/10 border border-slate-200/10 dark:border-white/10 rounded-lg text-sm text-slate-700 dark:text-slate-300 transition-colors w-full"
                                         >
                                             <Upload size={16} />
                                             <span>Upload Logo</span>
@@ -296,7 +296,7 @@ const ManageSponsors = () => {
 
                                     {/* Preview */}
                                     {formData.logoUrl && (
-                                        <div className="relative mt-2 p-4 rounded-lg bg-white/10 border border-slate-200 dark:border-white/10 flex items-center justify-center group h-32">
+                                        <div className="relative mt-2 p-4 rounded-lg bg-white/10 border border-slate-200/10 dark:border-white/10 flex items-center justify-center group h-32">
                                             <img src={formData.logoUrl} alt="Preview" className="max-w-full max-h-full object-contain drop-shadow-lg" />
                                             <button
                                                 type="button"
@@ -307,7 +307,7 @@ const ManageSponsors = () => {
                                             </button>
                                             {uploading && (
                                                 <div className="absolute inset-0 bg-black/60 flex items-center justify-center rounded-lg">
-                                                    <div className="text-white text-xs font-medium animate-pulse">Processing...</div>
+                                                    <div className="text-slate-900 dark:text-white text-xs font-medium animate-pulse">Processing...</div>
                                                 </div>
                                             )}
                                         </div>
@@ -315,13 +315,13 @@ const ManageSponsors = () => {
                                 </div>
                             </div>
 
-                            <div className="flex items-center gap-2 mt-4 pt-2 border-t border-slate-200 dark:border-white/10">
+                            <div className="flex items-center gap-2 mt-4 pt-2 border-t border-slate-200/10 dark:border-white/10">
                                 <input
                                     type="checkbox"
                                     id="activeStatus"
                                     checked={formData.active}
                                     onChange={e => setFormData({ ...formData, active: e.target.checked })}
-                                    className="w-4 h-4 text-brand-600 bg-black/20 border-slate-200 dark:border-white/10 rounded rounded-lg focus:ring-brand-500 focus:ring-2"
+                                    className="w-4 h-4 text-brand-600 bg-black/20 border-slate-200/10 dark:border-white/10 rounded rounded-lg focus:ring-brand-500 focus:ring-2"
                                 />
                                 <label htmlFor="activeStatus" className="text-sm font-medium text-slate-700 dark:text-slate-300">
                                     Active (Visible on Site)
@@ -335,7 +335,7 @@ const ManageSponsors = () => {
                             >
                                 {uploading ? (
                                     <>
-                                        <div className="h-4 w-4 border-2 border-slate-200 dark:border-white/30 border-t-white rounded-full animate-spin" />
+                                        <div className="h-4 w-4 border-2 border-slate-200/30 dark:border-white/30 border-t-white rounded-full animate-spin" />
                                         <span>{statusText || 'Processing...'}</span>
                                     </>
                                 ) : (
@@ -422,7 +422,7 @@ const ManageSponsors = () => {
                                 </motion.div>
                             ))}
                             {sponsors.length === 0 && (
-                                <div className="text-center py-10 bg-white/5 rounded-xl border border-dashed border-slate-200 dark:border-white/10 text-slate-500">
+                                <div className="text-center py-10 bg-white/5 rounded-xl border border-dashed border-slate-200/10 dark:border-white/10 text-slate-500">
                                     No sponsors added yet.
                                 </div>
                             )}

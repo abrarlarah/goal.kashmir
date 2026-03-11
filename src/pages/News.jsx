@@ -94,16 +94,16 @@ const News = () => {
                             />
                             <div className="absolute inset-0 bg-gradient-to-t from-dark-bg via-dark-bg/50 to-transparent" />
                             <div className="absolute bottom-0 left-0 p-8 space-y-3">
-                                <span className="inline-block px-3 py-1 bg-brand-600 text-white text-xs font-bold uppercase tracking-wider rounded-lg shadow-lg">
+                                <span className="inline-block px-3 py-1 bg-brand-600 text-slate-900 dark:text-white text-xs font-bold uppercase tracking-wider rounded-lg shadow-lg">
                                     {news[0].category}
                                 </span>
-                                <h2 className="text-2xl md:text-4xl font-display font-bold text-white leading-tight max-w-2xl group-hover:text-brand-400 transition-colors">
+                                <h2 className="text-2xl md:text-4xl font-display font-bold text-slate-900 dark:text-white leading-tight max-w-2xl group-hover:text-brand-400 transition-colors">
                                     {news[0].title}
                                 </h2>
-                                <p className="text-slate-300 line-clamp-2 max-w-xl text-sm md:text-base">
+                                <p className="text-slate-600 dark:text-slate-300 line-clamp-2 max-w-xl text-sm md:text-base">
                                     {news[0].excerpt}
                                 </p>
-                                <div className="flex items-center gap-2 text-slate-400 text-xs font-medium pt-2">
+                                <div className="flex items-center gap-2 text-slate-500 dark:text-slate-400 text-xs font-medium pt-2">
                                     <Calendar size={14} />
                                     {news[0].createdAt?.seconds ? new Date(news[0].createdAt.seconds * 1000).toLocaleDateString(undefined, { dateStyle: 'long' }) : 'Today'}
                                 </div>
@@ -126,7 +126,7 @@ const News = () => {
                                         className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
                                     />
                                     <div className="absolute top-4 left-4">
-                                        <span className="px-2 py-1 bg-black/60 backdrop-blur-md text-white text-[10px] font-bold uppercase tracking-wider rounded border border-white/10">
+                                        <span className="px-2 py-1 bg-black/60 backdrop-blur-md text-slate-900 dark:text-white text-[10px] font-bold uppercase tracking-wider rounded border border-slate-200/10 dark:border-white/10">
                                             {article.category}
                                         </span>
                                     </div>
@@ -140,7 +140,7 @@ const News = () => {
                                         {article.excerpt}
                                     </p>
 
-                                    <div className="flex items-center justify-between pt-4 border-t border-slate-200 dark:border-white/5 mt-auto">
+                                    <div className="flex items-center justify-between pt-4 border-t border-slate-200/5 dark:border-white/5 mt-auto">
                                         <span className="text-xs text-slate-500 flex items-center gap-1.5">
                                             <Calendar size={12} />
                                             {article.createdAt?.seconds ? new Date(article.createdAt.seconds * 1000).toLocaleDateString() : 'Recent'}
@@ -155,7 +155,7 @@ const News = () => {
                     ))}
                 </motion.div>
             ) : (
-                <div className="text-center py-20 bg-white/5 rounded-3xl border border-dashed border-slate-200 dark:border-white/10">
+                <div className="text-center py-20 bg-white/5 rounded-3xl border border-dashed border-slate-200/10 dark:border-white/10">
                     <Newspaper className="w-16 h-16 text-slate-600 mx-auto mb-4" strokeWidth={1.5} />
                     <h3 className="text-xl font-bold text-slate-900 dark:text-white mb-2">No News Yet</h3>
                     <p className="text-slate-600 dark:text-slate-400">Check back later for the latest updates from the league.</p>

@@ -97,12 +97,12 @@ const MatchPredictions = ({ matchId, teamA, teamB }) => {
 
     if (loading && totalVotes === 0) {
         return (
-            <div className="bg-slate-900/50 dark:bg-white/5 backdrop-blur-sm rounded-3xl p-6 border border-slate-200 dark:border-white/5 animate-pulse h-64" />
+            <div className="bg-white/50 dark:bg-slate-900/50 dark:bg-white/5 backdrop-blur-sm rounded-3xl p-6 border border-slate-200/5 dark:border-white/5 animate-pulse h-64" />
         );
     }
 
     return (
-        <div className="bg-slate-900/50 dark:bg-white/5 backdrop-blur-sm rounded-3xl p-6 border border-slate-200 dark:border-white/5 shadow-xl">
+        <div className="bg-white/50 dark:bg-slate-900/50 dark:bg-white/5 backdrop-blur-sm rounded-3xl p-6 border border-slate-200/5 dark:border-white/5 shadow-xl">
             <div className="flex items-center justify-between mb-6">
                 <div className="flex items-center gap-3">
                     <div className="p-2 bg-brand-500/10 rounded-xl text-brand-400">
@@ -113,7 +113,7 @@ const MatchPredictions = ({ matchId, teamA, teamB }) => {
                         <p className="text-[10px] text-slate-500 font-bold uppercase">Fan Predictions</p>
                     </div>
                 </div>
-                <div className="flex items-center gap-2 px-3 py-1 bg-white/5 rounded-full border border-slate-200 dark:border-white/5">
+                <div className="flex items-center gap-2 px-3 py-1 bg-white/5 rounded-full border border-slate-200/5 dark:border-white/5">
                     <Users size={12} className="text-slate-500" />
                     <span className="text-xs font-black text-slate-600 dark:text-slate-400">{totalVotes} Votes</span>
                 </div>
@@ -138,7 +138,7 @@ const MatchPredictions = ({ matchId, teamA, teamB }) => {
                             <button
                                 key={choice.id}
                                 onClick={() => handleVote(choice.id)}
-                                className="group relative overflow-hidden bg-white/5 hover:bg-white/10 border border-slate-200 dark:border-white/5 rounded-2xl p-4 transition-all hover:border-brand-500/30 font-bold"
+                                className="group relative overflow-hidden bg-white/5 hover:bg-white/10 border border-slate-200/5 dark:border-white/5 rounded-2xl p-4 transition-all hover:border-brand-500/30 font-bold"
                             >
                                 <span className="relative z-10 text-xs font-black text-slate-600 dark:text-slate-400 group-hover:text-slate-900 dark:text-white uppercase transition-colors">
                                     {choice.label}
@@ -167,7 +167,7 @@ const MatchPredictions = ({ matchId, teamA, teamB }) => {
                                             </div>
                                             <span className="text-lg font-impact text-slate-900 dark:text-white">{Math.round(percent)}%</span>
                                         </div>
-                                        <div className="h-3 w-full bg-slate-100 dark:bg-white/5 rounded-full overflow-hidden border border-slate-200 dark:border-white/5 p-[1px]">
+                                        <div className="h-3 w-full bg-slate-100 dark:bg-white/5 rounded-full overflow-hidden border border-slate-200/5 dark:border-white/5 p-[1px]">
                                             <motion.div
                                                 initial={{ width: 0 }}
                                                 animate={{ width: `${percent}%` }}
@@ -179,7 +179,7 @@ const MatchPredictions = ({ matchId, teamA, teamB }) => {
                             })}
                         </div>
 
-                        <div className="pt-4 border-t border-slate-200 dark:border-white/5">
+                        <div className="pt-4 border-t border-slate-200/5 dark:border-white/5">
                             <p className="text-[10px] text-slate-500 font-bold uppercase mb-3 text-center">Change your prediction:</p>
                             <div className="grid grid-cols-3 gap-2">
                                 {choices.map(choice => (
@@ -190,7 +190,7 @@ const MatchPredictions = ({ matchId, teamA, teamB }) => {
                                             "px-3 py-2 rounded-xl text-[10px] font-black uppercase transition-all border",
                                             userVote === choice.id
                                                 ? "bg-brand-500 text-slate-900 dark:text-white border-brand-500 shadow-lg shadow-brand-500/20"
-                                                : "bg-white/5 text-slate-500 border-slate-200 dark:border-white/5 hover:bg-white/10 hover:text-slate-900 dark:text-white"
+                                                : "bg-white/5 text-slate-500 border-slate-200/5 dark:border-white/5 hover:bg-white/10 hover:text-slate-900 dark:text-white"
                                         )}
                                     >
                                         {choice.label}

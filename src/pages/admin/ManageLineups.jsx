@@ -171,12 +171,12 @@ const ManageLineups = () => {
             )}
 
             {/* Match Selection */}
-            <div className="bg-gray-800 p-6 rounded-lg mb-6">
+            <div className="bg-slate-50 dark:bg-gray-800 p-6 rounded-lg mb-6">
                 <h3 className="text-xl mb-4">Select Match</h3>
                 <select
                     value={selectedMatch}
                     onChange={(e) => handleMatchChange(e.target.value)}
-                    className="bg-gray-700 p-3 rounded text-slate-900 dark:text-white w-full mb-4"
+                    className="bg-slate-100 dark:bg-gray-700 p-3 rounded text-slate-900 dark:text-white w-full mb-4"
                 >
                     <option value="">Select a match</option>
                     {scopedMatches.filter(m => m.status !== 'finished').map(match => (
@@ -193,13 +193,13 @@ const ManageLineups = () => {
                         <div className="flex gap-4">
                             <button
                                 onClick={() => handleTeamChange(currentMatch.teamA)}
-                                className={`flex-1 p-3 rounded ${selectedTeam === currentMatch.teamA ? 'bg-green-600' : 'bg-gray-700 hover:bg-gray-600'}`}
+                                className={`flex-1 p-3 rounded ${selectedTeam === currentMatch.teamA ? 'bg-green-600' : 'bg-slate-100 dark:bg-gray-700 hover:bg-gray-600'}`}
                             >
                                 {currentMatch.teamA}
                             </button>
                             <button
                                 onClick={() => handleTeamChange(currentMatch.teamB)}
-                                className={`flex-1 p-3 rounded ${selectedTeam === currentMatch.teamB ? 'bg-green-600' : 'bg-gray-700 hover:bg-gray-600'}`}
+                                className={`flex-1 p-3 rounded ${selectedTeam === currentMatch.teamB ? 'bg-green-600' : 'bg-slate-100 dark:bg-gray-700 hover:bg-gray-600'}`}
                             >
                                 {currentMatch.teamB}
                             </button>
@@ -212,17 +212,17 @@ const ManageLineups = () => {
             {selectedTeam && (
                 <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
                     {/* Available Players */}
-                    <div className="bg-gray-800 p-6 rounded-lg">
+                    <div className="bg-slate-50 dark:bg-gray-800 p-6 rounded-lg">
                         <div className="flex flex-col mb-4">
                             <h3 className="text-xl mb-2">Available Players</h3>
                             <div className="relative">
-                                <Search className="absolute left-2 top-1/2 -translate-y-1/2 text-gray-500" size={14} />
+                                <Search className="absolute left-2 top-1/2 -translate-y-1/2 text-slate-500 dark:text-gray-500" size={14} />
                                 <input
                                     type="text"
                                     placeholder="Search team players..."
                                     value={searchTerm}
                                     onChange={(e) => setSearchTerm(e.target.value)}
-                                    className="w-full bg-gray-700 border border-gray-600 rounded pl-8 pr-2 py-1.5 text-xs text-slate-900 dark:text-white focus:ring-1 focus:ring-green-500 outline-none"
+                                    className="w-full bg-slate-100 dark:bg-gray-700 border border-gray-600 rounded pl-8 pr-2 py-1.5 text-xs text-slate-900 dark:text-white focus:ring-1 focus:ring-green-500 outline-none"
                                 />
                             </div>
                         </div>
@@ -230,10 +230,10 @@ const ManageLineups = () => {
                             {teamPlayers
                                 .filter(p => !selectedPlayerIds.includes(p.id))
                                 .map(player => (
-                                    <div key={player.id} className="bg-gray-700 p-3 rounded flex justify-between items-center">
+                                    <div key={player.id} className="bg-slate-100 dark:bg-gray-700 p-3 rounded flex justify-between items-center">
                                         <div>
                                             <div className="font-medium">{player.name}</div>
-                                            <div className="text-xs text-gray-400">{player.position}</div>
+                                            <div className="text-xs text-slate-500 dark:text-gray-400">{player.position}</div>
                                         </div>
                                         <div className="flex gap-2">
                                             <button
@@ -254,13 +254,13 @@ const ManageLineups = () => {
                                     </div>
                                 ))}
                             {teamPlayers.filter(p => !selectedPlayerIds.includes(p.id)).length === 0 && (
-                                <p className="text-gray-400 text-sm text-center py-4">All players assigned</p>
+                                <p className="text-slate-500 dark:text-gray-400 text-sm text-center py-4">All players assigned</p>
                             )}
                         </div>
                     </div>
 
                     {/* Starting 11 */}
-                    <div className="bg-gray-800 p-6 rounded-lg">
+                    <div className="bg-slate-50 dark:bg-gray-800 p-6 rounded-lg">
                         <h3 className="text-xl mb-4">
                             Starting 11
                             <span className={`ml-2 text-sm ${lineup.starting11.length === 11 ? 'text-green-400' : 'text-yellow-400'}`}>
@@ -274,7 +274,7 @@ const ManageLineups = () => {
                                     <div key={playerId} className="bg-green-900 p-3 rounded flex justify-between items-center">
                                         <div>
                                             <div className="font-medium">#{index + 1} {player.name}</div>
-                                            <div className="text-xs text-gray-300">{player.position}</div>
+                                            <div className="text-xs text-slate-600 dark:text-gray-300">{player.position}</div>
                                         </div>
                                         <button
                                             onClick={() => removeFromStarting11(playerId)}
@@ -286,16 +286,16 @@ const ManageLineups = () => {
                                 ) : null;
                             })}
                             {lineup.starting11.length === 0 && (
-                                <p className="text-gray-400 text-sm text-center py-4">No players selected</p>
+                                <p className="text-slate-500 dark:text-gray-400 text-sm text-center py-4">No players selected</p>
                             )}
                         </div>
                     </div>
 
                     {/* Bench */}
-                    <div className="bg-gray-800 p-6 rounded-lg">
+                    <div className="bg-slate-50 dark:bg-gray-800 p-6 rounded-lg">
                         <h3 className="text-xl mb-4">
                             Bench
-                            <span className={`ml-2 text-sm ${lineup.bench.length === 6 ? 'text-green-400' : 'text-gray-400'}`}>
+                            <span className={`ml-2 text-sm ${lineup.bench.length === 6 ? 'text-green-400' : 'text-slate-500 dark:text-gray-400'}`}>
                                 ({lineup.bench.length}/6)
                             </span>
                         </h3>
@@ -306,7 +306,7 @@ const ManageLineups = () => {
                                     <div key={playerId} className="bg-blue-900 p-3 rounded flex justify-between items-center">
                                         <div>
                                             <div className="font-medium">{player.name}</div>
-                                            <div className="text-xs text-gray-300">{player.position}</div>
+                                            <div className="text-xs text-slate-600 dark:text-gray-300">{player.position}</div>
                                         </div>
                                         <button
                                             onClick={() => removeFromBench(playerId)}
@@ -318,7 +318,7 @@ const ManageLineups = () => {
                                 ) : null;
                             })}
                             {lineup.bench.length === 0 && (
-                                <p className="text-gray-400 text-sm text-center py-4">No bench players</p>
+                                <p className="text-slate-500 dark:text-gray-400 text-sm text-center py-4">No bench players</p>
                             )}
                         </div>
                     </div>
@@ -340,9 +340,9 @@ const ManageLineups = () => {
 
             {/* Instructions */}
             {!selectedMatch && (
-                <div className="bg-gray-800 p-6 rounded-lg mt-6">
+                <div className="bg-slate-50 dark:bg-gray-800 p-6 rounded-lg mt-6">
                     <h3 className="text-xl mb-4">📋 How to Create a Lineup</h3>
-                    <ol className="list-decimal list-inside space-y-2 text-gray-300">
+                    <ol className="list-decimal list-inside space-y-2 text-slate-600 dark:text-gray-300">
                         <li>Select a match from the dropdown</li>
                         <li>Choose which team you want to create a lineup for</li>
                         <li>Add 11 players to the Starting 11</li>

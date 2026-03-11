@@ -263,11 +263,11 @@ const ManageTeams = () => {
             )}
 
             {/* Form */}
-            <div className="bg-gray-800 p-6 rounded-lg mb-8">
+            <div className="bg-slate-50 dark:bg-gray-800 p-6 rounded-lg mb-8">
                 <h3 className="text-xl mb-4">{editingId ? 'Edit Team' : 'Add New Team'}</h3>
                 <form onSubmit={handleSubmit} className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     {/* Logo Upload Section */}
-                    <div className="md:col-span-2 flex flex-col items-center p-4 border-2 border-dashed border-gray-600 rounded-xl bg-gray-700/30">
+                    <div className="md:col-span-2 flex flex-col items-center p-4 border-2 border-dashed border-gray-600 rounded-xl bg-slate-100/30 dark:bg-gray-700/30">
                         {formData.logoUrl ? (
                             <div className="relative">
                                 <img src={formData.logoUrl} alt="Logo Preview" className="w-24 h-24 object-contain rounded-lg bg-white/10 p-2" />
@@ -282,7 +282,7 @@ const ManageTeams = () => {
                         ) : (
                             <div className="flex flex-col items-center gap-4">
                                 <label className="flex flex-col items-center justify-center cursor-pointer group">
-                                    <div className="w-16 h-16 rounded-full bg-gray-700 flex items-center justify-center text-gray-400 group-hover:bg-gray-600 transition-colors">
+                                    <div className="w-16 h-16 rounded-full bg-slate-100 dark:bg-gray-700 flex items-center justify-center text-slate-500 dark:text-gray-400 group-hover:bg-gray-600 transition-colors">
                                         {uploading ? (
                                             <div className="flex flex-col items-center">
                                                 <div className="w-8 h-8 border-2 border-brand-500 border-t-transparent animate-spin rounded-full mb-1"></div>
@@ -292,7 +292,7 @@ const ManageTeams = () => {
                                             <ImageIcon size={32} />
                                         )}
                                     </div>
-                                    <span className="mt-2 text-sm text-gray-400 group-hover:text-gray-300">
+                                    <span className="mt-2 text-sm text-slate-500 dark:text-gray-400 group-hover:text-slate-600 dark:text-gray-300">
                                         {uploading ? 'Uploading...' : 'Upload Team Logo'}
                                     </span>
                                     <input type="file" className="hidden" accept="image/*" onChange={handleLogoUpload} disabled={uploading} />
@@ -300,7 +300,7 @@ const ManageTeams = () => {
 
                                 <div className="flex items-center gap-3">
                                     <div className="h-[1px] w-12 bg-gray-600"></div>
-                                    <span className="text-xs text-gray-500 uppercase font-bold">OR</span>
+                                    <span className="text-xs text-slate-500 dark:text-gray-500 uppercase font-bold">OR</span>
                                     <div className="h-[1px] w-12 bg-gray-600"></div>
                                 </div>
 
@@ -324,80 +324,80 @@ const ManageTeams = () => {
                     />
 
                     <div>
-                        <label className="text-xs text-gray-400 block mb-1">Team Name</label>
+                        <label className="text-xs text-slate-500 dark:text-gray-400 block mb-1">Team Name</label>
                         <input
                             type="text"
                             name="name"
                             placeholder="Team Name"
                             value={formData.name}
                             onChange={handleInputChange}
-                            className="bg-gray-700 p-2 rounded text-slate-900 dark:text-white w-full"
+                            className="bg-slate-100 dark:bg-gray-700 p-2 rounded text-slate-900 dark:text-white w-full"
                             required
                         />
                     </div>
                     <div>
-                        <label className="text-xs text-gray-400 block mb-1">Short Name</label>
+                        <label className="text-xs text-slate-500 dark:text-gray-400 block mb-1">Short Name</label>
                         <input
                             type="text"
                             name="shortName"
                             placeholder="e.g. MUN"
                             value={formData.shortName}
                             onChange={handleInputChange}
-                            className="bg-gray-700 p-2 rounded text-slate-900 dark:text-white w-full"
+                            className="bg-slate-100 dark:bg-gray-700 p-2 rounded text-slate-900 dark:text-white w-full"
                             required
                         />
                     </div>
                     <div>
-                        <label className="text-xs text-gray-400 block mb-1">Founded Year</label>
+                        <label className="text-xs text-slate-500 dark:text-gray-400 block mb-1">Founded Year</label>
                         <input
                             type="number"
                             name="founded"
                             placeholder="Year"
                             value={formData.founded}
                             onChange={handleInputChange}
-                            className="bg-gray-700 p-2 rounded text-slate-900 dark:text-white w-full"
+                            className="bg-slate-100 dark:bg-gray-700 p-2 rounded text-slate-900 dark:text-white w-full"
                         />
                     </div>
                     <div>
-                        <label className="text-xs text-gray-400 block mb-1">Stadium</label>
+                        <label className="text-xs text-slate-500 dark:text-gray-400 block mb-1">Stadium</label>
                         <input
                             type="text"
                             name="stadium"
                             placeholder="Stadium"
                             value={formData.stadium}
                             onChange={handleInputChange}
-                            className="bg-gray-700 p-2 rounded text-slate-900 dark:text-white w-full"
+                            className="bg-slate-100 dark:bg-gray-700 p-2 rounded text-slate-900 dark:text-white w-full"
                         />
                     </div>
                     <div>
-                        <label className="text-xs text-gray-400 block mb-1">Manager Name</label>
+                        <label className="text-xs text-slate-500 dark:text-gray-400 block mb-1">Manager Name</label>
                         <input
                             type="text"
                             name="manager"
                             placeholder="Manager's Name"
                             value={formData.manager || ''}
                             onChange={handleInputChange}
-                            className="bg-gray-700 p-2 rounded text-slate-900 dark:text-white w-full"
+                            className="bg-slate-100 dark:bg-gray-700 p-2 rounded text-slate-900 dark:text-white w-full"
                         />
                     </div>
                     <div>
-                        <label className="text-xs text-gray-400 block mb-1">Squad Size</label>
+                        <label className="text-xs text-slate-500 dark:text-gray-400 block mb-1">Squad Size</label>
                         <input
                             type="number"
                             name="players"
                             placeholder="0"
                             value={formData.players}
                             onChange={handleInputChange}
-                            className="bg-gray-700 p-2 rounded text-slate-900 dark:text-white w-full"
+                            className="bg-slate-100 dark:bg-gray-700 p-2 rounded text-slate-900 dark:text-white w-full"
                         />
                     </div>
                     <div>
-                        <label className="text-xs text-gray-400 block mb-1">Team Status</label>
+                        <label className="text-xs text-slate-500 dark:text-gray-400 block mb-1">Team Status</label>
                         <select
                             name="status"
                             value={formData.status || 'Active'}
                             onChange={handleInputChange}
-                            className="bg-gray-700 p-2 rounded text-slate-900 dark:text-white w-full"
+                            className="bg-slate-100 dark:bg-gray-700 p-2 rounded text-slate-900 dark:text-white w-full"
                         >
                             <option value="Active">Active</option>
                             <option value="Inactive">Inactive</option>
@@ -406,12 +406,12 @@ const ManageTeams = () => {
                         </select>
                     </div>
                     <div>
-                        <label className="text-xs text-gray-400 block mb-1">Home District</label>
+                        <label className="text-xs text-slate-500 dark:text-gray-400 block mb-1">Home District</label>
                         <select
                             name="district"
                             value={formData.district || ''}
                             onChange={handleInputChange}
-                            className="bg-gray-700 p-2 rounded text-slate-900 dark:text-white w-full"
+                            className="bg-slate-100 dark:bg-gray-700 p-2 rounded text-slate-900 dark:text-white w-full"
                         >
                             <option value="">Select District</option>
                             <optgroup label="Jammu Division">
@@ -427,44 +427,44 @@ const ManageTeams = () => {
                         </select>
                     </div>
                     <div>
-                        <label className="text-xs text-gray-400 block mb-1">Trophies Won</label>
+                        <label className="text-xs text-slate-500 dark:text-gray-400 block mb-1">Trophies Won</label>
                         <input
                             type="number"
                             name="trophies"
                             placeholder="0"
                             value={formData.trophies || 0}
                             onChange={handleInputChange}
-                            className="bg-gray-700 p-2 rounded text-slate-900 dark:text-white w-full"
+                            className="bg-slate-100 dark:bg-gray-700 p-2 rounded text-slate-900 dark:text-white w-full"
                         />
                     </div>
                     <div className="col-span-full">
-                        <label className="text-xs text-gray-400 block mb-1">Club History / Description</label>
+                        <label className="text-xs text-slate-500 dark:text-gray-400 block mb-1">Club History / Description</label>
                         <textarea
                             name="description"
                             rows="4"
                             placeholder="Write about the club's history, values, and achievements..."
                             value={formData.description || ''}
                             onChange={handleInputChange}
-                            className="bg-gray-700 p-3 rounded text-slate-900 dark:text-white w-full"
+                            className="bg-slate-100 dark:bg-gray-700 p-3 rounded text-slate-900 dark:text-white w-full"
                         ></textarea>
                     </div>
                     <div>
-                        <label className="text-xs text-gray-400 block mb-1">Participating Tournaments</label>
-                        <div className="flex flex-wrap gap-2 bg-gray-700 p-2 rounded min-h-[42px] items-center">
+                        <label className="text-xs text-slate-500 dark:text-gray-400 block mb-1">Participating Tournaments</label>
+                        <div className="flex flex-wrap gap-2 bg-slate-100 dark:bg-gray-700 p-2 rounded min-h-[42px] items-center">
                             {tournaments.map(t => (
                                 <button
                                     key={t.id}
                                     type="button"
                                     onClick={() => handleTournamentToggle(t.name)}
                                     className={`text-xs px-2 py-1 rounded transition-colors ${Array.isArray(formData.tournaments) && formData.tournaments.includes(t.name)
-                                        ? 'bg-green-600 text-slate-900 dark:text-white shadow-sm'
-                                        : 'bg-gray-600 text-gray-300 hover:bg-gray-500'
+                                        ? 'bg-green-600 text-white shadow-sm'
+                                        : 'bg-slate-200 dark:bg-gray-600 text-slate-700 dark:text-gray-300 hover:bg-slate-300 dark:hover:bg-gray-500'
                                         }`}
                                 >
                                     {t.name}
                                 </button>
                             ))}
-                            {tournaments.length === 0 && <span className="text-gray-500 text-xs italic">No tournaments available. Create one first.</span>}
+                            {tournaments.length === 0 && <span className="text-slate-500 dark:text-gray-500 text-xs italic">No tournaments available. Create one first.</span>}
                         </div>
                     </div>
 
@@ -505,13 +505,13 @@ const ManageTeams = () => {
 
             {/* Search */}
             < div id="team-list-top" className="mb-6 relative" >
-                <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={18} />
+                <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-500 dark:text-gray-400" size={18} />
                 <input
                     type="text"
                     placeholder="Search teams by name or short name..."
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
-                    className="w-full bg-gray-800 border border-gray-700 rounded-lg pl-10 pr-4 py-2 text-slate-900 dark:text-white focus:ring-2 focus:ring-brand-500 outline-none"
+                    className="w-full bg-slate-50 dark:bg-gray-800 border border-slate-200 dark:border-gray-700 rounded-lg pl-10 pr-4 py-2 text-slate-900 dark:text-white focus:ring-2 focus:ring-brand-500 outline-none"
                 />
             </div >
 
@@ -519,9 +519,9 @@ const ManageTeams = () => {
             < div className="grid grid-cols-1 md:grid-cols-2 gap-4" >
                 {
                     currentItems.map(team => (
-                        <div key={team.id} className="bg-gray-800 p-4 rounded flex justify-between items-center">
+                        <div key={team.id} className="bg-slate-50 dark:bg-gray-800 p-4 rounded flex justify-between items-center">
                             <div className="flex items-center gap-4">
-                                <div className="w-12 h-12 rounded bg-white/5 flex items-center justify-center border border-white/5 overflow-hidden">
+                                <div className="w-12 h-12 rounded bg-white/5 flex items-center justify-center border border-slate-200/5 dark:border-white/5 overflow-hidden">
                                     {team.logoUrl ? (
                                         <img src={team.logoUrl} alt={team.name} className="w-full h-full object-contain p-1" />
                                     ) : (
@@ -530,7 +530,7 @@ const ManageTeams = () => {
                                 </div>
                                 <div>
                                     <div className="font-bold text-lg">{team.name} ({team.shortName})</div>
-                                    <div className="text-sm text-gray-400">
+                                    <div className="text-sm text-slate-500 dark:text-gray-400">
                                         Stadium: {team.stadium} • Manager: {team.manager || 'N/A'}
                                     </div>
                                 </div>
@@ -554,29 +554,29 @@ const ManageTeams = () => {
                 }
                 {
                     filteredTeams.length === 0 && !loading && (
-                        <p className="text-center text-gray-400 col-span-full py-8">No teams found matching your search.</p>
+                        <p className="text-center text-slate-500 dark:text-gray-400 col-span-full py-8">No teams found matching your search.</p>
                     )
                 }
             </div >
 
             {/* Pagination Controls */}
             {filteredTeams.length > teamsPerPage && (
-                <div className="mt-8 flex flex-col sm:flex-row items-center justify-between gap-4 bg-gray-800/50 p-4 rounded-2xl border border-white/5">
-                    <div className="text-sm text-gray-400 font-medium">
-                        Showing <span className="text-white font-bold">{indexOfFirstTeam + 1}</span> to <span className="text-white font-bold">{Math.min(indexOfLastTeam, filteredTeams.length)}</span> of <span className="text-white font-bold">{filteredTeams.length}</span> teams
+                <div className="mt-8 flex flex-col sm:flex-row items-center justify-between gap-4 bg-slate-50/50 dark:bg-gray-800/50 p-4 rounded-2xl border border-slate-200/5 dark:border-white/5">
+                    <div className="text-sm text-slate-500 dark:text-gray-400 font-medium">
+                        Showing <span className="text-slate-900 dark:text-white font-bold">{indexOfFirstTeam + 1}</span> to <span className="text-slate-900 dark:text-white font-bold">{Math.min(indexOfLastTeam, filteredTeams.length)}</span> of <span className="text-slate-900 dark:text-white font-bold">{filteredTeams.length}</span> teams
                     </div>
                     <div className="flex items-center gap-2">
                         <button
                             onClick={() => paginate(1)}
                             disabled={currentPage === 1}
-                            className="p-2 rounded-xl bg-gray-800 border border-white/5 text-gray-400 hover:text-white disabled:opacity-30 disabled:cursor-not-allowed transition-all"
+                            className="p-2 rounded-xl bg-slate-50 dark:bg-gray-800 border border-slate-200/5 dark:border-white/5 text-slate-500 dark:text-gray-400 hover:text-slate-900 dark:text-white disabled:opacity-30 disabled:cursor-not-allowed transition-all"
                         >
                             <ChevronsLeft size={18} />
                         </button>
                         <button
                             onClick={() => paginate(currentPage - 1)}
                             disabled={currentPage === 1}
-                            className="p-2 rounded-xl bg-gray-800 border border-white/5 text-gray-400 hover:text-white disabled:opacity-30 disabled:cursor-not-allowed transition-all"
+                            className="p-2 rounded-xl bg-slate-50 dark:bg-gray-800 border border-slate-200/5 dark:border-white/5 text-slate-500 dark:text-gray-400 hover:text-slate-900 dark:text-white disabled:opacity-30 disabled:cursor-not-allowed transition-all"
                         >
                             <ChevronLeft size={18} />
                         </button>
@@ -595,7 +595,7 @@ const ManageTeams = () => {
                                             onClick={() => paginate(pageNum)}
                                             className={`w-10 h-10 rounded-xl text-sm font-bold transition-all ${currentPage === pageNum
                                                 ? "bg-brand-500 text-slate-900 shadow-lg shadow-brand-500/20"
-                                                : "bg-gray-800 border border-white/5 text-gray-400 hover:text-white"
+                                                : "bg-slate-50 dark:bg-gray-800 border border-slate-200/5 dark:border-white/5 text-slate-500 dark:text-gray-400 hover:text-slate-900 dark:text-white"
                                                 }`}
                                         >
                                             {pageNum}
@@ -614,14 +614,14 @@ const ManageTeams = () => {
                         <button
                             onClick={() => paginate(currentPage + 1)}
                             disabled={currentPage === totalPages}
-                            className="p-2 rounded-xl bg-gray-800 border border-white/5 text-gray-400 hover:text-white disabled:opacity-30 disabled:cursor-not-allowed transition-all"
+                            className="p-2 rounded-xl bg-slate-50 dark:bg-gray-800 border border-slate-200/5 dark:border-white/5 text-slate-500 dark:text-gray-400 hover:text-slate-900 dark:text-white disabled:opacity-30 disabled:cursor-not-allowed transition-all"
                         >
                             <ChevronRight size={18} />
                         </button>
                         <button
                             onClick={() => paginate(totalPages)}
                             disabled={currentPage === totalPages}
-                            className="p-2 rounded-xl bg-gray-800 border border-white/5 text-gray-400 hover:text-white disabled:opacity-30 disabled:cursor-not-allowed transition-all"
+                            className="p-2 rounded-xl bg-slate-50 dark:bg-gray-800 border border-slate-200/5 dark:border-white/5 text-slate-500 dark:text-gray-400 hover:text-slate-900 dark:text-white disabled:opacity-30 disabled:cursor-not-allowed transition-all"
                         >
                             <ChevronsRight size={18} />
                         </button>

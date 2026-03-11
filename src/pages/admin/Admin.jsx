@@ -30,7 +30,7 @@ const Admin = () => {
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4">
         <div>
           <h1 className="text-3xl font-bold text-slate-900 dark:text-white">Admin Dashboard</h1>
-          <p className="text-gray-400 text-sm mt-1">
+          <p className="text-slate-500 dark:text-gray-400 text-sm mt-1">
             Welcome back, {userProfile?.displayName || 'Admin'}
           </p>
         </div>
@@ -66,10 +66,10 @@ const Admin = () => {
             className={`group bg-gradient-to-br ${card.color} border p-6 rounded-2xl shadow-lg hover:scale-[1.02] transition-all duration-300`}
           >
             <div className="flex items-center gap-3 mb-3">
-              <card.icon className="text-white/70 group-hover:text-white transition-colors" size={22} />
+              <card.icon className="text-slate-900/70 dark:text-white/70 group-hover:text-slate-900 dark:text-white transition-colors" size={22} />
               <h2 className="text-xl font-semibold text-slate-900 dark:text-white">{card.title}</h2>
             </div>
-            <p className="text-gray-400 text-sm">{card.desc}</p>
+            <p className="text-slate-500 dark:text-gray-400 text-sm">{card.desc}</p>
           </Link>
         ))}
 
@@ -86,7 +86,7 @@ const Admin = () => {
               <UserCog className="text-yellow-400/70 group-hover:text-yellow-400 transition-colors" size={22} />
               <h2 className="text-xl font-semibold text-slate-900 dark:text-white">👑 Manage Users</h2>
             </div>
-            <p className="text-gray-400 text-sm">Assign roles and manage admin access</p>
+            <p className="text-slate-500 dark:text-gray-400 text-sm">Assign roles and manage admin access</p>
           </Link>
         )}
       </div>

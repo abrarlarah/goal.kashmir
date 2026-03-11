@@ -195,16 +195,16 @@ const ManageMatches = () => {
 
       {/* Live Matches Quick Controls */}
       {liveMatches.length > 0 && (
-        <div className="mb-8 p-4 bg-gray-800 rounded-lg border border-green-500">
+        <div className="mb-8 p-4 bg-slate-50 dark:bg-gray-800 rounded-lg border border-green-500">
           <h3 className="text-xl font-bold mb-4 text-green-400 flex items-center">
             <span className="w-3 h-3 bg-green-500 rounded-full mr-2 animate-pulse"></span>
             Active Matches Control
           </h3>
           <div className="grid gap-4">
             {liveMatches.map(match => (
-              <div key={match.id} className="bg-gray-700 p-4 rounded flex flex-col md:flex-row justify-between items-center gap-4">
+              <div key={match.id} className="bg-slate-100 dark:bg-gray-700 p-4 rounded flex flex-col md:flex-row justify-between items-center gap-4">
                 <div className="text-center md:text-left flex-1">
-                  <div className="font-medium text-gray-300">
+                  <div className="font-medium text-slate-600 dark:text-gray-300">
                     {match.competition} - {match.status === 'halftime' ? <span className="text-orange-400">Half Time</span> : <span className="text-red-400">Live {match.currentMinute}'</span>}
                   </div>
                   <div className="flex items-center justify-center md:justify-start gap-4 text-2xl font-bold mt-2">
@@ -216,7 +216,7 @@ const ManageMatches = () => {
                         <button onClick={() => updateMatchScore(match.id, 'A', 1)} className="w-8 h-8 rounded bg-green-600 hover:bg-green-500 text-sm">+</button>
                       </div>
                     </div>
-                    <span className="text-gray-400">vs</span>
+                    <span className="text-slate-500 dark:text-gray-400">vs</span>
                     <div className="flex flex-col items-center gap-1">
                       <span>{match.teamB}</span>
                       <div className="flex items-center gap-2">
@@ -248,16 +248,16 @@ const ManageMatches = () => {
       )}
 
       {/* Form */}
-      <div className="bg-gray-800 p-6 rounded-lg mb-8">
+      <div className="bg-slate-50 dark:bg-gray-800 p-6 rounded-lg mb-8">
         <h3 className="text-xl mb-4">{editingId ? 'Edit Match' : 'Add New Match'}</h3>
         <form onSubmit={handleSubmit} className="grid grid-cols-1 gap-4">
           <div>
-            <label className="text-xs text-gray-400 block mb-1">Competition / Tournament</label>
+            <label className="text-xs text-slate-500 dark:text-gray-400 block mb-1">Competition / Tournament</label>
             <select
               name="competition"
               value={formData.competition}
               onChange={handleInputChange}
-              className="bg-gray-700 p-2 rounded text-slate-900 dark:text-white w-full"
+              className="bg-slate-100 dark:bg-gray-700 p-2 rounded text-slate-900 dark:text-white w-full"
               required
             >
               <option value="" disabled>Select Competition</option>
@@ -269,12 +269,12 @@ const ManageMatches = () => {
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
-              <label className="text-xs text-gray-400 block mb-1">Home Team</label>
+              <label className="text-xs text-slate-500 dark:text-gray-400 block mb-1">Home Team</label>
               <select
                 name="teamA"
                 value={formData.teamA}
                 onChange={handleInputChange}
-                className="bg-gray-700 p-2 rounded text-slate-900 dark:text-white w-full"
+                className="bg-slate-100 dark:bg-gray-700 p-2 rounded text-slate-900 dark:text-white w-full"
                 required
               >
                 <option value="" disabled>Select Home Team</option>
@@ -290,16 +290,16 @@ const ManageMatches = () => {
                 placeholder="Home Manager"
                 value={formData.managerA || ''}
                 onChange={handleInputChange}
-                className="bg-gray-700 p-2 rounded text-slate-900 dark:text-white w-full mt-2 text-sm"
+                className="bg-slate-100 dark:bg-gray-700 p-2 rounded text-slate-900 dark:text-white w-full mt-2 text-sm"
               />
             </div>
             <div>
-              <label className="text-xs text-gray-400 block mb-1">Away Team</label>
+              <label className="text-xs text-slate-500 dark:text-gray-400 block mb-1">Away Team</label>
               <select
                 name="teamB"
                 value={formData.teamB}
                 onChange={handleInputChange}
-                className="bg-gray-700 p-2 rounded text-slate-900 dark:text-white w-full"
+                className="bg-slate-100 dark:bg-gray-700 p-2 rounded text-slate-900 dark:text-white w-full"
                 required
               >
                 <option value="" disabled>Select Away Team</option>
@@ -315,79 +315,79 @@ const ManageMatches = () => {
                 placeholder="Away Manager"
                 value={formData.managerB || ''}
                 onChange={handleInputChange}
-                className="bg-gray-700 p-2 rounded text-slate-900 dark:text-white w-full mt-2 text-sm"
+                className="bg-slate-100 dark:bg-gray-700 p-2 rounded text-slate-900 dark:text-white w-full mt-2 text-sm"
               />
             </div>
           </div>
 
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <label className="text-xs text-gray-400 block mb-1">Match Date</label>
+              <label className="text-xs text-slate-500 dark:text-gray-400 block mb-1">Match Date</label>
               <input
                 type="date"
                 name="date"
                 value={formData.date}
                 onChange={handleInputChange}
-                className="bg-gray-700 p-2 rounded text-slate-900 dark:text-white w-full"
+                className="bg-slate-100 dark:bg-gray-700 p-2 rounded text-slate-900 dark:text-white w-full"
               />
             </div>
             <div>
-              <label className="text-xs text-gray-400 block mb-1">Match Time</label>
+              <label className="text-xs text-slate-500 dark:text-gray-400 block mb-1">Match Time</label>
               <input
                 type="time"
                 name="time"
                 value={formData.time}
                 onChange={handleInputChange}
-                className="bg-gray-700 p-2 rounded text-slate-900 dark:text-white w-full"
+                className="bg-slate-100 dark:bg-gray-700 p-2 rounded text-slate-900 dark:text-white w-full"
               />
             </div>
           </div>
 
           <div>
-            <label className="text-xs text-gray-400 block mb-1">Round / Group (e.g. 'Group A', 'Final', 'Quarter-Final')</label>
+            <label className="text-xs text-slate-500 dark:text-gray-400 block mb-1">Round / Group (e.g. 'Group A', 'Final', 'Quarter-Final')</label>
             <input
               type="text"
               name="round"
               placeholder="Round / Group"
               value={formData.round || ''}
               onChange={handleInputChange}
-              className="bg-gray-700 p-2 rounded text-slate-900 dark:text-white w-full"
+              className="bg-slate-100 dark:bg-gray-700 p-2 rounded text-slate-900 dark:text-white w-full"
             />
           </div>
 
           <div className="grid grid-cols-2 gap-2">
             <div className="w-full">
-              <label className="text-xs text-gray-400 block mb-1">Home Score</label>
+              <label className="text-xs text-slate-500 dark:text-gray-400 block mb-1">Home Score</label>
               <input
                 type="number"
                 name="scoreA"
                 placeholder="0"
                 value={formData.scoreA}
                 onChange={handleInputChange}
-                className="bg-gray-700 p-2 rounded text-slate-900 dark:text-white w-full"
+                className="bg-slate-100 dark:bg-gray-700 p-2 rounded text-slate-900 dark:text-white w-full"
               />
             </div>
             <div className="w-full">
-              <label className="text-xs text-gray-400 block mb-1">Away Score</label>
+              <label className="text-xs text-slate-500 dark:text-gray-400 block mb-1">Away Score</label>
               <input
                 type="number"
                 name="scoreB"
                 placeholder="0"
                 value={formData.scoreB}
                 onChange={handleInputChange}
-                className="bg-gray-700 p-2 rounded text-slate-900 dark:text-white w-full"
+                className="bg-slate-100 dark:bg-gray-700 p-2 rounded text-slate-900 dark:text-white w-full"
               />
             </div>
           </div>
 
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <label className="text-xs text-gray-400 block mb-1">Match Status</label>
+              <label className="text-xs text-slate-500 dark:text-gray-400 block mb-1">Match Status</label>
               <select
                 name="status"
                 value={formData.status}
                 onChange={handleInputChange}
-                className="bg-gray-700 p-2 rounded text-slate-900 dark:text-white w-full"
+                className="bg-slate-100 dark:bg-gray-700 p-2 rounded text-slate-900 dark:text-white w-full"
               >
                 <option value="scheduled">Scheduled</option>
                 <option value="live">Live</option>
@@ -396,14 +396,14 @@ const ManageMatches = () => {
               </select>
             </div>
             <div>
-              <label className="text-xs text-gray-400 block mb-1">Current Minute</label>
+              <label className="text-xs text-slate-500 dark:text-gray-400 block mb-1">Current Minute</label>
               <input
                 type="number"
                 name="currentMinute"
                 placeholder="0'"
                 value={formData.currentMinute}
                 onChange={handleInputChange}
-                className="bg-gray-700 p-2 rounded text-slate-900 dark:text-white w-full"
+                className="bg-slate-100 dark:bg-gray-700 p-2 rounded text-slate-900 dark:text-white w-full"
               />
             </div>
           </div>
@@ -446,12 +446,12 @@ const ManageMatches = () => {
       <h3 id="match-list-top" className="text-xl font-bold mb-4">All Matches</h3>
       <div className="grid gap-4">
         {currentMatches.map(match => (
-          <div key={match.id} className="bg-gray-800 p-4 rounded flex justify-between items-center">
+          <div key={match.id} className="bg-slate-50 dark:bg-gray-800 p-4 rounded flex justify-between items-center">
             <div>
               <div className="font-bold text-lg">
                 {match.teamA} <span className="text-green-400">{match.scoreA}</span> - <span className="text-green-400">{match.scoreB}</span> {match.teamB}
               </div>
-              <div className="text-sm text-gray-400">
+              <div className="text-sm text-slate-500 dark:text-gray-400">
                 {match.competition} {match.round && `• ${match.round}`} • {match.status} {match.status === 'live' && `• ${match.currentMinute}'`}
               </div>
             </div>
@@ -472,28 +472,28 @@ const ManageMatches = () => {
           </div>
         ))}
         {otherMatches.length === 0 && !loading && (
-          <p className="text-center text-gray-400">No scheduled or finished matches found.</p>
+          <p className="text-center text-slate-500 dark:text-gray-400">No scheduled or finished matches found.</p>
         )}
       </div>
 
       {/* Pagination Controls */}
       {otherMatches.length > matchesPerPage && (
-        <div className="mt-8 flex flex-col sm:flex-row items-center justify-between gap-4 bg-gray-800/50 p-4 rounded-2xl border border-white/5">
-          <div className="text-sm text-gray-400 font-medium">
-            Showing <span className="text-white font-bold">{indexOfFirstMatch + 1}</span> to <span className="text-white font-bold">{Math.min(indexOfLastMatch, otherMatches.length)}</span> of <span className="text-white font-bold">{otherMatches.length}</span> matches
+        <div className="mt-8 flex flex-col sm:flex-row items-center justify-between gap-4 bg-slate-50/50 dark:bg-gray-800/50 p-4 rounded-2xl border border-slate-200/5 dark:border-white/5">
+          <div className="text-sm text-slate-500 dark:text-gray-400 font-medium">
+            Showing <span className="text-slate-900 dark:text-white font-bold">{indexOfFirstMatch + 1}</span> to <span className="text-slate-900 dark:text-white font-bold">{Math.min(indexOfLastMatch, otherMatches.length)}</span> of <span className="text-slate-900 dark:text-white font-bold">{otherMatches.length}</span> matches
           </div>
           <div className="flex items-center gap-2">
             <button
               onClick={() => paginate(1)}
               disabled={currentPage === 1}
-              className="p-2 rounded-xl bg-gray-800 border border-white/5 text-gray-400 hover:text-white disabled:opacity-30 disabled:cursor-not-allowed transition-all"
+              className="p-2 rounded-xl bg-slate-50 dark:bg-gray-800 border border-slate-200/5 dark:border-white/5 text-slate-500 dark:text-gray-400 hover:text-slate-900 dark:text-white disabled:opacity-30 disabled:cursor-not-allowed transition-all"
             >
               <ChevronsLeft size={18} />
             </button>
             <button
               onClick={() => paginate(currentPage - 1)}
               disabled={currentPage === 1}
-              className="p-2 rounded-xl bg-gray-800 border border-white/5 text-gray-400 hover:text-white disabled:opacity-30 disabled:cursor-not-allowed transition-all"
+              className="p-2 rounded-xl bg-slate-50 dark:bg-gray-800 border border-slate-200/5 dark:border-white/5 text-slate-500 dark:text-gray-400 hover:text-slate-900 dark:text-white disabled:opacity-30 disabled:cursor-not-allowed transition-all"
             >
               <ChevronLeft size={18} />
             </button>
@@ -512,7 +512,7 @@ const ManageMatches = () => {
                       onClick={() => paginate(pageNum)}
                       className={`w-10 h-10 rounded-xl text-sm font-bold transition-all ${currentPage === pageNum
                         ? "bg-brand-500 text-slate-900 shadow-lg shadow-brand-500/20"
-                        : "bg-gray-800 border border-white/5 text-gray-400 hover:text-white"
+                        : "bg-slate-50 dark:bg-gray-800 border border-slate-200/5 dark:border-white/5 text-slate-500 dark:text-gray-400 hover:text-slate-900 dark:text-white"
                         }`}
                     >
                       {pageNum}
@@ -531,14 +531,14 @@ const ManageMatches = () => {
             <button
               onClick={() => paginate(currentPage + 1)}
               disabled={currentPage === totalPages}
-              className="p-2 rounded-xl bg-gray-800 border border-white/5 text-gray-400 hover:text-white disabled:opacity-30 disabled:cursor-not-allowed transition-all"
+              className="p-2 rounded-xl bg-slate-50 dark:bg-gray-800 border border-slate-200/5 dark:border-white/5 text-slate-500 dark:text-gray-400 hover:text-slate-900 dark:text-white disabled:opacity-30 disabled:cursor-not-allowed transition-all"
             >
               <ChevronRight size={18} />
             </button>
             <button
               onClick={() => paginate(totalPages)}
               disabled={currentPage === totalPages}
-              className="p-2 rounded-xl bg-gray-800 border border-white/5 text-gray-400 hover:text-white disabled:opacity-30 disabled:cursor-not-allowed transition-all"
+              className="p-2 rounded-xl bg-slate-50 dark:bg-gray-800 border border-slate-200/5 dark:border-white/5 text-slate-500 dark:text-gray-400 hover:text-slate-900 dark:text-white disabled:opacity-30 disabled:cursor-not-allowed transition-all"
             >
               <ChevronsRight size={18} />
             </button>

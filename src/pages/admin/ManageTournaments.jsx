@@ -16,7 +16,7 @@ const DISTRICTS = {
 const statusConfig = {
     upcoming: { label: 'Upcoming', color: 'bg-blue-500/10 text-blue-400 border-blue-500/20', icon: Clock, dot: 'bg-blue-400' },
     ongoing: { label: 'Ongoing', color: 'bg-green-500/10 text-green-400 border-green-500/20', icon: Flag, dot: 'bg-green-400 animate-pulse' },
-    finished: { label: 'Finished', color: 'bg-slate-500/10 text-slate-400 border-slate-500/20', icon: CheckCircle, dot: 'bg-slate-400' },
+    finished: { label: 'Finished', color: 'bg-slate-500/10 text-slate-500 dark:text-slate-400 border-slate-500/20', icon: CheckCircle, dot: 'bg-slate-400' },
 };
 
 const typeConfig = {
@@ -237,7 +237,7 @@ const ManageTournaments = () => {
                 <div>
                     <h1 className="text-3xl font-display font-bold text-slate-900 dark:text-white flex items-center gap-3">
                         <div className="w-10 h-10 bg-gradient-to-br from-yellow-400 to-orange-500 rounded-2xl flex items-center justify-center shadow-lg shadow-yellow-500/20">
-                            <Trophy size={20} className="text-white" />
+                            <Trophy size={20} className="text-slate-900 dark:text-white" />
                         </div>
                         Tournaments
                     </h1>
@@ -250,7 +250,7 @@ const ManageTournaments = () => {
                         whileHover={{ scale: 1.03 }}
                         whileTap={{ scale: 0.97 }}
                         onClick={handleExportCSV}
-                        className="flex items-center gap-2 px-5 py-2.5 bg-slate-800 hover:bg-slate-700 text-white rounded-xl text-sm font-bold transition-all shadow-lg border border-slate-700"
+                        className="flex items-center gap-2 px-5 py-2.5 bg-slate-50 dark:bg-slate-800 hover:bg-slate-100 dark:bg-slate-700 text-slate-900 dark:text-white rounded-xl text-sm font-bold transition-all shadow-lg border border-slate-200 dark:border-slate-700"
                     >
                         <Download size={18} /> Export CSV
                     </motion.button>
@@ -259,7 +259,7 @@ const ManageTournaments = () => {
                             whileHover={{ scale: 1.03 }}
                             whileTap={{ scale: 0.97 }}
                             onClick={() => { setShowForm(true); setEditingId(null); }}
-                            className="flex items-center gap-2 px-5 py-2.5 bg-gradient-to-r from-brand-600 to-brand-500 hover:from-brand-500 hover:to-brand-400 text-white rounded-xl text-sm font-bold transition-all shadow-lg shadow-brand-500/25"
+                            className="flex items-center gap-2 px-5 py-2.5 bg-gradient-to-r from-brand-600 to-brand-500 hover:from-brand-500 hover:to-brand-400 text-slate-900 dark:text-white rounded-xl text-sm font-bold transition-all shadow-lg shadow-brand-500/25"
                         >
                             <Plus size={18} /> New Tournament
                         </motion.button>
@@ -321,9 +321,9 @@ const ManageTournaments = () => {
                         exit={{ opacity: 0, height: 0 }}
                         className="overflow-hidden"
                     >
-                        <div className="glass-card rounded-3xl border border-slate-200 dark:border-white/10 overflow-hidden shadow-2xl">
+                        <div className="glass-card rounded-3xl border border-slate-200/10 dark:border-white/10 overflow-hidden shadow-2xl">
                             {/* Form Header */}
-                            <div className="bg-gradient-to-r from-brand-600/20 via-brand-500/10 to-transparent p-6 border-b border-slate-200 dark:border-white/5 flex items-center justify-between">
+                            <div className="bg-gradient-to-r from-brand-600/20 via-brand-500/10 to-transparent p-6 border-b border-slate-200/5 dark:border-white/5 flex items-center justify-between">
                                 <div className="flex items-center gap-3">
                                     <div className={`w-10 h-10 rounded-2xl flex items-center justify-center ${editingId ? 'bg-blue-500/20' : 'bg-brand-500/20'}`}>
                                         {editingId ? <Edit3 size={18} className="text-blue-400" /> : <Plus size={18} className="text-brand-400" />}
@@ -337,7 +337,7 @@ const ManageTournaments = () => {
                                 </div>
                                 <button
                                     onClick={resetForm}
-                                    className="p-2 hover:bg-white/10 rounded-xl transition-colors text-slate-500 hover:text-white"
+                                    className="p-2 hover:bg-white/10 rounded-xl transition-colors text-slate-500 hover:text-slate-900 dark:text-white"
                                 >
                                     <X size={20} />
                                 </button>
@@ -354,7 +354,7 @@ const ManageTournaments = () => {
                                         placeholder="e.g. Kashmir Premier League 2026"
                                         value={formData.name}
                                         onChange={handleInputChange}
-                                        className="w-full bg-white/5 border border-slate-200 dark:border-white/10 rounded-xl px-4 py-3 text-slate-900 dark:text-white placeholder-slate-400 focus:ring-2 focus:ring-brand-500/50 focus:border-brand-500 outline-none transition-all text-sm"
+                                        className="w-full bg-white/5 border border-slate-200/10 dark:border-white/10 rounded-xl px-4 py-3 text-slate-900 dark:text-white placeholder-slate-400 focus:ring-2 focus:ring-brand-500/50 focus:border-brand-500 outline-none transition-all text-sm"
                                         required
                                     />
                                 </div>
@@ -368,7 +368,7 @@ const ManageTournaments = () => {
                                         name="district"
                                         value={formData.district}
                                         onChange={handleInputChange}
-                                        className="w-full bg-white/5 border border-slate-200 dark:border-white/10 rounded-xl px-4 py-3 text-slate-900 dark:text-white focus:ring-2 focus:ring-brand-500/50 outline-none transition-all text-sm"
+                                        className="w-full bg-white/5 border border-slate-200/10 dark:border-white/10 rounded-xl px-4 py-3 text-slate-900 dark:text-white focus:ring-2 focus:ring-brand-500/50 outline-none transition-all text-sm"
                                         required
                                     >
                                         <option value="">Select District</option>
@@ -388,14 +388,14 @@ const ManageTournaments = () => {
                                             <Calendar size={12} className="inline mr-1" /> Start Date
                                         </label>
                                         <input type="date" name="startDate" value={formData.startDate} onChange={handleInputChange}
-                                            className="w-full bg-white/5 border border-slate-200 dark:border-white/10 rounded-xl px-4 py-3 text-slate-900 dark:text-white focus:ring-2 focus:ring-brand-500/50 outline-none text-sm" />
+                                            className="w-full bg-white/5 border border-slate-200/10 dark:border-white/10 rounded-xl px-4 py-3 text-slate-900 dark:text-white focus:ring-2 focus:ring-brand-500/50 outline-none text-sm" />
                                     </div>
                                     <div>
                                         <label className="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">
                                             <Calendar size={12} className="inline mr-1" /> End Date
                                         </label>
                                         <input type="date" name="endDate" value={formData.endDate} onChange={handleInputChange}
-                                            className="w-full bg-white/5 border border-slate-200 dark:border-white/10 rounded-xl px-4 py-3 text-slate-900 dark:text-white focus:ring-2 focus:ring-brand-500/50 outline-none text-sm" />
+                                            className="w-full bg-white/5 border border-slate-200/10 dark:border-white/10 rounded-xl px-4 py-3 text-slate-900 dark:text-white focus:ring-2 focus:ring-brand-500/50 outline-none text-sm" />
                                     </div>
                                 </div>
 
@@ -404,7 +404,7 @@ const ManageTournaments = () => {
                                     <div>
                                         <label className="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Format</label>
                                         <select name="type" value={formData.type} onChange={handleInputChange}
-                                            className="w-full bg-white/5 border border-slate-200 dark:border-white/10 rounded-xl px-4 py-3 text-slate-900 dark:text-white focus:ring-2 focus:ring-brand-500/50 outline-none text-sm">
+                                            className="w-full bg-white/5 border border-slate-200/10 dark:border-white/10 rounded-xl px-4 py-3 text-slate-900 dark:text-white focus:ring-2 focus:ring-brand-500/50 outline-none text-sm">
                                             <option value="league">🏆 League</option>
                                             <option value="knockout">⚔️ Knockout</option>
                                             <option value="pool">🏊 Pool Group + Knockout</option>
@@ -414,7 +414,7 @@ const ManageTournaments = () => {
                                     <div>
                                         <label className="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Status</label>
                                         <select name="status" value={formData.status} onChange={handleInputChange}
-                                            className="w-full bg-white/5 border border-slate-200 dark:border-white/10 rounded-xl px-4 py-3 text-slate-900 dark:text-white focus:ring-2 focus:ring-brand-500/50 outline-none text-sm">
+                                            className="w-full bg-white/5 border border-slate-200/10 dark:border-white/10 rounded-xl px-4 py-3 text-slate-900 dark:text-white focus:ring-2 focus:ring-brand-500/50 outline-none text-sm">
                                             <option value="upcoming">🕐 Upcoming</option>
                                             <option value="ongoing">🟢 Ongoing</option>
                                             <option value="finished">✅ Finished</option>
@@ -429,7 +429,7 @@ const ManageTournaments = () => {
                                             <Users size={12} className="inline mr-1" /> Number of Teams
                                         </label>
                                         <input type="number" name="teamsCount" placeholder="0" min="0" value={formData.teamsCount} onChange={handleInputChange}
-                                            className="w-full bg-white/5 border border-slate-200 dark:border-white/10 rounded-xl px-4 py-3 text-slate-900 dark:text-white focus:ring-2 focus:ring-brand-500/50 outline-none text-sm" />
+                                            className="w-full bg-white/5 border border-slate-200/10 dark:border-white/10 rounded-xl px-4 py-3 text-slate-900 dark:text-white focus:ring-2 focus:ring-brand-500/50 outline-none text-sm" />
                                         {formData.teamsCount > 0 && (
                                             <p className="text-[10px] text-brand-400 mt-2 leading-relaxed">
                                                 Teams: {generateTeamsList(formData.teamsCount).join(', ')}
@@ -441,7 +441,7 @@ const ManageTournaments = () => {
                                             <Swords size={12} className="inline mr-1" /> Matches <span className="text-brand-400 normal-case">(auto)</span>
                                         </label>
                                         <input type="number" name="matchesCount" value={formData.matchesCount} readOnly
-                                            className="w-full bg-white/5 border border-slate-200 dark:border-white/10 rounded-xl px-4 py-3 text-slate-900 dark:text-white outline-none text-sm opacity-60 cursor-not-allowed" />
+                                            className="w-full bg-white/5 border border-slate-200/10 dark:border-white/10 rounded-xl px-4 py-3 text-slate-900 dark:text-white outline-none text-sm opacity-60 cursor-not-allowed" />
                                         <p className="text-[10px] text-slate-500 mt-2">
                                             {formData.type === 'knockout' ? 'Knockout: N-1 matches' : formData.type === 'pool' ? 'Pool RR + Semi + Final' : formData.type === 'dual_knockout' ? '2-Pool + Semi + Final' : 'League: N × (N-1) matches'}
                                         </p>
@@ -476,11 +476,11 @@ const ManageTournaments = () => {
                                         <div className="grid grid-cols-2 gap-4">
                                             <div className="bg-white/5 p-3 rounded-xl border border-indigo-500/10">
                                                 <p className="text-xs font-bold text-indigo-300 mb-1">Pool A ({Math.ceil(formData.teamsCount / 2)} teams)</p>
-                                                <p className="text-[10px] text-slate-400">{generateTeamsList(Math.ceil(formData.teamsCount / 2)).join(', ')}</p>
+                                                <p className="text-[10px] text-slate-500 dark:text-slate-400">{generateTeamsList(Math.ceil(formData.teamsCount / 2)).join(', ')}</p>
                                             </div>
                                             <div className="bg-white/5 p-3 rounded-xl border border-indigo-500/10">
                                                 <p className="text-xs font-bold text-indigo-300 mb-1">Pool B ({formData.teamsCount - Math.ceil(formData.teamsCount / 2)} teams)</p>
-                                                <p className="text-[10px] text-slate-400">{Array.from({ length: formData.teamsCount - Math.ceil(formData.teamsCount / 2) }, (_, i) => `Team ${Math.ceil(formData.teamsCount / 2) + i + 1}`).join(', ')}</p>
+                                                <p className="text-[10px] text-slate-500 dark:text-slate-400">{Array.from({ length: formData.teamsCount - Math.ceil(formData.teamsCount / 2) }, (_, i) => `Team ${Math.ceil(formData.teamsCount / 2) + i + 1}`).join(', ')}</p>
                                             </div>
                                         </div>
                                         <p className="text-[10px] text-slate-500 mt-3">Semi-Finals: A1 vs B2, B1 vs A2 → Final</p>
@@ -513,7 +513,7 @@ const ManageTournaments = () => {
                                         whileTap={{ scale: 0.98 }}
                                         type="submit"
                                         disabled={loading}
-                                        className="flex-1 flex items-center justify-center gap-2 bg-gradient-to-r from-brand-600 to-brand-500 hover:from-brand-500 hover:to-brand-400 text-white font-bold py-3.5 rounded-xl transition-all shadow-lg shadow-brand-500/20 disabled:opacity-50 disabled:cursor-not-allowed text-sm"
+                                        className="flex-1 flex items-center justify-center gap-2 bg-gradient-to-r from-brand-600 to-brand-500 hover:from-brand-500 hover:to-brand-400 text-slate-900 dark:text-white font-bold py-3.5 rounded-xl transition-all shadow-lg shadow-brand-500/20 disabled:opacity-50 disabled:cursor-not-allowed text-sm"
                                     >
                                         {loading ? (
                                             <div className="h-5 w-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
@@ -536,7 +536,7 @@ const ManageTournaments = () => {
                                     <button
                                         type="button"
                                         onClick={resetForm}
-                                        className="flex items-center justify-center gap-2 px-5 py-3.5 bg-white/5 hover:bg-white/10 text-slate-400 border border-slate-200 dark:border-white/10 rounded-xl text-sm font-medium transition-all"
+                                        className="flex items-center justify-center gap-2 px-5 py-3.5 bg-white/5 hover:bg-white/10 text-slate-500 dark:text-slate-400 border border-slate-200/10 dark:border-white/10 rounded-xl text-sm font-medium transition-all"
                                     >
                                         <X size={16} /> Cancel
                                     </button>
@@ -554,10 +554,10 @@ const ManageTournaments = () => {
                 </h3>
 
                 {scopedTournaments.length === 0 ? (
-                    <div className="text-center py-20 glass-card rounded-3xl border border-slate-200 dark:border-white/5">
-                        <Trophy size={48} className="mx-auto text-slate-300 dark:text-slate-700 mb-4" />
+                    <div className="text-center py-20 glass-card rounded-3xl border border-slate-200/5 dark:border-white/5">
+                        <Trophy size={48} className="mx-auto text-slate-600 dark:text-slate-300 dark:text-slate-700 mb-4" />
                         <p className="text-slate-500 font-medium">No tournaments found</p>
-                        <p className="text-slate-400 text-sm mt-1">
+                        <p className="text-slate-500 dark:text-slate-400 text-sm mt-1">
                             {isSuperAdmin ? 'Create your first tournament to get started' : 'Contact a Super Admin to get assigned'}
                         </p>
                     </div>
@@ -574,7 +574,7 @@ const ManageTournaments = () => {
                                     initial={{ opacity: 0, y: 20 }}
                                     animate={{ opacity: 1, y: 0 }}
                                     transition={{ delay: i * 0.05 }}
-                                    className="glass-card rounded-3xl border border-slate-200 dark:border-white/10 overflow-hidden group hover:border-brand-500/30 transition-all duration-300 hover:shadow-lg hover:shadow-brand-500/5"
+                                    className="glass-card rounded-3xl border border-slate-200/10 dark:border-white/10 overflow-hidden group hover:border-brand-500/30 transition-all duration-300 hover:shadow-lg hover:shadow-brand-500/5"
                                 >
                                     {/* Card Header */}
                                     <div className="p-5 pb-0">
@@ -628,17 +628,17 @@ const ManageTournaments = () => {
                                     )}
 
                                     {/* Card Actions */}
-                                    <div className="px-5 py-4 border-t border-slate-200 dark:border-white/5 flex items-center gap-2">
+                                    <div className="px-5 py-4 border-t border-slate-200/5 dark:border-white/5 flex items-center gap-2">
                                         <button
                                             onClick={() => handleEdit(t)}
-                                            className="flex-1 flex items-center justify-center gap-2 px-4 py-2.5 bg-brand-500/10 hover:bg-brand-500 text-brand-400 hover:text-white rounded-xl text-xs font-bold transition-all"
+                                            className="flex-1 flex items-center justify-center gap-2 px-4 py-2.5 bg-brand-500/10 hover:bg-brand-500 text-brand-400 hover:text-slate-900 dark:text-white rounded-xl text-xs font-bold transition-all"
                                         >
                                             <Edit3 size={14} /> Edit
                                         </button>
                                         {isSuperAdmin && (
                                             <button
                                                 onClick={() => handleDelete(t.id)}
-                                                className="flex items-center justify-center gap-2 px-4 py-2.5 bg-red-500/10 hover:bg-red-500 text-red-400 hover:text-white rounded-xl text-xs font-bold transition-all"
+                                                className="flex items-center justify-center gap-2 px-4 py-2.5 bg-red-500/10 hover:bg-red-500 text-red-400 hover:text-slate-900 dark:text-white rounded-xl text-xs font-bold transition-all"
                                             >
                                                 <Trash2 size={14} />
                                             </button>

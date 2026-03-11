@@ -200,10 +200,10 @@ const PlayerDetail = () => {
     if (!player) {
         return (
             <div className="max-w-7xl mx-auto px-4 py-20 text-center">
-                <UserIcon size={64} className="mx-auto text-slate-300 dark:text-slate-700 mb-6" strokeWidth={1.5} />
+                <UserIcon size={64} className="mx-auto text-slate-600 dark:text-slate-300 dark:text-slate-700 mb-6" strokeWidth={1.5} />
                 <h2 className="text-3xl font-display font-bold text-slate-900 dark:text-white mb-4">Player Not Found</h2>
                 <p className="text-slate-600 dark:text-slate-400 mb-8 max-w-md mx-auto">We couldn't find the player you're looking for. They might have been transferred or retired.</p>
-                <Link to="/players" className="inline-flex items-center gap-2 px-6 py-3 bg-brand-600 hover:bg-brand-500 text-white rounded-xl font-bold transition-all shadow-lg shadow-brand-500/20">
+                <Link to="/players" className="inline-flex items-center gap-2 px-6 py-3 bg-brand-600 hover:bg-brand-500 text-slate-900 dark:text-white rounded-xl font-bold transition-all shadow-lg shadow-brand-500/20">
                     <ChevronLeft size={20} /> Back to Players
                 </Link>
             </div>
@@ -226,7 +226,7 @@ const PlayerDetail = () => {
                 {canEdit && (
                     <button
                         onClick={() => navigate('/admin/players', { state: { editPlayer: player } })}
-                        className="flex items-center gap-2 px-4 py-2 bg-brand-500/10 text-brand-500 hover:bg-brand-500 hover:text-white rounded-xl text-sm font-bold transition-all shadow-sm"
+                        className="flex items-center gap-2 px-4 py-2 bg-brand-500/10 text-brand-500 hover:bg-brand-500 hover:text-slate-900 dark:text-white rounded-xl text-sm font-bold transition-all shadow-sm"
                     >
                         <Edit3 size={16} />
                         Edit Player Details
@@ -240,22 +240,22 @@ const PlayerDetail = () => {
                 <motion.div
                     initial={{ opacity: 0, x: -20 }}
                     animate={{ opacity: 1, x: 0 }}
-                    className="lg:col-span-1 glass-card rounded-3xl overflow-hidden border border-slate-200 dark:border-white/10 shadow-2xl"
+                    className="lg:col-span-1 glass-card rounded-3xl overflow-hidden border border-slate-200/10 dark:border-white/10 shadow-2xl"
                 >
-                    <div className="relative aspect-square bg-slate-800">
+                    <div className="relative aspect-square bg-slate-50 dark:bg-slate-800">
                         {player.photoUrl ? (
                             <img src={player.photoUrl} alt={player.name} className="w-full h-full object-cover" />
                         ) : (
-                            <div className="w-full h-full flex items-center justify-center text-8xl font-black text-white/5">
+                            <div className="w-full h-full flex items-center justify-center text-8xl font-black text-slate-900/5 dark:text-white/5">
                                 {player.name.charAt(0)}
                             </div>
                         )}
                         <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent" />
                         <div className="absolute bottom-6 left-6 flex flex-col items-start">
-                            <span className="px-3 py-1 bg-brand-600 text-white text-[10px] font-black uppercase tracking-widest rounded-lg mb-2 shadow-lg">
+                            <span className="px-3 py-1 bg-brand-600 text-slate-900 dark:text-white text-[10px] font-black uppercase tracking-widest rounded-lg mb-2 shadow-lg">
                                 {player.position}
                             </span>
-                            <h1 className="text-3xl font-display font-bold text-white drop-shadow-md">
+                            <h1 className="text-3xl font-display font-bold text-slate-900 dark:text-white drop-shadow-md">
                                 {player.name}
                             </h1>
                         </div>
@@ -263,16 +263,16 @@ const PlayerDetail = () => {
 
                     <div className="p-6 space-y-6">
                         <div className="grid grid-cols-2 gap-4">
-                            <div className="p-3 rounded-2xl bg-white/5 border border-white/5">
+                            <div className="p-3 rounded-2xl bg-white/5 border border-slate-200/5 dark:border-white/5">
                                 <span className="text-[10px] text-slate-500 uppercase font-black tracking-wider block mb-1">Squad Number</span>
                                 <span className="text-xl font-display font-bold text-slate-900 dark:text-white">#{player.number || '--'}</span>
                             </div>
-                            <div className="p-3 rounded-2xl bg-white/5 border border-white/5">
+                            <div className="p-3 rounded-2xl bg-white/5 border border-slate-200/5 dark:border-white/5">
                                 <span className="text-[10px] text-slate-500 uppercase font-black tracking-wider block mb-1">Age</span>
                                 <span className="text-xl font-display font-bold text-slate-900 dark:text-white">{age}</span>
                             </div>
                             {player.nationality && (
-                                <div className="p-3 rounded-2xl bg-white/5 border border-white/5 md:col-span-2">
+                                <div className="p-3 rounded-2xl bg-white/5 border border-slate-200/5 dark:border-white/5 md:col-span-2">
                                     <span className="text-[10px] text-slate-500 uppercase font-black tracking-wider block mb-1">Nationality</span>
                                     <span className="text-sm font-bold text-slate-900 dark:text-white">{player.nationality}</span>
                                 </div>
@@ -319,7 +319,7 @@ const PlayerDetail = () => {
                             { label: 'Assists', value: player.assists || 0, icon: <Zap className="text-yellow-500" />, color: 'yellow' },
                             { label: 'Clean Sheets', value: player.cleanSheets || 0, icon: <Shield className="text-green-500" />, color: 'green', showIf: player.position === 'Goalkeeper' }
                         ].filter(stat => stat.showIf !== false).map((stat, idx) => (
-                            <div key={idx} className="glass-card p-6 rounded-3xl border border-slate-200 dark:border-white/5 text-center group hover:border-white/20 transition-all">
+                            <div key={idx} className="glass-card p-6 rounded-3xl border border-slate-200/5 dark:border-white/5 text-center group hover:border-slate-200/20 dark:border-white/20 transition-all">
                                 <div className="flex justify-center mb-3">
                                     <div className={cn(
                                         "w-12 h-12 rounded-2xl flex items-center justify-center transition-transform group-hover:scale-110",
@@ -341,7 +341,7 @@ const PlayerDetail = () => {
                             initial={{ opacity: 0, y: 20 }}
                             animate={{ opacity: 1, y: 0 }}
                             transition={{ delay: 0.1 }}
-                            className="glass-card p-6 rounded-3xl border border-slate-200 dark:border-white/5"
+                            className="glass-card p-6 rounded-3xl border border-slate-200/5 dark:border-white/5"
                         >
                             <h3 className="text-lg font-bold mb-6 flex items-center gap-2 text-slate-900 dark:text-white">
                                 <Trophy size={20} className="text-brand-500" />
@@ -370,7 +370,7 @@ const PlayerDetail = () => {
                             initial={{ opacity: 0, y: 20 }}
                             animate={{ opacity: 1, y: 0 }}
                             transition={{ delay: 0.2 }}
-                            className="glass-card p-6 rounded-3xl border border-slate-200 dark:border-white/5"
+                            className="glass-card p-6 rounded-3xl border border-slate-200/5 dark:border-white/5"
                         >
                             <h3 className="text-lg font-bold mb-4 flex items-center gap-2 text-slate-900 dark:text-white">
                                 <History size={20} className="text-brand-500" />
@@ -378,7 +378,7 @@ const PlayerDetail = () => {
                             </h3>
                             <div className="space-y-4">
                                 {recentEvents.map((event, idx) => (
-                                    <div key={idx} className="flex items-center gap-3 p-3 rounded-2xl bg-white/5 border border-white/5 hover:bg-white/10 transition-colors">
+                                    <div key={idx} className="flex items-center gap-3 p-3 rounded-2xl bg-white/5 border border-slate-200/5 dark:border-white/5 hover:bg-white/10 transition-colors">
                                         <div className={cn(
                                             "w-8 h-8 rounded-full flex items-center justify-center shadow-sm",
                                             event.type === 'goal' ? "bg-brand-500/20 text-brand-500" :
@@ -414,7 +414,7 @@ const PlayerDetail = () => {
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ delay: 0.25 }}
-                        className="glass-card p-6 rounded-3xl border border-slate-200 dark:border-white/5"
+                        className="glass-card p-6 rounded-3xl border border-slate-200/5 dark:border-white/5"
                     >
                         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
                             <h3 className="text-lg font-bold flex items-center gap-2 text-slate-900 dark:text-white">
@@ -427,7 +427,7 @@ const PlayerDetail = () => {
                         </div>
                         <div className="space-y-4">
                             {tournamentStats.length > 0 ? tournamentStats.map(t => (
-                                <div key={t.id} className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 p-4 rounded-2xl bg-white/5 border border-white/5 hover:border-brand-500/30 transition-colors">
+                                <div key={t.id} className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 p-4 rounded-2xl bg-white/5 border border-slate-200/5 dark:border-white/5 hover:border-brand-500/30 transition-colors">
                                     <div>
                                         <div className="font-bold text-slate-900 dark:text-white text-sm">{t.name}</div>
                                         <div className="text-xs text-slate-500 mt-1">{t.registered ? 'Registered / Active' : 'Played Matches Here'}</div>
@@ -456,7 +456,7 @@ const PlayerDetail = () => {
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ delay: 0.3 }}
-                        className="glass-card p-8 rounded-3xl border border-slate-200 dark:border-white/5 bg-gradient-to-br from-brand-500/5 to-transparent"
+                        className="glass-card p-8 rounded-3xl border border-slate-200/5 dark:border-white/5 bg-gradient-to-br from-brand-500/5 to-transparent"
                     >
                         <h3 className="text-xl font-display font-bold mb-4 text-slate-900 dark:text-white">About {player.name.split(' ')[0]}</h3>
                         <p className="text-slate-600 dark:text-slate-400 leading-relaxed">
@@ -465,9 +465,9 @@ const PlayerDetail = () => {
 
                         {/* Tags / Skills */}
                         <div className="flex flex-wrap gap-2 mt-6">
-                            <span className="px-3 py-1 bg-white/5 border border-white/10 rounded-lg text-xs font-medium text-slate-500">Precision Passing</span>
-                            <span className="px-3 py-1 bg-white/5 border border-white/10 rounded-lg text-xs font-medium text-slate-500">Leadership</span>
-                            <span className="px-3 py-1 bg-white/5 border border-white/10 rounded-lg text-xs font-medium text-slate-500">High Stamina</span>
+                            <span className="px-3 py-1 bg-white/5 border border-slate-200/10 dark:border-white/10 rounded-lg text-xs font-medium text-slate-500">Precision Passing</span>
+                            <span className="px-3 py-1 bg-white/5 border border-slate-200/10 dark:border-white/10 rounded-lg text-xs font-medium text-slate-500">Leadership</span>
+                            <span className="px-3 py-1 bg-white/5 border border-slate-200/10 dark:border-white/10 rounded-lg text-xs font-medium text-slate-500">High Stamina</span>
                         </div>
                     </motion.div>
                 </div>

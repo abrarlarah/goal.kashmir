@@ -89,7 +89,7 @@ const NewsDetail = () => {
                         initial={{ y: 20, opacity: 0 }}
                         animate={{ y: 0, opacity: 1 }}
                         transition={{ delay: 0.2 }}
-                        className="flex flex-wrap items-center gap-6 text-slate-600 dark:text-slate-400 text-sm py-4 border-y border-slate-200 dark:border-white/5"
+                        className="flex flex-wrap items-center gap-6 text-slate-600 dark:text-slate-400 text-sm py-4 border-y border-slate-200/5 dark:border-white/5"
                     >
                         <div className="flex items-center gap-2">
                             <Calendar size={16} className="text-brand-500" />
@@ -140,7 +140,7 @@ const NewsDetail = () => {
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     transition={{ delay: 0.5 }}
-                    className="pt-12 mt-12 border-t border-slate-200 dark:border-white/5 flex items-center justify-between"
+                    className="pt-12 mt-12 border-t border-slate-200/5 dark:border-white/5 flex items-center justify-between"
                 >
                     <div className="flex items-center gap-4">
                         <button className="flex items-center gap-2 px-4 py-2 bg-white/5 hover:bg-white/10 text-slate-900 dark:text-white rounded-xl transition-colors">

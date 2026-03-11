@@ -53,8 +53,8 @@ const Navbar = () => {
         className={cn(
           "fixed top-0 inset-x-0 z-50 transition-all duration-300 border-b",
           scrolled
-            ? "bg-gradient-to-r from-slate-900/95 via-brand-900/90 to-slate-900/95 backdrop-blur-xl border-brand-500/20 shadow-[0_4px_30px_rgba(14,165,233,0.15)]"
-            : "bg-gradient-to-r from-slate-900/70 via-brand-900/50 to-slate-900/70 backdrop-blur-md border-brand-500/10 shadow-[0_4px_30px_rgba(14,165,233,0.05)]"
+            ? "bg-gradient-to-r from-white/95 dark:from-slate-900/95 via-brand-50/90 dark:via-brand-900/90 to-white/95 dark:to-slate-900/95 backdrop-blur-xl border-brand-500/20 shadow-[0_4px_30px_rgba(14,165,233,0.15)]"
+            : "bg-gradient-to-r from-white/70 dark:from-slate-900/70 via-brand-50/50 dark:via-brand-900/50 to-white/70 dark:to-slate-900/70 backdrop-blur-md border-brand-500/10 shadow-[0_4px_30px_rgba(14,165,233,0.05)]"
         )}
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -82,14 +82,14 @@ const Navbar = () => {
                   >
                     <span className={cn(
                       "relative z-10 flex items-center gap-2 text-sm font-medium transition-colors",
-                      isActive ? "text-brand-600 dark:text-brand-400" : "text-slate-600 dark:text-slate-400 group-hover:text-brand-500 dark:group-hover:text-white"
+                      isActive ? "text-brand-600 dark:text-brand-400" : "text-slate-600 dark:text-slate-400 group-hover:text-brand-500 dark:group-hover:text-slate-900 dark:text-white"
                     )}>
                       {item.name}
                     </span>
                     {isActive && (
                       <motion.div
                         layoutId="navbar-indicator"
-                        className="absolute inset-0 bg-slate-100 dark:bg-white/10 rounded-lg border border-slate-200 dark:border-white/5"
+                        className="absolute inset-0 bg-slate-100 dark:bg-white/10 rounded-lg border border-slate-200/5 dark:border-white/5"
                         transition={{ type: "spring", bounce: 0.2, duration: 0.6 }}
                       />
                     )}
@@ -100,7 +100,7 @@ const Navbar = () => {
 
             {/* Desktop Auth & Search */}
             <div className="hidden lg:flex items-center gap-4">
-              <Link to="/search" className="p-2 text-slate-500 dark:text-slate-400 hover:text-brand-500 dark:hover:text-white transition-colors">
+              <Link to="/search" className="p-2 text-slate-500 dark:text-slate-400 hover:text-brand-500 dark:hover:text-slate-900 dark:text-white transition-colors">
                 <Search size={22} />
               </Link>
               <ThemeToggle />
@@ -115,20 +115,20 @@ const Navbar = () => {
                 </button>
               ) : (
                 <div className="flex items-center gap-3">
-                  <Link to="/login" className="px-4 py-2 bg-brand-600 hover:bg-brand-500 text-white text-sm font-medium rounded-lg shadow-lg shadow-brand-500/20 transition-all hover:scale-105 active:scale-95">Login</Link>
+                  <Link to="/login" className="px-4 py-2 bg-brand-600 hover:bg-brand-500 text-slate-900 dark:text-white text-sm font-medium rounded-lg shadow-lg shadow-brand-500/20 transition-all hover:scale-105 active:scale-95">Login</Link>
                 </div>
               )}
             </div>
 
             {/* Mobile Actions */}
             <div className="lg:hidden flex items-center gap-2">
-              <Link to="/search" className="p-2 text-slate-500 dark:text-slate-400 hover:text-brand-500 dark:hover:text-white transition-colors">
+              <Link to="/search" className="p-2 text-slate-500 dark:text-slate-400 hover:text-brand-500 dark:hover:text-slate-900 dark:text-white transition-colors">
                 <Search size={22} />
               </Link>
               <ThemeToggle />
               <button
                 onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-                className="p-2 rounded-lg text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-white/5 transition-colors"
+                className="p-2 rounded-lg text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-900 dark:text-white hover:bg-slate-100 dark:hover:bg-white/5 transition-colors"
               >
                 {mobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
               </button>
@@ -143,7 +143,7 @@ const Navbar = () => {
               initial={{ opacity: 0, height: 0 }}
               animate={{ opacity: 1, height: 'auto' }}
               exit={{ opacity: 0, height: 0 }}
-              className="lg:hidden bg-dark-bg/95 backdrop-blur-xl border-t border-slate-200 dark:border-white/5 overflow-hidden"
+              className="lg:hidden bg-slate-50 dark:bg-dark-bg/95 backdrop-blur-xl border-t border-slate-200/5 dark:border-white/5 overflow-hidden"
             >
               <div className="px-4 pt-4 pb-6 space-y-2">
                 {navItems.map((item) => (
@@ -155,7 +155,7 @@ const Navbar = () => {
                       "flex items-center justify-between p-4 rounded-xl border border-transparent transition-all",
                       isActive
                         ? "bg-brand-500/10 border-brand-500/20 text-brand-600 dark:text-brand-400"
-                        : "bg-white/5 text-slate-600 dark:text-slate-400 border-slate-200 dark:border-white/5 hover:bg-white/10 hover:text-slate-900 dark:hover:text-white"
+                        : "bg-white/5 text-slate-600 dark:text-slate-400 border-slate-200/5 dark:border-white/5 hover:bg-white/10 hover:text-slate-900 dark:hover:text-slate-900 dark:text-white"
                     )}
                   >
                     <div className="flex items-center gap-3">
@@ -181,7 +181,7 @@ const Navbar = () => {
                     <Link
                       to="/login"
                       onClick={() => setMobileMenuOpen(false)}
-                      className="flex justify-center p-4 rounded-xl bg-brand-600 text-white font-medium shadow-lg hover:bg-brand-500"
+                      className="flex justify-center p-4 rounded-xl bg-brand-600 text-slate-900 dark:text-white font-medium shadow-lg hover:bg-brand-500"
                     >
                       Login
                     </Link>

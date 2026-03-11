@@ -183,7 +183,7 @@ const Leaderboard = () => {
               setSelectedYear(e.target.value);
               setSelectedCompetitionId('All');
             }}
-            className="bg-white dark:bg-dark-card/50 backdrop-blur-sm border border-slate-200 dark:border-white/10 rounded-xl px-3 py-2 text-xs md:text-sm font-medium text-slate-900 dark:text-white focus:ring-2 focus:ring-brand-500 outline-none transition-all flex-shrink-0"
+            className="bg-white dark:bg-dark-card/50 backdrop-blur-sm border border-slate-200/10 dark:border-white/10 rounded-xl px-3 py-2 text-xs md:text-sm font-medium text-slate-900 dark:text-white focus:ring-2 focus:ring-brand-500 outline-none transition-all flex-shrink-0"
           >
             <option value="All">All Years</option>
             {availableYears.map(year => (
@@ -198,7 +198,7 @@ const Leaderboard = () => {
                 setSelectedDistrict(e.target.value);
                 setSelectedCompetitionId('All');
               }}
-              className="bg-white dark:bg-dark-card/50 backdrop-blur-sm border border-slate-200 dark:border-white/10 rounded-xl px-3 py-2 text-xs md:text-sm font-medium text-slate-900 dark:text-white focus:ring-2 focus:ring-brand-500 outline-none transition-all flex-shrink-0"
+              className="bg-white dark:bg-dark-card/50 backdrop-blur-sm border border-slate-200/10 dark:border-white/10 rounded-xl px-3 py-2 text-xs md:text-sm font-medium text-slate-900 dark:text-white focus:ring-2 focus:ring-brand-500 outline-none transition-all flex-shrink-0"
             >
               <option value="All">All Districts</option>
               <optgroup label="Jammu Division">
@@ -217,7 +217,7 @@ const Leaderboard = () => {
           <select
             value={selectedCompetitionId}
             onChange={(e) => setSelectedCompetitionId(e.target.value)}
-            className="bg-white dark:bg-dark-card/50 backdrop-blur-sm border border-slate-200 dark:border-white/10 rounded-xl px-3 py-2 text-xs md:text-sm font-medium text-slate-900 dark:text-white focus:ring-2 focus:ring-brand-500 outline-none transition-all flex-shrink-0 min-w-[140px] max-w-[180px] md:max-w-none"
+            className="bg-white dark:bg-dark-card/50 backdrop-blur-sm border border-slate-200/10 dark:border-white/10 rounded-xl px-3 py-2 text-xs md:text-sm font-medium text-slate-900 dark:text-white focus:ring-2 focus:ring-brand-500 outline-none transition-all flex-shrink-0 min-w-[140px] max-w-[180px] md:max-w-none"
           >
             {competitions.map(comp => (
               <option key={comp.id} value={comp.id}>{comp.name}</option>
@@ -227,7 +227,7 @@ const Leaderboard = () => {
       </div>
 
       {/* Tabs */}
-      <div className="flex gap-2 p-1 bg-white/5 backdrop-blur-md rounded-2xl w-full md:w-fit border border-slate-200 dark:border-white/5 overflow-x-auto scrollbar-none">
+      <div className="flex gap-2 p-1 bg-white/5 backdrop-blur-md rounded-2xl w-full md:w-fit border border-slate-200/5 dark:border-white/5 overflow-x-auto scrollbar-none">
         {[
           { id: 'table', label: 'League Table', icon: Trophy },
           { id: 'scorers', label: 'Top Scorers', icon: Award },
@@ -251,7 +251,7 @@ const Leaderboard = () => {
 
       {
         activeTab === 'table' && (
-          <div className="glass-card rounded-3xl border border-slate-200 dark:border-white/10 overflow-hidden shadow-2xl">
+          <div className="glass-card rounded-3xl border border-slate-200/10 dark:border-white/10 overflow-hidden shadow-2xl">
             <div className="overflow-x-auto">
               <table className="min-w-full divide-y divide-white/5">
                 <thead className="bg-white/5">
@@ -325,13 +325,13 @@ const Leaderboard = () => {
               <Link
                 key={player.id}
                 to={`/players/${player.id}`}
-                className="glass-card p-6 rounded-3xl border border-slate-200 dark:border-white/5 flex items-center gap-6 hover:border-brand-500/30 group transition-all shadow-xl"
+                className="glass-card p-6 rounded-3xl border border-slate-200/5 dark:border-white/5 flex items-center gap-6 hover:border-brand-500/30 group transition-all shadow-xl"
               >
                 <div className="relative">
                   <div className="absolute -top-3 -left-3 w-8 h-8 rounded-full bg-brand-500 flex items-center justify-center text-slate-900 dark:text-white font-black text-xs shadow-lg z-10">
                     {idx + 1}
                   </div>
-                  <div className="w-16 h-16 rounded-2xl bg-slate-800 overflow-hidden border border-white/5 group-hover:border-brand-500/30 transition-colors">
+                  <div className="w-16 h-16 rounded-2xl bg-slate-50 dark:bg-slate-800 overflow-hidden border border-slate-200/5 dark:border-white/5 group-hover:border-brand-500/30 transition-colors">
                     {player.photoUrl ? (
                       <img src={player.photoUrl} alt={player.name} className="w-full h-full object-cover" />
                     ) : (
@@ -370,13 +370,13 @@ const Leaderboard = () => {
               <Link
                 key={player.id}
                 to={`/players/${player.id}`}
-                className="glass-card p-6 rounded-3xl border border-slate-200 dark:border-white/5 flex items-center gap-6 hover:border-brand-500/30 group transition-all shadow-xl"
+                className="glass-card p-6 rounded-3xl border border-slate-200/5 dark:border-white/5 flex items-center gap-6 hover:border-brand-500/30 group transition-all shadow-xl"
               >
                 <div className="relative">
-                  <div className="absolute -top-3 -left-3 w-8 h-8 rounded-full bg-slate-800 flex items-center justify-center text-slate-600 font-black text-xs shadow-lg z-10 border border-white/10">
+                  <div className="absolute -top-3 -left-3 w-8 h-8 rounded-full bg-slate-50 dark:bg-slate-800 flex items-center justify-center text-slate-600 font-black text-xs shadow-lg z-10 border border-slate-200/10 dark:border-white/10">
                     {idx + 1}
                   </div>
-                  <div className="w-16 h-16 rounded-2xl bg-slate-800 overflow-hidden border border-white/5 group-hover:border-brand-500/30 transition-colors">
+                  <div className="w-16 h-16 rounded-2xl bg-slate-50 dark:bg-slate-800 overflow-hidden border border-slate-200/5 dark:border-white/5 group-hover:border-brand-500/30 transition-colors">
                     {player.photoUrl ? (
                       <img src={player.photoUrl} alt={player.name} className="w-full h-full object-cover" />
                     ) : (

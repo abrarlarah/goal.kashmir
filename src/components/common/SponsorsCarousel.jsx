@@ -38,7 +38,7 @@ const SponsorsCarousel = () => {
     if (loading || sponsors.length === 0) return null;
 
     return (
-        <section className="py-8 border-t border-slate-200 dark:border-white/10 mt-12 overflow-hidden relative">
+        <section className="py-8 border-t border-slate-200/10 dark:border-white/10 mt-12 overflow-hidden relative">
             <div className="container mx-auto px-4 mb-8">
                 <h3 className="text-center text-sm font-bold tracking-widest text-slate-500 uppercase">Our Official Partners</h3>
             </div>
@@ -56,7 +56,7 @@ const SponsorsCarousel = () => {
                                 href={sponsor.websiteUrl || '#'}
                                 target={sponsor.websiteUrl ? "_blank" : "_self"}
                                 rel="noopener noreferrer"
-                                className="block h-32 sm:h-40 w-64 sm:w-[320px] relative hover:scale-105 transition-transform duration-300 pointer-events-auto rounded-2xl overflow-hidden bg-slate-800/20"
+                                className="block h-32 sm:h-40 w-64 sm:w-[320px] relative hover:scale-105 transition-transform duration-300 pointer-events-auto rounded-2xl overflow-hidden bg-slate-50/20 dark:bg-slate-800/20"
                             >
                                 <img
                                     src={sponsor.logoUrl}

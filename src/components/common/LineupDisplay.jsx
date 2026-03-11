@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 const LineupDisplay = ({ lineup, players }) => {
     if (!lineup || !lineup.starting11 || lineup.starting11.length === 0) {
         return (
-            <div className="text-center text-gray-400 py-8">
+            <div className="text-center text-slate-500 dark:text-gray-400 py-8">
                 <p>No lineup available</p>
             </div>
         );
@@ -40,21 +40,21 @@ const LineupDisplay = ({ lineup, players }) => {
     const PlayerCard = ({ player }) => (
         <Link to={`/players/${player.id}`} className="flex flex-col items-center group z-10 w-14 sm:w-20">
             <div className="relative mb-0.5 sm:mb-1">
-                <div className="h-10 w-10 sm:h-14 sm:w-14 rounded-full border-2 border-white overflow-hidden bg-slate-800 flex items-center justify-center shadow-[0_4px_10px_rgba(0,0,0,0.5)] group-hover:scale-110 transition-transform duration-300">
+                <div className="h-10 w-10 sm:h-14 sm:w-14 rounded-full border-2 border-white overflow-hidden bg-slate-50 dark:bg-slate-800 flex items-center justify-center shadow-[0_4px_10px_rgba(0,0,0,0.5)] group-hover:scale-110 transition-transform duration-300">
                     {player.photoUrl ? (
                         <img src={player.photoUrl} alt={player.name} className="h-full w-full object-cover" />
                     ) : (
-                        <span className="text-white font-bold text-sm sm:text-base">{player.name.charAt(0)}</span>
+                        <span className="text-slate-900 dark:text-white font-bold text-sm sm:text-base">{player.name.charAt(0)}</span>
                     )}
                 </div>
-                <div className="absolute -bottom-1 -right-1 h-4 w-4 sm:h-5 sm:w-5 bg-slate-900 rounded-full border border-white flex items-center justify-center shadow-md">
-                    <span className="text-[8px] sm:text-[10px] font-black text-white leading-none">
+                <div className="absolute -bottom-1 -right-1 h-4 w-4 sm:h-5 sm:w-5 bg-white dark:bg-slate-900 rounded-full border border-white flex items-center justify-center shadow-md">
+                    <span className="text-[8px] sm:text-[10px] font-black text-slate-900 dark:text-white leading-none">
                         {player.number || '#'}
                     </span>
                 </div>
             </div>
             <div className="text-center w-[120%] sm:w-[130%] px-0.5 -mx-[10%] sm:-mx-[15%] z-20">
-                <div className="bg-black/90 px-1 py-0.5 rounded shadow-[0_2px_8px_rgba(0,0,0,0.8)] text-white font-black text-[9px] sm:text-[11px] truncate group-hover:text-brand-400 transition-colors uppercase tracking-widest border border-white/20">
+                <div className="bg-black/90 px-1 py-0.5 rounded shadow-[0_2px_8px_rgba(0,0,0,0.8)] text-white font-black text-[9px] sm:text-[11px] truncate group-hover:text-brand-400 transition-colors uppercase tracking-widest border border-slate-200/20 dark:border-white/20">
                     {player.name.split(' ').pop()}
                 </div>
             </div>
@@ -129,8 +129,8 @@ const LineupDisplay = ({ lineup, players }) => {
 
             {/* Bench */}
             {lineup.bench && lineup.bench.length > 0 && (
-                <div className="bg-slate-900/40 rounded-xl p-4 sm:p-5 border border-white/5 mt-2">
-                    <div className="text-sm text-slate-400 mb-3 font-bold uppercase tracking-widest">Bench</div>
+                <div className="bg-white/40 dark:bg-slate-900/40 rounded-xl p-4 sm:p-5 border border-slate-200/5 dark:border-white/5 mt-2">
+                    <div className="text-sm text-slate-500 dark:text-slate-400 mb-3 font-bold uppercase tracking-widest">Bench</div>
                     <div className="flex gap-2 flex-wrap">
                         {lineup.bench.map(playerId => {
                             const player = getPlayer(playerId);
@@ -138,13 +138,13 @@ const LineupDisplay = ({ lineup, players }) => {
                                 <Link
                                     key={player.id}
                                     to={`/players/${player.id}`}
-                                    className="flex items-center gap-2 bg-black/60 rounded-full pl-1 pr-4 py-1.5 text-xs sm:text-sm text-white border border-white/10 hover:bg-black/80 hover:border-brand-500/50 transition-colors"
+                                    className="flex items-center gap-2 bg-black/60 rounded-full pl-1 pr-4 py-1.5 text-xs sm:text-sm text-white border border-slate-200/10 dark:border-white/10 hover:bg-black/80 hover:border-brand-500/50 transition-colors"
                                 >
-                                    <div className="h-7 w-7 sm:h-8 sm:w-8 rounded-full overflow-hidden bg-slate-700 flex items-center justify-center shrink-0">
+                                    <div className="h-7 w-7 sm:h-8 sm:w-8 rounded-full overflow-hidden bg-slate-100 dark:bg-slate-700 flex items-center justify-center shrink-0">
                                         {player.photoUrl ? (
                                             <img src={player.photoUrl} alt="" className="h-full w-full object-cover" />
                                         ) : (
-                                            <span className="text-[10px] sm:text-xs font-bold text-white/50">{player.name.charAt(0)}</span>
+                                            <span className="text-[10px] sm:text-xs font-bold text-slate-900/50 dark:text-white/50">{player.name.charAt(0)}</span>
                                         )}
                                     </div>
                                     <span className="font-bold whitespace-nowrap">{player.name}</span>

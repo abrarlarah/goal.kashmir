@@ -16,8 +16,8 @@ export default function PrivateRoute({ children, requireSuperAdmin = false, requ
     return (
       <div className="min-h-[60vh] flex flex-col items-center justify-center text-center px-4">
         <div className="text-6xl mb-4">🔒</div>
-        <h2 className="text-2xl font-bold text-white mb-2">Access Denied</h2>
-        <p className="text-gray-400 max-w-md">
+        <h2 className="text-2xl font-bold text-slate-900 dark:text-white mb-2">Access Denied</h2>
+        <p className="text-slate-500 dark:text-gray-400 max-w-md">
           You don't have admin privileges. Please contact a Super Admin to get access.
         </p>
       </div>
@@ -38,8 +38,8 @@ export default function PrivateRoute({ children, requireSuperAdmin = false, requ
     return (
       <div className="min-h-[60vh] flex flex-col items-center justify-center text-center px-4">
         <div className="text-6xl mb-4">👑</div>
-        <h2 className="text-2xl font-bold text-white mb-2">Super Admin Only</h2>
-        <p className="text-gray-400 max-w-md">
+        <h2 className="text-2xl font-bold text-slate-900 dark:text-white mb-2">Super Admin Only</h2>
+        <p className="text-slate-500 dark:text-gray-400 max-w-md">
           This section is restricted to Super Admins only.
         </p>
       </div>

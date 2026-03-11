@@ -121,7 +121,7 @@ const TeamDetail = () => {
                 {canEditTeam() && (
                     <button
                         onClick={() => navigate('/admin/teams', { state: { editTeam: team } })}
-                        className="flex items-center gap-2 px-4 py-2 bg-brand-500/10 text-brand-500 hover:bg-brand-500 hover:text-white rounded-xl text-sm font-bold transition-all shadow-sm"
+                        className="flex items-center gap-2 px-4 py-2 bg-brand-500/10 text-brand-500 hover:bg-brand-500 hover:text-slate-900 dark:text-white rounded-xl text-sm font-bold transition-all shadow-sm"
                     >
                         <Edit2 size={16} />
                         Edit Club Details
@@ -167,7 +167,7 @@ const TeamDetail = () => {
                         className={cn(
                             `glass-card p-6 rounded-3xl border flex flex-col items-center justify-center transition-all hover:scale-105 active:scale-95`,
                             stat.bg,
-                            filterType === stat.id ? "border-brand-500 shadow-[0_0_20px_rgba(var(--brand-500-rgb),0.2)] ring-2 ring-brand-500/50" : "border-slate-200 dark:border-white/5"
+                            filterType === stat.id ? "border-brand-500 shadow-[0_0_20px_rgba(var(--brand-500-rgb),0.2)] ring-2 ring-brand-500/50" : "border-slate-200/5 dark:border-white/5"
                         )}
                     >
                         <span className={`text-4xl font-black mb-1 ${stat.color}`}>{stat.value}</span>
@@ -184,13 +184,13 @@ const TeamDetail = () => {
                 <motion.div
                     initial={{ opacity: 0, scale: 0.95 }}
                     animate={{ opacity: 1, scale: 1 }}
-                    className="lg:col-span-1 glass-card p-8 rounded-3xl border border-slate-200 dark:border-white/10 flex flex-col items-center text-center shadow-xl"
+                    className="lg:col-span-1 glass-card p-8 rounded-3xl border border-slate-200/10 dark:border-white/10 flex flex-col items-center text-center shadow-xl"
                 >
-                    <div className="w-32 h-32 rounded-3xl bg-white/5 p-4 border border-slate-200 dark:border-white/10 flex items-center justify-center mb-6 overflow-hidden">
+                    <div className="w-32 h-32 rounded-3xl bg-white/5 p-4 border border-slate-200/10 dark:border-white/10 flex items-center justify-center mb-6 overflow-hidden">
                         {team.logoUrl ? (
                             <img src={team.logoUrl} alt={team.name} className="w-full h-full object-contain" />
                         ) : (
-                            <Shield className="w-16 h-16 text-slate-300 dark:text-slate-700" />
+                            <Shield className="w-16 h-16 text-slate-600 dark:text-slate-300 dark:text-slate-700" />
                         )}
                     </div>
                     <h1 className="text-3xl font-display font-bold text-slate-900 dark:text-white mb-2">{team.name}</h1>
@@ -201,7 +201,7 @@ const TeamDetail = () => {
                         <span className="text-slate-500 text-sm">Founded {team.founded || 'N/A'}</span>
                     </div>
 
-                    <div className="w-full pt-6 border-t border-slate-200 dark:border-white/5 space-y-4">
+                    <div className="w-full pt-6 border-t border-slate-200/5 dark:border-white/5 space-y-4">
                         <div className="flex items-center justify-between text-sm">
                             <span className="text-slate-500 flex items-center gap-2"><UserIcon size={14} /> Manager</span>
                             <span className="font-bold text-slate-900 dark:text-white">{team.manager || 'N/A'}</span>
@@ -241,7 +241,7 @@ const TeamDetail = () => {
                                 initial={{ opacity: 0, y: 20 }}
                                 animate={{ opacity: 1, y: 0 }}
                                 transition={{ delay: idx * 0.1 }}
-                                className="glass-card p-6 rounded-3xl border border-slate-200 dark:border-white/5 text-center shadow-lg"
+                                className="glass-card p-6 rounded-3xl border border-slate-200/5 dark:border-white/5 text-center shadow-lg"
                             >
                                 <div className="flex justify-center mb-3 text-2xl">{stat.icon}</div>
                                 <div className="text-3xl font-display font-bold text-slate-900 dark:text-white mb-1">{stat.value}</div>
@@ -283,11 +283,11 @@ const TeamDetail = () => {
                                         return true;
                                     })
                                     .map(match => (
-                                        <Link key={match.id} to={`/matches/${match.id}`} className="glass-card p-4 rounded-2xl border border-slate-200 dark:border-white/5 flex items-center justify-between hover:bg-white/5 transition-colors group">
+                                        <Link key={match.id} to={`/matches/${match.id}`} className="glass-card p-4 rounded-2xl border border-slate-200/5 dark:border-white/5 flex items-center justify-between hover:bg-white/5 transition-colors group">
                                             <div className="flex-1 text-right text-sm font-medium pr-4 truncate">
                                                 {match.teamA}
                                             </div>
-                                            <div className="flex flex-col items-center px-4 bg-slate-900/50 rounded-xl py-1 min-w-[80px]">
+                                            <div className="flex flex-col items-center px-4 bg-white/50 dark:bg-slate-900/50 rounded-xl py-1 min-w-[80px]">
                                                 <span className="text-lg font-bold text-slate-900 dark:text-white">
                                                     {match.status === 'finished' ? `${match.scoreA} - ${match.scoreB}` : 'vs'}
                                                 </span>
@@ -317,9 +317,9 @@ const TeamDetail = () => {
                                     <Link
                                         key={player.id}
                                         to={`/players/${player.id}`}
-                                        className="flex items-center gap-3 p-3 rounded-2xl hover:bg-white/5 border border-transparent hover:border-slate-200 dark:border-white/5 transition-all group"
+                                        className="flex items-center gap-3 p-3 rounded-2xl hover:bg-white/5 border border-transparent hover:border-slate-200/5 dark:border-white/5 transition-all group"
                                     >
-                                        <div className="w-10 h-10 rounded-full bg-slate-800 flex items-center justify-center font-bold text-sm text-slate-700 dark:text-slate-300 overflow-hidden shrink-0">
+                                        <div className="w-10 h-10 rounded-full bg-slate-50 dark:bg-slate-800 flex items-center justify-center font-bold text-sm text-slate-700 dark:text-slate-300 overflow-hidden shrink-0">
                                             {player.photoUrl ? <img src={player.photoUrl} alt={player.name} className="w-full h-full object-cover" /> : player.name.charAt(0)}
                                         </div>
                                         <div className="flex-1">
@@ -334,7 +334,7 @@ const TeamDetail = () => {
                                                         e.stopPropagation();
                                                         navigate('/admin/players', { state: { editPlayer: player } });
                                                     }}
-                                                    className="p-1.5 bg-brand-500/10 text-brand-500 hover:bg-brand-500 hover:text-white rounded-lg transition-all"
+                                                    className="p-1.5 bg-brand-500/10 text-brand-500 hover:bg-brand-500 hover:text-slate-900 dark:text-white rounded-lg transition-all"
                                                     title="Edit Player Details"
                                                 >
                                                     <Edit2 size={12} />
@@ -352,7 +352,7 @@ const TeamDetail = () => {
                     <motion.div
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
-                        className="glass-card p-8 rounded-3xl border border-slate-200 dark:border-white/5"
+                        className="glass-card p-8 rounded-3xl border border-slate-200/5 dark:border-white/5"
                     >
                         <h3 className="text-xl font-display font-bold mb-4 text-slate-900 dark:text-white">Club History & Identity</h3>
                         <p className="text-slate-600 dark:text-slate-400 leading-relaxed mb-6">

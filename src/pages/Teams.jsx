@@ -109,7 +109,7 @@ const Teams = () => {
               <select
                 value={selectedDistrict}
                 onChange={(e) => setSelectedDistrict(e.target.value)}
-                className="bg-white dark:bg-dark-card/50 backdrop-blur-sm border border-slate-200 dark:border-white/10 rounded-xl px-4 py-2.5 text-sm font-medium text-slate-900 dark:text-white focus:ring-2 focus:ring-brand-500 focus:border-brand-500 outline-none transition-all"
+                className="bg-white dark:bg-dark-card/50 backdrop-blur-sm border border-slate-200/10 dark:border-white/10 rounded-xl px-4 py-2.5 text-sm font-medium text-slate-900 dark:text-white focus:ring-2 focus:ring-brand-500 focus:border-brand-500 outline-none transition-all"
               >
                 <option value="All">All Districts</option>
                 <optgroup label="Jammu Division">
@@ -150,7 +150,7 @@ const Teams = () => {
         <input
           type="text"
           placeholder="Search teams..."
-          className="block w-full pl-10 pr-3 py-3 border border-slate-200 dark:border-white/10 rounded-xl leading-5 bg-white/5 text-slate-700 dark:text-slate-300 placeholder-slate-500 focus:outline-none focus:bg-white/10 focus:ring-1 focus:ring-brand-500/50 focus:border-brand-500/50 sm:text-sm transition-colors"
+          className="block w-full pl-10 pr-3 py-3 border border-slate-200/10 dark:border-white/10 rounded-xl leading-5 bg-white/5 text-slate-700 dark:text-slate-300 placeholder-slate-500 focus:outline-none focus:bg-white/10 focus:ring-1 focus:ring-brand-500/50 focus:border-brand-500/50 sm:text-sm transition-colors"
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
         />
@@ -179,7 +179,7 @@ const Teams = () => {
                 <div className="flex items-center gap-4">
                   <div className="flex-shrink-0">
                     {team.logoUrl ? (
-                      <div className="w-16 h-16 rounded-xl bg-white/5 border border-slate-200 dark:border-white/10 p-2 flex items-center justify-center overflow-hidden">
+                      <div className="w-16 h-16 rounded-xl bg-white/5 border border-slate-200/10 dark:border-white/10 p-2 flex items-center justify-center overflow-hidden">
                         <img src={team.logoUrl} alt={team.name} className="w-full h-full object-contain" />
                       </div>
                     ) : (
@@ -223,7 +223,7 @@ const Teams = () => {
                       bg: 'bg-blue-500/5'
                     }
                   ].map((s, i) => (
-                    <div key={i} className={cn("flex flex-col items-center py-2 rounded-xl border border-white/5", s.bg)}>
+                    <div key={i} className={cn("flex flex-col items-center py-2 rounded-xl border border-slate-200/5 dark:border-white/5", s.bg)}>
                       <span className={cn("text-lg font-black", s.color)}>{s.val}</span>
                       <span className="text-[8px] uppercase font-bold tracking-tighter text-slate-500">{s.label}</span>
                     </div>
@@ -233,7 +233,7 @@ const Teams = () => {
             </Link>
 
             {/* Footer Stats/Status */}
-            <div className="px-6 py-4 border-t border-slate-200 dark:border-white/5 bg-black/20 flex justify-between items-center relative z-10">
+            <div className="px-6 py-4 border-t border-slate-200/5 dark:border-white/5 bg-black/20 flex justify-between items-center relative z-10">
               <div className="flex items-center gap-3">
                 <div className="flex items-center gap-2 text-xs text-slate-600 dark:text-slate-400">
                   <Shield size={14} />
@@ -249,7 +249,7 @@ const Teams = () => {
                       e.preventDefault();
                       navigate('/admin/teams', { state: { editTeam: team } });
                     }}
-                    className="p-1.5 bg-brand-500/10 text-brand-500 hover:bg-brand-500 hover:text-white rounded-lg transition-all"
+                    className="p-1.5 bg-brand-500/10 text-brand-500 hover:bg-brand-500 hover:text-slate-900 dark:text-white rounded-lg transition-all"
                     title="Edit Team Details"
                   >
                     <Edit2 size={12} />
@@ -259,7 +259,7 @@ const Teams = () => {
 
               <span className={cn(
                 "text-[10px] uppercase font-bold px-2 py-0.5 rounded-full border tracking-wide",
-                team.status === 'Inactive' ? 'bg-slate-800 text-slate-600 dark:text-slate-400 border-slate-700' :
+                team.status === 'Inactive' ? 'bg-slate-50 dark:bg-slate-800 text-slate-600 dark:text-slate-400 border-slate-200 dark:border-slate-700' :
                   team.status === 'Suspended' ? 'bg-red-900/20 text-red-500 border-red-500/20' :
                     team.status === 'Dissolved' ? 'bg-black text-slate-600 border-slate-800' :
                       'bg-green-500/10 text-brand-400 border-brand-500/20'

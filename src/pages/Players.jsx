@@ -128,7 +128,7 @@ const Players = () => {
               <select
                 value={selectedDistrict}
                 onChange={(e) => setSelectedDistrict(e.target.value)}
-                className="bg-white dark:bg-dark-card/50 backdrop-blur-sm border border-slate-200 dark:border-white/10 rounded-xl px-4 py-2.5 text-sm font-medium text-slate-900 dark:text-white focus:ring-2 focus:ring-brand-500 focus:border-brand-500 outline-none transition-all"
+                className="bg-white dark:bg-dark-card/50 backdrop-blur-sm border border-slate-200/10 dark:border-white/10 rounded-xl px-4 py-2.5 text-sm font-medium text-slate-900 dark:text-white focus:ring-2 focus:ring-brand-500 focus:border-brand-500 outline-none transition-all"
               >
                 <option value="All">All Districts</option>
                 <optgroup label="Jammu Division">
@@ -173,7 +173,7 @@ const Players = () => {
             ) : (
               <button
                 onClick={() => setEditMode(true)}
-                className="flex items-center gap-2 px-4 py-2 bg-white/5 hover:bg-white/10 text-slate-900 dark:text-white border border-slate-200 dark:border-white/5 rounded-lg text-sm font-medium transition-colors"
+                className="flex items-center gap-2 px-4 py-2 bg-white/5 hover:bg-white/10 text-slate-900 dark:text-white border border-slate-200/5 dark:border-white/5 rounded-lg text-sm font-medium transition-colors"
               >
                 <Edit2 size={16} /> Edit Stats
               </button>
@@ -196,7 +196,7 @@ const Players = () => {
           <input
             type="text"
             placeholder="Search players or teams..."
-            className="block w-full pl-10 pr-3 py-2.5 border border-slate-200 dark:border-white/10 rounded-xl leading-5 bg-white/5 text-slate-700 dark:text-slate-300 placeholder-slate-500 focus:outline-none focus:bg-white/10 focus:ring-1 focus:ring-brand-500/50 focus:border-brand-500/50 sm:text-sm transition-colors"
+            className="block w-full pl-10 pr-3 py-2.5 border border-slate-200/10 dark:border-white/10 rounded-xl leading-5 bg-white/5 text-slate-700 dark:text-slate-300 placeholder-slate-500 focus:outline-none focus:bg-white/10 focus:ring-1 focus:ring-brand-500/50 focus:border-brand-500/50 sm:text-sm transition-colors"
             value={searchQuery}
             onChange={e => {
               setSearchQuery(e.target.value);
@@ -210,7 +210,7 @@ const Players = () => {
             <Filter className="h-4 w-4 text-slate-500" />
           </div>
           <select
-            className="block w-full pl-9 pr-10 py-2.5 border border-slate-200 dark:border-white/10 rounded-xl leading-5 bg-white dark:bg-dark-card text-slate-700 dark:text-slate-300 focus:outline-none focus:ring-1 focus:ring-brand-500/50 sm:text-sm appearance-none cursor-pointer"
+            className="block w-full pl-9 pr-10 py-2.5 border border-slate-200/10 dark:border-white/10 rounded-xl leading-5 bg-white dark:bg-dark-card text-slate-700 dark:text-slate-300 focus:outline-none focus:ring-1 focus:ring-brand-500/50 sm:text-sm appearance-none cursor-pointer"
             value={positionFilter}
             onChange={e => {
               setPositionFilter(e.target.value);
@@ -231,7 +231,7 @@ const Players = () => {
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.3 }}
-        className="glass-card rounded-2xl overflow-hidden border border-slate-200 dark:border-white/5"
+        className="glass-card rounded-2xl overflow-hidden border border-slate-200/5 dark:border-white/5"
       >
         <div className="overflow-x-auto">
           <table className="min-w-full divide-y divide-white/5">
@@ -258,7 +258,7 @@ const Players = () => {
                   <tr key={player.id} className="hover:bg-white/5 transition-colors group">
                     <td className="px-6 py-4 whitespace-nowrap">
                       <Link to={`/players/${player.id}`} className="flex items-center gap-3">
-                        <div className="h-10 w-10 rounded-full bg-slate-700 flex items-center justify-center text-xs font-bold text-slate-700 dark:text-slate-300 overflow-hidden border border-slate-200 dark:border-white/10 group-hover:border-brand-500/30 transition-colors">
+                        <div className="h-10 w-10 rounded-full bg-slate-100 dark:bg-slate-700 flex items-center justify-center text-xs font-bold text-slate-700 dark:text-slate-300 overflow-hidden border border-slate-200/10 dark:border-white/10 group-hover:border-brand-500/30 transition-colors">
                           {player.photoUrl ? (
                             <img src={player.photoUrl} alt={player.name} className="h-full w-full object-cover" />
                           ) : (
@@ -307,7 +307,7 @@ const Players = () => {
                       {editMode && canEditPlayer(player) ? (
                         <input
                           type="number"
-                          className="w-16 bg-black/50 border border-slate-200 dark:border-white/10 rounded px-2 py-1 text-slate-900 dark:text-white text-center focus:ring-1 focus:ring-brand-500 outline-none"
+                          className="w-16 bg-black/50 border border-slate-200/10 dark:border-white/10 rounded px-2 py-1 text-slate-900 dark:text-white text-center focus:ring-1 focus:ring-brand-500 outline-none"
                           value={display.matches || 0}
                           onChange={e => handleStatChange(player.id, 'matches', e.target.value)}
                         />
@@ -320,7 +320,7 @@ const Players = () => {
                       {editMode && canEditPlayer(player) ? (
                         <input
                           type="number"
-                          className="w-16 bg-black/50 border border-slate-200 dark:border-white/10 rounded px-2 py-1 text-slate-900 dark:text-white text-center focus:ring-1 focus:ring-brand-500 outline-none"
+                          className="w-16 bg-black/50 border border-slate-200/10 dark:border-white/10 rounded px-2 py-1 text-slate-900 dark:text-white text-center focus:ring-1 focus:ring-brand-500 outline-none"
                           value={display.goals || 0}
                           onChange={e => handleStatChange(player.id, 'goals', e.target.value)}
                         />
@@ -335,7 +335,7 @@ const Players = () => {
                       {editMode && canEditPlayer(player) ? (
                         <input
                           type="number"
-                          className="w-16 bg-black/50 border border-slate-200 dark:border-white/10 rounded px-2 py-1 text-slate-900 dark:text-white text-center focus:ring-1 focus:ring-brand-500 outline-none"
+                          className="w-16 bg-black/50 border border-slate-200/10 dark:border-white/10 rounded px-2 py-1 text-slate-900 dark:text-white text-center focus:ring-1 focus:ring-brand-500 outline-none"
                           value={display.assists || 0}
                           onChange={e => handleStatChange(player.id, 'assists', e.target.value)}
                         />
@@ -362,7 +362,7 @@ const Players = () => {
                         {canEditPlayer(player) && (
                           <button
                             onClick={() => navigate('/admin/players', { state: { editPlayer: player } })}
-                            className="p-2 bg-brand-500/10 text-brand-500 hover:bg-brand-500 hover:text-white rounded-lg transition-all"
+                            className="p-2 bg-brand-500/10 text-brand-500 hover:bg-brand-500 hover:text-slate-900 dark:text-white rounded-lg transition-all"
                             title="Edit Player Details"
                           >
                             <Edit2 size={14} />
@@ -389,7 +389,7 @@ const Players = () => {
 
         {/* Pagination Controls */}
         {totalPages > 1 && (
-          <div className="px-6 py-6 flex flex-col sm:flex-row items-center justify-between gap-4 border-t border-white/5 bg-white/2">
+          <div className="px-6 py-6 flex flex-col sm:flex-row items-center justify-between gap-4 border-t border-slate-200/5 dark:border-white/5 bg-white/2">
             <div className="text-xs text-slate-500 font-bold uppercase tracking-widest">
               Showing <span className="text-brand-400">{indexOfFirstPlayer + 1}</span> to <span className="text-brand-400">{Math.min(indexOfLastPlayer, filteredPlayers.length)}</span> of <span className="text-brand-400">{filteredPlayers.length}</span> players
             </div>
@@ -398,7 +398,7 @@ const Players = () => {
               <button
                 onClick={() => paginate(1)}
                 disabled={currentPage === 1}
-                className="px-3 py-2 rounded-lg bg-white/5 border border-white/5 text-xs font-bold text-slate-400 hover:bg-white/10 disabled:opacity-30 disabled:cursor-not-allowed transition-all"
+                className="px-3 py-2 rounded-lg bg-white/5 border border-slate-200/5 dark:border-white/5 text-xs font-bold text-slate-500 dark:text-slate-400 hover:bg-white/10 disabled:opacity-30 disabled:cursor-not-allowed transition-all"
               >
                 First
               </button>
@@ -420,7 +420,7 @@ const Players = () => {
                           "w-9 h-9 flex items-center justify-center rounded-lg text-sm font-bold transition-all",
                           currentPage === page
                             ? "bg-brand-500 text-slate-900 shadow-lg shadow-brand-500/20"
-                            : "bg-white/5 border border-white/5 text-slate-400 hover:bg-white/10"
+                            : "bg-white/5 border border-slate-200/5 dark:border-white/5 text-slate-500 dark:text-slate-400 hover:bg-white/10"
                         )}
                       >
                         {page}
@@ -432,7 +432,7 @@ const Players = () => {
               <button
                 onClick={() => paginate(totalPages)}
                 disabled={currentPage === totalPages}
-                className="px-3 py-2 rounded-lg bg-white/5 border border-white/5 text-xs font-bold text-slate-400 hover:bg-white/10 disabled:opacity-30 disabled:cursor-not-allowed transition-all"
+                className="px-3 py-2 rounded-lg bg-white/5 border border-slate-200/5 dark:border-white/5 text-xs font-bold text-slate-500 dark:text-slate-400 hover:bg-white/10 disabled:opacity-30 disabled:cursor-not-allowed transition-all"
               >
                 Last
               </button>
