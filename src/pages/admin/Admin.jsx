@@ -1,10 +1,10 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
-import { Shield, Trophy, Users, Swords, LayoutList, Newspaper, UserCog, Crown, ShieldCheck, Star, ScrollText } from 'lucide-react';
+import { Shield, Trophy, Users, Swords, LayoutList, Newspaper, UserCog, Crown, ShieldCheck, Star, ScrollText, Camera } from 'lucide-react';
 
 const Admin = () => {
-  const { isSuperAdmin, isAdmin, isNewsAdmin, userProfile } = useAuth();
+  const { isSuperAdmin, isAdmin, isNewsAdmin, userProfile, hasAnyAdminAccess } = useAuth();
   
   const adminCards = [];
 
@@ -22,6 +22,11 @@ const Admin = () => {
   // News management applies to Super Admin and News Admin
   if (isNewsAdmin) {
     adminCards.push({ to: '/admin/news', icon: Newspaper, title: '📰 Manage News', desc: 'Publish articles and announcements', color: 'from-pink-500/20 to-pink-600/5 border-pink-500/20' });
+  }
+
+  // Gallery applies to all admins
+  if (hasAnyAdminAccess) {
+    adminCards.push({ to: '/admin/gallery', icon: Camera, title: 'Manage Gallery', desc: 'Upload and curate public photos', color: 'from-rose-500/20 to-rose-600/5 border-rose-500/20' });
   }
 
   return (

@@ -11,7 +11,7 @@ import { registerAsset } from '../../utils/assetRegistry';
 import { logAuditEvent } from '../../utils/auditLogger';
 
 const ManageSponsors = () => {
-    const { isAdmin } = useAuth();
+    const { isAdmin, isSuperAdmin, currentUser } = useAuth();
     const [sponsors, setSponsors] = useState([]);
     const [loading, setLoading] = useState(true);
     const [uploading, setUploading] = useState(false);
@@ -137,7 +137,8 @@ const ManageSponsors = () => {
             } else {
                 const docRef = await addDoc(collection(db, 'sponsors'), {
                     ...formData,
-                    createdAt: serverTimestamp()
+                    createdAt: serverTimestamp(),
+                    uploadedBy: currentUser?.uid
                 });
                 logAuditEvent('CREATE_SPONSOR', {
                     entityType: 'sponsor',
@@ -240,11 +241,11 @@ const ManageSponsors = () => {
                             <div>
                                 <label className="block text-sm font-medium text-slate-600 dark:text-slate-400 mb-1">Website URL (Optional)</label>
                                 <input
-                                    type="url"
+                                    type="text"
                                     className="w-full bg-black/20 border border-slate-200/10 dark:border-white/10 rounded-lg px-4 py-2 text-slate-900 dark:text-white focus:ring-1 focus:ring-brand-500 outline-none"
                                     value={formData.websiteUrl}
                                     onChange={e => setFormData({ ...formData, websiteUrl: e.target.value })}
-                                    placeholder="https://..."
+                                    placeholder="e.g. www.example.com"
                                 />
                             </div>
 
@@ -416,25 +417,29 @@ const ManageSponsors = () => {
                                                 </h3>
                                             </div>
                                             <div className="flex gap-1 ml-4 flex-shrink-0">
-                                                <button
-                                                    onClick={() => toggleActive(item.id, item.active)}
-                                                    className={`p-2 transition-colors ${item.active ? 'text-green-500 hover:text-green-400' : 'text-slate-500 hover:text-green-500'}`}
-                                                    title={item.active ? "Deactivate" : "Activate"}
-                                                >
-                                                    {item.active ? <CheckCircle size={18} /> : <XCircle size={18} />}
-                                                </button>
-                                                <button
-                                                    onClick={() => handleEdit(item)}
-                                                    className="text-slate-500 hover:text-brand-400 p-2 transition-colors"
-                                                >
-                                                    <Edit2 size={18} />
-                                                </button>
-                                                <button
-                                                    onClick={() => handleDelete(item.id)}
-                                                    className="text-slate-500 hover:text-red-500 p-2 transition-colors"
-                                                >
-                                                    <Trash2 size={18} />
-                                                </button>
+                                                {(isSuperAdmin || item.uploadedBy === currentUser?.uid) && (
+                                                    <>
+                                                        <button
+                                                            onClick={() => toggleActive(item.id, item.active)}
+                                                            className={`p-2 transition-colors ${item.active ? 'text-green-500 hover:text-green-400' : 'text-slate-500 hover:text-green-500'}`}
+                                                            title={item.active ? "Deactivate" : "Activate"}
+                                                        >
+                                                            {item.active ? <CheckCircle size={18} /> : <XCircle size={18} />}
+                                                        </button>
+                                                        <button
+                                                            onClick={() => handleEdit(item)}
+                                                            className="text-slate-500 hover:text-brand-400 p-2 transition-colors"
+                                                        >
+                                                            <Edit2 size={18} />
+                                                        </button>
+                                                        <button
+                                                            onClick={() => handleDelete(item.id)}
+                                                            className="text-slate-500 hover:text-red-500 p-2 transition-colors"
+                                                        >
+                                                            <Trash2 size={18} />
+                                                        </button>
+                                                    </>
+                                                )}
                                             </div>
                                         </div>
                                         {item.websiteUrl && (

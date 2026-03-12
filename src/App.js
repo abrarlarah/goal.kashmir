@@ -20,12 +20,14 @@ import ManageNews from './pages/admin/ManageNews'; // Admin News
 import ManageSponsors from './pages/admin/ManageSponsors'; // Admin Sponsors
 import ManageUsers from './pages/admin/ManageUsers'; // Admin User Management
 import AuditLogs from './pages/admin/AuditLogs'; // Admin Audit Logs
+import ManageGallery from './pages/admin/ManageGallery'; // Admin Gallery Management
 import News from './pages/News'; // Public News
 import NewsDetail from './pages/NewsDetail'; // Public News Detail
 import TournamentDetail from './pages/TournamentDetail';
 import PlayerDetail from './pages/PlayerDetail';
 import TeamDetail from './pages/TeamDetail';
 import Search from './pages/Search';
+import Gallery from './pages/Gallery';
 import PrivateRoute from './components/common/PrivateRoute';
 import { DataProvider } from './context/DataContext';
 import { ThemeProvider } from './context/ThemeContext';
@@ -50,6 +52,7 @@ function App() {
               <Route path="/leaderboard" element={<Leaderboard />} />
               <Route path="/news" element={<News />} />
               <Route path="/news/:id" element={<NewsDetail />} />
+              <Route path="/gallery" element={<Gallery />} />
               <Route path="/live/:matchId" element={<LiveMatch />} />
               <Route path="/login" element={<Login />} />
               {/* <Route path="/signup" element={<Signup />} /> */}
@@ -132,6 +135,14 @@ function App() {
                 element={
                   <PrivateRoute requireSuperAdmin>
                     <AuditLogs />
+                  </PrivateRoute>
+                }
+              />
+              <Route
+                path="/admin/gallery"
+                element={
+                  <PrivateRoute>
+                    <ManageGallery />
                   </PrivateRoute>
                 }
               />
