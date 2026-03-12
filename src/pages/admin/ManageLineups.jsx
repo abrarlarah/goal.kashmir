@@ -5,6 +5,7 @@ import { collection, addDoc, updateDoc, deleteDoc, doc, query, where, getDocs } 
 import { db } from '../../firebase';
 import { useData } from '../../context/DataContext';
 import { useAuth } from '../../context/AuthContext';
+import { logAuditEvent } from '../../utils/auditLogger';
 
 const ManageLineups = () => {
     const { matchId, teamName } = useParams();
@@ -123,6 +124,8 @@ const ManageLineups = () => {
             return;
         }
 
+        const matchLabel = currentMatch ? `${currentMatch.teamA} vs ${currentMatch.teamB}` : selectedMatch;
+
         try {
             if (lineup.id) {
                 // Update existing lineup
@@ -131,15 +134,25 @@ const ManageLineups = () => {
                     bench: lineup.bench,
                     updatedAt: new Date()
                 });
+                logAuditEvent('UPDATE_LINEUP', {
+                    entityType: 'lineup',
+                    entityId: lineup.id,
+                    entityName: `${selectedTeam} — ${matchLabel}`,
+                });
                 setSuccessMessage('Lineup updated successfully!');
             } else {
                 // Save new lineup
-                await addDoc(collection(db, 'lineups'), {
+                const docRef = await addDoc(collection(db, 'lineups'), {
                     matchId: lineup.matchId,
                     teamName: lineup.teamName,
                     starting11: lineup.starting11,
                     bench: lineup.bench,
                     createdAt: new Date()
+                });
+                logAuditEvent('CREATE_LINEUP', {
+                    entityType: 'lineup',
+                    entityId: docRef.id,
+                    entityName: `${selectedTeam} — ${matchLabel}`,
                 });
                 setSuccessMessage('Lineup saved successfully!');
             }

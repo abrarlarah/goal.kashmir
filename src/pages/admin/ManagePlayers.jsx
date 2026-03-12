@@ -9,6 +9,7 @@ import AssetPicker from '../../components/admin/AssetPicker';
 import { registerAsset } from '../../utils/assetRegistry';
 import { calculateAge } from '../../utils/ageUtils';
 import { useAuth } from '../../context/AuthContext';
+import { logAuditEvent } from '../../utils/auditLogger';
 
 // Districts of Jammu and Kashmir
 const DISTRICTS = {
@@ -139,17 +140,27 @@ const ManagePlayers = () => {
         setLoading(true);
         setSuccessMessage('');
 
-        const request = editingId
+        const isEditing = !!editingId;
+        const playerName = formData.name;
+        const playerId = editingId;
+
+        const request = isEditing
             ? updateDoc(doc(db, 'players', editingId), formData)
             : addDoc(collection(db, 'players'), formData);
 
-        request.catch((error) => {
+        request.then((docRef) => {
+            logAuditEvent(isEditing ? 'UPDATE_PLAYER' : 'CREATE_PLAYER', {
+                entityType: 'player',
+                entityId: isEditing ? playerId : docRef?.id,
+                entityName: playerName,
+            });
+        }).catch((error) => {
             console.error("Error saving player: ", error);
             alert("Error saving player: " + error.message);
         });
 
         // Optimistic Update
-        setSuccessMessage(editingId ? 'Player updated successfully!' : 'Player added successfully!');
+        setSuccessMessage(isEditing ? 'Player updated successfully!' : 'Player added successfully!');
 
         setFormData({
             name: '',
@@ -193,8 +204,14 @@ const ManagePlayers = () => {
 
     const handleDelete = async (id) => {
         if (window.confirm('Are you sure you want to delete this player?')) {
+            const player = players.find(p => p.id === id);
             try {
                 await deleteDoc(doc(db, 'players', id));
+                logAuditEvent('DELETE_PLAYER', {
+                    entityType: 'player',
+                    entityId: id,
+                    entityName: player?.name || 'Unknown',
+                });
                 setSuccessMessage('Player deleted successfully!');
                 setTimeout(() => setSuccessMessage(''), 3000);
             } catch (error) {

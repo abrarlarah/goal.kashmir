@@ -8,6 +8,7 @@ import { Upload, X, Image as ImageIcon, Folders, Search, ChevronLeft, ChevronRig
 import AssetPicker from '../../components/admin/AssetPicker';
 import { registerAsset } from '../../utils/assetRegistry';
 import { useAuth } from '../../context/AuthContext';
+import { logAuditEvent } from '../../utils/auditLogger';
 
 const ManageTeams = () => {
     const { teams, tournaments } = useData();
@@ -149,12 +150,28 @@ const ManageTeams = () => {
                     playersDocs.forEach(d => batch.update(d.ref, { team: newName }));
 
                     await batch.commit();
+                    logAuditEvent('UPDATE_TEAM', {
+                        entityType: 'team',
+                        entityId: editingId,
+                        entityName: formData.name,
+                        details: { nameChanged: true, oldName: originalTeam.name, newName: formData.name },
+                    });
                     setSuccessMessage('Team and all associated matches/players updated!');
                 } else {
+                    logAuditEvent('UPDATE_TEAM', {
+                        entityType: 'team',
+                        entityId: editingId,
+                        entityName: formData.name,
+                    });
                     setSuccessMessage('Team updated successfully!');
                 }
             } else {
-                await addDoc(collection(db, 'teams'), dataToSave);
+                const docRef = await addDoc(collection(db, 'teams'), dataToSave);
+                logAuditEvent('CREATE_TEAM', {
+                    entityType: 'team',
+                    entityId: docRef.id,
+                    entityName: formData.name,
+                });
                 setSuccessMessage('Team added successfully!');
             }
 
@@ -196,8 +213,14 @@ const ManageTeams = () => {
 
     const handleDelete = async (id) => {
         if (window.confirm('Are you sure you want to delete this team?')) {
+            const team = teams.find(t => t.id === id);
             try {
                 await deleteDoc(doc(db, 'teams', id));
+                logAuditEvent('DELETE_TEAM', {
+                    entityType: 'team',
+                    entityId: id,
+                    entityName: team?.name || 'Unknown',
+                });
                 setSuccessMessage('Team deleted successfully!');
                 setTimeout(() => setSuccessMessage(''), 3000);
             } catch (error) {

@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
-import { Shield, Trophy, Users, Swords, LayoutList, Newspaper, UserCog, Crown, ShieldCheck, Star } from 'lucide-react';
+import { Shield, Trophy, Users, Swords, LayoutList, Newspaper, UserCog, Crown, ShieldCheck, Star, ScrollText } from 'lucide-react';
 
 const Admin = () => {
   const { isSuperAdmin, isAdmin, isNewsAdmin, userProfile } = useAuth();
@@ -87,6 +87,23 @@ const Admin = () => {
               <h2 className="text-xl font-semibold text-slate-900 dark:text-white">👑 Manage Users</h2>
             </div>
             <p className="text-slate-500 dark:text-gray-400 text-sm">Assign roles and manage admin access</p>
+          </Link>
+        )}
+
+        {/* Super Admin Only: Audit Logs */}
+        {isSuperAdmin && (
+          <Link
+            to="/admin/audit-logs"
+            className="group bg-gradient-to-br from-amber-500/20 to-orange-700/5 border border-amber-500/20 p-6 rounded-2xl shadow-lg hover:scale-[1.02] transition-all duration-300 relative overflow-hidden"
+          >
+            <div className="absolute top-2 right-2">
+              <span className="text-[10px] px-2 py-0.5 bg-amber-400/20 text-amber-400 rounded-full font-black uppercase">Super Admin</span>
+            </div>
+            <div className="flex items-center gap-3 mb-3">
+              <ScrollText className="text-amber-400/70 group-hover:text-amber-400 transition-colors" size={22} />
+              <h2 className="text-xl font-semibold text-slate-900 dark:text-white">📋 Audit Logs</h2>
+            </div>
+            <p className="text-slate-500 dark:text-gray-400 text-sm">View a trail of all admin actions across the platform</p>
           </Link>
         )}
       </div>

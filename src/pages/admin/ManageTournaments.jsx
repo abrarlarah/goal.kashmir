@@ -7,6 +7,7 @@ import { useAuth } from '../../context/AuthContext';
 import { generateKnockoutMatches, generatePoolMatches, generateDualKnockoutMatches, generateLeagueMatches, calcMatchesCount } from '../../utils/bracketGenerator';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Trophy, Calendar, MapPin, Users, Swords, Crown, Plus, Edit3, Trash2, RefreshCw, ChevronDown, CheckCircle, Clock, Flag, X, Shield, Download } from 'lucide-react';
+import { logAuditEvent } from '../../utils/auditLogger';
 
 // Districts of Jammu and Kashmir
 const DISTRICTS = {
@@ -110,12 +111,24 @@ const ManageTournaments = () => {
             let currentTournamentId = editingId;
             if (editingId) {
                 await updateDoc(doc(db, 'tournaments', editingId), tournamentData);
+                logAuditEvent('UPDATE_TOURNAMENT', {
+                    entityType: 'tournament',
+                    entityId: editingId,
+                    entityName: formData.name,
+                });
             } else {
                 if (!tournamentData.createdBy) {
                     tournamentData.createdBy = currentUser?.uid || null;
                 }
                 const docRef = await addDoc(collection(db, 'tournaments'), tournamentData);
                 currentTournamentId = docRef.id;
+
+                logAuditEvent('CREATE_TOURNAMENT', {
+                    entityType: 'tournament',
+                    entityId: currentTournamentId,
+                    entityName: formData.name,
+                    details: { type: formData.type, autoSeed: !!autoSeed, teamsCount: formData.teamsCount },
+                });
 
                 if (autoSeed && formData.teamsCount > 0) {
                     let matches = [];
@@ -162,8 +175,14 @@ const ManageTournaments = () => {
 
     const handleDelete = async (id) => {
         if (window.confirm('Delete this tournament? This action cannot be undone.')) {
+            const tournament = tournaments.find(t => t.id === id);
             try {
                 await deleteDoc(doc(db, 'tournaments', id));
+                logAuditEvent('DELETE_TOURNAMENT', {
+                    entityType: 'tournament',
+                    entityId: id,
+                    entityName: tournament?.name || 'Unknown',
+                });
                 setSuccessMessage('Tournament deleted successfully!');
                 setTimeout(() => setSuccessMessage(''), 3000);
             } catch (error) {

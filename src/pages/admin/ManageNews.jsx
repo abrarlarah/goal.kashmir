@@ -9,6 +9,7 @@ import { Plus, Trash2, Image, Type, Upload, Camera, X, Check, Edit2, Folders } f
 import { cn } from '../../utils/cn';
 import AssetPicker from '../../components/admin/AssetPicker';
 import { registerAsset } from '../../utils/assetRegistry';
+import { logAuditEvent } from '../../utils/auditLogger';
 
 const ManageNews = () => {
     const { isNewsAdmin, isSuperAdmin } = useAuth();
@@ -283,12 +284,22 @@ const ManageNews = () => {
                     ...formData,
                     updatedAt: serverTimestamp()
                 });
+                logAuditEvent('UPDATE_NEWS', {
+                    entityType: 'news',
+                    entityId: editingId,
+                    entityName: formData.title,
+                });
                 alert('News article updated successfully!');
             } else {
                 // Create new document
-                await addDoc(collection(db, 'news'), {
+                const docRef = await addDoc(collection(db, 'news'), {
                     ...formData,
                     createdAt: serverTimestamp()
+                });
+                logAuditEvent('CREATE_NEWS', {
+                    entityType: 'news',
+                    entityId: docRef.id,
+                    entityName: formData.title,
                 });
                 alert('News article added successfully!');
             }
@@ -302,8 +313,14 @@ const ManageNews = () => {
 
     const handleDelete = async (id) => {
         if (window.confirm('Are you sure you want to delete this article?')) {
+            const article = news.find(n => n.id === id);
             try {
                 await deleteDoc(doc(db, 'news', id));
+                logAuditEvent('DELETE_NEWS', {
+                    entityType: 'news',
+                    entityId: id,
+                    entityName: article?.title || 'Unknown',
+                });
                 fetchNews();
                 if (editingId === id) resetForm();
             } catch (error) {

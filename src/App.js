@@ -19,6 +19,7 @@ import ManageLineups from './pages/admin/ManageLineups';
 import ManageNews from './pages/admin/ManageNews'; // Admin News
 import ManageSponsors from './pages/admin/ManageSponsors'; // Admin Sponsors
 import ManageUsers from './pages/admin/ManageUsers'; // Admin User Management
+import AuditLogs from './pages/admin/AuditLogs'; // Admin Audit Logs
 import News from './pages/News'; // Public News
 import NewsDetail from './pages/NewsDetail'; // Public News Detail
 import TournamentDetail from './pages/TournamentDetail';
@@ -123,6 +124,14 @@ function App() {
                 element={
                   <PrivateRoute requireSuperAdmin>
                     <ManageUsers />
+                  </PrivateRoute>
+                }
+              />
+              <Route
+                path="/admin/audit-logs"
+                element={
+                  <PrivateRoute requireSuperAdmin>
+                    <AuditLogs />
                   </PrivateRoute>
                 }
               />

@@ -4,6 +4,7 @@ import { db } from '../../firebase';
 import { useAuth } from '../../context/AuthContext';
 import { Shield, ShieldAlert, ShieldCheck, Users, Search, Crown, UserX, ChevronRight, Newspaper } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
+import { logAuditEvent } from '../../utils/auditLogger';
 
 const ROLE_CONFIG = {
     superadmin: { label: 'Super Admin', color: 'text-yellow-400 bg-yellow-400/10 border-yellow-400/20', icon: Crown },
@@ -56,8 +57,16 @@ const ManageUsers = () => {
         if (!window.confirm(`Change this user's role to "${roleLabel}"?`)) return;
 
         try {
+            const targetUser = users.find(u => u.id === userId);
+            const oldRole = targetUser?.role || null;
             await updateDoc(doc(db, 'users', userId), {
                 role: newRole
+            });
+            logAuditEvent('UPDATE_USER_ROLE', {
+                entityType: 'user',
+                entityId: userId,
+                entityName: targetUser?.displayName || targetUser?.email || 'Unknown',
+                details: { oldRole: oldRole || 'user', newRole: newRole || 'user' },
             });
             setSuccessMessage(`Role updated to ${roleLabel}!`);
             setTimeout(() => setSuccessMessage(''), 3000);
@@ -75,7 +84,13 @@ const ManageUsers = () => {
         if (!window.confirm('Remove this user profile? (This only removes their profile from the database, not their Firebase Auth account.)')) return;
 
         try {
+            const targetUser = users.find(u => u.id === userId);
             await deleteDoc(doc(db, 'users', userId));
+            logAuditEvent('REMOVE_USER', {
+                entityType: 'user',
+                entityId: userId,
+                entityName: targetUser?.displayName || targetUser?.email || 'Unknown',
+            });
             setSuccessMessage('User profile removed.');
             setTimeout(() => setSuccessMessage(''), 3000);
         } catch (error) {

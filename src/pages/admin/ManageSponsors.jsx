@@ -8,6 +8,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Plus, Trash2, Image, Upload, X, Edit2, Link as LinkIcon, Star, CheckCircle, XCircle, Folders } from 'lucide-react';
 import AssetPicker from '../../components/admin/AssetPicker';
 import { registerAsset } from '../../utils/assetRegistry';
+import { logAuditEvent } from '../../utils/auditLogger';
 
 const ManageSponsors = () => {
     const { isAdmin } = useAuth();
@@ -128,10 +129,20 @@ const ManageSponsors = () => {
                     ...formData,
                     updatedAt: serverTimestamp()
                 });
+                logAuditEvent('UPDATE_SPONSOR', {
+                    entityType: 'sponsor',
+                    entityId: editingId,
+                    entityName: formData.name,
+                });
             } else {
-                await addDoc(collection(db, 'sponsors'), {
+                const docRef = await addDoc(collection(db, 'sponsors'), {
                     ...formData,
                     createdAt: serverTimestamp()
+                });
+                logAuditEvent('CREATE_SPONSOR', {
+                    entityType: 'sponsor',
+                    entityId: docRef.id,
+                    entityName: formData.name,
                 });
             }
             resetForm();
@@ -144,8 +155,14 @@ const ManageSponsors = () => {
 
     const handleDelete = async (id) => {
         if (window.confirm('Are you sure you want to delete this sponsor?')) {
+            const sponsor = sponsors.find(s => s.id === id);
             try {
                 await deleteDoc(doc(db, 'sponsors', id));
+                logAuditEvent('DELETE_SPONSOR', {
+                    entityType: 'sponsor',
+                    entityId: id,
+                    entityName: sponsor?.name || 'Unknown',
+                });
                 fetchSponsors();
                 if (editingId === id) resetForm();
             } catch (error) {
@@ -155,10 +172,17 @@ const ManageSponsors = () => {
     };
 
     const toggleActive = async (id, currentStatus) => {
+        const sponsor = sponsors.find(s => s.id === id);
         try {
             const sponsorRef = doc(db, 'sponsors', id);
             await updateDoc(sponsorRef, {
                 active: !currentStatus
+            });
+            logAuditEvent('UPDATE_SPONSOR', {
+                entityType: 'sponsor',
+                entityId: id,
+                entityName: sponsor?.name || 'Unknown',
+                details: { toggled: 'active', newValue: !currentStatus },
             });
             fetchSponsors();
         } catch (error) {

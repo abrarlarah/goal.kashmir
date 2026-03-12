@@ -4,6 +4,7 @@ import { db } from '../../firebase';
 import { useData } from '../../context/DataContext';
 import { useAuth } from '../../context/AuthContext';
 import { ChevronLeft, ChevronRight, ChevronsLeft, ChevronsRight } from 'lucide-react';
+import { logAuditEvent } from '../../utils/auditLogger';
 
 const ManageMatches = () => {
   const { matches, teams, tournaments } = useData();
@@ -75,7 +76,14 @@ const ManageMatches = () => {
       ? updateDoc(doc(db, 'matches', editingId), formData)
       : addDoc(collection(db, 'matches'), formData);
 
-    request.then(() => {
+    request.then((docRef) => {
+      const matchLabel = `${formData.teamA} vs ${formData.teamB}`;
+      logAuditEvent(editingId ? 'UPDATE_MATCH' : 'CREATE_MATCH', {
+        entityType: 'match',
+        entityId: editingId || docRef?.id,
+        entityName: matchLabel,
+        details: { competition: formData.competition, round: formData.round },
+      });
       setSuccessMessage(editingId ? 'Match updated successfully!' : 'Match added successfully!');
       setFormData({
         teamA: '',
@@ -115,8 +123,14 @@ const ManageMatches = () => {
 
   const handleDelete = async (id) => {
     if (window.confirm('Are you sure you want to delete this match?')) {
+      const match = matches.find(m => m.id === id);
       try {
         await deleteDoc(doc(db, 'matches', id));
+        logAuditEvent('DELETE_MATCH', {
+          entityType: 'match',
+          entityId: id,
+          entityName: match ? `${match.teamA} vs ${match.teamB}` : 'Unknown',
+        });
         setSuccessMessage('Match deleted successfully!');
         setTimeout(() => setSuccessMessage(''), 3000);
       } catch (error) {
@@ -143,8 +157,15 @@ const ManageMatches = () => {
   };
 
   const updateMatchStatus = async (id, status) => {
+    const match = matches.find(m => m.id === id);
     try {
       await updateDoc(doc(db, 'matches', id), { status });
+      logAuditEvent('UPDATE_MATCH_STATUS', {
+        entityType: 'match',
+        entityId: id,
+        entityName: match ? `${match.teamA} vs ${match.teamB}` : 'Unknown',
+        details: { newStatus: status },
+      });
       setSuccessMessage(`Match marked as ${status}!`);
       setTimeout(() => setSuccessMessage(''), 3000);
     } catch (error) {
