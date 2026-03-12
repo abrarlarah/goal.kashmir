@@ -4,6 +4,7 @@ import { doc, getDoc } from 'firebase/firestore';
 import { db } from '../firebase';
 import { motion } from 'framer-motion';
 import { Calendar, Tag, ChevronLeft, Share2, Clock, User } from 'lucide-react';
+import { handleShare } from '../utils/shareUtils';
 
 const NewsDetail = () => {
     const { id } = useParams();
@@ -143,9 +144,16 @@ const NewsDetail = () => {
                     className="pt-12 mt-12 border-t border-slate-200/5 dark:border-white/5 flex items-center justify-between"
                 >
                     <div className="flex items-center gap-4">
-                        <button className="flex items-center gap-2 px-4 py-2 bg-white/5 hover:bg-white/10 text-slate-900 dark:text-white rounded-xl transition-colors">
+                        <button 
+                            onClick={() => handleShare(
+                                article.title, 
+                                article.excerpt || `Read this article on Goal Kashmir`, 
+                                `/news/${article.id}`
+                            )}
+                            className="flex items-center gap-2 px-4 py-2 bg-white/5 hover:bg-white/10 text-slate-900 dark:text-white rounded-xl transition-colors"
+                        >
                             <Share2 size={18} />
-                            Share
+                            Share Article
                         </button>
                     </div>
 

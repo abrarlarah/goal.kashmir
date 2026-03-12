@@ -13,11 +13,13 @@ import {
     Activity,
     User as UserIcon,
     Edit2,
-    Clock
+    Clock,
+    Share2
 } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import { useData } from '../context/DataContext';
 import { cn } from '../utils/cn';
+import { handleShare } from '../utils/shareUtils';
 
 const TeamDetail = () => {
     const { id } = useParams();
@@ -118,15 +120,28 @@ const TeamDetail = () => {
                     <span className="font-semibold">Back to Clubs</span>
                 </Link>
 
-                {canEditTeam() && (
+                <div className="flex items-center gap-3">
                     <button
-                        onClick={() => navigate('/admin/teams', { state: { editTeam: team } })}
+                        onClick={() => handleShare(
+                            `${team.name} - Team Profile`,
+                            `Check out ${team.name}'s squad, matches, and stats on Goal Kashmir!`,
+                            `/teams/${team.id}`
+                        )}
                         className="flex items-center gap-2 px-4 py-2 bg-brand-500/10 text-brand-500 hover:bg-brand-500 hover:text-slate-900 dark:text-white rounded-xl text-sm font-bold transition-all shadow-sm"
                     >
-                        <Edit2 size={16} />
-                        Edit Club Details
+                        <Share2 size={16} />
+                        Share
                     </button>
-                )}
+                    {canEditTeam() && (
+                        <button
+                            onClick={() => navigate('/admin/teams', { state: { editTeam: team } })}
+                            className="flex items-center gap-2 px-4 py-2 bg-brand-500/10 text-brand-500 hover:bg-brand-500 hover:text-slate-900 dark:text-white rounded-xl text-sm font-bold transition-all shadow-sm"
+                        >
+                            <Edit2 size={16} />
+                            Edit Club
+                        </button>
+                    )}
+                </div>
             </div>
 
             {/* Match Stats Summary */}

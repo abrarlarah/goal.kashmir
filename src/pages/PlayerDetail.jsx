@@ -16,11 +16,13 @@ import {
     Activity,
     User as UserIcon,
     History,
-    Edit3
+    Edit3,
+    Share2
 } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import { calculateAge } from '../utils/ageUtils';
 import { cn } from '../utils/cn';
+import { handleShare } from '../utils/shareUtils';
 
 const PlayerDetail = () => {
     const { id } = useParams();
@@ -223,15 +225,28 @@ const PlayerDetail = () => {
                     <span className="font-semibold">Back to Players</span>
                 </Link>
 
-                {canEdit && (
+                <div className="flex items-center gap-3">
                     <button
-                        onClick={() => navigate('/admin/players', { state: { editPlayer: player } })}
+                        onClick={() => handleShare(
+                            `${player.name} - Player Profile`,
+                            `Check out ${player.name}'s stats and profile on Goal Kashmir!`,
+                            `/players/${player.id}`
+                        )}
                         className="flex items-center gap-2 px-4 py-2 bg-brand-500/10 text-brand-500 hover:bg-brand-500 hover:text-slate-900 dark:text-white rounded-xl text-sm font-bold transition-all shadow-sm"
                     >
-                        <Edit3 size={16} />
-                        Edit Player Details
+                        <Share2 size={16} />
+                        Share
                     </button>
-                )}
+                    {canEdit && (
+                        <button
+                            onClick={() => navigate('/admin/players', { state: { editPlayer: player } })}
+                            className="flex items-center gap-2 px-4 py-2 bg-brand-500/10 text-brand-500 hover:bg-brand-500 hover:text-slate-900 dark:text-white rounded-xl text-sm font-bold transition-all shadow-sm"
+                        >
+                            <Edit3 size={16} />
+                            Edit Player
+                        </button>
+                    )}
+                </div>
             </div>
 
             {/* Profile Header Card */}
@@ -284,7 +299,13 @@ const PlayerDetail = () => {
                                 <Shield className="text-brand-500" size={20} />
                                 <div>
                                     <span className="text-xs text-slate-500 block">Current Team</span>
-                                    <span className="font-bold">{player.team}</span>
+                                    {team ? (
+                                        <Link to={`/teams/${team.id}`} className="font-bold text-slate-900 dark:text-white hover:text-brand-500 transition-colors block mt-0.5">
+                                            {player.team}
+                                        </Link>
+                                    ) : (
+                                        <span className="font-bold text-slate-900 dark:text-white mt-0.5 block">{player.team}</span>
+                                    )}
                                 </div>
                             </div>
                             <div className="flex items-center gap-3 text-slate-600 dark:text-slate-300">
@@ -465,9 +486,21 @@ const PlayerDetail = () => {
 
                         {/* Tags / Skills */}
                         <div className="flex flex-wrap gap-2 mt-6">
-                            <span className="px-3 py-1 bg-white/5 border border-slate-200/10 dark:border-white/10 rounded-lg text-xs font-medium text-slate-500">Precision Passing</span>
-                            <span className="px-3 py-1 bg-white/5 border border-slate-200/10 dark:border-white/10 rounded-lg text-xs font-medium text-slate-500">Leadership</span>
-                            <span className="px-3 py-1 bg-white/5 border border-slate-200/10 dark:border-white/10 rounded-lg text-xs font-medium text-slate-500">High Stamina</span>
+                            {player.position === 'Forward' && ['Finishing', 'Pace', 'Positioning'].map(t => (
+                                <span key={t} className="px-3 py-1 bg-brand-500/10 text-brand-500 border border-brand-500/20 rounded-lg text-xs font-medium">{t}</span>
+                            ))}
+                            {player.position === 'Midfielder' && ['Vision', 'Passing', 'Stamina'].map(t => (
+                                <span key={t} className="px-3 py-1 bg-brand-500/10 text-brand-500 border border-brand-500/20 rounded-lg text-xs font-medium">{t}</span>
+                            ))}
+                            {player.position === 'Defender' && ['Tackling', 'Strength', 'Aerial'].map(t => (
+                                <span key={t} className="px-3 py-1 bg-brand-500/10 text-brand-500 border border-brand-500/20 rounded-lg text-xs font-medium">{t}</span>
+                            ))}
+                            {player.position === 'Goalkeeper' && ['Reflexes', 'Diving', 'Handling'].map(t => (
+                                <span key={t} className="px-3 py-1 bg-brand-500/10 text-brand-500 border border-brand-500/20 rounded-lg text-xs font-medium">{t}</span>
+                            ))}
+                            {(!player.position || !['Forward', 'Midfielder', 'Defender', 'Goalkeeper'].includes(player.position)) && (
+                                <span className="px-3 py-1 bg-brand-500/10 text-brand-500 border border-brand-500/20 rounded-lg text-xs font-medium">Team Player</span>
+                            )}
                         </div>
                     </motion.div>
                 </div>

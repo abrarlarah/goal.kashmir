@@ -255,7 +255,14 @@ const Players = () => {
                 const display = { ...player, ...edited };
 
                 return (
-                  <tr key={player.id} className="hover:bg-white/5 transition-colors group">
+                  <tr
+                    key={player.id}
+                    onClick={() => !editMode && navigate(`/players/${player.id}`)}
+                    className={cn(
+                      "transition-colors group",
+                      editMode ? "hover:bg-white/5" : "cursor-pointer hover:bg-brand-500/5"
+                    )}
+                  >
                     <td className="px-6 py-4 whitespace-nowrap">
                       <Link to={`/players/${player.id}`} className="flex items-center gap-3">
                         <div className="h-10 w-10 rounded-full bg-slate-100 dark:bg-slate-700 flex items-center justify-center text-xs font-bold text-slate-700 dark:text-slate-300 overflow-hidden border border-slate-200/10 dark:border-white/10 group-hover:border-brand-500/30 transition-colors">
@@ -310,6 +317,7 @@ const Players = () => {
                           className="w-16 bg-black/50 border border-slate-200/10 dark:border-white/10 rounded px-2 py-1 text-slate-900 dark:text-white text-center focus:ring-1 focus:ring-brand-500 outline-none"
                           value={display.matches || 0}
                           onChange={e => handleStatChange(player.id, 'matches', e.target.value)}
+                          onClick={e => e.stopPropagation()}
                         />
                       ) : (
                         <span className="text-sm text-slate-600 dark:text-slate-400">{display.matches}</span>
@@ -323,6 +331,7 @@ const Players = () => {
                           className="w-16 bg-black/50 border border-slate-200/10 dark:border-white/10 rounded px-2 py-1 text-slate-900 dark:text-white text-center focus:ring-1 focus:ring-brand-500 outline-none"
                           value={display.goals || 0}
                           onChange={e => handleStatChange(player.id, 'goals', e.target.value)}
+                          onClick={e => e.stopPropagation()}
                         />
                       ) : (
                         <span className={cn("text-sm font-bold", display.goals > 0 ? "text-brand-400" : "text-slate-600")}>
@@ -338,6 +347,7 @@ const Players = () => {
                           className="w-16 bg-black/50 border border-slate-200/10 dark:border-white/10 rounded px-2 py-1 text-slate-900 dark:text-white text-center focus:ring-1 focus:ring-brand-500 outline-none"
                           value={display.assists || 0}
                           onChange={e => handleStatChange(player.id, 'assists', e.target.value)}
+                          onClick={e => e.stopPropagation()}
                         />
                       ) : (
                         <span className={cn("text-sm font-medium", display.assists > 0 ? "text-blue-400" : "text-slate-600")}>
@@ -361,7 +371,7 @@ const Players = () => {
                       <td className="px-6 py-4 whitespace-nowrap text-right">
                         {canEditPlayer(player) && (
                           <button
-                            onClick={() => navigate('/admin/players', { state: { editPlayer: player } })}
+                            onClick={(e) => { e.stopPropagation(); navigate('/admin/players', { state: { editPlayer: player } }); }}
                             className="p-2 bg-brand-500/10 text-brand-500 hover:bg-brand-500 hover:text-slate-900 dark:text-white rounded-lg transition-all"
                             title="Edit Player Details"
                           >

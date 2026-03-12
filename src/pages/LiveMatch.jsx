@@ -11,7 +11,8 @@ import MatchPredictions from '../components/common/MatchPredictions';
 import MatchTimer from '../components/common/MatchTimer';
 import { cn } from '../utils/cn';
 import { motion } from 'framer-motion';
-import { UserPlus, Settings, Play, Pause, Square, Info, ShieldAlert, Plus, Minus, RotateCcw, Edit3, X, Check, Activity, Shield, Trash2, Clock, Trophy, AlertTriangle } from 'lucide-react';
+import { UserPlus, Settings, Play, Pause, Square, Info, ShieldAlert, Plus, Minus, RotateCcw, Edit3, X, Check, Activity, Shield, Trash2, Clock, Trophy, AlertTriangle, Share2 } from 'lucide-react';
+import { handleShare } from '../utils/shareUtils';
 
 const LiveMatch = () => {
   const { matchId } = useParams();
@@ -586,6 +587,19 @@ const LiveMatch = () => {
             <p className="text-slate-600 dark:text-slate-400 max-w-2xl text-sm md:text-base">
               Track live scores, fixtures and statistics in real-time.
             </p>
+          </div>
+          <div className="flex items-center gap-3">
+              <button
+                  onClick={() => handleShare(
+                      `${match.teamA} vs ${match.teamB}`,
+                      `Check out the match between ${match.teamA} and ${match.teamB} on Goal Kashmir!`,
+                      `/live/${matchId}`
+                  )}
+                  className="flex items-center gap-2 px-5 py-2.5 bg-brand-500/10 hover:bg-brand-500 text-brand-600 dark:text-brand-400 hover:text-slate-900 dark:text-white rounded-xl font-bold transition-all"
+              >
+                  <Share2 size={18} />
+                  Share Match
+              </button>
           </div>
         </div>
       </motion.div>
