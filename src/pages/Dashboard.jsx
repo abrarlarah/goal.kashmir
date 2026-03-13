@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useMemo } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useData } from '../context/DataContext';
 import { calculateStandings } from '../utils/soccerUtils';
 import LineupDisplay from '../components/common/LineupDisplay';
@@ -18,6 +18,7 @@ const DISTRICTS = {
 };
 
 const Dashboard = () => {
+  const navigate = useNavigate();
   const { isAdmin, isSuperAdmin, currentUser } = useAuth();
   const { matches, players, tournaments, lineups, teams, loading } = useData();
   const [dashboardCompetitionId, setDashboardCompetitionId] = useState('All');
@@ -113,6 +114,26 @@ const Dashboard = () => {
   const getMatchLineups = (matchId) => lineups.filter(l => l.matchId === matchId);
   const getTeamInfo = (teamName) => teams.find(t => t.name === teamName) || {};
   const getTournamentId = (name) => tournaments.find(t => t.name === name)?.id;
+  const getTeamId = (name) => teams.find(t => t.name === name)?.id;
+
+  const handleTeamClick = (e, teamName) => {
+    e.preventDefault();
+    e.stopPropagation();
+    const tid = getTeamId(teamName);
+    if (tid) navigate(`/teams/${tid}`);
+  };
+
+  // Global match numbers: sort ALL matches by date ascending and assign 1, 2, 3...
+  const globalMatchNumbers = useMemo(() => {
+    const sorted = [...matches].sort((a, b) => {
+      const dateA = new Date(`${a.date || '2000-01-01'}T${a.time || '00:00'}`);
+      const dateB = new Date(`${b.date || '2000-01-01'}T${b.time || '00:00'}`);
+      return dateA - dateB;
+    });
+    const map = {};
+    sorted.forEach((m, idx) => { map[m.id] = idx + 1; });
+    return map;
+  }, [matches]);
 
   const today = new Date().toISOString().split('T')[0];
   const nextWeek = new Date(); nextWeek.setDate(nextWeek.getDate() + 7);
@@ -255,8 +276,9 @@ const Dashboard = () => {
                       <div className="p-3 sm:p-5 relative z-10">
                         {/* Status bar with Actions - Single Line Layout */}
                         <div className="flex flex-row justify-between items-center gap-1.5 sm:gap-2 mb-3 bg-white/60 dark:bg-slate-800/60 p-1.5 sm:p-2.5 rounded-xl border border-slate-200/80 dark:border-white/5 shadow-inner dark:shadow-none">
-                          {/* Left: Status */}
-                          <div className="flex items-center flex-shrink-0">
+                          {/* Left: Match # + Status */}
+                          <div className="flex items-center gap-1.5 flex-shrink-0">
+                            <span className="px-1.5 py-0.5 rounded-md bg-brand-500/10 text-brand-500 dark:text-brand-400 text-[8px] sm:text-[9px] font-black uppercase tracking-wider border border-brand-500/20">{globalMatchNumbers[match.id]}</span>
                             {match.status === 'halftime' ? (
                               <span className="px-1.5 py-0.5 sm:px-2.5 sm:py-1 rounded-md bg-orange-500/20 text-orange-400 text-[9px] sm:text-[10px] font-black uppercase tracking-widest border border-orange-500/30 flex items-center gap-1 sm:gap-1.5 shadow-[0_0_10px_rgba(249,115,22,0.2)]">
                                 Half Time
@@ -301,17 +323,33 @@ const Dashboard = () => {
 
                         {/* Scoreboard */}
                         <div className="flex items-center justify-center gap-3 sm:gap-6 w-full max-w-sm mx-auto">
-                          <div className="flex-1 flex flex-col items-center gap-1.5 min-w-0">
-                            <TeamLogo teamName={match.teamA} size="md" />
-                            <span className="text-xs font-bold text-slate-900 dark:text-white text-center truncate w-full">{match.teamA}</span>
-                          </div>
+                          {getTeamId(match.teamA) ? (
+                            <Link to={`/teams/${getTeamId(match.teamA)}`} className="flex-1 flex flex-col items-center gap-1.5 min-w-0 group/team cursor-pointer">
+                              <div className="group-hover/team:scale-110 transition-transform"><TeamLogo teamName={match.teamA} size="md" /></div>
+                              <span className="text-xs font-bold text-slate-900 dark:text-white text-center truncate w-full group-hover/team:text-brand-500 transition-colors">{match.teamA}</span>
+                            </Link>
+                          ) : (
+                            <div className="flex-1 flex flex-col items-center gap-1.5 min-w-0">
+                              <TeamLogo teamName={match.teamA} size="md" />
+                              <span className="text-xs font-bold text-slate-900 dark:text-white text-center truncate w-full">{match.teamA}</span>
+                            </div>
+                          )}
+
                           <div className="px-3 sm:px-4 py-1.5 bg-slate-100/80 dark:bg-black/40 rounded-xl border border-slate-200/80 dark:border-white/5 backdrop-blur-md flex-shrink-0">
                             <span className="font-impact text-xl sm:text-3xl tracking-wider text-slate-900 dark:text-white">{match.scoreA}<span className="text-slate-600 mx-1 sm:mx-2">-</span>{match.scoreB}</span>
                           </div>
-                          <div className="flex-1 flex flex-col items-center gap-1.5 min-w-0">
-                            <TeamLogo teamName={match.teamB} size="md" />
-                            <span className="text-xs font-bold text-slate-900 dark:text-white text-center truncate w-full">{match.teamB}</span>
-                          </div>
+
+                          {getTeamId(match.teamB) ? (
+                            <Link to={`/teams/${getTeamId(match.teamB)}`} className="flex-1 flex flex-col items-center gap-1.5 min-w-0 group/team cursor-pointer">
+                              <div className="group-hover/team:scale-110 transition-transform"><TeamLogo teamName={match.teamB} size="md" /></div>
+                              <span className="text-xs font-bold text-slate-900 dark:text-white text-center truncate w-full group-hover/team:text-brand-500 transition-colors">{match.teamB}</span>
+                            </Link>
+                          ) : (
+                            <div className="flex-1 flex flex-col items-center gap-1.5 min-w-0">
+                              <TeamLogo teamName={match.teamB} size="md" />
+                              <span className="text-xs font-bold text-slate-900 dark:text-white text-center truncate w-full">{match.teamB}</span>
+                            </div>
+                          )}
                         </div>
                         
                         {/* Goal Events Display */}
@@ -372,29 +410,30 @@ const Dashboard = () => {
             <h2 className="text-lg sm:text-xl font-display font-black text-slate-900 dark:text-white drop-shadow-sm mb-3 sm:mb-4 flex items-center gap-2"><Calendar className="text-brand-400" size={20} /> Upcoming</h2>
             <div className="space-y-2.5 max-h-[280px] overflow-y-auto pr-1 scrollbar-thin scrollbar-thumb-white/10 scrollbar-track-transparent">
               {upcomingMatches.length > 0 ? upcomingMatches.map(match => (
-                <Link to={`/live/${match.id}`} key={match.id} className="group block">
+                <div onClick={() => navigate(`/live/${match.id}`)} key={match.id} className="group block cursor-pointer">
                   <div className="flex items-center gap-3 p-3 sm:p-4 rounded-xl bg-gradient-to-r from-white to-slate-50 dark:from-[#0f172a] dark:to-[#020617] ring-1 ring-slate-200/80 dark:ring-white/5 hover:shadow-lg hover:ring-2 hover:ring-brand-500/30 dark:hover:shadow-cyan-500/10 transition-all shadow-sm dark:shadow-md">
                     {/* Date */}
                     <div className="flex-shrink-0 w-12 text-center px-1 py-1.5 bg-slate-100/50 dark:bg-white/5 rounded-lg border border-slate-200/50 dark:border-white/5">
+                      <div className="text-[8px] font-black text-brand-500 dark:text-brand-400">{globalMatchNumbers[match.id]}</div>
                       <div className="text-[10px] font-bold text-brand-500 dark:text-brand-400 uppercase">{match.date ? new Date(match.date).toLocaleDateString('en-US', { month: 'short' }) : 'TBA'}</div>
                       <div className="text-lg font-bold text-slate-900 dark:text-white leading-tight">{match.date ? new Date(match.date).getDate() : '-'}</div>
                       <div className="text-[9px] text-slate-500 dark:text-slate-400">{match.time || 'TBD'}</div>
                     </div>
                     {/* Teams */}
                     <div className="flex-1 min-w-0 flex items-center gap-2">
-                      <div className="flex-1 flex items-center gap-2 justify-end min-w-0">
-                        <span className="text-xs sm:text-sm font-semibold text-slate-700 dark:text-slate-200 truncate">{match.teamA}</span>
-                        <TeamLogo teamName={match.teamA} size="sm" />
+                      <div onClick={(e) => handleTeamClick(e, match.teamA)} className="flex-1 flex items-center gap-2 justify-end min-w-0 hover:text-brand-500 transition-colors group/tea">
+                        <span className="text-xs sm:text-sm font-semibold text-slate-700 dark:text-slate-200 truncate group-hover/tea:text-brand-500 transition-colors">{match.teamA}</span>
+                        <div className="group-hover/tea:scale-110 transition-transform"><TeamLogo teamName={match.teamA} size="sm" /></div>
                        </div>
                        <span className="px-2 py-0.5 bg-slate-100 dark:bg-white/5 rounded text-[10px] font-bold text-slate-500 flex-shrink-0 border border-slate-200/50 dark:border-transparent">VS</span>
-                       <div className="flex-1 flex items-center gap-2 min-w-0">
-                         <TeamLogo teamName={match.teamB} size="sm" />
-                         <span className="text-xs sm:text-sm font-semibold text-slate-700 dark:text-slate-200 truncate">{match.teamB}</span>
+                       <div onClick={(e) => handleTeamClick(e, match.teamB)} className="flex-1 flex items-center gap-2 min-w-0 hover:text-brand-500 transition-colors group/tea">
+                         <div className="group-hover/tea:scale-110 transition-transform"><TeamLogo teamName={match.teamB} size="sm" /></div>
+                         <span className="text-xs sm:text-sm font-semibold text-slate-700 dark:text-slate-200 truncate group-hover/tea:text-brand-500 transition-colors">{match.teamB}</span>
                        </div>
                      </div>
                      <ChevronRight size={14} className="text-slate-400 dark:text-slate-600 group-hover:text-brand-500 dark:group-hover:text-brand-400 flex-shrink-0 transition-colors" />
                    </div>
-                 </Link>
+                 </div>
               )) : <div className="text-slate-500 text-sm text-center py-8">No upcoming matches scheduled.</div>}
             </div>
           </motion.section>
@@ -404,25 +443,28 @@ const Dashboard = () => {
             <h2 className="text-lg sm:text-xl font-display font-black text-slate-900 dark:text-white drop-shadow-sm mb-3 sm:mb-4 flex items-center gap-2"><Clock className="text-slate-500 dark:text-slate-400" size={20} /> Recent Results</h2>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               {finishedMatches.length > 0 ? finishedMatches.map(match => (
-                <Link to={`/live/${match.id}`} key={match.id} className="block group">
+                <div onClick={() => navigate(`/live/${match.id}`)} key={match.id} className="block group cursor-pointer">
                   <div className="p-3.5 sm:p-4 rounded-xl bg-gradient-to-br from-white to-slate-50 dark:from-[#0f172a] dark:to-[#020617] ring-1 ring-slate-200/80 dark:ring-white/5 hover:shadow-lg hover:ring-2 hover:ring-brand-500/30 dark:hover:shadow-cyan-500/10 hover:-translate-y-0.5 transition-all duration-300 shadow-sm dark:shadow-md">
                     <div className="flex justify-between text-[10px] text-slate-500 mb-2.5">
-                      <span className="text-brand-400 font-bold">{match.competition}</span>
+                      <div className="flex items-center gap-1.5">
+                        <span className="px-1.5 py-0.5 rounded bg-brand-500/10 text-brand-500 dark:text-brand-400 text-[8px] font-black border border-brand-500/20">{globalMatchNumbers[match.id]}</span>
+                        <span className="text-brand-400 font-bold">{match.competition}</span>
+                      </div>
                       <span>{match.date && new Date(match.date).toLocaleDateString()}</span>
                     </div>
                     <div className="space-y-1.5">
                       <div className="flex justify-between items-center">
-                        <div className="flex items-center gap-2"><TeamLogo teamName={match.teamA} size="sm" /><span className={cn("text-xs sm:text-sm font-semibold", match.scoreA > match.scoreB ? "text-slate-900 dark:text-white" : "text-slate-500")}>{match.teamA}</span></div>
+                        <div onClick={(e) => handleTeamClick(e, match.teamA)} className="flex items-center gap-2 group/tea hover:text-brand-500 transition-colors"><div className="group-hover/tea:scale-110 transition-transform"><TeamLogo teamName={match.teamA} size="sm" /></div><span className={cn("text-xs sm:text-sm font-semibold group-hover/tea:text-brand-500 transition-colors", match.scoreA > match.scoreB ? "text-slate-900 dark:text-white" : "text-slate-500")}>{match.teamA}</span></div>
                         <span className={cn("text-sm font-bold px-2 py-0.5 rounded", match.scoreA > match.scoreB ? "bg-brand-500/15 text-brand-400" : "bg-white/5 text-slate-500")}>{match.scoreA}</span>
                       </div>
                       <div className="flex justify-between items-center">
-                        <div className="flex items-center gap-2"><TeamLogo teamName={match.teamB} size="sm" /><span className={cn("text-xs sm:text-sm font-semibold", match.scoreB > match.scoreA ? "text-slate-900 dark:text-white" : "text-slate-500")}>{match.teamB}</span></div>
+                        <div onClick={(e) => handleTeamClick(e, match.teamB)} className="flex items-center gap-2 group/tea hover:text-brand-500 transition-colors"><div className="group-hover/tea:scale-110 transition-transform"><TeamLogo teamName={match.teamB} size="sm" /></div><span className={cn("text-xs sm:text-sm font-semibold group-hover/tea:text-brand-500 transition-colors", match.scoreB > match.scoreA ? "text-slate-900 dark:text-white" : "text-slate-500")}>{match.teamB}</span></div>
                         <span className={cn("text-sm font-bold px-2 py-0.5 rounded", match.scoreB > match.scoreA ? "bg-brand-500/15 text-brand-400" : "bg-white/5 text-slate-500")}>{match.scoreB}</span>
                       </div>
                     </div>
                     <div className="mt-2.5 pt-2 border-t border-slate-200/5 dark:border-white/5 text-center"><span className="text-[10px] font-bold text-brand-400/70 uppercase tracking-widest group-hover:text-brand-400 transition-colors">Match Report →</span></div>
                   </div>
-                </Link>
+                </div>
               )) : <div className="text-slate-500 text-sm">No recent matches.</div>}
             </div>
           </motion.section>
@@ -446,17 +488,17 @@ const Dashboard = () => {
               ) : topTeams.length > 0 ? (
                 <div className="space-y-1">
                   {topTeams.map((team, idx) => (
-                    <div key={team.id} className="flex items-center justify-between p-2.5 rounded-lg hover:bg-white/5 transition-colors">
+                    <Link to={`/teams/${team.id}`} key={team.id} className="flex items-center justify-between p-2.5 rounded-lg hover:bg-white/5 transition-colors group">
                       <div className="flex items-center gap-2.5 flex-1 min-w-0 pr-2">
                         <span className={cn("text-xs font-bold w-5 text-center shrink-0", idx === 0 ? "text-yellow-500" : idx === 1 ? "text-slate-400 dark:text-slate-300" : idx === 2 ? "text-amber-700" : "text-slate-400")}>{idx + 1}</span>
-                        <div className="h-6 w-6 rounded-full bg-slate-200/50 dark:bg-white/10 flex items-center justify-center overflow-hidden border border-slate-200/80 dark:border-white/5 shrink-0">{team.logoUrl ? <img src={team.logoUrl} alt="" className="h-full w-full object-contain p-0.5" /> : <span className="text-[8px] text-slate-500">{team.name.substring(0, 2)}</span>}</div>
-                        <span className="text-xs sm:text-sm font-medium text-slate-900 dark:text-slate-200 truncate">{team.name}</span>
+                        <div className="h-6 w-6 rounded-full bg-slate-200/50 dark:bg-white/10 flex items-center justify-center overflow-hidden border border-slate-200/80 dark:border-white/5 shrink-0 group-hover:scale-110 transition-transform">{team.logoUrl ? <img src={team.logoUrl} alt="" className="h-full w-full object-contain p-0.5" /> : <span className="text-[8px] text-slate-500">{team.name.substring(0, 2)}</span>}</div>
+                        <span className="text-xs sm:text-sm font-medium text-slate-900 dark:text-slate-200 truncate group-hover:text-brand-400 transition-colors">{team.name}</span>
                       </div>
                       <div className="flex items-center gap-3 text-xs shrink-0">
                         <span className="text-slate-500 w-5 text-center">{team.played}</span>
-                        <span className="font-bold text-slate-900 dark:text-white w-6 text-right">{team.points}</span>
+                        <span className="font-bold text-slate-900 dark:text-white w-6 text-right group-hover:text-brand-400 transition-colors">{team.points}</span>
                       </div>
-                    </div>
+                    </Link>
                   ))}
                 </div>
               ) : <div className="text-slate-500 text-xs text-center py-4">No standings data.</div>}

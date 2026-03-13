@@ -62,7 +62,7 @@ const Gallery = () => {
     }
 
     return (
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-12 space-y-8 min-h-screen">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 pt-24 md:py-12 space-y-8 min-h-screen">
             
             {/* Header */}
             <motion.div 
@@ -87,10 +87,10 @@ const Gallery = () => {
                     <select
                         value={filter}
                         onChange={(e) => setFilter(e.target.value)}
-                        className="w-full appearance-none bg-slate-100 dark:bg-slate-800/50 border border-slate-200/50 dark:border-white/5 text-slate-900 dark:text-white text-sm font-bold rounded-xl px-5 py-3 pr-10 focus:outline-none focus:ring-2 focus:ring-brand-500 shadow-sm cursor-pointer transition-colors"
+                        className="w-full bg-white/90 dark:bg-white/10 backdrop-blur-md border border-slate-200/80 dark:border-white/20 hover:border-brand-400 dark:hover:border-white/30 rounded-xl pl-4 pr-10 py-2.5 text-sm font-bold text-slate-900 dark:text-white focus:ring-2 focus:ring-brand-500 outline-none transition-all cursor-pointer appearance-none shadow-sm dark:shadow-lg [&>option]:text-slate-900"
                     >
                         {categories.map(cat => (
-                            <option key={cat.id} value={cat.id} className="bg-white dark:bg-slate-800">
+                            <option key={cat.id} value={cat.id}>
                                 {cat.label}
                             </option>
                         ))}

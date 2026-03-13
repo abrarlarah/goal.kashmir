@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { NavLink, Link, useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Menu, X, Trophy, Shield, Users, BarChart2, LayoutDashboard, LogOut, ChevronRight, User, Newspaper, Search, Camera } from 'lucide-react';
+import { Menu, X, Trophy, Shield, Users, BarChart2, LayoutDashboard, LogOut, ChevronRight, User, Newspaper, Search, Camera, Calendar } from 'lucide-react';
 import { cn } from '../../utils/cn';
 import ThemeToggle from './ThemeToggle';
 
@@ -34,6 +34,7 @@ const Navbar = () => {
 
   const navItems = [
     { name: 'Dashboard', path: '/', icon: LayoutDashboard },
+    { name: 'Fixtures', path: '/fixtures', icon: Calendar },
     { name: 'News', path: '/news', icon: Newspaper },
     { name: 'Tournaments', path: '/tournaments', icon: Trophy },
     { name: 'Teams', path: '/teams', icon: Shield },

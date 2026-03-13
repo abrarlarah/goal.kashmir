@@ -7,6 +7,7 @@ import Tournaments from './pages/Tournaments';
 import Teams from './pages/Teams';
 import Players from './pages/Players';
 import Leaderboard from './pages/Leaderboard';
+import Fixtures from './pages/Fixtures';
 import LiveMatch from './pages/LiveMatch';
 import Login from './pages/auth/Login';
 // import Signup from './pages/auth/Signup';
@@ -49,6 +50,7 @@ function App() {
               <Route path="/teams/:id" element={<TeamDetail />} />
               <Route path="/players" element={<Players />} />
               <Route path="/players/:id" element={<PlayerDetail />} />
+              <Route path="/fixtures" element={<Fixtures />} />
               <Route path="/leaderboard" element={<Leaderboard />} />
               <Route path="/news" element={<News />} />
               <Route path="/news/:id" element={<NewsDetail />} />
