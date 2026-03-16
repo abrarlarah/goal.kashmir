@@ -821,13 +821,15 @@ const ManageMatches = () => {
                   >
                     <Edit3 size={14} /> Edit
                   </button>
-                  <button
-                    onClick={() => handleDelete(match.id)}
-                    className="px-3.5 py-2.5 rounded-xl bg-red-500/10 hover:bg-red-500/20 border border-red-500/20 text-red-500 text-sm font-bold transition-all flex items-center justify-center"
-                    title="Delete Match"
-                  >
-                    <Trash2 size={16} />
-                  </button>
+                  {isSuperAdmin && (
+                    <button
+                      onClick={() => handleDelete(match.id)}
+                      className="px-3.5 py-2.5 rounded-xl bg-red-500/10 hover:bg-red-500/20 border border-red-500/20 text-red-500 text-sm font-bold transition-all flex items-center justify-center"
+                      title="Delete Match"
+                    >
+                      <Trash2 size={16} />
+                    </button>
+                  )}
                 </div>
               </div>
             </motion.div>

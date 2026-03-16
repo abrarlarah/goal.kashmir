@@ -570,12 +570,14 @@ const ManageNews = () => {
                                                 >
                                                     <Edit2 size={18} />
                                                 </button>
-                                                <button
-                                                    onClick={() => handleDelete(item.id)}
-                                                    className="text-slate-500 hover:text-red-500 p-2 transition-colors"
-                                                >
-                                                    <Trash2 size={18} />
-                                                </button>
+                                                {isSuperAdmin && (
+                                                    <button
+                                                        onClick={() => handleDelete(item.id)}
+                                                        className="text-slate-500 hover:text-red-500 p-2 transition-colors"
+                                                    >
+                                                        <Trash2 size={18} />
+                                                    </button>
+                                                )}
                                             </div>
                                         </div>
                                         <p className="text-slate-600 dark:text-slate-400 text-sm mt-2 line-clamp-2">{item.excerpt}</p>

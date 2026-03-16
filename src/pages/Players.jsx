@@ -144,7 +144,7 @@ const Players = () => {
               </select>
             </div>
 
-            {isSuperAdmin && (
+            {(isAdmin || isSuperAdmin) && (
               <Link to="/admin/players" className="flex items-center gap-2 px-5 py-2.5 bg-brand-600 hover:bg-brand-500 text-slate-900 dark:text-white rounded-xl text-sm font-semibold transition-all shadow-lg shadow-brand-500/20 hover:scale-105 active:scale-95">
                 <Plus size={18} /> Add Player
               </Link>

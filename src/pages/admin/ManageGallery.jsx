@@ -406,12 +406,14 @@ const ManageGallery = () => {
                                                     >
                                                         <Edit2 size={14} />
                                                     </button>
-                                                    <button
-                                                        onClick={() => handleDelete(item.id, item.title)}
-                                                        className="p-1.5 bg-black/50 text-white hover:text-red-500 rounded-lg transition-colors"
-                                                    >
-                                                        <Trash2 size={14} />
-                                                    </button>
+                                                    {isSuperAdmin && (
+                                                        <button
+                                                            onClick={() => handleDelete(item.id, item.title)}
+                                                            className="p-1.5 bg-black/50 text-white hover:text-red-500 rounded-lg transition-colors"
+                                                        >
+                                                            <Trash2 size={14} />
+                                                        </button>
+                                                    )}
                                                 </>
                                             )}
                                         </div>

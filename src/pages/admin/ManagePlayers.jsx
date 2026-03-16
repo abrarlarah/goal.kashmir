@@ -4,7 +4,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage';
 import { db, storage } from '../../firebase';
 import { useData } from '../../context/DataContext';
-import { Upload, X, User, Image as ImageIcon, Folders, Search, Filter, Edit3, ChevronLeft, ChevronRight, ChevronsLeft, ChevronsRight, Download } from 'lucide-react';
+import { Upload, X, User, Image as ImageIcon, Folders, Search, Filter, Edit3, ChevronLeft, ChevronRight, ChevronsLeft, ChevronsRight, Download, MapPin } from 'lucide-react';
 import AssetPicker from '../../components/admin/AssetPicker';
 import { registerAsset } from '../../utils/assetRegistry';
 import { calculateAge } from '../../utils/ageUtils';
@@ -323,299 +323,345 @@ const ManagePlayers = () => {
             )}
 
             {/* Form */}
-            <div className="rounded-2xl bg-gradient-to-br from-white to-slate-50 dark:from-[#0f172a] dark:to-[#020617] ring-1 ring-slate-200/80 dark:ring-white/5 overflow-hidden shadow-xl dark:shadow-2xl dark:shadow-brand-500/5 transition-all p-6 mb-8">
-                <h3 className="text-xl mb-4 font-bold">{editingId ? 'Edit Player' : 'Add New Player'}</h3>
-                <form onSubmit={handleSubmit} className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-                    {/* Player Photo Upload */}
-                    <div className="lg:col-span-4 flex flex-col items-center p-4 border-2 border-dashed border-gray-600 rounded-xl bg-slate-100/30 dark:bg-gray-700/30">
-                        {formData.photoUrl ? (
-                            <div className="relative">
-                                <img src={formData.photoUrl} alt="Preview" className="w-24 h-24 object-cover rounded-full border-2 border-brand-500" />
-                                <button
-                                    type="button"
-                                    onClick={removePhoto}
-                                    className="absolute -top-1 -right-1 p-1 bg-red-500 rounded-full text-slate-900 dark:text-white shadow-lg hover:bg-red-600"
-                                >
-                                    <X size={12} />
-                                </button>
-                            </div>
-                        ) : (
-                            <div className="flex flex-col items-center gap-4">
-                                <label className="flex flex-col items-center cursor-pointer group">
-                                    <div className="w-20 h-20 rounded-full bg-slate-100 dark:bg-gray-700 flex items-center justify-center text-slate-500 dark:text-gray-400 group-hover:bg-gray-600 transition-colors">
-                                        {uploading ? (
-                                            <div className="flex flex-col items-center">
-                                                <div className="w-8 h-8 border-2 border-brand-500 border-t-transparent animate-spin rounded-full mb-1"></div>
-                                                <span className="text-[10px] text-brand-400">{Math.round(uploadProgress)}%</span>
-                                            </div>
-                                        ) : (
-                                            <User size={32} />
-                                        )}
+            <div className="rounded-3xl bg-white dark:bg-[#0B1120] border border-slate-200/50 dark:border-white/5 shadow-2xl dark:shadow-brand-500/5 overflow-hidden transition-all mb-10">
+                <div className="bg-gradient-to-r from-violet-600 via-fuchsia-500 to-pink-500 p-6 sm:p-8 relative overflow-hidden">
+                    <div className="absolute top-0 right-0 w-64 h-64 bg-white/10 rounded-full blur-3xl -mr-20 -mt-20 pointer-events-none"></div>
+                    <div className="relative z-10 flex items-center gap-4">
+                        <div className="p-3 bg-white/20 rounded-2xl backdrop-blur-sm border border-white/20 shadow-lg">
+                            <User className="text-white h-7 w-7" />
+                        </div>
+                        <div>
+                            <h3 className="text-2xl font-black text-white tracking-tight drop-shadow-sm">
+                                {editingId ? 'Edit Player Details' : 'Register New Player'}
+                            </h3>
+                            <p className="text-white/90 mt-1 text-sm font-medium">Add a player to the registry database and manage statistics.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div className="p-6 sm:p-8 bg-slate-50/50 dark:bg-transparent">
+                    <form onSubmit={handleSubmit} className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-x-8 gap-y-6">
+                        {/* Player Photo Upload */}
+                        <div className="lg:col-span-4">
+                            <label className="text-sm font-bold text-slate-700 dark:text-gray-300 block mb-3 uppercase tracking-wider">Player Portrait</label>
+                            <div className="flex flex-col sm:flex-row items-center gap-6 p-6 border-[1.5px] border-dashed border-slate-300 dark:border-white/10 rounded-2xl bg-white dark:bg-white/5 transition-all hover:border-violet-500/50 hover:bg-violet-50/50 dark:hover:bg-violet-500/5 group shadow-sm">
+                                {formData.photoUrl ? (
+                                    <div className="relative shrink-0">
+                                        <div className="absolute inset-0 bg-fuchsia-500/20 blur-xl rounded-full opacity-100 transition-opacity"></div>
+                                        <img src={formData.photoUrl} alt="Preview" className="w-28 h-28 object-cover rounded-full bg-white dark:bg-gray-800 p-1.5 shadow-xl relative z-10 border border-slate-100 dark:border-white/5 mx-auto" />
+                                        <button
+                                            type="button"
+                                            onClick={removePhoto}
+                                            className="absolute top-0 right-0 p-1.5 bg-red-500 rounded-full text-white shadow-lg hover:bg-red-600 transition-all z-20 hover:scale-110"
+                                            title="Remove Photo"
+                                        >
+                                            <X size={14} />
+                                        </button>
                                     </div>
-                                    <span className="mt-2 text-sm text-slate-500 dark:text-gray-400">
-                                        {uploading ? 'Uploading...' : 'Upload Profile Picture'}
-                                    </span>
-                                    <input type="file" className="hidden" accept="image/*" onChange={handlePhotoUpload} disabled={uploading} />
-                                </label>
+                                ) : (
+                                    <div className="flex-1 w-full flex flex-col items-center justify-center py-2">
+                                        <label className="flex flex-col items-center justify-center cursor-pointer group/upload w-full">
+                                            <div className="w-20 h-20 rounded-full bg-slate-100 dark:bg-gray-800 shadow-inner border border-slate-200/50 dark:border-white/5 flex items-center justify-center text-violet-500 group-hover/upload:scale-110 group-hover/upload:bg-violet-100 dark:group-hover/upload:bg-violet-500/20 transition-all duration-300">
+                                                {uploading ? (
+                                                    <div className="flex flex-col items-center">
+                                                        <div className="w-6 h-6 border-2 border-violet-500 border-t-transparent animate-spin rounded-full"></div>
+                                                    </div>
+                                                ) : (
+                                                    <User size={32} className="drop-shadow-sm" />
+                                                )}
+                                            </div>
+                                            <span className="mt-4 font-semibold text-slate-700 dark:text-gray-300 group-hover/upload:text-violet-600 dark:group-hover/upload:text-violet-400 transition-colors">
+                                                {uploading ? `Uploading ${Math.round(uploadProgress)}%...` : 'Click to Upload Portrait'}
+                                            </span>
+                                            <span className="text-xs text-slate-500 mt-1 font-medium bg-slate-100 dark:bg-gray-800 px-3 py-1 rounded-full">PNG, JPG up to 5MB</span>
+                                            <input type="file" className="hidden" accept="image/*" onChange={handlePhotoUpload} disabled={uploading} />
+                                        </label>
+                                    </div>
+                                )}
 
-                                <div className="flex items-center gap-3">
-                                    <div className="h-[1px] w-12 bg-gray-600"></div>
-                                    <span className="text-xs text-slate-500 dark:text-gray-500 uppercase font-bold">OR</span>
-                                    <div className="h-[1px] w-12 bg-gray-600"></div>
-                                </div>
+                                {!formData.photoUrl && (
+                                    <>
+                                        <div className="hidden sm:flex flex-col items-center justify-center px-4">
+                                            <div className="w-px h-10 bg-slate-200 dark:bg-white/10"></div>
+                                            <span className="my-3 text-xs font-black text-slate-400 uppercase tracking-widest bg-white dark:bg-[#0B1120] px-2 py-1 rounded-md shadow-sm border border-slate-100 dark:border-white/5">OR</span>
+                                            <div className="w-px h-10 bg-slate-200 dark:bg-white/10"></div>
+                                        </div>
+                                        <div className="flex sm:hidden items-center justify-center w-full px-4 gap-4 py-2">
+                                            <div className="h-px w-full bg-slate-200 dark:bg-white/10"></div>
+                                            <span className="text-xs font-black text-slate-400 uppercase tracking-widest bg-white dark:bg-[#0B1120] px-2 py-1 rounded-md shadow-sm border border-slate-100 dark:border-white/5">OR</span>
+                                            <div className="h-px w-full bg-slate-200 dark:bg-white/10"></div>
+                                        </div>
 
-                                <button
-                                    type="button"
-                                    onClick={() => setShowAssetPicker(true)}
-                                    className="flex items-center gap-2 px-4 py-2 bg-brand-500/10 hover:bg-brand-500/20 text-brand-400 border border-brand-500/20 rounded-xl text-sm font-semibold transition-all"
+                                        <div className="flex-1 flex justify-center w-full">
+                                            <button
+                                                type="button"
+                                                onClick={() => setShowAssetPicker(true)}
+                                                className="flex items-center justify-center gap-2 w-full sm:w-auto px-6 py-3.5 bg-white dark:bg-gray-800 hover:bg-violet-50 hover:text-violet-600 dark:hover:bg-violet-500/10 text-slate-700 dark:text-white border border-slate-200 dark:border-white/10 hover:border-violet-500/30 rounded-xl font-bold shadow-sm transition-all hover:scale-[1.02] active:scale-95 group/btn"
+                                            >
+                                                <Folders size={20} className="text-violet-500 group-hover/btn:scale-110 transition-transform" />
+                                                Choose from Directory
+                                            </button>
+                                        </div>
+                                    </>
+                                )}
+                            </div>
+                        </div>
+
+                        <AssetPicker
+                            isOpen={showAssetPicker}
+                            onClose={() => setShowAssetPicker(false)}
+                            onSelect={(url) => setFormData(prev => ({ ...prev, photoUrl: url }))}
+                            category="Players"
+                        />
+
+                        {/* Text Inputs */}
+                        <div className="md:col-span-2 space-y-1.5 focus-within:text-violet-600 dark:focus-within:text-fuchsia-400 transition-colors">
+                            <label className="text-xs font-bold text-slate-500 dark:text-gray-400 uppercase tracking-wider">Player Name <span className="text-red-500">*</span></label>
+                            <input
+                                type="text"
+                                name="name"
+                                placeholder="Full Name"
+                                value={formData.name}
+                                onChange={handleInputChange}
+                                className="w-full bg-white dark:bg-gray-800/50 border border-slate-200 dark:border-white/10 p-3.5 rounded-xl text-slate-900 dark:text-white focus:ring-2 focus:ring-violet-500 focus:border-violet-500 outline-none transition-all shadow-sm font-medium"
+                                required
+                            />
+                        </div>
+
+                        <div className="space-y-1.5 focus-within:text-violet-600 dark:focus-within:text-fuchsia-400 transition-colors">
+                            <label className="text-xs font-bold text-slate-500 dark:text-gray-400 uppercase tracking-wider flex justify-between items-center">
+                                <span>Team</span>
+                                {teams.length > 5 && (
+                                    <div className="flex items-center gap-1 bg-slate-100 dark:bg-gray-900/50 px-2 py-0.5 rounded-md border border-slate-200/50 dark:border-white/5">
+                                        <Search size={10} className="text-slate-400 dark:text-gray-500" />
+                                        <input
+                                            type="text"
+                                            placeholder="Find team"
+                                            value={teamSearchText}
+                                            onChange={(e) => setTeamSearchText(e.target.value)}
+                                            className="bg-transparent border-none text-[10px] w-14 outline-none text-violet-500 placeholder:text-gray-400/70"
+                                        />
+                                    </div>
+                                )}
+                            </label>
+                            <div className="relative">
+                                <select
+                                    name="team"
+                                    value={formData.team}
+                                    onChange={handleInputChange}
+                                    className="w-full bg-white dark:bg-gray-800/50 border border-slate-200 dark:border-white/10 p-3.5 rounded-xl text-slate-900 dark:text-white focus:ring-2 focus:ring-violet-500 focus:border-violet-500 outline-none transition-all shadow-sm font-medium appearance-none cursor-pointer"
+                                    required
                                 >
-                                    <Folders size={18} />
-                                    Choose from Repository
+                                    <option value="" disabled>Select a Club</option>
+                                    {teams
+                                        .filter(t => t.name.toLowerCase().includes(teamSearchText.toLowerCase()))
+                                        .sort((a, b) => a.name.localeCompare(b.name))
+                                        .map(t => (
+                                            <option key={t.id} value={t.name} className="font-medium text-slate-800 dark:text-white">{t.name}</option>
+                                        ))
+                                    }
+                                </select>
+                                <div className="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none text-slate-400">
+                                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7"></path></svg>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div className="space-y-1.5 focus-within:text-violet-600 dark:focus-within:text-fuchsia-400 transition-colors">
+                            <label className="text-xs font-bold text-slate-500 dark:text-gray-400 uppercase tracking-wider">Position</label>
+                            <div className="relative">
+                                <select
+                                    name="position"
+                                    value={formData.position}
+                                    onChange={handleInputChange}
+                                    className="w-full bg-white dark:bg-gray-800/50 border border-slate-200 dark:border-white/10 p-3.5 rounded-xl text-slate-900 dark:text-white focus:ring-2 focus:ring-violet-500 focus:border-violet-500 outline-none transition-all shadow-sm font-medium appearance-none cursor-pointer"
+                                    style={{
+                                        color: formData.position === 'Forward' ? '#ef4444' :
+                                               formData.position === 'Midfielder' ? '#eab308' :
+                                               formData.position === 'Defender' ? '#3b82f6' : '#22c55e'
+                                    }}
+                                >
+                                    {positions.map(p => (
+                                        <option key={p} value={p} className="text-slate-900 dark:text-white">
+                                            {p}
+                                        </option>
+                                    ))}
+                                </select>
+                                <div className="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none text-slate-400">
+                                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7"></path></svg>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div className="space-y-1.5 focus-within:text-violet-600 dark:focus-within:text-fuchsia-400 transition-colors">
+                            <label className="text-xs font-bold text-slate-500 dark:text-gray-400 uppercase tracking-wider">Home District <span className="text-red-500">*</span></label>
+                            <div className="relative">
+                                <select
+                                    name="district"
+                                    value={formData.district}
+                                    onChange={handleInputChange}
+                                    className="w-full bg-white dark:bg-gray-800/50 border border-slate-200 dark:border-white/10 p-3.5 rounded-xl text-slate-900 dark:text-white focus:ring-2 focus:ring-violet-500 focus:border-violet-500 outline-none transition-all shadow-sm font-medium appearance-none cursor-pointer"
+                                    required
+                                >
+                                    <option value="" disabled>Select District</option>
+                                    <optgroup label="Jammu Division" className="font-bold text-violet-500">
+                                        {DISTRICTS.JAMMU.map(district => (
+                                            <option key={district} value={district} className="text-slate-900 dark:text-white font-medium">{district}</option>
+                                        ))}
+                                    </optgroup>
+                                    <optgroup label="Kashmir Division" className="font-bold text-fuchsia-500">
+                                        {DISTRICTS.KASHMIR.map(district => (
+                                            <option key={district} value={district} className="text-slate-900 dark:text-white font-medium">{district}</option>
+                                        ))}
+                                    </optgroup>
+                                </select>
+                                <div className="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none text-slate-400">
+                                    <MapPin className="w-4 h-4" />
+                                </div>
+                            </div>
+                        </div>
+
+                        <div className="space-y-1.5 focus-within:text-violet-600 dark:focus-within:text-fuchsia-400 transition-colors">
+                            <label className="text-xs font-bold text-slate-500 dark:text-gray-400 uppercase tracking-wider">Kit Number</label>
+                            <input
+                                type="number"
+                                name="number"
+                                placeholder="e.g. 10"
+                                value={formData.number}
+                                onChange={handleInputChange}
+                                className="w-full bg-white dark:bg-gray-800/50 border border-slate-200 dark:border-white/10 p-3.5 rounded-xl text-slate-900 dark:text-white focus:ring-2 focus:ring-violet-500 focus:border-violet-500 outline-none transition-all shadow-sm font-black text-center text-lg"
+                            />
+                        </div>
+
+                        <div className="space-y-1.5 focus-within:text-violet-600 dark:focus-within:text-fuchsia-400 transition-colors">
+                            <label className="text-xs font-bold text-slate-500 dark:text-gray-400 uppercase tracking-wider">Nationality</label>
+                            <input
+                                type="text"
+                                name="nationality"
+                                placeholder="Nationality"
+                                value={formData.nationality}
+                                onChange={handleInputChange}
+                                className="w-full bg-white dark:bg-gray-800/50 border border-slate-200 dark:border-white/10 p-3.5 rounded-xl text-slate-900 dark:text-white focus:ring-2 focus:ring-violet-500 focus:border-violet-500 outline-none transition-all shadow-sm font-medium"
+                            />
+                        </div>
+
+                        <div className="space-y-1.5 focus-within:text-violet-600 dark:focus-within:text-fuchsia-400 transition-colors">
+                            <label className="text-xs font-bold text-slate-500 dark:text-gray-400 uppercase tracking-wider">Date of Birth</label>
+                            <input
+                                type="date"
+                                name="dob"
+                                value={formData.dob}
+                                onChange={handleInputChange}
+                                className="w-full bg-white dark:bg-gray-800/50 border border-slate-200 dark:border-white/10 p-3.5 rounded-xl text-slate-900 dark:text-white focus:ring-2 focus:ring-violet-500 focus:border-violet-500 outline-none transition-all shadow-sm font-medium"
+                            />
+                        </div>
+
+                        <div className="space-y-1.5">
+                            <label className="text-xs font-bold text-slate-500 dark:text-gray-400 uppercase tracking-wider">Age (Auto Calc)</label>
+                            <input
+                                type="number"
+                                name="age"
+                                placeholder="0"
+                                value={formData.age === 0 ? '' : formData.age}
+                                readOnly
+                                className="w-full bg-slate-100/80 dark:bg-gray-800/80 border border-slate-200/50 dark:border-white/5 p-3.5 rounded-xl text-slate-500 dark:text-gray-400 font-medium cursor-not-allowed text-center"
+                            />
+                        </div>
+
+                        {/* Player Statistics Grids */}
+                        <div className="col-span-full pt-4">
+                            <h4 className="text-sm font-black text-slate-800 dark:text-white uppercase tracking-widest mb-4 flex items-center gap-2">
+                                <div className="w-2 h-2 rounded-full bg-fuchsia-500"></div> Player Statistics
+                            </h4>
+                            <div className="grid grid-cols-2 md:grid-cols-6 gap-3 sm:gap-4 p-4 rounded-2xl bg-slate-50 dark:bg-[#121b2e] border border-slate-200/50 dark:border-white/5">
+                                <div className="space-y-1.5 focus-within:text-violet-600 dark:focus-within:text-fuchsia-400 transition-colors">
+                                    <label className="text-[10px] font-bold text-slate-500 dark:text-gray-400 uppercase tracking-wider text-center block">Matches</label>
+                                    <input type="number" name="matches" placeholder="0" value={formData.matches === 0 ? '' : formData.matches} onChange={handleInputChange} className="w-full bg-white dark:bg-gray-800 border border-slate-200 dark:border-white/10 p-2.5 rounded-lg text-slate-900 dark:text-white focus:ring-2 focus:ring-violet-500 focus:border-violet-500 outline-none shadow-sm font-black text-center" />
+                                </div>
+                                <div className="space-y-1.5 focus-within:text-violet-600 dark:focus-within:text-fuchsia-400 transition-colors">
+                                    <label className="text-[10px] font-bold text-slate-500 dark:text-gray-400 uppercase tracking-wider text-center block">Goals</label>
+                                    <input type="number" name="goals" placeholder="0" value={formData.goals === 0 ? '' : formData.goals} onChange={handleInputChange} className="w-full bg-white dark:bg-gray-800 border border-slate-200 dark:border-white/10 p-2.5 rounded-lg text-slate-900 dark:text-white focus:ring-2 focus:ring-violet-500 focus:border-violet-500 outline-none shadow-sm font-black text-center text-brand-500" />
+                                </div>
+                                <div className="space-y-1.5 focus-within:text-violet-600 dark:focus-within:text-fuchsia-400 transition-colors">
+                                    <label className="text-[10px] font-bold text-slate-500 dark:text-gray-400 uppercase tracking-wider text-center block">Assists</label>
+                                    <input type="number" name="assists" placeholder="0" value={formData.assists === 0 ? '' : formData.assists} onChange={handleInputChange} className="w-full bg-white dark:bg-gray-800 border border-slate-200 dark:border-white/10 p-2.5 rounded-lg text-slate-900 dark:text-white focus:ring-2 focus:ring-violet-500 focus:border-violet-500 outline-none shadow-sm font-black text-center text-blue-500" />
+                                </div>
+                                <div className="space-y-1.5 focus-within:text-violet-600 dark:focus-within:text-fuchsia-400 transition-colors">
+                                    <label className="text-[10px] font-bold text-slate-500 dark:text-gray-400 uppercase tracking-wider text-center block">Y. Cards</label>
+                                    <input type="number" name="yellowCards" placeholder="0" value={formData.yellowCards === 0 ? '' : formData.yellowCards} onChange={handleInputChange} className="w-full bg-white dark:bg-gray-800 border border-slate-200 dark:border-white/10 p-2.5 rounded-lg text-slate-900 dark:text-white focus:ring-2 focus:ring-violet-500 focus:border-violet-500 outline-none shadow-sm font-black text-center text-yellow-500" />
+                                </div>
+                                <div className="space-y-1.5 focus-within:text-violet-600 dark:focus-within:text-fuchsia-400 transition-colors">
+                                    <label className="text-[10px] font-bold text-slate-500 dark:text-gray-400 uppercase tracking-wider text-center block">R. Cards</label>
+                                    <input type="number" name="redCards" placeholder="0" value={formData.redCards === 0 ? '' : formData.redCards} onChange={handleInputChange} className="w-full bg-white dark:bg-gray-800 border border-slate-200 dark:border-white/10 p-2.5 rounded-lg text-slate-900 dark:text-white focus:ring-2 focus:ring-violet-500 focus:border-violet-500 outline-none shadow-sm font-black text-center text-red-500" />
+                                </div>
+                                <div className="space-y-1.5 focus-within:text-violet-600 dark:focus-within:text-fuchsia-400 transition-colors">
+                                    <label className="text-[10px] font-bold text-slate-500 dark:text-gray-400 uppercase tracking-wider text-center block">Clean Sht</label>
+                                    <input type="number" name="cleanSheets" placeholder="0" value={formData.cleanSheets === 0 ? '' : formData.cleanSheets} onChange={handleInputChange} className="w-full bg-white dark:bg-gray-800 border border-slate-200 dark:border-white/10 p-2.5 rounded-lg text-slate-900 dark:text-white focus:ring-2 focus:ring-violet-500 focus:border-violet-500 outline-none shadow-sm font-black text-center text-emerald-500" />
+                                </div>
+                            </div>
+                        </div>
+
+                        <div className="md:col-span-2 lg:col-span-4 space-y-1.5 focus-within:text-violet-600 dark:focus-within:text-fuchsia-400 transition-colors mt-2">
+                            <label className="text-xs font-bold text-slate-500 dark:text-gray-400 uppercase tracking-wider">Player Biography</label>
+                            <textarea
+                                name="bio"
+                                placeholder="Write about the player's career, strengths, and background..."
+                                value={formData.bio || ''}
+                                onChange={handleInputChange}
+                                rows={3}
+                                className="w-full bg-white dark:bg-gray-800/50 border border-slate-200 dark:border-white/10 p-4 rounded-xl text-slate-900 dark:text-white focus:ring-2 focus:ring-violet-500 focus:border-violet-500 outline-none transition-all shadow-sm font-medium resize-y"
+                            ></textarea>
+                        </div>
+
+                        {/* Actions */}
+                        <div className="lg:col-span-4 pt-6 pb-2 border-t border-slate-200 dark:border-white/10 flex flex-col sm:flex-row gap-3 items-center justify-between">
+                            <div className="flex w-full gap-3 flex-col sm:flex-row order-1 sm:order-2 sm:justify-end">
+                                {editingId && (
+                                    <button
+                                        type="button"
+                                        onClick={() => {
+                                            setEditingId(null);
+                                            setFormData({
+                                                name: '',
+                                                team: '',
+                                                position: 'Forward',
+                                                nationality: '',
+                                                district: '',
+                                                age: '',
+                                                matches: 0,
+                                                goals: 0,
+                                                assists: 0,
+                                                yellowCards: 0,
+                                                redCards: 0,
+                                                number: ''
+                                            });
+                                        }}
+                                        className="px-6 py-3.5 rounded-xl font-bold bg-slate-100 hover:bg-slate-200 text-slate-700 dark:bg-white/5 dark:hover:bg-white/10 dark:text-white transition-all w-full sm:w-auto text-center"
+                                    >
+                                        Cancel Edit
+                                    </button>
+                                )}
+                                <button
+                                    type="submit"
+                                    disabled={loading}
+                                    className={`relative overflow-hidden group px-8 py-3.5 rounded-xl font-black text-white shadow-lg shadow-fuchsia-500/25 transition-all w-full sm:w-auto text-center ${loading ? 'bg-fuchsia-400/80 cursor-not-allowed scale-95' : 'bg-gradient-to-r from-violet-600 via-fuchsia-500 to-pink-500 hover:scale-[1.02] active:scale-95'}`}
+                                >
+                                    {loading ? (
+                                        <div className="flex items-center justify-center gap-2">
+                                            <div className="w-5 h-5 border-2 border-white/50 border-t-white animate-spin rounded-full"></div>
+                                            <span>Saving...</span>
+                                        </div>
+                                    ) : (
+                                        <div className="relative z-10 flex items-center justify-center gap-2">
+                                            <span>{editingId ? 'Save Improvements' : 'Register Player'}</span>
+                                            <svg className="w-5 h-5 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7"></path></svg>
+                                        </div>
+                                    )}
                                 </button>
                             </div>
-                        )}
-                    </div>
-
-                    <AssetPicker
-                        isOpen={showAssetPicker}
-                        onClose={() => setShowAssetPicker(false)}
-                        onSelect={(url) => setFormData(prev => ({ ...prev, photoUrl: url }))}
-                        category="Players"
-                    />
-
-                    <div className="md:col-span-2">
-                        <label className="text-xs text-slate-500 dark:text-gray-400 block mb-1">Player Name</label>
-                        <input
-                            type="text"
-                            name="name"
-                            placeholder="Full Name"
-                            value={formData.name}
-                            onChange={handleInputChange}
-                            className="bg-slate-100 dark:bg-gray-700 p-2 rounded text-slate-900 dark:text-white w-full"
-                            required
-                        />
-                    </div>
-                    <div>
-                        <label className="text-xs text-slate-500 dark:text-gray-400 block mb-1 flex justify-between items-center">
-                            <span>Team</span>
-                            {teams.length > 5 && (
-                                <div className="flex items-center gap-1 bg-white/50 dark:bg-gray-900/50 px-2 py-0.5 rounded border border-slate-200/5 dark:border-white/5">
-                                    <Search size={10} className="text-slate-500 dark:text-gray-500" />
-                                    <input
-                                        type="text"
-                                        placeholder="Find team..."
-                                        value={teamSearchText}
-                                        onChange={(e) => setTeamSearchText(e.target.value)}
-                                        className="bg-transparent border-none text-[10px] w-16 outline-none text-brand-400 placeholder:text-gray-600"
-                                    />
-                                </div>
-                            )}
-                        </label>
-                        <select
-                            name="team"
-                            value={formData.team}
-                            onChange={handleInputChange}
-                            className="bg-slate-100 dark:bg-gray-700 p-2 rounded text-slate-900 dark:text-white w-full"
-                            required
-                        >
-                            <option value="" disabled>Select Team</option>
-                            {teams
-                                .filter(t => t.name.toLowerCase().includes(teamSearchText.toLowerCase()))
-                                .sort((a, b) => a.name.localeCompare(b.name))
-                                .map(t => (
-                                    <option key={t.id} value={t.name}>{t.name}</option>
-                                ))
-                            }
-                        </select>
-                    </div>
-                    <div>
-                        <label className="text-xs text-slate-500 dark:text-gray-400 block mb-1">Position</label>
-                        <select
-                            name="position"
-                            value={formData.position}
-                            onChange={handleInputChange}
-                            className="bg-slate-100 dark:bg-gray-700 p-2 rounded text-slate-900 dark:text-white w-full"
-                        >
-                            {positions.map(p => <option key={p} value={p}>{p}</option>)}
-                        </select>
-                    </div>
-                    <div>
-                        <label className="text-xs text-slate-500 dark:text-gray-400 block mb-1">District</label>
-                        <select
-                            name="district"
-                            value={formData.district}
-                            onChange={handleInputChange}
-                            className="bg-slate-100 dark:bg-gray-700 p-2 rounded text-slate-900 dark:text-white w-full"
-                            required
-                        >
-                            <option value="" disabled>Select District</option>
-                            <optgroup label="Jammu Division">
-                                {DISTRICTS.JAMMU.map(district => (
-                                    <option key={district} value={district}>{district}</option>
-                                ))}
-                            </optgroup>
-                            <optgroup label="Kashmir Division">
-                                {DISTRICTS.KASHMIR.map(district => (
-                                    <option key={district} value={district}>{district}</option>
-                                ))}
-                            </optgroup>
-                        </select>
-                    </div>
-                    <div>
-                        <label className="text-xs text-slate-500 dark:text-gray-400 block mb-1">Kit Number</label>
-                        <input
-                            type="number"
-                            name="number"
-                            placeholder="e.g. 10"
-                            value={formData.number}
-                            onChange={handleInputChange}
-                            className="bg-slate-100 dark:bg-gray-700 p-2 rounded text-slate-900 dark:text-white w-full"
-                        />
-                    </div>
-                    <div>
-                        <label className="text-xs text-slate-500 dark:text-gray-400 block mb-1">Nationality</label>
-                        <input
-                            type="text"
-                            name="nationality"
-                            placeholder="Nationality"
-                            value={formData.nationality}
-                            onChange={handleInputChange}
-                            className="bg-slate-100 dark:bg-gray-700 p-2 rounded text-slate-900 dark:text-white w-full"
-                        />
-                    </div>
-                    <div>
-                        <label className="text-xs text-slate-500 dark:text-gray-400 block mb-1">Date of Birth</label>
-                        <input
-                            type="date"
-                            name="dob"
-                            value={formData.dob}
-                            onChange={handleInputChange}
-                            className="bg-slate-100 dark:bg-gray-700 p-2 rounded text-slate-900 dark:text-white w-full"
-                        />
-                    </div>
-                    <div>
-                        <label className="text-xs text-slate-500 dark:text-gray-400 block mb-1">Age (Auto)</label>
-                        <input
-                            type="number"
-                            name="age"
-                            placeholder="0"
-                            value={formData.age === 0 ? '' : formData.age}
-                            readOnly
-                            className="bg-slate-100/50 dark:bg-gray-700/50 p-2 rounded text-slate-500 dark:text-gray-400 w-full cursor-not-allowed"
-                        />
-                    </div>
-                    <div>
-                        <label className="text-xs text-slate-500 dark:text-gray-400 block mb-1">Clean Sheets (GK)</label>
-                        <input
-                            type="number"
-                            name="cleanSheets"
-                            placeholder="0"
-                            value={formData.cleanSheets === 0 ? '' : formData.cleanSheets}
-                            onChange={handleInputChange}
-                            className="bg-slate-100 dark:bg-gray-700 p-2 rounded text-slate-900 dark:text-white w-full"
-                        />
-                    </div>
-                    <div>
-                        <label className="text-xs text-slate-500 dark:text-gray-400 block mb-1">Matches</label>
-                        <input
-                            type="number"
-                            name="matches"
-                            placeholder="0"
-                            value={formData.matches === 0 ? '' : formData.matches}
-                            onChange={handleInputChange}
-                            className="bg-slate-100 dark:bg-gray-700 p-2 rounded text-slate-900 dark:text-white w-full"
-                        />
-                    </div>
-                    <div>
-                        <label className="text-xs text-slate-500 dark:text-gray-400 block mb-1">Goals</label>
-                        <input
-                            type="number"
-                            name="goals"
-                            placeholder="0"
-                            value={formData.goals === 0 ? '' : formData.goals}
-                            onChange={handleInputChange}
-                            className="bg-slate-100 dark:bg-gray-700 p-2 rounded text-slate-900 dark:text-white w-full"
-                        />
-                    </div>
-                    <div>
-                        <label className="text-xs text-slate-500 dark:text-gray-400 block mb-1">Assists</label>
-                        <input
-                            type="number"
-                            name="assists"
-                            placeholder="0"
-                            value={formData.assists === 0 ? '' : formData.assists}
-                            onChange={handleInputChange}
-                            className="bg-slate-100 dark:bg-gray-700 p-2 rounded text-slate-900 dark:text-white w-full"
-                        />
-                    </div>
-                    <div>
-                        <label className="text-xs text-slate-500 dark:text-gray-400 block mb-1">Yellow Cards</label>
-                        <input
-                            type="number"
-                            name="yellowCards"
-                            placeholder="0"
-                            value={formData.yellowCards === 0 ? '' : formData.yellowCards}
-                            onChange={handleInputChange}
-                            className="bg-slate-100 dark:bg-gray-700 p-2 rounded text-slate-900 dark:text-white w-full"
-                        />
-                    </div>
-                    <div>
-                        <label className="text-xs text-slate-500 dark:text-gray-400 block mb-1">Red Cards</label>
-                        <input
-                            type="number"
-                            name="redCards"
-                            placeholder="0"
-                            value={formData.redCards === 0 ? '' : formData.redCards}
-                            onChange={handleInputChange}
-                            className="bg-slate-100 dark:bg-gray-700 p-2 rounded text-slate-900 dark:text-white w-full"
-                        />
-                    </div>
-
-                    <div className="md:col-span-2 lg:col-span-4">
-                        <label className="text-xs text-slate-500 dark:text-gray-400 block mb-1">Player Biography</label>
-                        <textarea
-                            name="bio"
-                            placeholder="Tell us about the player or their career..."
-                            value={formData.bio}
-                            onChange={handleInputChange}
-                            rows={4}
-                            className="bg-slate-100 dark:bg-gray-700 p-2 rounded text-slate-900 dark:text-white w-full outline-none focus:ring-2 focus:ring-brand-500"
-                        ></textarea>
-                    </div>
-
-                    <button
-                        type="submit"
-                        disabled={loading}
-                        className={`bg-green-600 hover:bg-green-700 p-2 rounded text-slate-900 dark:text-white col-span-full ${loading ? 'opacity-50 cursor-not-allowed' : ''}`}
-                    >
-                        {loading ? 'Saving...' : (editingId ? 'Update Player' : 'Add Player')}
-                    </button>
-                    {editingId && (
-                        <button
-                            type="button"
-                            onClick={() => {
-                                setEditingId(null);
-                                setFormData({
-                                    name: '',
-                                    team: '',
-                                    position: 'Forward',
-                                    nationality: '',
-                                    district: '',
-                                    age: '',
-                                    matches: 0,
-                                    goals: 0,
-                                    assists: 0,
-                                    yellowCards: 0,
-                                    redCards: 0,
-                                    number: ''
-                                });
-                            }}
-                            className="bg-gray-600 hover:bg-gray-500 p-2 rounded text-slate-900 dark:text-white col-span-full"
-                        >
-                            Cancel Edit
-                        </button>
-                    )}
-                </form>
+                        </div>
+                    </form>
+                </div>
             </div>
 
             {/* Search and Filters */}
@@ -685,13 +731,15 @@ const ManagePlayers = () => {
                                         >
                                             <Edit3 size={16} />
                                         </button>
-                                        <button
-                                            onClick={() => handleDelete(player.id)}
-                                            className="p-2 bg-red-500/10 text-red-500 hover:bg-red-500 hover:text-slate-900 dark:text-white rounded-lg transition-all"
-                                            title="Delete Player"
-                                        >
-                                            <X size={16} />
-                                        </button>
+                                        {isSuperAdmin && (
+                                            <button
+                                                onClick={() => handleDelete(player.id)}
+                                                className="p-2 bg-red-500/10 text-red-500 hover:bg-red-500 hover:text-slate-900 dark:text-white rounded-lg transition-all"
+                                                title="Delete Player"
+                                            >
+                                                <X size={16} />
+                                            </button>
+                                        )}
                                     </div>
                                 </td>
                             </tr>

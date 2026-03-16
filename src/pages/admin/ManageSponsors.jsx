@@ -432,12 +432,14 @@ const ManageSponsors = () => {
                                                         >
                                                             <Edit2 size={18} />
                                                         </button>
-                                                        <button
-                                                            onClick={() => handleDelete(item.id)}
-                                                            className="text-slate-500 hover:text-red-500 p-2 transition-colors"
-                                                        >
-                                                            <Trash2 size={18} />
-                                                        </button>
+                                                        {isSuperAdmin && (
+                                                            <button
+                                                                onClick={() => handleDelete(item.id)}
+                                                                className="text-slate-500 hover:text-red-500 p-2 transition-colors"
+                                                            >
+                                                                <Trash2 size={18} />
+                                                            </button>
+                                                        )}
                                                     </>
                                                 )}
                                             </div>

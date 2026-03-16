@@ -4,7 +4,7 @@ import { useLocation } from 'react-router-dom';
 import { ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage';
 import { db, storage } from '../../firebase';
 import { useData } from '../../context/DataContext';
-import { Upload, X, Image as ImageIcon, Folders, Search, ChevronLeft, ChevronRight, ChevronsLeft, ChevronsRight } from 'lucide-react';
+import { Upload, X, Image as ImageIcon, Folders, Search, ChevronLeft, ChevronRight, ChevronsLeft, ChevronsRight, Shield, MapPin } from 'lucide-react';
 import AssetPicker from '../../components/admin/AssetPicker';
 import { registerAsset } from '../../utils/assetRegistry';
 import { useAuth } from '../../context/AuthContext';
@@ -287,245 +287,321 @@ const ManageTeams = () => {
             )}
 
             {/* Form */}
-            <div className="rounded-2xl bg-gradient-to-br from-white to-slate-50 dark:from-[#0f172a] dark:to-[#020617] ring-1 ring-slate-200/80 dark:ring-white/5 overflow-hidden shadow-xl dark:shadow-2xl dark:shadow-brand-500/5 transition-all p-6 mb-8">
-                <h3 className="text-xl mb-4 font-bold">{editingId ? 'Edit Team' : 'Add New Team'}</h3>
-                <form onSubmit={handleSubmit} className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    {/* Logo Upload Section */}
-                    <div className="md:col-span-2 flex flex-col items-center p-4 border-2 border-dashed border-gray-600 rounded-xl bg-slate-100/30 dark:bg-gray-700/30">
-                        {formData.logoUrl ? (
-                            <div className="relative">
-                                <img src={formData.logoUrl} alt="Logo Preview" className="w-24 h-24 object-contain rounded-lg bg-white/10 p-2" />
-                                <button
-                                    type="button"
-                                    onClick={removeLogo}
-                                    className="absolute -top-2 -right-2 p-1 bg-red-500 rounded-full text-slate-900 dark:text-white shadow-lg hover:bg-red-600 transition-colors"
-                                >
-                                    <X size={14} />
-                                </button>
-                            </div>
-                        ) : (
-                            <div className="flex flex-col items-center gap-4">
-                                <label className="flex flex-col items-center justify-center cursor-pointer group">
-                                    <div className="w-16 h-16 rounded-full bg-slate-100 dark:bg-gray-700 flex items-center justify-center text-slate-500 dark:text-gray-400 group-hover:bg-gray-600 transition-colors">
-                                        {uploading ? (
-                                            <div className="flex flex-col items-center">
-                                                <div className="w-8 h-8 border-2 border-brand-500 border-t-transparent animate-spin rounded-full mb-1"></div>
-                                                <span className="text-[10px] text-brand-400">{Math.round(uploadProgress)}%</span>
-                                            </div>
-                                        ) : (
-                                            <ImageIcon size={32} />
-                                        )}
-                                    </div>
-                                    <span className="mt-2 text-sm text-slate-500 dark:text-gray-400 group-hover:text-slate-600 dark:text-gray-300">
-                                        {uploading ? 'Uploading...' : 'Upload Team Logo'}
-                                    </span>
-                                    <input type="file" className="hidden" accept="image/*" onChange={handleLogoUpload} disabled={uploading} />
-                                </label>
-
-                                <div className="flex items-center gap-3">
-                                    <div className="h-[1px] w-12 bg-gray-600"></div>
-                                    <span className="text-xs text-slate-500 dark:text-gray-500 uppercase font-bold">OR</span>
-                                    <div className="h-[1px] w-12 bg-gray-600"></div>
-                                </div>
-
-                                <button
-                                    type="button"
-                                    onClick={() => setShowAssetPicker(true)}
-                                    className="flex items-center gap-2 px-4 py-2 bg-brand-500/10 hover:bg-brand-500/20 text-brand-400 border border-brand-500/20 rounded-xl text-sm font-semibold transition-all"
-                                >
-                                    <Folders size={18} />
-                                    Choose from Repository
-                                </button>
-                            </div>
-                        )}
-                    </div>
-
-                    <AssetPicker
-                        isOpen={showAssetPicker}
-                        onClose={() => setShowAssetPicker(false)}
-                        onSelect={(url) => setFormData(prev => ({ ...prev, logoUrl: url }))}
-                        category="Teams"
-                    />
-
-                    <div>
-                        <label className="text-xs text-slate-500 dark:text-gray-400 block mb-1">Team Name</label>
-                        <input
-                            type="text"
-                            name="name"
-                            placeholder="Team Name"
-                            value={formData.name}
-                            onChange={handleInputChange}
-                            className="bg-slate-100 dark:bg-gray-700 p-2 rounded text-slate-900 dark:text-white w-full"
-                            required
-                        />
-                    </div>
-                    <div>
-                        <label className="text-xs text-slate-500 dark:text-gray-400 block mb-1">Short Name</label>
-                        <input
-                            type="text"
-                            name="shortName"
-                            placeholder="e.g. MUN"
-                            value={formData.shortName}
-                            onChange={handleInputChange}
-                            className="bg-slate-100 dark:bg-gray-700 p-2 rounded text-slate-900 dark:text-white w-full"
-                            required
-                        />
-                    </div>
-                    <div>
-                        <label className="text-xs text-slate-500 dark:text-gray-400 block mb-1">Founded Year</label>
-                        <input
-                            type="number"
-                            name="founded"
-                            placeholder="Year"
-                            value={formData.founded === 0 ? '' : formData.founded}
-                            onChange={handleInputChange}
-                            className="bg-slate-100 dark:bg-gray-700 p-2 rounded text-slate-900 dark:text-white w-full"
-                        />
-                    </div>
-                    <div>
-                        <label className="text-xs text-slate-500 dark:text-gray-400 block mb-1">Stadium</label>
-                        <input
-                            type="text"
-                            name="stadium"
-                            placeholder="Stadium"
-                            value={formData.stadium}
-                            onChange={handleInputChange}
-                            className="bg-slate-100 dark:bg-gray-700 p-2 rounded text-slate-900 dark:text-white w-full"
-                        />
-                    </div>
-                    <div>
-                        <label className="text-xs text-slate-500 dark:text-gray-400 block mb-1">Manager Name</label>
-                        <input
-                            type="text"
-                            name="manager"
-                            placeholder="Manager's Name"
-                            value={formData.manager || ''}
-                            onChange={handleInputChange}
-                            className="bg-slate-100 dark:bg-gray-700 p-2 rounded text-slate-900 dark:text-white w-full"
-                        />
-                    </div>
-                    <div>
-                        <label className="text-xs text-slate-500 dark:text-gray-400 block mb-1">Squad Size</label>
-                        <input
-                            type="number"
-                            name="players"
-                            placeholder="0"
-                            value={formData.players === 0 ? '' : formData.players}
-                            onChange={handleInputChange}
-                            className="bg-slate-100 dark:bg-gray-700 p-2 rounded text-slate-900 dark:text-white w-full"
-                        />
-                    </div>
-                    <div>
-                        <label className="text-xs text-slate-500 dark:text-gray-400 block mb-1">Team Status</label>
-                        <select
-                            name="status"
-                            value={formData.status || 'Active'}
-                            onChange={handleInputChange}
-                            className="bg-slate-100 dark:bg-gray-700 p-2 rounded text-slate-900 dark:text-white w-full"
-                        >
-                            <option value="Active">Active</option>
-                            <option value="Inactive">Inactive</option>
-                            <option value="Suspended">Suspended</option>
-                            <option value="Dissolved">Dissolved</option>
-                        </select>
-                    </div>
-                    <div>
-                        <label className="text-xs text-slate-500 dark:text-gray-400 block mb-1">Home District</label>
-                        <select
-                            name="district"
-                            value={formData.district || ''}
-                            onChange={handleInputChange}
-                            className="bg-slate-100 dark:bg-gray-700 p-2 rounded text-slate-900 dark:text-white w-full"
-                        >
-                            <option value="">Select District</option>
-                            <optgroup label="Jammu Division">
-                                {['Jammu', 'Samba', 'Kathua', 'Udhampur', 'Reasi', 'Rajouri', 'Poonch', 'Doda', 'Ramban', 'Kishtwar'].map(d => (
-                                    <option key={d} value={d}>{d}</option>
-                                ))}
-                            </optgroup>
-                            <optgroup label="Kashmir Division">
-                                {['Srinagar', 'Ganderbal', 'Budgam', 'Baramulla', 'Bandipora', 'Kupwara', 'Pulwama', 'Shopian', 'Kulgam', 'Anantnag'].map(d => (
-                                    <option key={d} value={d}>{d}</option>
-                                ))}
-                            </optgroup>
-                        </select>
-                    </div>
-                    <div>
-                        <label className="text-xs text-slate-500 dark:text-gray-400 block mb-1">Trophies Won</label>
-                        <input
-                            type="number"
-                            name="trophies"
-                            placeholder="0"
-                            value={formData.trophies === 0 ? '' : formData.trophies}
-                            onChange={handleInputChange}
-                            className="bg-slate-100 dark:bg-gray-700 p-2 rounded text-slate-900 dark:text-white w-full"
-                        />
-                    </div>
-                    <div className="col-span-full">
-                        <label className="text-xs text-slate-500 dark:text-gray-400 block mb-1">Club History / Description</label>
-                        <textarea
-                            name="description"
-                            rows="4"
-                            placeholder="Write about the club's history, values, and achievements..."
-                            value={formData.description || ''}
-                            onChange={handleInputChange}
-                            className="bg-slate-100 dark:bg-gray-700 p-3 rounded text-slate-900 dark:text-white w-full"
-                        ></textarea>
-                    </div>
-                    <div>
-                        <label className="text-xs text-slate-500 dark:text-gray-400 block mb-1">Participating Tournaments</label>
-                        <div className="flex flex-wrap gap-2 bg-slate-100 dark:bg-gray-700 p-2 rounded min-h-[42px] items-center">
-                            {tournaments.map(t => (
-                                <button
-                                    key={t.id}
-                                    type="button"
-                                    onClick={() => handleTournamentToggle(t.name)}
-                                    className={`text-xs px-2 py-1 rounded transition-colors ${Array.isArray(formData.tournaments) && formData.tournaments.includes(t.name)
-                                        ? 'bg-green-600 text-white shadow-sm'
-                                        : 'bg-slate-200 dark:bg-gray-600 text-slate-700 dark:text-gray-300 hover:bg-slate-300 dark:hover:bg-gray-500'
-                                        }`}
-                                >
-                                    {t.name}
-                                </button>
-                            ))}
-                            {tournaments.length === 0 && <span className="text-slate-500 dark:text-gray-500 text-xs italic">No tournaments available. Create one first.</span>}
+            <div className="rounded-3xl bg-white dark:bg-[#0B1120] border border-slate-200/50 dark:border-white/5 shadow-2xl dark:shadow-brand-500/5 overflow-hidden transition-all mb-10">
+                <div className="bg-gradient-to-r from-brand-600 via-brand-500 to-sky-500 p-6 sm:p-8 relative overflow-hidden">
+                    <div className="absolute top-0 right-0 w-64 h-64 bg-white/10 rounded-full blur-3xl -mr-20 -mt-20 pointer-events-none"></div>
+                    <div className="relative z-10 flex items-center gap-4">
+                        <div className="p-3 bg-white/20 rounded-2xl backdrop-blur-sm border border-white/20 shadow-lg">
+                            <Shield className="text-white h-7 w-7" />
+                        </div>
+                        <div>
+                            <h3 className="text-2xl font-black text-white tracking-tight drop-shadow-sm">
+                                {editingId ? 'Edit Team Details' : 'Register New Team'}
+                            </h3>
+                            <p className="text-brand-50/90 mt-1 text-sm font-medium">Complete the information below to manage team records.</p>
                         </div>
                     </div>
+                </div>
 
-                    <button
-                        type="submit"
-                        disabled={loading}
-                        className={`bg-green-600 hover:bg-green-700 p-2 rounded text-slate-900 dark:text-white col-span-full ${loading ? 'opacity-50 cursor-not-allowed' : ''}`}
-                    >
-                        {loading ? 'Saving...' : (editingId ? 'Update Team' : 'Add Team')}
-                    </button>
-                    {editingId && (
-                        <button
-                            type="button"
-                            onClick={() => {
-                                setEditingId(null);
-                                setFormData({
-                                    name: '',
-                                    shortName: '',
-                                    founded: '',
-                                    stadium: '',
-                                    manager: '',
-                                    status: 'Active',
-                                    players: 0,
-                                    tournaments: [],
-                                    logoUrl: '',
-                                    description: '',
-                                    trophies: 0,
-                                    district: 'Baramulla'
-                                });
-                            }}
-                            className="bg-gray-600 hover:bg-gray-500 p-2 rounded text-slate-900 dark:text-white col-span-full"
-                        >
-                            Cancel Edit
-                        </button>
-                    )}
-                </form>
-            </div >
+                <div className="p-6 sm:p-8 bg-slate-50/50 dark:bg-transparent">
+                    <form onSubmit={handleSubmit} className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-6">
+                        {/* Logo Upload Section */}
+                        <div className="md:col-span-2">
+                            <label className="text-sm font-bold text-slate-700 dark:text-gray-300 block mb-3 uppercase tracking-wider">Team Crest / Logo</label>
+                            <div className="flex flex-col sm:flex-row items-center gap-6 p-6 border-[1.5px] border-dashed border-slate-300 dark:border-white/10 rounded-2xl bg-white dark:bg-white/5 transition-all hover:border-brand-500/50 hover:bg-brand-50/50 dark:hover:bg-brand-500/5 group shadow-sm">
+                                {formData.logoUrl ? (
+                                    <div className="relative shrink-0">
+                                        <div className="absolute inset-0 bg-brand-500/20 blur-xl rounded-full opacity-100 transition-opacity"></div>
+                                        <img src={formData.logoUrl} alt="Logo Preview" className="w-28 h-28 object-contain rounded-2xl bg-white dark:bg-gray-800 p-3 shadow-xl relative z-10 border border-slate-100 dark:border-white/5" />
+                                        <button
+                                            type="button"
+                                            onClick={removeLogo}
+                                            className="absolute -top-3 -right-3 p-1.5 bg-red-500 rounded-full text-white shadow-lg hover:bg-red-600 transition-all z-20 hover:scale-110"
+                                            title="Remove Logo"
+                                        >
+                                            <X size={16} />
+                                        </button>
+                                    </div>
+                                ) : (
+                                    <div className="flex-1 w-full flex flex-col items-center justify-center py-2">
+                                        <label className="flex flex-col items-center justify-center cursor-pointer group/upload w-full">
+                                            <div className="w-16 h-16 rounded-2xl bg-slate-100 dark:bg-gray-800 shadow-inner border border-slate-200/50 dark:border-white/5 flex items-center justify-center text-brand-500 group-hover/upload:scale-110 group-hover/upload:bg-brand-100 dark:group-hover/upload:bg-brand-500/20 transition-all duration-300">
+                                                {uploading ? (
+                                                    <div className="flex flex-col items-center">
+                                                        <div className="w-6 h-6 border-2 border-brand-500 border-t-transparent animate-spin rounded-full"></div>
+                                                    </div>
+                                                ) : (
+                                                    <ImageIcon size={28} className="drop-shadow-sm" />
+                                                )}
+                                            </div>
+                                            <span className="mt-4 font-semibold text-slate-700 dark:text-gray-300 group-hover/upload:text-brand-600 dark:group-hover/upload:text-brand-400 transition-colors">
+                                                {uploading ? `Uploading ${Math.round(uploadProgress)}%...` : 'Click to Upload Logo'}
+                                            </span>
+                                            <span className="text-xs text-slate-500 mt-1 font-medium bg-slate-100 dark:bg-gray-800 px-3 py-1 rounded-full">PNG, JPG up to 5MB</span>
+                                            <input type="file" className="hidden" accept="image/*" onChange={handleLogoUpload} disabled={uploading} />
+                                        </label>
+                                    </div>
+                                )}
+
+                                {!formData.logoUrl && (
+                                    <>
+                                        <div className="hidden sm:flex flex-col items-center justify-center px-4">
+                                            <div className="w-px h-10 bg-slate-200 dark:bg-white/10"></div>
+                                            <span className="my-3 text-xs font-black text-slate-400 uppercase tracking-widest bg-white dark:bg-[#0B1120] px-2 py-1 rounded-md shadow-sm border border-slate-100 dark:border-white/5">OR</span>
+                                            <div className="w-px h-10 bg-slate-200 dark:bg-white/10"></div>
+                                        </div>
+                                        <div className="flex sm:hidden items-center justify-center w-full px-4 gap-4 py-2">
+                                            <div className="h-px w-full bg-slate-200 dark:bg-white/10"></div>
+                                            <span className="text-xs font-black text-slate-400 uppercase tracking-widest bg-white dark:bg-[#0B1120] px-2 py-1 rounded-md shadow-sm border border-slate-100 dark:border-white/5">OR</span>
+                                            <div className="h-px w-full bg-slate-200 dark:bg-white/10"></div>
+                                        </div>
+
+                                        <div className="flex-1 flex justify-center w-full">
+                                            <button
+                                                type="button"
+                                                onClick={() => setShowAssetPicker(true)}
+                                                className="flex items-center justify-center gap-2 w-full sm:w-auto px-6 py-3.5 bg-white dark:bg-gray-800 hover:bg-brand-50 hover:text-brand-600 dark:hover:bg-brand-500/10 text-slate-700 dark:text-white border border-slate-200 dark:border-white/10 hover:border-brand-500/30 rounded-xl font-bold shadow-sm transition-all hover:scale-[1.02] active:scale-95 group/btn"
+                                            >
+                                                <Folders size={20} className="text-brand-500 group-hover/btn:scale-110 transition-transform" />
+                                                Choose from Gallery
+                                            </button>
+                                        </div>
+                                    </>
+                                )}
+                            </div>
+                        </div>
+
+                        <AssetPicker
+                            isOpen={showAssetPicker}
+                            onClose={() => setShowAssetPicker(false)}
+                            onSelect={(url) => setFormData(prev => ({ ...prev, logoUrl: url }))}
+                            category="Teams"
+                        />
+
+                        {/* Text Inputs */}
+                        <div className="space-y-1.5 focus-within:text-brand-600 dark:focus-within:text-brand-400 transition-colors">
+                            <label className="text-xs font-bold text-slate-500 dark:text-gray-400 uppercase tracking-wider">Team Name <span className="text-red-500">*</span></label>
+                            <input
+                                type="text"
+                                name="name"
+                                placeholder="e.g. Real Madrid CF"
+                                value={formData.name}
+                                onChange={handleInputChange}
+                                className="w-full bg-white dark:bg-gray-800/50 border border-slate-200 dark:border-white/10 p-3.5 rounded-xl text-slate-900 dark:text-white focus:ring-2 focus:ring-brand-500 focus:border-brand-500 outline-none transition-all shadow-sm font-medium"
+                                required
+                            />
+                        </div>
+                        
+                        <div className="space-y-1.5 focus-within:text-brand-600 dark:focus-within:text-brand-400 transition-colors">
+                            <label className="text-xs font-bold text-slate-500 dark:text-gray-400 uppercase tracking-wider">Short Name <span className="text-red-500">*</span></label>
+                            <input
+                                type="text"
+                                name="shortName"
+                                placeholder="e.g. RMA"
+                                value={formData.shortName}
+                                onChange={handleInputChange}
+                                className="w-full bg-white dark:bg-gray-800/50 border border-slate-200 dark:border-white/10 p-3.5 rounded-xl text-slate-900 dark:text-white focus:ring-2 focus:ring-brand-500 focus:border-brand-500 outline-none transition-all shadow-sm font-medium uppercase"
+                                maxLength={5}
+                                required
+                            />
+                        </div>
+                        
+                        <div className="space-y-1.5 focus-within:text-brand-600 dark:focus-within:text-brand-400 transition-colors">
+                            <label className="text-xs font-bold text-slate-500 dark:text-gray-400 uppercase tracking-wider">Founded Year</label>
+                            <input
+                                type="number"
+                                name="founded"
+                                placeholder="e.g. 1902"
+                                value={formData.founded === 0 ? '' : formData.founded}
+                                onChange={handleInputChange}
+                                className="w-full bg-white dark:bg-gray-800/50 border border-slate-200 dark:border-white/10 p-3.5 rounded-xl text-slate-900 dark:text-white focus:ring-2 focus:ring-brand-500 focus:border-brand-500 outline-none transition-all shadow-sm font-medium"
+                            />
+                        </div>
+                        
+                        <div className="space-y-1.5 focus-within:text-brand-600 dark:focus-within:text-brand-400 transition-colors">
+                            <label className="text-xs font-bold text-slate-500 dark:text-gray-400 uppercase tracking-wider">Stadium</label>
+                            <input
+                                type="text"
+                                name="stadium"
+                                placeholder="e.g. Santiago Bernabéu"
+                                value={formData.stadium}
+                                onChange={handleInputChange}
+                                className="w-full bg-white dark:bg-gray-800/50 border border-slate-200 dark:border-white/10 p-3.5 rounded-xl text-slate-900 dark:text-white focus:ring-2 focus:ring-brand-500 focus:border-brand-500 outline-none transition-all shadow-sm font-medium"
+                            />
+                        </div>
+                        
+                        <div className="space-y-1.5 focus-within:text-brand-600 dark:focus-within:text-brand-400 transition-colors">
+                            <label className="text-xs font-bold text-slate-500 dark:text-gray-400 uppercase tracking-wider">Manager Name</label>
+                            <input
+                                type="text"
+                                name="manager"
+                                placeholder="Manager's Full Name"
+                                value={formData.manager || ''}
+                                onChange={handleInputChange}
+                                className="w-full bg-white dark:bg-gray-800/50 border border-slate-200 dark:border-white/10 p-3.5 rounded-xl text-slate-900 dark:text-white focus:ring-2 focus:ring-brand-500 focus:border-brand-500 outline-none transition-all shadow-sm font-medium"
+                            />
+                        </div>
+                        
+                        <div className="space-y-1.5 focus-within:text-brand-600 dark:focus-within:text-brand-400 transition-colors">
+                            <label className="text-xs font-bold text-slate-500 dark:text-gray-400 uppercase tracking-wider">Squad Size</label>
+                            <input
+                                type="number"
+                                name="players"
+                                placeholder="Number of players"
+                                value={formData.players === 0 ? '' : formData.players}
+                                onChange={handleInputChange}
+                                className="w-full bg-white dark:bg-gray-800/50 border border-slate-200 dark:border-white/10 p-3.5 rounded-xl text-slate-900 dark:text-white focus:ring-2 focus:ring-brand-500 focus:border-brand-500 outline-none transition-all shadow-sm font-medium"
+                            />
+                        </div>
+                        
+                        <div className="space-y-1.5 focus-within:text-brand-600 dark:focus-within:text-brand-400 transition-colors">
+                            <label className="text-xs font-bold text-slate-500 dark:text-gray-400 uppercase tracking-wider">Team Status</label>
+                            <div className="relative">
+                                <select
+                                    name="status"
+                                    value={formData.status || 'Active'}
+                                    onChange={handleInputChange}
+                                    className="w-full bg-white dark:bg-gray-800/50 border border-slate-200 dark:border-white/10 p-3.5 rounded-xl text-slate-900 dark:text-white focus:ring-2 focus:ring-brand-500 focus:border-brand-500 outline-none transition-all shadow-sm font-medium appearance-none cursor-pointer"
+                                    style={{
+                                        color: formData.status === 'Active' ? '#22c55e' : 
+                                               formData.status === 'Inactive' ? '#94a3b8' : 
+                                               formData.status === 'Suspended' ? '#ef4444' : '#64748b'
+                                    }}
+                                >
+                                    <option value="Active" className="text-green-500 font-bold">Active</option>
+                                    <option value="Inactive" className="text-slate-500 font-bold">Inactive</option>
+                                    <option value="Suspended" className="text-red-500 font-bold">Suspended</option>
+                                    <option value="Dissolved" className="text-slate-600 font-bold">Dissolved</option>
+                                </select>
+                                <div className="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none text-slate-400">
+                                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7"></path></svg>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div className="space-y-1.5 focus-within:text-brand-600 dark:focus-within:text-brand-400 transition-colors">
+                            <label className="text-xs font-bold text-slate-500 dark:text-gray-400 uppercase tracking-wider">Home District</label>
+                            <div className="relative">
+                                <select
+                                    name="district"
+                                    value={formData.district || ''}
+                                    onChange={handleInputChange}
+                                    className="w-full bg-white dark:bg-gray-800/50 border border-slate-200 dark:border-white/10 p-3.5 rounded-xl text-slate-900 dark:text-white focus:ring-2 focus:ring-brand-500 focus:border-brand-500 outline-none transition-all shadow-sm font-medium appearance-none cursor-pointer"
+                                >
+                                    <option value="">Select District</option>
+                                    <optgroup label="Jammu Division" className="font-bold text-brand-500">
+                                        {['Jammu', 'Samba', 'Kathua', 'Udhampur', 'Reasi', 'Rajouri', 'Poonch', 'Doda', 'Ramban', 'Kishtwar'].map(d => (
+                                            <option key={d} value={d} className="text-slate-900 dark:text-white font-medium">{d}</option>
+                                        ))}
+                                    </optgroup>
+                                    <optgroup label="Kashmir Division" className="font-bold text-sky-500">
+                                        {['Srinagar', 'Ganderbal', 'Budgam', 'Baramulla', 'Bandipora', 'Kupwara', 'Pulwama', 'Shopian', 'Kulgam', 'Anantnag'].map(d => (
+                                            <option key={d} value={d} className="text-slate-900 dark:text-white font-medium">{d}</option>
+                                        ))}
+                                    </optgroup>
+                                </select>
+                                <div className="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none text-slate-400">
+                                    <MapPin className="w-4 h-4" />
+                                </div>
+                            </div>
+                        </div>
+                        <div className="space-y-1.5 focus-within:text-brand-600 dark:focus-within:text-brand-400 transition-colors">
+                            <label className="text-xs font-bold text-slate-500 dark:text-gray-400 uppercase tracking-wider">Trophies Won</label>
+                            <input
+                                type="number"
+                                name="trophies"
+                                placeholder="0"
+                                value={formData.trophies === 0 ? '' : formData.trophies}
+                                onChange={handleInputChange}
+                                className="w-full bg-white dark:bg-gray-800/50 border border-slate-200 dark:border-white/10 p-3.5 rounded-xl text-slate-900 dark:text-white focus:ring-2 focus:ring-brand-500 focus:border-brand-500 outline-none transition-all shadow-sm font-medium"
+                            />
+                        </div>
+
+                        <div className="md:col-span-2 space-y-1.5 focus-within:text-brand-600 dark:focus-within:text-brand-400 transition-colors">
+                            <label className="text-xs font-bold text-slate-500 dark:text-gray-400 uppercase tracking-wider">Club History / Description</label>
+                            <textarea
+                                name="description"
+                                rows="4"
+                                placeholder="Write about the club's history, values, and achievements..."
+                                value={formData.description || ''}
+                                onChange={handleInputChange}
+                                className="w-full bg-white dark:bg-gray-800/50 border border-slate-200 dark:border-white/10 p-4 rounded-xl text-slate-900 dark:text-white focus:ring-2 focus:ring-brand-500 focus:border-brand-500 outline-none transition-all shadow-sm font-medium resize-y"
+                            ></textarea>
+                        </div>
+
+                        <div className="md:col-span-2 space-y-2">
+                            <label className="text-xs font-bold text-slate-500 dark:text-gray-400 uppercase tracking-wider flex items-center justify-between">
+                                Participating Tournaments
+                                <span className="text-[10px] font-medium opacity-80 normal-case bg-slate-200 dark:bg-white/10 px-2 py-0.5 rounded-full">Select multiple</span>
+                            </label>
+                            <div className="flex flex-wrap gap-2.5 bg-white dark:bg-gray-800/50 border border-slate-200 dark:border-white/10 p-4 rounded-xl min-h-[58px] items-center shadow-inner">
+                                {tournaments.map(t => (
+                                    <button
+                                        key={t.id}
+                                        type="button"
+                                        onClick={() => handleTournamentToggle(t.name)}
+                                        className={`text-sm px-4 py-2 rounded-lg font-bold transition-all border ${Array.isArray(formData.tournaments) && formData.tournaments.includes(t.name)
+                                            ? 'bg-brand-500/10 border-brand-500/30 text-brand-600 dark:text-brand-400 shadow-sm'
+                                            : 'bg-slate-50 dark:bg-white/5 border-slate-200 dark:border-white/10 text-slate-600 dark:text-gray-400 hover:bg-slate-100 dark:hover:bg-white/10'
+                                            }`}
+                                    >
+                                        {t.name}
+                                    </button>
+                                ))}
+                                {tournaments.length === 0 && <div className="text-slate-500 dark:text-gray-500 text-sm italic py-1 px-2 border border-dashed border-slate-300 dark:border-gray-600 rounded">No tournaments available. Create one first.</div>}
+                            </div>
+                        </div>
+
+                        {/* Actions */}
+                        <div className="md:col-span-2 pt-6 mt-2 border-t border-slate-200 dark:border-white/10 flex flex-col sm:flex-row gap-3 items-center justify-between">
+                            <div className="flex w-full gap-3 flex-col sm:flex-row order-1 sm:order-2 sm:justify-end">
+                                {editingId && (
+                                    <button
+                                        type="button"
+                                        onClick={() => {
+                                            setEditingId(null);
+                                            setFormData({
+                                                name: '',
+                                                shortName: '',
+                                                founded: '',
+                                                stadium: '',
+                                                manager: '',
+                                                status: 'Active',
+                                                players: 0,
+                                                tournaments: [],
+                                                logoUrl: '',
+                                                description: '',
+                                                trophies: 0,
+                                                district: 'Baramulla'
+                                            });
+                                        }}
+                                        className="px-6 py-3.5 rounded-xl font-bold bg-slate-100 hover:bg-slate-200 text-slate-700 dark:bg-white/5 dark:hover:bg-white/10 dark:text-white transition-all w-full sm:w-auto text-center"
+                                    >
+                                        Cancel
+                                    </button>
+                                )}
+                                <button
+                                    type="submit"
+                                    disabled={loading}
+                                    className={`relative overflow-hidden group px-8 py-3.5 rounded-xl font-black text-white shadow-lg shadow-brand-500/25 transition-all w-full sm:w-auto text-center ${loading ? 'bg-brand-400/80 cursor-not-allowed scale-95' : 'bg-gradient-to-r from-brand-600 to-sky-500 hover:scale-[1.02] active:scale-95'}`}
+                                >
+                                    {loading ? (
+                                        <div className="flex items-center justify-center gap-2">
+                                            <div className="w-5 h-5 border-2 border-white/50 border-t-white animate-spin rounded-full"></div>
+                                            <span>Saving...</span>
+                                        </div>
+                                    ) : (
+                                        <div className="relative z-10 flex items-center justify-center gap-2">
+                                            <span>{editingId ? 'Save Changes' : 'Create Team'}</span>
+                                            <ChevronRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+                                        </div>
+                                    )}
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
 
             {/* Search */}
             < div id="team-list-top" className="mb-6 relative" >
@@ -566,12 +642,14 @@ const ManageTeams = () => {
                                 >
                                     Edit
                                 </button>
-                                <button
-                                    onClick={() => handleDelete(team.id)}
-                                    className="bg-red-600 hover:bg-red-700 px-3 py-1 rounded text-sm transition-colors"
-                                >
-                                    Delete
-                                </button>
+                                {isSuperAdmin && (
+                                    <button
+                                        onClick={() => handleDelete(team.id)}
+                                        className="bg-red-600 hover:bg-red-700 px-3 py-1 rounded text-sm transition-colors"
+                                    >
+                                        Delete
+                                    </button>
+                                )}
                             </div>
                         </div>
                     ))
