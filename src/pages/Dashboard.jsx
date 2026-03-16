@@ -202,7 +202,7 @@ const Dashboard = () => {
             </div>
 
             {/* ═══ FILTERS ═══ */}
-            <div className="flex flex-nowrap items-center gap-1.5 sm:gap-2 md:gap-3 w-full lg:w-auto lg:max-w-[60%] overflow-x-auto scrollbar-none pb-1">
+            <div className="flex flex-nowrap items-center lg:justify-end gap-1.5 sm:gap-2 md:gap-3 w-full lg:w-[60%] lg:flex-1 overflow-x-auto scrollbar-none pb-1">
               {/* Year filter */}
               <div className="relative flex-none" style={{ minWidth: 0, width: 'auto' }}>
                 <select
@@ -231,11 +231,11 @@ const Dashboard = () => {
               </div>
 
               {/* Tournament filter */}
-              <div className="relative flex-1 min-w-0">
+              <div className="relative flex-none lg:flex-1" style={{ width: 'auto' }}>
                 <select
                   value={dashboardCompetitionId}
                   onChange={(e) => setDashboardCompetitionId(e.target.value)}
-                  className="w-full bg-white/90 dark:bg-white/10 backdrop-blur-md border border-slate-200/80 dark:border-white/20 hover:border-brand-400 dark:hover:border-white/30 rounded-lg md:rounded-xl pl-2 sm:pl-2.5 md:pl-3 pr-5 sm:pr-6 md:pr-8 py-1 sm:py-1.5 md:py-2 text-[9px] sm:text-[10px] md:text-sm font-bold text-slate-900 dark:text-white focus:ring-2 focus:ring-brand-500 outline-none transition-all cursor-pointer appearance-none shadow-sm dark:shadow-lg h-7 sm:h-8 md:h-10 [&>option]:text-slate-900 truncate"
+                  className="w-full bg-white/90 dark:bg-white/10 backdrop-blur-md border border-slate-200/80 dark:border-white/20 hover:border-brand-400 dark:hover:border-white/30 rounded-lg md:rounded-xl pl-2 sm:pl-2.5 md:pl-3 pr-5 sm:pr-6 md:pr-8 py-1 sm:py-1.5 md:py-2 text-[9px] sm:text-[10px] md:text-sm font-bold text-slate-900 dark:text-white focus:ring-2 focus:ring-brand-500 outline-none transition-all cursor-pointer appearance-none shadow-sm dark:shadow-lg h-7 sm:h-8 md:h-10 [&>option]:text-slate-900"
                 >
                   <option value="All">Tournament</option>
                   {filteredTournaments.map(t => <option key={t.id} value={t.id}>{t.name}</option>)}
