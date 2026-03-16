@@ -105,8 +105,8 @@ const Dashboard = () => {
 
   const filteredPlayers = relevantTeamNames ? players.filter(p => relevantTeamNames.includes(p.team)) : players;
   const liveMatches = filteredMatches.filter(m => m.status === 'live' || m.status === 'halftime');
-  const upcomingMatches = filteredMatches.filter(m => m.status === 'scheduled');
-  const finishedMatches = filteredMatches.filter(m => m.status === 'finished').slice(0, 5);
+  const upcomingMatches = filteredMatches.filter(m => m.status === 'scheduled').sort((a, b) => (a.date || '').localeCompare(b.date || ''));
+  const finishedMatches = filteredMatches.filter(m => m.status === 'finished').sort((a, b) => (b.date || '').localeCompare(a.date || '')).slice(0, 15);
   const topScorers = [...filteredPlayers].sort((a, b) => (b.goals || 0) - (a.goals || 0)).slice(0, 5);
   const topAssists = [...filteredPlayers].sort((a, b) => (b.assists || 0) - (a.assists || 0)).slice(0, 5);
   const standings = (dashboardCompetitionId && dashboardCompetitionId !== 'All') ? calculateStandings(teams, matches, tournaments.find(t => t.id === dashboardCompetitionId)?.name) : [];
@@ -441,7 +441,7 @@ const Dashboard = () => {
           {/* ── RECENT RESULTS ── */}
           <motion.section variants={item}>
             <h2 className="text-lg sm:text-xl font-display font-black text-slate-900 dark:text-white drop-shadow-sm mb-3 sm:mb-4 flex items-center gap-2"><Clock className="text-slate-500 dark:text-slate-400" size={20} /> Recent Results</h2>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <div className="space-y-3 max-h-[420px] overflow-y-auto pr-2 scrollbar-thin scrollbar-thumb-slate-300 dark:scrollbar-thumb-white/10 scrollbar-track-transparent">
               {finishedMatches.length > 0 ? finishedMatches.map(match => (
                 <div onClick={() => navigate(`/live/${match.id}`)} key={match.id} className="block group cursor-pointer">
                   <div className="p-3.5 sm:p-4 rounded-xl bg-gradient-to-br from-white to-slate-50 dark:from-[#0f172a] dark:to-[#020617] ring-1 ring-slate-200/80 dark:ring-white/5 hover:shadow-lg hover:ring-2 hover:ring-brand-500/30 dark:hover:shadow-cyan-500/10 hover:-translate-y-0.5 transition-all duration-300 shadow-sm dark:shadow-md">
