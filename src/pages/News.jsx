@@ -63,15 +63,15 @@ const News = () => {
     }
 
     return (
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 space-y-12">
+        <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 py-8 sm:py-12 space-y-8 sm:space-y-12">
 
             <motion.div
                 initial={{ opacity: 0, y: -20 }}
                 animate={{ opacity: 1, y: 0 }}
                 className="text-center max-w-2xl mx-auto"
             >
-                <h1 className="text-4xl md:text-5xl font-display font-bold text-slate-900 dark:text-white mb-4">Latest News</h1>
-                <p className="text-slate-600 dark:text-slate-400 text-lg">Stay updated with the latest match reports, transfer news, and club announcements.</p>
+                <h1 className="text-2xl sm:text-4xl md:text-5xl font-display font-bold text-slate-900 dark:text-white mb-3 sm:mb-4">Latest News</h1>
+                <p className="text-slate-600 dark:text-slate-400 text-sm sm:text-base md:text-lg">Stay updated with the latest match reports, transfer news, and club announcements.</p>
             </motion.div>
 
             {news.length > 0 ? (
@@ -79,7 +79,7 @@ const News = () => {
                     variants={container}
                     initial="hidden"
                     animate="show"
-                    className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
+                    className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-5 md:gap-8"
                 >
                     {/* Featured Article (First One) */}
                     <Link
@@ -93,11 +93,11 @@ const News = () => {
                                 className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
                             />
                             <div className="absolute inset-0 bg-gradient-to-t from-dark-bg via-dark-bg/50 to-transparent" />
-                            <div className="absolute bottom-0 left-0 p-8 space-y-3">
+                            <div className="absolute bottom-0 left-0 p-4 sm:p-8 space-y-2 sm:space-y-3">
                                 <span className="inline-block px-3 py-1 bg-brand-600 text-slate-900 dark:text-white text-xs font-bold uppercase tracking-wider rounded-lg shadow-lg">
                                     {news[0].category}
                                 </span>
-                                <h2 className="text-2xl md:text-4xl font-display font-bold text-slate-900 dark:text-white leading-tight max-w-2xl group-hover:text-brand-400 transition-colors">
+                                <h2 className="text-xl sm:text-2xl md:text-4xl font-display font-bold text-slate-900 dark:text-white leading-tight max-w-2xl group-hover:text-brand-400 transition-colors line-clamp-3">
                                     {news[0].title}
                                 </h2>
                                 <p className="text-slate-600 dark:text-slate-300 line-clamp-2 max-w-xl text-sm md:text-base">
@@ -132,8 +132,8 @@ const News = () => {
                                     </div>
                                 </div>
 
-                                <div className="p-5 flex flex-col flex-1">
-                                    <h3 className="text-xl font-display font-bold text-slate-900 dark:text-white mb-2 line-clamp-2 group-hover:text-brand-400 transition-colors">
+                                <div className="p-3 sm:p-5 flex flex-col flex-1">
+                                    <h3 className="text-base sm:text-xl font-display font-bold text-slate-900 dark:text-white mb-2 line-clamp-2 group-hover:text-brand-400 transition-colors">
                                         {article.title}
                                     </h3>
                                     <p className="text-slate-600 dark:text-slate-400 text-sm line-clamp-3 mb-4 flex-1">

@@ -83,12 +83,12 @@ const Tournaments = () => {
   }
 
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-12 space-y-8">
+    <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 py-6 sm:py-8 md:py-12 space-y-5 sm:space-y-8">
       {/* Hero Header */}
       <motion.div
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
-        className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-white via-slate-50 to-brand-50/50 dark:from-[#020617] dark:via-[#1e1b4b] dark:to-[#0f172a] border border-slate-200/80 dark:border-brand-500/20 shadow-xl dark:shadow-2xl dark:shadow-brand-900/40 p-8 md:p-10"
+        className="relative overflow-hidden rounded-2xl sm:rounded-3xl bg-gradient-to-br from-white via-slate-50 to-brand-50/50 dark:from-[#020617] dark:via-[#1e1b4b] dark:to-[#0f172a] border border-slate-200/80 dark:border-brand-500/20 shadow-xl dark:shadow-2xl dark:shadow-brand-900/40 p-4 sm:p-8 md:p-10"
       >
         <div className="absolute -top-20 -right-20 w-64 h-64 bg-brand-500/5 rounded-full blur-3xl" />
         <div className="absolute -bottom-20 -left-20 w-48 h-48 bg-yellow-500/5 rounded-full blur-3xl" />
@@ -100,27 +100,27 @@ const Tournaments = () => {
                 <Trophy size={24} className="text-slate-900 dark:text-white" />
               </div>
               <div>
-                <h1 className="text-3xl md:text-4xl font-display font-bold text-slate-900 dark:text-white">Tournaments</h1>
+                <h1 className="text-2xl sm:text-3xl md:text-4xl font-display font-bold text-slate-900 dark:text-white">Tournaments</h1>
                 <p className="text-slate-500 text-sm mt-0.5">Explore local football competitions across J&K</p>
               </div>
             </div>
           </div>
 
           {/* Quick Stats */}
-          <div className="flex items-center gap-4">
-            <div className="text-center px-4 py-2">
-              <div className="text-2xl font-display font-bold text-green-400">{ongoingCount}</div>
-              <div className="text-[10px] text-slate-500 uppercase font-bold tracking-wider">Live</div>
+          <div className="flex items-center gap-2 sm:gap-4 flex-shrink-0">
+            <div className="text-center px-2 sm:px-4 py-2">
+              <div className="text-xl sm:text-2xl font-display font-bold text-green-400">{ongoingCount}</div>
+              <div className="text-[9px] sm:text-[10px] text-slate-500 uppercase font-bold tracking-wider">Live</div>
             </div>
-            <div className="w-px h-10 bg-white/10" />
-            <div className="text-center px-4 py-2">
-              <div className="text-2xl font-display font-bold text-blue-400">{upcomingCount}</div>
-              <div className="text-[10px] text-slate-500 uppercase font-bold tracking-wider">Upcoming</div>
+            <div className="w-px h-8 sm:h-10 bg-white/10" />
+            <div className="text-center px-2 sm:px-4 py-2">
+              <div className="text-xl sm:text-2xl font-display font-bold text-blue-400">{upcomingCount}</div>
+              <div className="text-[9px] sm:text-[10px] text-slate-500 uppercase font-bold tracking-wider">Upcoming</div>
             </div>
-            <div className="w-px h-10 bg-white/10" />
-            <div className="text-center px-4 py-2">
-              <div className="text-2xl font-display font-bold text-slate-500 dark:text-slate-400">{finishedCount}</div>
-              <div className="text-[10px] text-slate-500 uppercase font-bold tracking-wider">Completed</div>
+            <div className="w-px h-8 sm:h-10 bg-white/10" />
+            <div className="text-center px-2 sm:px-4 py-2">
+              <div className="text-xl sm:text-2xl font-display font-bold text-slate-500 dark:text-slate-400">{finishedCount}</div>
+              <div className="text-[9px] sm:text-[10px] text-slate-500 uppercase font-bold tracking-wider">Done</div>
             </div>
           </div>
         </div>
@@ -131,9 +131,9 @@ const Tournaments = () => {
         initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.1 }}
-        className="rounded-2xl bg-gradient-to-br from-white to-slate-50 dark:from-[#0f172a] dark:to-[#020617] ring-1 ring-slate-200/80 dark:ring-white/5 shadow-sm p-4"
+        className="rounded-xl sm:rounded-2xl bg-gradient-to-br from-white to-slate-50 dark:from-[#0f172a] dark:to-[#020617] ring-1 ring-slate-200/80 dark:ring-white/5 shadow-sm p-3 sm:p-4"
       >
-        <div className="flex flex-col lg:flex-row items-start lg:items-center gap-4">
+        <div className="flex flex-col lg:flex-row items-start lg:items-center gap-2 sm:gap-3 md:gap-4">
           {/* Search */}
           <div className="relative flex-1 w-full lg:w-auto">
             <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-500 dark:text-slate-400" />
@@ -142,12 +142,12 @@ const Tournaments = () => {
               placeholder="Search tournaments..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full bg-white/5 border border-slate-200/10 dark:border-white/10 rounded-xl pl-10 pr-4 py-2.5 text-sm text-slate-900 dark:text-white placeholder-slate-400 focus:ring-2 focus:ring-brand-500/50 focus:border-brand-500 outline-none transition-all"
+              className="w-full bg-white/5 border border-slate-200/10 dark:border-white/10 rounded-lg md:rounded-xl pl-8 sm:pl-10 pr-3 sm:pr-4 py-2 sm:py-2.5 text-xs sm:text-sm text-slate-900 dark:text-white placeholder-slate-400 focus:ring-2 focus:ring-brand-500/50 focus:border-brand-500 outline-none transition-all"
             />
           </div>
 
           {/* Tab Filters */}
-          <div className="flex items-center gap-1 bg-white/5 rounded-xl p-1 border border-slate-200/5 dark:border-white/5">
+          <div className="flex items-center gap-0.5 sm:gap-1 bg-white/5 rounded-lg md:rounded-xl p-0.5 sm:p-1 border border-slate-200/5 dark:border-white/5 overflow-x-auto scrollbar-none w-full sm:w-auto">
             {[
               { key: 'all', label: 'All', count: tournaments.length },
               { key: 'ongoing', label: 'Live', count: ongoingCount },
@@ -157,7 +157,7 @@ const Tournaments = () => {
               <button
                 key={tab.key}
                 onClick={() => setActiveTab(tab.key)}
-                className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all ${activeTab === tab.key
+                className={`px-1.5 sm:px-2 md:px-3 py-1 sm:py-1.5 rounded-md md:rounded-lg text-[9px] sm:text-[10px] md:text-xs font-bold transition-all whitespace-nowrap ${activeTab === tab.key
                     ? 'bg-brand-500 text-slate-900 dark:text-white shadow-md shadow-brand-500/20'
                     : 'text-slate-500 hover:text-slate-900 dark:text-white hover:bg-white/5'
                   }`}
@@ -168,13 +168,13 @@ const Tournaments = () => {
           </div>
 
           {/* Dropdowns */}
-          <div className="flex items-center gap-2">
-            <div className="flex items-center gap-2 bg-white/5 px-3 py-2 rounded-xl border border-slate-200/5 dark:border-white/5">
+          <div className="flex flex-nowrap items-center gap-1.5 sm:gap-2 overflow-x-auto scrollbar-none w-full sm:w-auto">
+            <div className="flex items-center gap-1.5 sm:gap-2 bg-white/5 px-2 sm:px-3 py-1.5 sm:py-2 rounded-lg md:rounded-xl border border-slate-200/5 dark:border-white/5 flex-shrink-0">
               <Calendar size={14} className="text-brand-400" />
               <select
                 value={selectedYear}
                 onChange={(e) => setSelectedYear(e.target.value)}
-                className="bg-transparent text-xs text-slate-900 dark:text-white outline-none font-medium"
+                className="bg-transparent text-[10px] sm:text-xs text-slate-900 dark:text-white outline-none font-medium"
               >
                 <option value="All" className="bg-white dark:bg-slate-900">All Years</option>
                 {availableYears.map(year => (
@@ -183,12 +183,12 @@ const Tournaments = () => {
               </select>
             </div>
 
-            <div className="flex items-center gap-2 bg-white/5 px-3 py-2 rounded-xl border border-slate-200/5 dark:border-white/5">
+            <div className="flex items-center gap-1.5 sm:gap-2 bg-white/5 px-2 sm:px-3 py-1.5 sm:py-2 rounded-lg md:rounded-xl border border-slate-200/5 dark:border-white/5 flex-shrink-0">
               <MapPin size={14} className="text-brand-400" />
               <select
                 value={selectedDistrict}
                 onChange={(e) => setSelectedDistrict(e.target.value)}
-                className="bg-transparent text-xs text-slate-900 dark:text-white outline-none font-medium"
+                className="bg-transparent text-[10px] sm:text-xs text-slate-900 dark:text-white outline-none font-medium"
               >
                 <option value="All" className="bg-white dark:bg-slate-900">All Districts</option>
                 {availableDistricts.map(district => (
@@ -228,7 +228,7 @@ const Tournaments = () => {
           variants={container}
           initial="hidden"
           animate="show"
-          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
+          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6"
         >
           {filteredTournaments.map((tournament) => {
             const status = statusConfig[tournament.status] || statusConfig.upcoming;
@@ -244,7 +244,7 @@ const Tournaments = () => {
                   {/* Card Top Gradient Bar */}
                   <div className={`h-1.5 bg-gradient-to-r ${type.gradient}`} />
 
-                  <div className="p-6">
+                  <div className="p-4 sm:p-6">
                     {/* Status & Type */}
                     <div className="flex items-center justify-between mb-4">
                       <div className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg border text-[10px] font-black uppercase tracking-wider ${status.color}`}>
@@ -271,7 +271,7 @@ const Tournaments = () => {
                     </div>
 
                     {/* Title */}
-                    <h2 className="text-xl font-display font-bold text-slate-900 dark:text-white mb-1 group-hover:text-brand-400 transition-colors leading-tight">
+                    <h2 className="text-base sm:text-xl font-display font-bold text-slate-900 dark:text-white mb-1 group-hover:text-brand-400 transition-colors leading-tight line-clamp-2">
                       {tournament.name}
                     </h2>
 
@@ -284,18 +284,18 @@ const Tournaments = () => {
                     )}
 
                     {/* Stats Row */}
-                    <div className="grid grid-cols-3 gap-3 mb-4">
-                      <div className="bg-white/5 rounded-xl p-3 text-center border border-slate-200/5 dark:border-white/5">
+                    <div className="grid grid-cols-3 gap-2 sm:gap-3 mb-4">
+                      <div className="bg-white/5 rounded-xl p-2 sm:p-3 text-center border border-slate-200/5 dark:border-white/5">
                         <Users size={14} className="mx-auto text-blue-400 mb-1" />
                         <div className="text-lg font-display font-bold text-slate-900 dark:text-white">{tournament.teamsCount || 0}</div>
                         <div className="text-[9px] text-slate-500 uppercase font-bold tracking-wider">Teams</div>
                       </div>
-                      <div className="bg-white/5 rounded-xl p-3 text-center border border-slate-200/5 dark:border-white/5">
+                      <div className="bg-white/5 rounded-xl p-2 sm:p-3 text-center border border-slate-200/5 dark:border-white/5">
                         <Swords size={14} className="mx-auto text-brand-400 mb-1" />
                         <div className="text-lg font-display font-bold text-slate-900 dark:text-white">{matchCount}</div>
                         <div className="text-[9px] text-slate-500 uppercase font-bold tracking-wider">Matches</div>
                       </div>
-                      <div className="bg-white/5 rounded-xl p-3 text-center border border-slate-200/5 dark:border-white/5">
+                      <div className="bg-white/5 rounded-xl p-2 sm:p-3 text-center border border-slate-200/5 dark:border-white/5">
                         <Calendar size={14} className="mx-auto text-yellow-400 mb-1" />
                         <div className="text-sm font-bold text-slate-900 dark:text-white">
                           {tournament.startDate ? new Date(tournament.startDate).toLocaleDateString('en-IN', { day: 'numeric', month: 'short' }) : 'TBD'}

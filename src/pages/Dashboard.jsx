@@ -190,59 +190,57 @@ const Dashboard = () => {
         <div className="absolute top-0 right-0 w-40 h-40 bg-brand-500/10 rounded-full blur-3xl" />
         <div className="absolute bottom-0 left-0 w-32 h-32 bg-cyan-500/10 rounded-full blur-3xl" />
         <div className="relative px-4 sm:px-8 py-6 sm:py-10">
-          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 sm:gap-6">
-            <div className="w-full">
-              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-                <div className="flex flex-col">
-                  <div className="flex items-center gap-2 mb-2">
-                    {liveMatches.length > 0 && <span className="flex items-center w-fit gap-1.5 px-2.5 py-1 rounded-full bg-red-500/20 border border-red-500/30 text-red-400 text-[11px] font-bold uppercase tracking-wider"><span className="h-1.5 w-1.5 rounded-full bg-red-500 animate-pulse" />{liveMatches.length} Live</span>}
-                  </div>
-                  <h1 className="text-2xl sm:text-4xl font-display font-black text-slate-900 dark:text-white drop-shadow-sm dark:drop-shadow-lg mb-1">Match <span className="text-transparent bg-clip-text bg-gradient-to-r from-brand-500 to-cyan-500 dark:from-brand-400 dark:to-cyan-400">Center</span></h1>
-                  <p className="text-slate-500 dark:text-slate-400 text-sm sm:text-base">Track live scores, fixtures and statistics in real-time.</p>
+          <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4 lg:gap-6">
+            <div className="flex-shrink-0">
+              <div className="flex flex-col">
+                <div className="flex items-center gap-2 mb-2">
+                  {liveMatches.length > 0 && <span className="flex items-center w-fit gap-1.5 px-2.5 py-1 rounded-full bg-red-500/20 border border-red-500/30 text-red-400 text-[11px] font-bold uppercase tracking-wider"><span className="h-1.5 w-1.5 rounded-full bg-red-500 animate-pulse" />{liveMatches.length} Live</span>}
                 </div>
+                <h1 className="text-2xl sm:text-4xl font-display font-black text-slate-900 dark:text-white drop-shadow-sm dark:drop-shadow-lg mb-1">Match <span className="text-transparent bg-clip-text bg-gradient-to-r from-brand-500 to-cyan-500 dark:from-brand-400 dark:to-cyan-400">Center</span></h1>
+                <p className="text-slate-500 dark:text-slate-400 text-sm sm:text-base">Track live scores, fixtures and statistics in real-time.</p>
               </div>
             </div>
 
             {/* ═══ FILTERS ═══ */}
-            <div className="mt-6 flex flex-nowrap overflow-x-auto items-center gap-2 sm:gap-4 w-full pb-2 scrollbar-none">
+            <div className="flex flex-nowrap items-center gap-1.5 sm:gap-2 md:gap-3 w-full lg:w-auto lg:max-w-[60%] overflow-x-auto scrollbar-none pb-1">
               {/* Year filter */}
-              <div className="relative flex-none min-w-[75px] sm:min-w-[80px]">
+              <div className="relative flex-none" style={{ minWidth: 0, width: 'auto' }}>
                 <select
                   value={selectedYear}
                   onChange={(e) => { setSelectedYear(e.target.value); setDashboardCompetitionId('All'); }}
-                  className="w-full bg-white/90 dark:bg-white/10 backdrop-blur-md border border-slate-200/80 dark:border-white/20 hover:border-brand-400 dark:hover:border-white/30 rounded-xl pl-3 pr-8 py-2 text-[11px] sm:text-sm font-bold text-slate-900 dark:text-white focus:ring-2 focus:ring-brand-500 outline-none transition-all cursor-pointer appearance-none shadow-sm dark:shadow-lg h-10 [&>option]:text-slate-900"
+                  className="w-full bg-white/90 dark:bg-white/10 backdrop-blur-md border border-slate-200/80 dark:border-white/20 hover:border-brand-400 dark:hover:border-white/30 rounded-lg md:rounded-xl pl-2 sm:pl-2.5 md:pl-3 pr-5 sm:pr-6 md:pr-8 py-1 sm:py-1.5 md:py-2 text-[9px] sm:text-[10px] md:text-sm font-bold text-slate-900 dark:text-white focus:ring-2 focus:ring-brand-500 outline-none transition-all cursor-pointer appearance-none shadow-sm dark:shadow-lg h-7 sm:h-8 md:h-10 [&>option]:text-slate-900"
                 >
                   <option value="All">Year</option>
                   {availableYears.map(y => <option key={y} value={y}>{y}</option>)}
                 </select>
-                <ChevronRight size={12} className="absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-500 dark:text-slate-400 rotate-90 pointer-events-none" />
+                <ChevronRight size={10} className="absolute right-1 sm:right-1.5 md:right-2.5 top-1/2 -translate-y-1/2 text-slate-500 dark:text-slate-400 rotate-90 pointer-events-none" />
               </div>
 
               {/* District filter */}
-              <div className="relative flex-none min-w-[90px] sm:min-w-[110px]">
+              <div className="relative flex-none" style={{ minWidth: 0, width: 'auto' }}>
                 <select
                   value={selectedDistrict}
                   onChange={(e) => { setSelectedDistrict(e.target.value); setDashboardCompetitionId('All'); }}
-                  className="w-full bg-white/90 dark:bg-white/10 backdrop-blur-md border border-slate-200/80 dark:border-white/20 hover:border-brand-400 dark:hover:border-white/30 rounded-xl pl-3 pr-8 py-2 text-[11px] sm:text-sm font-bold text-slate-900 dark:text-white focus:ring-2 focus:ring-brand-500 outline-none transition-all cursor-pointer appearance-none shadow-sm dark:shadow-lg h-10 [&>option]:text-slate-900"
+                  className="w-full bg-white/90 dark:bg-white/10 backdrop-blur-md border border-slate-200/80 dark:border-white/20 hover:border-brand-400 dark:hover:border-white/30 rounded-lg md:rounded-xl pl-2 sm:pl-2.5 md:pl-3 pr-5 sm:pr-6 md:pr-8 py-1 sm:py-1.5 md:py-2 text-[9px] sm:text-[10px] md:text-sm font-bold text-slate-900 dark:text-white focus:ring-2 focus:ring-brand-500 outline-none transition-all cursor-pointer appearance-none shadow-sm dark:shadow-lg h-7 sm:h-8 md:h-10 [&>option]:text-slate-900"
                 >
                   <option value="All">District</option>
                   <optgroup label="Kashmir">{DISTRICTS.KASHMIR.map(d => <option key={d} value={d}>{d}</option>)}</optgroup>
                   <optgroup label="Jammu">{DISTRICTS.JAMMU.map(d => <option key={d} value={d}>{d}</option>)}</optgroup>
                 </select>
-                <ChevronRight size={12} className="absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-500 dark:text-slate-400 rotate-90 pointer-events-none" />
+                <ChevronRight size={10} className="absolute right-1 sm:right-1.5 md:right-2.5 top-1/2 -translate-y-1/2 text-slate-500 dark:text-slate-400 rotate-90 pointer-events-none" />
               </div>
 
               {/* Tournament filter */}
-              <div className="relative flex-1 min-w-[120px] sm:min-w-[130px]">
+              <div className="relative flex-1 min-w-0">
                 <select
                   value={dashboardCompetitionId}
                   onChange={(e) => setDashboardCompetitionId(e.target.value)}
-                  className="w-full bg-white/90 dark:bg-white/10 backdrop-blur-md border border-slate-200/80 dark:border-white/20 hover:border-brand-400 dark:hover:border-white/30 rounded-xl pl-3 pr-8 py-2 text-[11px] sm:text-sm font-bold text-slate-900 dark:text-white focus:ring-2 focus:ring-brand-500 outline-none transition-all cursor-pointer appearance-none shadow-sm dark:shadow-lg h-10 [&>option]:text-slate-900"
+                  className="w-full bg-white/90 dark:bg-white/10 backdrop-blur-md border border-slate-200/80 dark:border-white/20 hover:border-brand-400 dark:hover:border-white/30 rounded-lg md:rounded-xl pl-2 sm:pl-2.5 md:pl-3 pr-5 sm:pr-6 md:pr-8 py-1 sm:py-1.5 md:py-2 text-[9px] sm:text-[10px] md:text-sm font-bold text-slate-900 dark:text-white focus:ring-2 focus:ring-brand-500 outline-none transition-all cursor-pointer appearance-none shadow-sm dark:shadow-lg h-7 sm:h-8 md:h-10 [&>option]:text-slate-900 truncate"
                 >
                   <option value="All">Tournament</option>
                   {filteredTournaments.map(t => <option key={t.id} value={t.id}>{t.name}</option>)}
                 </select>
-                <ChevronRight size={12} className="absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-500 dark:text-slate-400 rotate-90 pointer-events-none" />
+                <ChevronRight size={10} className="absolute right-1 sm:right-1.5 md:right-2.5 top-1/2 -translate-y-1/2 text-slate-500 dark:text-slate-400 rotate-90 pointer-events-none" />
               </div>
             </div>
           </div>
