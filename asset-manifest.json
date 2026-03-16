@@ -1,7 +1,7 @@
 {
   "files": {
     "main.css": "/goal.kashmir/static/css/main.2aeebbcd.css",
-    "main.js": "/goal.kashmir/static/js/main.97571fd1.js",
+    "main.js": "/goal.kashmir/static/js/main.6daacf2c.js",
     "static/media/ChatGPT Image Feb 9, 2026, 11_39_58 AM.png": "/goal.kashmir/static/media/ChatGPT Image Feb 9, 2026, 11_39_58 AM.af44b4557789aa16e7e3.png",
     "static/media/iu.jpg": "/goal.kashmir/static/media/iu.a60e27ede2b5e10f956c.jpg",
     "static/media/Snow-3 - Copy (2).jpg": "/goal.kashmir/static/media/Snow-3 - Copy (2).e2aed85986e8803be7b8.jpg",
@@ -11,10 +11,10 @@
     "service-worker.js": "/goal.kashmir/service-worker.js",
     "index.html": "/goal.kashmir/index.html",
     "main.2aeebbcd.css.map": "/goal.kashmir/static/css/main.2aeebbcd.css.map",
-    "main.97571fd1.js.map": "/goal.kashmir/static/js/main.97571fd1.js.map"
+    "main.6daacf2c.js.map": "/goal.kashmir/static/js/main.6daacf2c.js.map"
   },
   "entrypoints": [
     "static/css/main.2aeebbcd.css",
-    "static/js/main.97571fd1.js"
+    "static/js/main.6daacf2c.js"
   ]
 }
