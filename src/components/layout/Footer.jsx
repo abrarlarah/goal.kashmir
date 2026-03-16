@@ -2,38 +2,44 @@ import React, { useState, useEffect } from 'react';
 import { Heart, Download, Smartphone, Shield, Zap } from 'lucide-react';
 
 const Footer = () => {
-    const [deferredPrompt, setDeferredPrompt] = useState(null);
+    const [canInstall, setCanInstall] = useState(false);
     const [isInstalled, setIsInstalled] = useState(false);
 
     useEffect(() => {
         // Check if app is already installed
         if (window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone) {
             setIsInstalled(true);
+            return;
         }
 
-        const handler = (e) => {
-            e.preventDefault();
-            setDeferredPrompt(e);
-        };
-        window.addEventListener('beforeinstallprompt', handler);
+        // Check if the prompt was already captured globally (in index.js)
+        if (window.__PWA_DEFERRED_PROMPT) {
+            setCanInstall(true);
+        }
+
+        // Listen for the custom event dispatched from index.js
+        const onAvailable = () => setCanInstall(true);
+        window.addEventListener('pwa-install-available', onAvailable);
         
         window.addEventListener('appinstalled', () => {
-            setDeferredPrompt(null);
+            setCanInstall(false);
             setIsInstalled(true);
         });
 
-        return () => window.removeEventListener('beforeinstallprompt', handler);
+        return () => window.removeEventListener('pwa-install-available', onAvailable);
     }, []);
 
     const handleInstallClick = async () => {
-        if (!deferredPrompt) {
-            alert("App installation is not supported on this browser or you have already installed it. If you're on iOS, tap the 'Share' button and select 'Add to Home Screen'.");
+        const prompt = window.__PWA_DEFERRED_PROMPT;
+        if (!prompt) {
+            alert("To install this app:\n\n• Android Chrome: Tap the ⋮ menu → 'Install App'\n• iPhone Safari: Tap Share ⬆️ → 'Add to Home Screen'\n• Desktop Chrome: Click the ⊕ icon in the address bar");
             return;
         }
-        deferredPrompt.prompt();
-        const { outcome } = await deferredPrompt.userChoice;
+        prompt.prompt();
+        const { outcome } = await prompt.userChoice;
         if (outcome === 'accepted') {
-            setDeferredPrompt(null);
+            window.__PWA_DEFERRED_PROMPT = null;
+            setCanInstall(false);
         }
     };
 

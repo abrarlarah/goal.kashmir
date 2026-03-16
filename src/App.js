@@ -32,6 +32,7 @@ import Gallery from './pages/Gallery';
 import PrivateRoute from './components/common/PrivateRoute';
 import { DataProvider } from './context/DataContext';
 import { ThemeProvider } from './context/ThemeContext';
+import InstallPWA from './components/common/InstallPWA';
 
 function App() {
   return (
@@ -150,6 +151,7 @@ function App() {
               />
             </Routes>
           </main>
+          <InstallPWA />
           <Footer />
         </div>
       </DataProvider>
