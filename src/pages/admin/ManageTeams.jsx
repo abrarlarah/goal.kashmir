@@ -242,14 +242,19 @@ const ManageTeams = () => {
     }, [tournaments, currentUser, isSuperAdmin]);
 
     const scopedTeams = useMemo(() => {
-        if (!myTournamentNames) return teams; // superadmin
+        if (isSuperAdmin) return teams;
         return teams.filter(team => {
+            // Include teams created by the user (Team Admins)
+            if (team.createdBy === currentUser?.uid) return true;
+
+            // Include teams in user's tournaments (Tournament Admins)
+            if (!myTournamentNames) return false;
             const teamTournaments = Array.isArray(team.tournaments)
                 ? team.tournaments
                 : (typeof team.tournaments === 'string' ? team.tournaments.split(',').map(t => t.trim()) : []);
             return teamTournaments.some(tn => myTournamentNames.includes(tn));
         });
-    }, [teams, myTournamentNames]);
+    }, [teams, myTournamentNames, currentUser, isSuperAdmin]);
 
     const filteredTeams = scopedTeams.filter(team =>
         team.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -489,6 +494,7 @@ const ManageTeams = () => {
                                     className="w-full bg-white dark:bg-gray-800/50 border border-slate-200 dark:border-white/10 p-3.5 rounded-xl text-slate-900 dark:text-white focus:ring-2 focus:ring-brand-500 focus:border-brand-500 outline-none transition-all shadow-sm font-medium appearance-none cursor-pointer"
                                 >
                                     <option value="">Select District</option>
+                                    <option value="Quick Match">Quick Match Special Category</option>
                                     <optgroup label="Jammu Division" className="font-bold text-brand-500">
                                         {['Jammu', 'Samba', 'Kathua', 'Udhampur', 'Reasi', 'Rajouri', 'Poonch', 'Doda', 'Ramban', 'Kishtwar'].map(d => (
                                             <option key={d} value={d} className="text-slate-900 dark:text-white font-medium">{d}</option>

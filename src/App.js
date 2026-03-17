@@ -64,7 +64,7 @@ function App() {
               <Route
                 path="/admin"
                 element={
-                  <PrivateRoute>
+                  <PrivateRoute requireAdminPanelAccess>
                     <Admin />
                   </PrivateRoute>
                 }
@@ -72,7 +72,7 @@ function App() {
               <Route
                 path="/admin/matches"
                 element={
-                  <PrivateRoute requireTournamentAdmin>
+                  <PrivateRoute requireTeamAdmin>
                     <ManageMatches />
                   </PrivateRoute>
                 }
@@ -80,7 +80,7 @@ function App() {
               <Route
                 path="/admin/teams"
                 element={
-                  <PrivateRoute requireTournamentAdmin>
+                  <PrivateRoute requireTeamAdmin>
                     <ManageTeams />
                   </PrivateRoute>
                 }
@@ -88,7 +88,7 @@ function App() {
               <Route
                 path="/admin/players"
                 element={
-                  <PrivateRoute requireTournamentAdmin>
+                  <PrivateRoute requireTeamAdmin>
                     <ManagePlayers />
                   </PrivateRoute>
                 }
@@ -96,7 +96,7 @@ function App() {
               <Route
                 path="/admin/lineups/:matchId?/:teamName?"
                 element={
-                  <PrivateRoute requireTournamentAdmin>
+                  <PrivateRoute requireTeamAdmin>
                     <ManageLineups />
                   </PrivateRoute>
                 }

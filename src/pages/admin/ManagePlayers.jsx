@@ -229,16 +229,21 @@ const ManagePlayers = () => {
     }, [tournaments, currentUser, isSuperAdmin]);
 
     const allowedTeamNames = useMemo(() => {
-        if (!myTournamentNames) return null; // superadmin
+        if (isSuperAdmin) return null; // superadmin
         return teams
             .filter(team => {
+                // Include teams created by the user (Team Admins)
+                if (team.createdBy === currentUser?.uid) return true;
+
+                // Include teams in user's tournaments (Tournament Admins)
+                if (!myTournamentNames) return false;
                 const teamTournaments = Array.isArray(team.tournaments)
                     ? team.tournaments
                     : (typeof team.tournaments === 'string' ? team.tournaments.split(',').map(t => t.trim()) : []);
                 return teamTournaments.some(tn => myTournamentNames.includes(tn));
             })
             .map(t => t.name);
-    }, [teams, myTournamentNames]);
+    }, [teams, myTournamentNames, currentUser, isSuperAdmin]);
 
     const scopedPlayers = useMemo(() => {
         if (!allowedTeamNames) return players; // superadmin

@@ -9,6 +9,7 @@ import { logAuditEvent } from '../../utils/auditLogger';
 const ROLE_CONFIG = {
     superadmin: { label: 'Super Admin', color: 'text-yellow-400 bg-yellow-400/10 border-yellow-400/20', icon: Crown },
     admin: { label: 'Tournament Admin', color: 'text-blue-400 bg-blue-400/10 border-blue-400/20', icon: ShieldCheck },
+    teamadmin: { label: 'Team Admin', color: 'text-emerald-400 bg-emerald-400/10 border-emerald-400/20', icon: Shield },
     newsadmin: { label: 'News Admin', color: 'text-pink-400 bg-pink-400/10 border-pink-400/20', icon: Newspaper },
     null: { label: 'User', color: 'text-slate-500 dark:text-gray-400 bg-gray-400/10 border-gray-400/20', icon: Users }
 };
@@ -174,6 +175,10 @@ const ManageUsers = () => {
                     <div className="text-2xl font-black text-pink-400">{users.filter(u => u.role === 'newsadmin').length}</div>
                     <div className="text-[10px] text-slate-500 dark:text-gray-500 uppercase font-black tracking-widest">News Admins</div>
                 </div>
+                <div className="bg-slate-50/50 dark:bg-gray-800/50 p-4 rounded-2xl border border-slate-200/5 dark:border-white/5 text-center">
+                    <div className="text-2xl font-black text-emerald-400">{users.filter(u => u.role === 'teamadmin').length}</div>
+                    <div className="text-[10px] text-slate-500 dark:text-gray-500 uppercase font-black tracking-widest">Team Admins</div>
+                </div>
             </div>
 
             {/* User List */}
@@ -222,6 +227,7 @@ const ManageUsers = () => {
                                             >
                                                 <option value="">Regular User</option>
                                                 <option value="newsadmin">News Admin</option>
+                                                <option value="teamadmin">Team Admin</option>
                                                 <option value="admin">Tournament Admin</option>
                                                 <option value="superadmin">Super Admin</option>
                                             </select>

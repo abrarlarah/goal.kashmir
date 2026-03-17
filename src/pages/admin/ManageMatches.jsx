@@ -10,7 +10,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 
 const ManageMatches = () => {
   const { matches, teams, tournaments } = useData();
-  const { currentUser, isSuperAdmin } = useAuth();
+  const { currentUser, isSuperAdmin, isTeamAdmin } = useAuth();
   const [loading, setLoading] = useState(false); // Form loading
   const [formData, setFormData] = useState({
     teamA: '',
@@ -49,6 +49,8 @@ const ManageMatches = () => {
   // Helper to filter teams by selected competition
   const getFilteredTeams = () => {
     if (!formData.competition) return [];
+    // For Quick Match, show all teams
+    if (formData.competition === 'Quick Match') return teams;
     return teams.filter(team => {
       const tTournaments = Array.isArray(team.tournaments)
         ? team.tournaments
@@ -104,9 +106,18 @@ const ManageMatches = () => {
     setLoading(true);
     setSuccessMessage('');
 
+    const isQuickMatch = formData.competition === 'Quick Match';
+    const dataToSave = {
+      ...formData,
+      ...(isQuickMatch && !editingId ? {
+        isQuickMatch: true,
+        createdBy: currentUser?.uid,
+      } : {})
+    };
+
     const request = editingId
-      ? updateDoc(doc(db, 'matches', editingId), formData)
-      : addDoc(collection(db, 'matches'), formData);
+      ? updateDoc(doc(db, 'matches', editingId), dataToSave)
+      : addDoc(collection(db, 'matches'), dataToSave);
 
     request.then((docRef) => {
       const matchLabel = `${formData.teamA} vs ${formData.teamB}`;
@@ -221,9 +232,16 @@ const ManageMatches = () => {
   }, [tournaments, currentUser, isSuperAdmin]);
 
   const scopedMatches = useMemo(() => {
-    if (!myTournamentNames) return matches; // superadmin
-    return matches.filter(m => myTournamentNames.includes(m.competition));
-  }, [matches, myTournamentNames]);
+    if (isSuperAdmin) return matches;
+    const myNames = tournaments
+      .filter(t => t.createdBy === currentUser?.uid)
+      .map(t => t.name);
+    
+    return matches.filter(m => 
+      myNames.includes(m.competition) || 
+      (m.isQuickMatch && m.createdBy === currentUser?.uid)
+    );
+  }, [matches, tournaments, currentUser, isSuperAdmin]);
 
   const filteredScopedMatches = useMemo(() => {
     return scopedMatches.filter(match => {
@@ -450,6 +468,7 @@ const ManageMatches = () => {
                         required
                       >
                         <option value="" disabled>Select Competition</option>
+                        <option value="Quick Match">⚡ Quick Match</option>
                         {tournaments.map(t => (
                           <option key={t.id} value={t.name}>{t.name}</option>
                         ))}
@@ -693,11 +712,11 @@ const ManageMatches = () => {
                 onChange={(e) => setFilterStatus(e.target.value)}
                 className="bg-transparent text-[11px] font-bold text-slate-600 dark:text-slate-300 focus:outline-none px-2 py-1 cursor-pointer hover:text-slate-900 dark:hover:text-white transition-colors capitalize appearance-none"
               >
-                <option value="all" className="bg-white dark:bg-[#1a103d]">All States</option>
-                <option value="scheduled" className="bg-white dark:bg-[#1a103d]">Scheduled</option>
-                <option value="live" className="bg-white dark:bg-[#1a103d]">Live</option>
-                <option value="halftime" className="bg-white dark:bg-[#1a103d]">Half Time</option>
-                <option value="finished" className="bg-white dark:bg-[#1a103d]">Finished</option>
+                <option value="all" className="bg-white dark:bg-slate-900 text-slate-900 dark:text-white">All States</option>
+                <option value="scheduled" className="bg-white dark:bg-slate-900 text-slate-900 dark:text-white">Scheduled</option>
+                <option value="live" className="bg-white dark:bg-slate-900 text-slate-900 dark:text-white">Live</option>
+                <option value="halftime" className="bg-white dark:bg-slate-900 text-slate-900 dark:text-white">Half Time</option>
+                <option value="finished" className="bg-white dark:bg-slate-900 text-slate-900 dark:text-white">Finished</option>
               </select>
               <div className="w-px h-4 bg-slate-200 dark:bg-white/10"></div>
               <select
@@ -705,9 +724,9 @@ const ManageMatches = () => {
                 onChange={(e) => setFilterTournament(e.target.value)}
                 className="bg-transparent text-[11px] font-bold text-slate-600 dark:text-slate-300 focus:outline-none px-2 py-1 cursor-pointer hover:text-slate-900 dark:hover:text-white transition-colors appearance-none"
               >
-                <option value="all" className="bg-white dark:bg-[#1a103d]">All Tournaments</option>
+                <option value="all" className="bg-white dark:bg-slate-900 text-slate-900 dark:text-white">All Tournaments</option>
                 {tournaments.map(t => (
-                  <option key={t.id} value={t.name} className="bg-white dark:bg-[#1a103d]">{t.name}</option>
+                  <option key={t.id} value={t.name} className="bg-white dark:bg-slate-900 text-slate-900 dark:text-white">{t.name}</option>
                 ))}
               </select>
             </div>

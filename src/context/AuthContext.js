@@ -101,12 +101,20 @@ export function AuthProvider({ children }) {
     isSuperAdmin: userRole === 'superadmin',
     isAdmin: userRole === 'superadmin' || userRole === 'admin',
     isNewsAdmin: userRole === 'superadmin' || userRole === 'newsadmin',
-    hasAnyAdminAccess: userRole === 'superadmin' || userRole === 'admin' || userRole === 'newsadmin',
+    isTeamAdmin: userRole === 'superadmin' || userRole === 'admin' || userRole === 'teamadmin',
+    hasAnyAdminAccess: userRole === 'superadmin' || userRole === 'admin' || userRole === 'newsadmin' || userRole === 'teamadmin',
     isLoggedIn: !!currentUser,
     signup,
     login,
     logout,
-    refreshRole: () => fetchUserRole(currentUser)
+    refreshRole: () => fetchUserRole(currentUser),
+    requestTeamAdminAccess: async () => {
+      if (currentUser && !userRole) {
+        const userDocRef = doc(db, 'users', currentUser.uid);
+        await setDoc(userDocRef, { role: 'teamadmin' }, { merge: true });
+        await fetchUserRole(currentUser);
+      }
+    }
   };
 
   return (

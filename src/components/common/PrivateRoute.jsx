@@ -1,8 +1,8 @@
 import { Navigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 
-export default function PrivateRoute({ children, requireSuperAdmin = false, requireTournamentAdmin = false, requireNewsAdmin = false }) {
-  const { currentUser, isAdmin, isSuperAdmin, isNewsAdmin, hasAnyAdminAccess } = useAuth();
+export default function PrivateRoute({ children, requireSuperAdmin = false, requireTournamentAdmin = false, requireTeamAdmin = false, requireNewsAdmin = false, requireAdminPanelAccess = false }) {
+  const { currentUser, isAdmin, isSuperAdmin, isNewsAdmin, isTeamAdmin, hasAnyAdminAccess } = useAuth();
   const location = useLocation();
 
   if (!currentUser) {
@@ -24,13 +24,23 @@ export default function PrivateRoute({ children, requireSuperAdmin = false, requ
     );
   }
 
+  // Generic Admin Panel access (blocks pure Team Admins from generic panel)
+  if (requireAdminPanelAccess && !isAdmin && !isNewsAdmin) {
+    return <Navigate to="/" replace />;
+  }
+
   // Check specific required modes
   if (requireTournamentAdmin && !isAdmin) { // isAdmin acts as tournament admin
-      return <Navigate to="/admin" replace />;
+      return <Navigate to="/" replace />;
+  }
+
+  // Team admin access: allows teamadmin, admin, and superadmin
+  if (requireTeamAdmin && !isTeamAdmin) {
+      return <Navigate to="/" replace />;
   }
 
   if (requireNewsAdmin && !isNewsAdmin) { 
-      return <Navigate to="/admin" replace />;
+      return <Navigate to="/" replace />;
   }
 
   // Check if super admin is required

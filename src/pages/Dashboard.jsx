@@ -6,11 +6,12 @@ import LineupDisplay from '../components/common/LineupDisplay';
 import MatchTimer from '../components/common/MatchTimer';
 import SponsorsCarousel from '../components/common/SponsorsCarousel';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Calendar, Clock, MapPin, Shirt, ChevronRight, Trophy, Activity, MapPinned, UserPlus, Zap, Target } from 'lucide-react';
+import { Calendar, Clock, MapPin, Shirt, ChevronRight, Trophy, Activity, MapPinned, UserPlus, Zap, Target, Plus } from 'lucide-react';
 import { cn } from '../utils/cn';
 import { useAuth } from '../context/AuthContext';
 import { collection, query, where, getDocs } from 'firebase/firestore';
 import { db } from '../firebase';
+import QuickMatchModal from '../components/dashboard/QuickMatchModal';
 
 const DISTRICTS = {
   JAMMU: ['Jammu', 'Samba', 'Kathua', 'Udhampur', 'Reasi', 'Rajouri', 'Poonch', 'Doda', 'Ramban', 'Kishtwar'],
@@ -19,13 +20,14 @@ const DISTRICTS = {
 
 const Dashboard = () => {
   const navigate = useNavigate();
-  const { isAdmin, isSuperAdmin, currentUser } = useAuth();
+  const { hasAnyAdminAccess, isSuperAdmin, currentUser } = useAuth();
   const { matches, players, tournaments, lineups, teams, loading } = useData();
   const [dashboardCompetitionId, setDashboardCompetitionId] = useState('All');
   const [selectedDistrict, setSelectedDistrict] = useState('Baramulla');
   const [selectedYear, setSelectedYear] = useState(new Date().getFullYear().toString());
   const [expandedMatch, setExpandedMatch] = useState(null);
   const [liveMatchEvents, setLiveMatchEvents] = useState({});
+  const [isQuickMatchOpen, setIsQuickMatchOpen] = useState(false);
 
   useEffect(() => {
     // Fetch events (like goals) for live matches so we can display them
@@ -58,8 +60,9 @@ const Dashboard = () => {
   }, [matches]);
 
   const canEditMatch = (match) => {
-    if (!isAdmin || !match) return false;
+    if (!hasAnyAdminAccess || !match) return false;
     if (isSuperAdmin) return true;
+    if (match.isQuickMatch && match.createdBy === currentUser?.uid) return true;
     const tournament = tournaments?.find(t => t.name === match.competition || t.id === match.tournamentId);
     return tournament ? tournament.createdBy === currentUser?.uid : false;
   };
@@ -93,7 +96,11 @@ const Dashboard = () => {
     }
     const activeTourneyIds = new Set(filteredTournaments.map(t => t.id));
     const activeTourneyNames = new Set(filteredTournaments.map(t => t.name));
-    return matches.filter(m => activeTourneyIds.has(m.tournamentId) || (!m.tournamentId && activeTourneyNames.has(m.competition)));
+    return matches.filter(m => 
+      m.isQuickMatch || 
+      activeTourneyIds.has(m.tournamentId) || 
+      (!m.tournamentId && activeTourneyNames.has(m.competition))
+    );
   }, [matches, dashboardCompetitionId, filteredTournaments, tournaments]);
 
   const relevantTeamNames = dashboardCompetitionId && dashboardCompetitionId !== 'All'
@@ -196,7 +203,20 @@ const Dashboard = () => {
                 <div className="flex items-center gap-2 mb-2">
                   {liveMatches.length > 0 && <span className="flex items-center w-fit gap-1.5 px-2.5 py-1 rounded-full bg-red-500/20 border border-red-500/30 text-red-400 text-[11px] font-bold uppercase tracking-wider"><span className="h-1.5 w-1.5 rounded-full bg-red-500 animate-pulse" />{liveMatches.length} Live</span>}
                 </div>
-                <h1 className="text-2xl sm:text-4xl font-display font-black text-slate-900 dark:text-white drop-shadow-sm dark:drop-shadow-lg mb-1">Match <span className="text-transparent bg-clip-text bg-gradient-to-r from-brand-500 to-cyan-500 dark:from-brand-400 dark:to-cyan-400">Center</span></h1>
+                <div className="flex items-center justify-between mb-1">
+                  <h1 className="text-2xl sm:text-4xl font-display font-black text-slate-900 dark:text-white drop-shadow-sm dark:drop-shadow-lg flex items-center flex-wrap gap-2 lg:gap-4">
+                    Match <span className="text-transparent bg-clip-text bg-gradient-to-r from-brand-500 to-cyan-500 dark:from-brand-400 dark:to-cyan-400">Center</span>
+                  </h1>
+                  
+                  {/* Quick Match Button - Positioned top right on mobile, inline on desktop */}
+                  <button 
+                    onClick={() => setIsQuickMatchOpen(true)} 
+                    className="absolute top-4 right-4 sm:relative sm:top-0 sm:right-0 inline-flex items-center gap-2 px-3 sm:px-4 py-2 bg-gradient-to-r from-amber-500 via-orange-500 to-red-500 hover:from-amber-400 hover:to-red-400 text-white rounded-xl text-[10px] sm:text-sm font-black uppercase tracking-wider shadow-[0_0_20px_rgba(249,115,22,0.4)] active:scale-95 transition-all w-fit group border border-white/20 z-20"
+                  >
+                    <Zap size={14} className="fill-current group-hover:animate-pulse sm:w-4 sm:h-4" /> 
+                    <span>Quick Match</span>
+                  </button>
+                </div>
                 <p className="text-slate-500 dark:text-slate-400 text-sm sm:text-base">Track live scores, fixtures and statistics in real-time.</p>
               </div>
             </div>
@@ -299,6 +319,11 @@ const Dashboard = () => {
                                 {match.competition}
                               </span>
                             )}
+                            {match.location && (
+                              <span className="flex items-center gap-1 text-[8px] sm:text-[9px] font-bold text-slate-400 dark:text-slate-500 mt-0.5 truncate max-w-full">
+                                <MapPin size={8} /> {match.location}
+                              </span>
+                            )}
                           </div>
                           
                           {/* Right: Actions - Icons only on Mobile */}
@@ -306,14 +331,31 @@ const Dashboard = () => {
                             <Link to={`/live/${match.id}`} className="flex items-center justify-center p-1.5 sm:px-2.5 sm:py-1.5 bg-brand-500 hover:bg-brand-600 dark:bg-brand-500/10 dark:hover:bg-brand-500/20 text-white dark:text-brand-400 border border-brand-500/20 rounded-md sm:rounded-lg transition-all shadow-sm active:scale-95" title="Match Center">
                               <Activity size={12} /> <span className="hidden md:inline ml-1.5 text-[10px] font-bold">Match Center</span>
                             </Link>
-                            {matchLineups.length > 0 && (
-                              <button onClick={() => setExpandedMatch(isExpanded ? null : match.id)} className="flex items-center justify-center p-1.5 sm:px-2.5 sm:py-1.5 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 border border-slate-300 dark:border-slate-600 text-slate-700 dark:text-slate-300 rounded-md sm:rounded-lg transition-all active:scale-95" title={isExpanded ? 'Hide Lineups' : 'Show Lineups'}>
-                                <Shirt size={12} /> <span className="hidden md:inline ml-1.5 text-[10px] font-bold">{isExpanded ? 'Hide Lineups' : 'Lineups'}</span>
+                            {(matchLineups.length > 0 || canEditMatch(match)) && (
+                              <button 
+                                onClick={() => {
+                                  if (matchLineups.length > 0) {
+                                    setExpandedMatch(isExpanded ? null : match.id);
+                                  } else {
+                                    navigate(`/admin/lineups/${match.id}`);
+                                  }
+                                }} 
+                                className={`flex items-center justify-center p-1.5 sm:px-2.5 sm:py-1.5 border rounded-md sm:rounded-lg transition-all active:scale-95 ${
+                                  matchLineups.length > 0 
+                                  ? 'bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 border-slate-300 dark:border-slate-600 text-slate-700 dark:text-slate-300' 
+                                  : 'bg-indigo-500/10 hover:bg-indigo-500/20 border-indigo-500/20 text-indigo-600 dark:text-indigo-400'
+                                }`} 
+                                title={matchLineups.length > 0 ? (isExpanded ? 'Hide Lineups' : 'Show Lineups') : 'Create Lineup'}
+                              >
+                                {matchLineups.length > 0 ? <Shirt size={12} /> : <Plus size={12} />}
+                                <span className="hidden md:inline ml-1.5 text-[10px] font-bold">
+                                  {matchLineups.length > 0 ? (isExpanded ? 'Hide Lineups' : 'Lineups') : 'Add Lineup'}
+                                </span>
                               </button>
                             )}
-                            {canEditMatch(match) && (
+                            {canEditMatch(match) && !match.isQuickMatch && (
                               <Link to={`/admin/lineups/${match.id}`} className="flex items-center justify-center p-1.5 sm:px-2.5 sm:py-1.5 bg-indigo-500/10 hover:bg-indigo-500/20 border border-indigo-500/20 text-indigo-600 dark:text-indigo-400 rounded-md sm:rounded-lg transition-all active:scale-95" title="Edit Lineup">
-                                <UserPlus size={12} /> <span className="hidden md:inline ml-1.5 text-[10px] font-bold">Edit Lineup</span>
+                                <UserPlus size={12} /> <span className="hidden md:inline ml-1.5 text-[10px] font-bold">Players</span>
                               </Link>
                             )}
                           </div>
@@ -617,6 +659,7 @@ const Dashboard = () => {
 
       {/* ═══ SPONSORS CAROUSEL ═══ */}
       <SponsorsCarousel />
+      <QuickMatchModal isOpen={isQuickMatchOpen} onClose={() => setIsQuickMatchOpen(false)} />
     </div>
   );
 };

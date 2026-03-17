@@ -7,7 +7,7 @@ import { cn } from '../../utils/cn';
 import ThemeToggle from './ThemeToggle';
 
 const Navbar = () => {
-  const { currentUser, isAdmin, hasAnyAdminAccess, logout } = useAuth();
+  const { currentUser, isAdmin, isNewsAdmin, logout } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -43,7 +43,7 @@ const Navbar = () => {
     { name: 'Gallery', path: '/gallery', icon: Camera },
   ];
 
-  if (hasAnyAdminAccess) {
+  if (isAdmin || isNewsAdmin) {
     navItems.push({ name: 'Admin', path: '/admin', icon: User });
   }
 

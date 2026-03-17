@@ -27,16 +27,17 @@ const LiveMatch = () => {
   const [error, setError] = useState('');
   const [isEditingTeams, setIsEditingTeams] = useState(false);
   const [editFormData, setEditFormData] = useState({ teamA: '', teamB: '', date: '', time: '', stadium: '' });
-  const { isAdmin, isSuperAdmin, currentUser } = useAuth();
+  const { hasAnyAdminAccess, isSuperAdmin, currentUser } = useAuth();
   const { players, lineups, teams, matches, tournaments } = useData();
 
   // Determine if this user is allowed to edit THIS match
   const canEditMatch = useMemo(() => {
-    if (!isAdmin || !match) return false;
+    if (!hasAnyAdminAccess || !match) return false;
     if (isSuperAdmin) return true;
+    if (match.isQuickMatch && match.createdBy === currentUser?.uid) return true;
     const tournament = tournaments?.find(t => t.name === match.competition || t.id === match.tournamentId);
     return tournament ? tournament.createdBy === currentUser?.uid : false;
-  }, [isAdmin, isSuperAdmin, currentUser, match, tournaments]);
+  }, [hasAnyAdminAccess, isSuperAdmin, currentUser, match, tournaments]);
 
   // Filter teams to only show those registered in THIS tournament
   const tournamentTeams = useMemo(() => {

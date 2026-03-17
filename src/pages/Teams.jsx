@@ -3,7 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { useData } from '../context/DataContext';
 import { motion } from 'framer-motion';
-import { Search, MapPin, User, Shield, Plus, Trophy, MapPinned, Edit2 } from 'lucide-react';
+import { Search, MapPin, User, Shield, Plus, Trophy, MapPinned, Edit2, Zap } from 'lucide-react';
 import { cn } from '../utils/cn';
 
 // Districts of Jammu and Kashmir
@@ -17,7 +17,8 @@ const Teams = () => {
   const navigate = useNavigate();
   const { isAdmin, isSuperAdmin, currentUser } = useAuth();
   const [searchQuery, setSearchQuery] = useState('');
-  const [selectedDistrict, setSelectedDistrict] = useState('Baramulla');
+  const [selectedDistrict, setSelectedDistrict] = useState('All');
+  const [activeTab, setActiveTab] = useState('registered'); // 'registered' or 'quick'
 
   // Determine if this user is allowed to edit a specific team
   const canEditTeam = (team) => {
@@ -59,32 +60,23 @@ const Teams = () => {
     );
   }
 
-  // Filter teams by district through their tournaments
+  // Filter teams by tab AND district
   const filteredTeams = teams.filter(team => {
     // Search filter
     const matchesSearch = team.name.toLowerCase().includes(searchQuery.toLowerCase());
+    if (!matchesSearch) return false;
 
-    // District filter
-    if (selectedDistrict === 'All') {
-      return matchesSearch;
-    }
+    // Tab filter
+    const isQuickMatchTeam = team.isQuickMatch || team.district === 'Quick Match' || (team.tournaments && team.tournaments.includes('Quick Match'));
+    
+    if (activeTab === 'registered' && isQuickMatchTeam) return false;
+    if (activeTab === 'quick' && !isQuickMatchTeam) return false;
 
-    // 1. Direct match on team's district field
-    if (team.district === selectedDistrict) {
-      return matchesSearch;
-    }
-
-    // 2. Fallback: Check if team participates in any tournament in the selected district
-    const teamTournaments = Array.isArray(team.tournaments)
-      ? team.tournaments
-      : (typeof team.tournaments === 'string' ? team.tournaments.split(',').map(t => t.trim()) : []);
-
-    const hasDistrictMatch = teamTournaments.some(tournamentName => {
-      const tournament = tournaments.find(t => t.name === tournamentName);
-      return tournament && tournament.district === selectedDistrict;
-    });
-
-    return matchesSearch && hasDistrictMatch;
+    // District filter (ignore district filter for Quick Match tab if user wants to see all QMs)
+    if (selectedDistrict === 'All') return true;
+    
+    // Direct match on team's district field
+    return team.district === selectedDistrict;
   });
 
   return (
@@ -103,6 +95,32 @@ const Teams = () => {
           </div>
 
           <div className="flex flex-col sm:flex-row gap-3">
+            {/* Tabs */}
+            <div className="flex bg-slate-100 dark:bg-white/5 p-1 rounded-xl border border-slate-200 dark:border-white/10">
+              <button 
+                onClick={() => setActiveTab('registered')}
+                className={cn(
+                  "px-4 py-2 rounded-lg text-xs font-bold uppercase tracking-wider transition-all",
+                  activeTab === 'registered' 
+                    ? "bg-white dark:bg-brand-500 text-brand-600 dark:text-slate-900 shadow-sm" 
+                    : "text-slate-500 hover:text-slate-700 dark:hover:text-slate-300"
+                )}
+              >
+                Registered
+              </button>
+              <button 
+                onClick={() => setActiveTab('quick')}
+                className={cn(
+                  "px-4 py-2 rounded-lg text-xs font-bold uppercase tracking-wider transition-all",
+                  activeTab === 'quick' 
+                    ? "bg-white dark:bg-amber-500 text-amber-600 dark:text-slate-900 shadow-sm" 
+                    : "text-slate-500 hover:text-slate-700 dark:hover:text-slate-300"
+                )}
+              >
+                Quick Match
+              </button>
+            </div>
+
             {/* District Filter */}
             <div className="flex items-center gap-2">
               <MapPinned className="text-brand-400" size={20} />
@@ -112,6 +130,7 @@ const Teams = () => {
                 className="bg-white dark:bg-dark-card/50 backdrop-blur-sm border border-slate-200/10 dark:border-white/10 rounded-xl px-4 py-2.5 text-sm font-medium text-slate-900 dark:text-white focus:ring-2 focus:ring-brand-500 focus:border-brand-500 outline-none transition-all"
               >
                 <option value="All">All Districts</option>
+                <option value="Quick Match">Quick Match Special</option>
                 <optgroup label="Jammu Division">
                   {DISTRICTS.JAMMU.map(district => (
                     <option key={district} value={district}>{district}</option>
@@ -173,6 +192,15 @@ const Teams = () => {
             <Link to={`/teams/${team.id}`} className="block">
               {/* Background Glow */}
               <div className="absolute -top-20 -right-20 w-40 h-40 bg-brand-500/20 rounded-full blur-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+
+              {/* Quick Match Badge */}
+              {(team.isQuickMatch || team.district === 'Quick Match') && (
+                <div className="absolute top-3 right-3 z-10">
+                  <span className="flex items-center gap-1 px-2 py-1 rounded-lg bg-amber-500/10 dark:bg-amber-500/20 text-amber-600 dark:text-amber-400 text-[9px] font-black uppercase tracking-tighter border border-amber-500/30 shadow-sm backdrop-blur-md">
+                    <Zap size={10} className="fill-current" /> Quick Match
+                  </span>
+                </div>
+              )}
 
               {/* Team Logo/Name */}
               <div className="p-6 pb-4">

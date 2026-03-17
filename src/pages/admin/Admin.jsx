@@ -4,16 +4,23 @@ import { useAuth } from '../../context/AuthContext';
 import { Shield, Trophy, Users, Swords, LayoutList, Newspaper, UserCog, Crown, ShieldCheck, Star, ScrollText, Camera } from 'lucide-react';
 
 const Admin = () => {
-  const { isSuperAdmin, isAdmin, isNewsAdmin, userProfile, hasAnyAdminAccess } = useAuth();
+  const { isSuperAdmin, isAdmin, isNewsAdmin, isTeamAdmin, userProfile, hasAnyAdminAccess } = useAuth();
   
   const adminCards = [];
 
-  if (isAdmin) {
+  // Team Admin access (includes Tournament Admin and Super Admin)
+  if (isTeamAdmin) {
     adminCards.push(
       { to: '/admin/matches', icon: Swords, title: 'Manage Matches', desc: 'Update live scores and match details', color: 'from-green-500/20 to-green-600/5 border-green-500/20' },
       { to: '/admin/teams', icon: Users, title: 'Manage Teams', desc: 'Add, edit, and remove teams', color: 'from-blue-500/20 to-blue-600/5 border-blue-500/20' },
       { to: '/admin/players', icon: LayoutList, title: 'Manage Players', desc: 'Update player stats and info', color: 'from-purple-500/20 to-purple-600/5 border-purple-500/20' },
-      { to: '/admin/lineups', icon: Shield, title: '⚽ Manage Lineups', desc: 'Set starting 11 and bench players for matches', color: 'from-teal-500/20 to-teal-600/5 border-teal-500/20' },
+      { to: '/admin/lineups', icon: Shield, title: '⚽ Manage Lineups', desc: 'Set starting 11 and bench players for matches', color: 'from-teal-500/20 to-teal-600/5 border-teal-500/20' }
+    );
+  }
+
+  // Tournament Admin specific access (includes Super Admin)
+  if (isAdmin) {
+    adminCards.push(
       { to: '/admin/tournaments', icon: Trophy, title: 'Manage Tournaments', desc: 'Create and manage tournaments', color: 'from-yellow-500/20 to-yellow-600/5 border-yellow-500/20' },
       { to: '/admin/sponsors', icon: Star, title: 'Manage Sponsors', desc: 'Add/update tournament sponsors', color: 'from-indigo-500/20 to-indigo-600/5 border-indigo-500/20' }
     );
@@ -41,11 +48,11 @@ const Admin = () => {
         </div>
         <div className={`flex items-center gap-2 px-4 py-2 rounded-2xl border font-bold text-sm ${
           isSuperAdmin ? 'bg-yellow-400/10 border-yellow-400/20 text-yellow-400'
-          : isNewsAdmin && !isAdmin ? 'bg-pink-400/10 border-pink-400/20 text-pink-400'
+          : isNewsAdmin && !isAdmin && !isTeamAdmin ? 'bg-pink-400/10 border-pink-400/20 text-pink-400'
           : 'bg-blue-400/10 border-blue-400/20 text-blue-400'
         }`}>
-          {isSuperAdmin ? <Crown size={16} /> : isNewsAdmin && !isAdmin ? <Newspaper size={16} /> : <ShieldCheck size={16} />}
-          {isSuperAdmin ? 'Super Admin' : isNewsAdmin && !isAdmin ? 'News Admin' : 'Tournament Admin'}
+          {isSuperAdmin ? <Crown size={16} /> : isNewsAdmin && !isAdmin && !isTeamAdmin ? <Newspaper size={16} /> : <ShieldCheck size={16} />}
+          {isSuperAdmin ? 'Super Admin' : isNewsAdmin && !isAdmin && !isTeamAdmin ? 'News Admin' : isAdmin ? 'Tournament Admin' : 'Team Admin'}
         </div>
       </div>
 
@@ -53,7 +60,13 @@ const Admin = () => {
       {!isSuperAdmin && isAdmin && (
         <div className="bg-blue-500/10 border border-blue-500/20 rounded-2xl p-4 mb-8 text-sm text-blue-300">
           <ShieldCheck size={16} className="inline mr-2" />
-          <strong>Tournament Admin Mode:</strong> You can only manage tournaments you created and their associated matches, teams, and players.
+          <strong>Tournament Admin Mode:</strong> You can manage tournaments you created and their associated matches, teams, and players.
+        </div>
+      )}
+      {!isSuperAdmin && !isAdmin && isTeamAdmin && (
+        <div className="bg-emerald-500/10 border border-emerald-500/20 rounded-2xl p-4 mb-8 text-sm text-emerald-300">
+          <ShieldCheck size={16} className="inline mr-2" />
+          <strong>Team Admin Mode:</strong> You can manage your teams, players, and and user-created matches.
         </div>
       )}
       {!isSuperAdmin && !isAdmin && isNewsAdmin && (
