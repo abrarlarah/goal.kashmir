@@ -28,4 +28,12 @@ root.render(
 );
 
 // Register the service worker for PWA support
-serviceWorkerRegistration.register();
+serviceWorkerRegistration.register({
+  onUpdate: (registration) => {
+    // Automatically skip waiting and reload when an update is found
+    if (registration && registration.waiting) {
+      registration.waiting.postMessage({ type: 'SKIP_WAITING' });
+    }
+    window.location.reload();
+  }
+});
