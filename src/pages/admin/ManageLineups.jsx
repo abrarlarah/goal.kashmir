@@ -256,13 +256,72 @@ const ManageLineups = () => {
             }
 
             setTimeout(() => setSuccessMessage(''), 3000);
-            setLineup({ id: '', matchId: '', teamName: '', starting11: [], bench: [] });
-            setSelectedMatch('');
-            setSelectedTeam('');
+            // setLineup({ id: '', matchId: '', teamName: '', starting11: [], bench: [] });
+            // setSelectedMatch('');
+            // setSelectedTeam('');
         } catch (error) {
             console.error('Error saving lineup:', error);
             alert('Error saving lineup: ' + error.message);
         }
+    };
+
+    const handleSaveDefault = async () => {
+        if (!selectedTeam) return;
+        
+        try {
+            const team = teams.find(t => t.name === selectedTeam);
+            if (!team) return;
+
+            const isManualData = isManualMode;
+            const lineupData = isManualData 
+                ? { starting11: manualLineup.starting11, bench: manualLineup.bench, isManual: true }
+                : { starting11: lineup.starting11, bench: lineup.bench, isManual: false };
+
+            await updateDoc(doc(db, 'teams', team.id), {
+                defaultLineup: lineupData
+            });
+
+            setSuccessMessage(`Default lineup saved for ${selectedTeam}!`);
+            setTimeout(() => setSuccessMessage(''), 3000);
+            
+            logAuditEvent('SAVE_DEFAULT_LINEUP', {
+                entityType: 'team',
+                entityId: team.id,
+                entityName: selectedTeam,
+            });
+        } catch (error) {
+            console.error('Error saving default lineup:', error);
+            alert('Error saving default: ' + error.message);
+        }
+    };
+
+    const handleLoadDefault = () => {
+        const team = teams.find(t => t.name === selectedTeam);
+        if (!team || !team.defaultLineup) {
+            alert('No default lineup found for this team.');
+            return;
+        }
+
+        const def = team.defaultLineup;
+        if (def.isManual) {
+            setIsManualMode(true);
+            setManualLineup(prev => ({
+                ...prev,
+                starting11: def.starting11 || [],
+                bench: def.bench || []
+            }));
+            setLineup(prev => ({ ...prev, starting11: [], bench: [] }));
+        } else {
+            setIsManualMode(false);
+            setLineup(prev => ({
+                ...prev,
+                starting11: def.starting11 || [],
+                bench: def.bench || []
+            }));
+            setManualLineup(prev => ({ ...prev, starting11: [], bench: [] }));
+        }
+        setSuccessMessage('Default lineup loaded!');
+        setTimeout(() => setSuccessMessage(''), 3000);
     };
 
     const saveManualLineup = async () => {
@@ -307,9 +366,9 @@ const ManageLineups = () => {
             }
 
             setTimeout(() => setSuccessMessage(''), 3000);
-            setManualLineup({ id: '', matchId: '', teamName: '', starting11: [], bench: [] });
-            setSelectedMatch('');
-            setSelectedTeam('');
+            // setManualLineup({ id: '', matchId: '', teamName: '', starting11: [], bench: [] });
+            // setSelectedMatch('');
+            // setSelectedTeam('');
         } catch (error) {
             console.error('Error saving manual lineup:', error);
             alert('Error saving lineup: ' + error.message);
@@ -350,20 +409,47 @@ const ManageLineups = () => {
                 {currentMatch && (
                     <div className="mt-4">
                         <h4 className="text-lg mb-2">Select Team</h4>
-                        <div className="flex gap-4">
-                            <button
-                                onClick={() => handleTeamChange(currentMatch.teamA)}
-                                className={`flex-1 p-3 rounded ${selectedTeam === currentMatch.teamA ? 'bg-green-600' : 'bg-slate-100 dark:bg-gray-700 hover:bg-gray-600'}`}
-                            >
-                                {currentMatch.teamA}
-                            </button>
-                            <button
-                                onClick={() => handleTeamChange(currentMatch.teamB)}
-                                className={`flex-1 p-3 rounded ${selectedTeam === currentMatch.teamB ? 'bg-green-600' : 'bg-slate-100 dark:bg-gray-700 hover:bg-gray-600'}`}
-                            >
-                                {currentMatch.teamB}
-                            </button>
+                        <div className="flex flex-wrap gap-2">
+                            {/* Team Selection Buttons */}
+                            {[currentMatch.teamA, currentMatch.teamB].map(teamName => (
+                                <button
+                                    key={teamName}
+                                    onClick={() => handleTeamChange(teamName)}
+                                    className={`flex-1 p-4 rounded-xl border-2 transition-all flex flex-col items-center gap-2 ${
+                                        selectedTeam === teamName 
+                                        ? 'bg-brand-500/10 border-brand-500 text-brand-500' 
+                                        : 'bg-white/5 border-white/5 hover:bg-white/10 hover:border-white/20'
+                                    }`}
+                                >
+                                    <Shield size={32} />
+                                    <span className="font-bold">{teamName}</span>
+                                </button>
+                            ))}
                         </div>
+
+                        {/* Template Controls */}
+                        {selectedTeam && (
+                            <div className="mt-4 p-4 bg-slate-100 dark:bg-gray-700/50 rounded-xl flex items-center justify-between gap-4 border border-white/5">
+                                <div className="flex items-center gap-2 text-slate-500 dark:text-gray-400">
+                                    <Users size={18} />
+                                    <span className="text-sm font-medium">Lineup Templates</span>
+                                </div>
+                                <div className="flex gap-2">
+                                    <button
+                                        onClick={handleLoadDefault}
+                                        className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-xs font-bold transition-all flex items-center gap-2"
+                                    >
+                                        💾 Load Team Default
+                                    </button>
+                                    <button
+                                        onClick={handleSaveDefault}
+                                        className="px-4 py-2 bg-brand-500/20 hover:bg-brand-500/30 text-brand-500 border border-brand-500/30 rounded-lg text-xs font-bold transition-all flex items-center gap-2"
+                                    >
+                                        ⭐ Save as Default
+                                    </button>
+                                </div>
+                            </div>
+                        )}
                     </div>
                 )}
             </div>
@@ -661,11 +747,16 @@ const ManageLineups = () => {
 
             {/* Save Button */}
             {selectedTeam && (
-                <div className="mt-6 flex justify-center">
+                <div className="mt-6 flex flex-col items-center gap-4">
+                    {successMessage && (
+                        <div className="bg-green-600/20 border border-green-600/50 text-green-400 px-6 py-2 rounded-xl text-sm font-bold animate-in fade-in slide-in-from-bottom-2">
+                             ✓ {successMessage}
+                        </div>
+                    )}
                     <button
                         onClick={handleSaveLineup}
                         disabled={isManualMode ? manualLineup.starting11.length < 1 : lineup.starting11.length < 1}
-                        className="bg-green-600 hover:bg-green-700 disabled:bg-gray-600 disabled:cursor-not-allowed px-8 py-3 rounded-lg text-lg font-medium"
+                        className="bg-green-600 hover:bg-green-700 disabled:bg-gray-600 disabled:cursor-not-allowed px-12 py-3 rounded-xl text-lg font-black transition-all shadow-lg shadow-green-600/20 active:scale-95"
                     >
                         {isManualMode ? 'Save Manual Lineup' : 'Save Lineup'}
                     </button>

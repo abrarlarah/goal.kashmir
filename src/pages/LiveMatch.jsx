@@ -23,6 +23,7 @@ const LiveMatch = () => {
   const [showScorerSelect, setShowScorerSelect] = useState(null); // { team: 'A' | 'B' }
   const [showCardSelect, setShowCardSelect] = useState(null); // { team: 'A' | 'B', type: 'yellow' | 'red' }
   const [showCancelSelect, setShowCancelSelect] = useState(null); // { team: 'A' | 'B' }
+  const [showPotmSelect, setShowPotmSelect] = useState(false);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [isEditingTeams, setIsEditingTeams] = useState(false);
@@ -176,6 +177,45 @@ const LiveMatch = () => {
     } catch (err) {
       console.error("Error recording goal:", err);
       alert("Error recording goal. Check console.");
+    }
+  };
+
+  const confirmPotm = async (player) => {
+    try {
+      if (!player) return;
+      
+      const matchRef = doc(db, 'matches', matchId);
+      await updateDoc(matchRef, {
+        potmId: player.id,
+        potmName: player.name,
+        potmTeam: player.team
+      });
+
+      // Update player profile POTM count
+      const playerRef = doc(db, 'players', player.id);
+      const currentPlayer = players.find(p => p.id === player.id);
+      if (currentPlayer) {
+        await updateDoc(playerRef, {
+          potmAwards: (currentPlayer.potmAwards || 0) + 1
+        });
+      }
+
+      // Add match event
+      const currentSecs = calculateTotalSecondsSnapshot(match);
+      await addDoc(collection(db, 'matches', matchId, 'events'), {
+        type: 'potm',
+        player: player.name,
+        playerId: player.id,
+        team: player.team,
+        minute: getMinuteOnly(currentSecs),
+        seconds: currentSecs,
+        timestamp: Date.now()
+      });
+
+      setShowPotmSelect(false);
+    } catch (err) {
+      console.error("Error setting POTM:", err);
+      alert("Error setting Player of the Match.");
     }
   };
 
@@ -893,7 +933,7 @@ const LiveMatch = () => {
             )}
 
             {/* Dynamic Popups for Goal Scorer and Cards */}
-            {(showScorerSelect || showCardSelect || showCancelSelect) && (
+            {(showScorerSelect || showCardSelect || showCancelSelect || showPotmSelect) && (
               <div className="border-t border-slate-200/10 dark:border-white/10 bg-slate-950/80 p-6 animate-in slide-in-from-bottom-4 relative">
                 
                 {/* Cancel Goal Context */}
@@ -1065,8 +1105,98 @@ const LiveMatch = () => {
                     </div>
                   </div>
                 )}
+                {/* Confirm POTM Context */}
+                {showPotmSelect && (
+                  <div className="bg-brand-500/5 border border-brand-500/30 rounded-2xl p-5 mb-4">
+                    <div className="flex justify-between items-center mb-5">
+                      <h4 className="font-bold flex items-center gap-2 text-lg text-brand-500">
+                        <Trophy size={20} />
+                        Select Player of the Match
+                      </h4>
+                      <button onClick={() => setShowPotmSelect(false)} className="p-1.5 bg-slate-50 dark:bg-slate-800 hover:bg-slate-100 dark:bg-slate-700 rounded-lg text-slate-500 dark:text-slate-400"><X size={16} /></button>
+                    </div>
+
+                    <div className="space-y-6">
+                      {[match.teamA, match.teamB].map(teamName => (
+                        <div key={teamName}>
+                          <div className="text-[10px] text-slate-500 uppercase font-black mb-2 tracking-widest">{teamName}</div>
+                          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
+                            {players
+                              .filter(p => p.team === teamName)
+                              .sort((a, b) => a.name.localeCompare(b.name))
+                              .map(player => (
+                                <button
+                                  key={player.id}
+                                  onClick={() => confirmPotm(player)}
+                                  className="text-left p-3 rounded-xl border border-slate-200/5 dark:border-white/5 bg-white dark:bg-slate-900 font-bold text-sm transition-all flex items-center gap-2 hover:border-brand-500 text-slate-600 dark:text-slate-300 hover:text-brand-500"
+                                >
+                                  <span className="w-6 h-6 shrink-0 bg-slate-50 dark:bg-slate-800 rounded-md flex items-center justify-center text-[10px] text-slate-500">{player.number || '#'}</span>
+                                  <span className="truncate">{player.name}</span>
+                                </button>
+                              ))}
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
               </div>
             )}
+          </div>
+        )}
+
+        {/* ═══ PLAYER OF THE MATCH AWARD ═══ */}
+        {match.potmId && (
+          <motion.div 
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
+            className="mb-8 relative rounded-2xl overflow-hidden border border-brand-500/30 shadow-2xl shadow-brand-500/10"
+          >
+            <div className="absolute inset-0 bg-gradient-to-br from-brand-900/40 via-slate-900 to-slate-900"></div>
+            <div className="absolute inset-0 bg-[radial-gradient(circle_at_right,_var(--tw-gradient-stops))] from-brand-500/20 via-transparent to-transparent"></div>
+            
+            <div className="relative z-10 p-6 flex flex-col md:flex-row items-center gap-6">
+              <div className="relative">
+                <div className="w-20 h-20 rounded-2xl bg-gradient-to-br from-brand-400 to-brand-600 flex items-center justify-center shadow-xl shadow-brand-500/20">
+                  <Trophy size={40} className="text-white" />
+                </div>
+                <div className="absolute -bottom-2 -right-2 bg-slate-950 px-2 py-1 rounded-lg border border-brand-400/30 text-[10px] font-black text-brand-400 uppercase tracking-tighter">
+                  MVP
+                </div>
+              </div>
+
+              <div className="text-center md:text-left flex-1">
+                <h3 className="text-[10px] text-brand-400 uppercase font-black tracking-[0.2em] mb-1">Player of the Match</h3>
+                <h4 className="text-2xl font-display font-black text-white italic">{match.potmName}</h4>
+                <div className="flex items-center justify-center md:justify-start gap-2 mt-1">
+                  <span className="text-slate-400 text-xs font-bold">{match.potmTeam}</span>
+                  <div className="h-1 w-1 rounded-full bg-slate-700"></div>
+                  <span className="text-brand-400/80 text-[10px] font-black uppercase">Outstanding Performance</span>
+                </div>
+              </div>
+
+              {canEditMatch && (
+                <button 
+                  onClick={() => setShowPotmSelect(true)}
+                  className="px-4 py-2 bg-white/5 hover:bg-white/10 border border-white/10 rounded-xl text-[10px] font-bold text-slate-400 hover:text-white transition-all uppercase tracking-widest"
+                >
+                  Change MVP
+                </button>
+              )}
+            </div>
+          </motion.div>
+        )}
+
+        {/* ═══ ADMIN POTM BUTTON (Visible when match finished and no POTM yet) ═══ */}
+        {canEditMatch && match.status === 'finished' && !match.potmId && !showPotmSelect && (
+          <div className="mb-8 flex justify-center">
+            <button
+              onClick={() => setShowPotmSelect(true)}
+              className="flex items-center gap-3 px-8 py-4 bg-gradient-to-r from-brand-500 to-brand-600 text-slate-900 rounded-2xl font-black text-sm uppercase tracking-widest hover:scale-105 transition-all shadow-xl shadow-brand-500/20 group"
+            >
+              <Trophy size={18} className="group-hover:rotate-12 transition-transform" />
+              Assign Player of the Match
+            </button>
           </div>
         )}
 
@@ -1388,6 +1518,19 @@ const LiveMatch = () => {
                               </div>
                               <span className="text-slate-500 text-[11px] uppercase tracking-wider font-bold block mt-0.5">
                                 Substitution ({event.team})
+                              </span>
+                            </div>
+                          </div>
+                        )}
+                        {event.type === 'potm' && (
+                          <div className="flex items-center gap-3">
+                            <div className="w-10 h-10 rounded-xl bg-brand-500/15 border border-brand-500/20 flex items-center justify-center shrink-0">
+                              <Trophy size={18} className="text-brand-400" />
+                            </div>
+                            <div>
+                              <span className="font-black text-white text-base sm:text-lg block">{event.player}</span>
+                              <span className="text-brand-400 text-[11px] uppercase tracking-wider font-bold">
+                                🎖️ Player of the Match ({event.team})
                               </span>
                             </div>
                           </div>

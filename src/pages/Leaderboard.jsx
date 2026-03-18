@@ -166,6 +166,22 @@ const Leaderboard = () => {
       .slice(0, 20);
   }, [players]);
 
+  const topPotm = useMemo(() => {
+    const potmList = (players || [])
+      .filter(p => (p.potmAwards || 0) > 0)
+      .map(player => {
+        // Find all matches where this player was POTM
+        const playerMatches = matches.filter(m => m.potmId === player.id);
+        return {
+          ...player,
+          wonMatches: playerMatches
+        };
+      })
+      .sort((a, b) => (b.potmAwards || 0) - (a.potmAwards || 0))
+      .slice(0, 20);
+    return potmList;
+  }, [players, matches]);
+
   const cleanSheetTeams = useMemo(() => {
     return tableData
       .filter(t => t.cleanSheets > 0)
@@ -191,44 +207,56 @@ const Leaderboard = () => {
   if (loading && teams.length === 0) return <div className="text-center text-slate-900 dark:text-white py-20">Loading Standings...</div>;
 
   // Player card component for reuse
-  const PlayerCard = ({ player, idx, statValue, statLabel, statColor, icon: Icon }) => (
-    <Link
+  const PlayerCard = ({ player, idx, statValue, statLabel, statColor, icon: Icon, children }) => (
+    <div
       key={player.id}
-      to={`/players/${player.id}`}
-      className="group relative rounded-2xl overflow-hidden transition-all duration-300 hover:-translate-y-1 block bg-gradient-to-br from-[#0f172a] via-[#1e1b4b]/80 to-[#0f172a] ring-1 ring-white/5"
+      className={cn(
+        "group relative rounded-2xl overflow-hidden transition-all duration-300 block bg-gradient-to-br from-[#0f172a] via-[#1e1b4b]/80 to-[#0f172a] ring-1 ring-white/5",
+        !children && "hover:-translate-y-1"
+      )}
     >
-      <div className="relative z-10 p-5 flex items-center gap-4">
-        {/* Rank */}
-        <div className={cn(
-          "w-8 h-8 rounded-lg flex items-center justify-center text-xs font-black shrink-0 border",
-          idx < 3
-            ? "bg-gradient-to-br from-amber-400/20 to-orange-500/20 text-amber-300 border-amber-500/30 shadow-sm shadow-amber-500/10"
-            : "bg-white/5 text-slate-500 border-white/5"
-        )}>
-          {idx + 1}
-        </div>
+      <div className="relative z-10 p-3 sm:p-5 flex items-center gap-2 sm:gap-4 overflow-x-hidden">
+        {/* Left: Rank & Photo & Info */}
+        <Link to={`/players/${player.id}`} className="flex items-center gap-2 sm:gap-4 flex-none min-w-0 max-w-[40%] sm:max-w-none">
+          {/* Rank */}
+          <div className={cn(
+            "w-6 h-6 sm:w-8 sm:h-8 rounded-lg flex items-center justify-center text-[10px] sm:text-xs font-black shrink-0 border",
+            idx < 3
+              ? "bg-gradient-to-br from-amber-400/20 to-orange-500/20 text-amber-300 border-amber-500/30 shadow-sm shadow-amber-500/10"
+              : "bg-white/5 text-slate-500 border-white/5"
+          )}>
+            {idx + 1}
+          </div>
 
-        {/* Player photo */}
-        <div className="w-12 h-12 rounded-xl bg-white/5 overflow-hidden border border-white/10 group-hover:border-brand-500/30 transition-colors shrink-0">
-          {player.photoUrl ? (
-            <img src={player.photoUrl} alt={player.name} className="w-full h-full object-cover" />
-          ) : (
-            <div className="w-full h-full flex items-center justify-center text-lg font-black text-white/30">
-              {player.name.charAt(0)}
-            </div>
-          )}
-        </div>
+          {/* Player photo */}
+          <div className="w-8 h-8 sm:w-12 sm:h-12 rounded-xl bg-white/5 overflow-hidden border border-white/10 group-hover:border-brand-500/30 transition-colors shrink-0">
+            {player.photoUrl ? (
+              <img src={player.photoUrl} alt={player.name} className="w-full h-full object-cover" />
+            ) : (
+              <div className="w-full h-full flex items-center justify-center text-sm sm:text-lg font-black text-white/30">
+                {player.name.charAt(0)}
+              </div>
+            )}
+          </div>
 
-        {/* Info */}
-        <div className="flex-1 min-w-0">
-          <h4 className="font-black text-white text-sm group-hover:text-brand-400 transition-colors truncate">{player.name}</h4>
-          <p className="text-[10px] text-slate-500 font-bold uppercase tracking-wider truncate">{player.team}</p>
-        </div>
+          {/* Info */}
+          <div className="flex-1 min-w-0">
+            <h4 className="font-black text-white text-[11px] sm:text-sm group-hover:text-brand-400 transition-colors truncate">{player.name}</h4>
+            <p className="text-[9px] text-slate-500 font-bold uppercase tracking-wider truncate hidden xs:block">{player.team}</p>
+          </div>
+        </Link>
 
-        {/* Stat */}
-        <div className="text-center shrink-0">
-          <div className={cn("text-2xl font-black", statColor)}>{statValue}</div>
-          <div className="text-[9px] text-slate-500 font-bold uppercase tracking-wider">{statLabel}</div>
+        {/* Center: Match Badges (Flex-1) */}
+        {children && (
+          <div className="flex-1 flex flex-nowrap items-center gap-1.5 overflow-x-auto no-scrollbar scroll-smooth">
+            {children}
+          </div>
+        )}
+
+        {/* Right: Stat */}
+        <div className="text-center shrink-0 pl-2 sm:pl-4 border-l border-white/5">
+          <div className={cn("text-lg sm:text-2xl font-black", statColor)}>{statValue}</div>
+          <div className="text-[8px] sm:text-[9px] text-slate-500 font-bold uppercase tracking-wider">{statLabel}</div>
         </div>
       </div>
 
@@ -236,7 +264,7 @@ const Leaderboard = () => {
       {idx < 3 && (
         <div className="absolute inset-0 bg-gradient-to-r from-amber-500/[0.03] to-transparent pointer-events-none"></div>
       )}
-    </Link>
+    </div>
   );
 
   return (
@@ -343,6 +371,7 @@ const Leaderboard = () => {
           { id: 'table', label: 'League Table', icon: Trophy },
           { id: 'scorers', label: 'Top Scorers', icon: Target },
           { id: 'assists', label: 'Top Assists', icon: Handshake },
+          { id: 'potm', label: 'MVP Awards', icon: Medal },
           { id: 'discipline', label: 'Cards', icon: ShieldAlert },
           { id: 'cleansheets', label: 'Clean Sheets', icon: ShieldCheck }
         ].map(tab => (
@@ -550,7 +579,43 @@ const Leaderboard = () => {
         </div>
       )}
 
-      {/* ═══ TOP ASSISTS ═══ */}
+      {/* ═══ TOP POTM ═══ */}
+      {activeTab === 'potm' && (
+        <div className="space-y-4">
+          {topPotm.length > 0 ? (
+            topPotm.map((player, idx) => (
+              <PlayerCard 
+                key={player.id} 
+                player={player} 
+                idx={idx} 
+                statValue={player.potmAwards || 0} 
+                statLabel="Awards" 
+                statColor="text-brand-400" 
+                icon={Medal}
+              >
+                {player.wonMatches?.length > 0 && (
+                  <>
+                    {player.wonMatches.map(m => (
+                      <Link 
+                        key={m.id} 
+                        to={`/live/${m.id}`}
+                        className="px-2.5 py-1 bg-brand-500/5 hover:bg-brand-500/10 border border-brand-500/10 rounded-lg text-[9px] font-bold text-slate-400 hover:text-brand-400 transition-all flex items-center gap-1.5 group/match whitespace-nowrap"
+                      >
+                        <span className="w-1 h-1 rounded-full bg-brand-500 group-hover/match:animate-pulse"></span>
+                        {m.teamA} vs {m.teamB}
+                      </Link>
+                    ))}
+                  </>
+                )}
+              </PlayerCard>
+            ))
+          ) : (
+            <div className="text-center py-20 text-slate-500 font-medium italic rounded-2xl bg-[#0f172a] border border-dashed border-white/10">
+              No MVP awards recorded yet.
+            </div>
+          )}
+        </div>
+      )}
       {activeTab === 'assists' && (
         <div className="space-y-3">
           {topAssists.length > 0 ? (
