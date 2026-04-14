@@ -1,20 +1,32 @@
 {
   "files": {
     "main.css": "./static/css/main.e7ae12eb.css",
-    "main.js": "./static/js/main.17bd8513.js",
-    "static/media/ChatGPT Image Feb 9, 2026, 11_39_58 AM.png": "./static/media/ChatGPT Image Feb 9, 2026, 11_39_58 AM.af44b4557789aa16e7e3.png",
+    "main.js": "./static/js/main.af240a63.js",
+    "static/media/Abi_abrar.png": "./static/media/Abi_abrar.01c4964c52c3de9dcfbd.png",
+    "static/media/danish_akbar.jpg": "./static/media/danish_akbar.05b30d358601901944f0.jpg",
     "static/media/iu.jpg": "./static/media/iu.a60e27ede2b5e10f956c.jpg",
-    "static/media/Snow-3 - Copy (2).jpg": "./static/media/Snow-3 - Copy (2).e2aed85986e8803be7b8.jpg",
+    "static/media/shahid_ganai.jpg": "./static/media/shahid_ganai.cf90926be0a194a5a8cd.jpg",
+    "static/media/zubair_saraf.jpg": "./static/media/zubair_saraf.13ef9f45d45a35db381d.jpg",
     "static/media/Snow-3 - Copy.jpg": "./static/media/Snow-3 - Copy.e2aed85986e8803be7b8.jpg",
     "static/media/Snow-3.jpg": "./static/media/Snow-3.e2aed85986e8803be7b8.jpg",
+    "static/media/Media (1).jpg": "./static/media/Media (1).a8aa58bf49f432d8bf94.jpg",
+    "static/media/abral.jpg": "./static/media/abral.da369812b970eeaa9701.jpg",
     "static/media/shared image (6).jpg": "./static/media/shared image (6).320c8dcf2ebac095e8dc.jpg",
+    "static/media/zubair_manzoor.jpg": "./static/media/zubair_manzoor.74b3215473705e301dd6.jpg",
+    "static/media/hazik_mir.jpg": "./static/media/hazik_mir.ec0d57728b393a3ca70b.jpg",
+    "static/media/nadeem_dar.jpg": "./static/media/nadeem_dar.90d0d3256e6e1c0f5b8a.jpg",
+    "static/media/adnan_dar.jpg": "./static/media/adnan_dar.4122be6a18aba1e323cc.jpg",
     "service-worker.js": "./service-worker.js",
+    "static/media/bazi_irshad.jpg": "./static/media/bazi_irshad.f1b6c43d21a49a4dc93e.jpg",
+    "static/media/farhan_mir.jpg": "./static/media/farhan_mir.cc20f6421554bac521ac.jpg",
+    "static/media/adil_riyaz.jpg": "./static/media/adil_riyaz.392d81fa8c9a4fccdc02.jpg",
+    "static/media/nadeem.jpg": "./static/media/nadeem.edf510bc9f578c6e078d.jpg",
     "index.html": "./index.html",
     "main.e7ae12eb.css.map": "./static/css/main.e7ae12eb.css.map",
-    "main.17bd8513.js.map": "./static/js/main.17bd8513.js.map"
+    "main.af240a63.js.map": "./static/js/main.af240a63.js.map"
   },
   "entrypoints": [
     "static/css/main.e7ae12eb.css",
-    "static/js/main.17bd8513.js"
+    "static/js/main.af240a63.js"
   ]
 }
