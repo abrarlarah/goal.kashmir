@@ -457,12 +457,12 @@ const ManagePlayers = () => {
                                     className="w-full bg-white dark:bg-gray-800/50 border border-slate-200 dark:border-white/10 p-3.5 rounded-xl text-slate-900 dark:text-white focus:ring-2 focus:ring-violet-500 focus:border-violet-500 outline-none transition-all shadow-sm font-medium appearance-none cursor-pointer"
                                     required
                                 >
-                                    <option value="" disabled>Select a Club</option>
+                                    <option value="" disabled className="dark:bg-gray-800">Select a Club</option>
                                     {teams
                                         .filter(t => t.name.toLowerCase().includes(teamSearchText.toLowerCase()))
                                         .sort((a, b) => a.name.localeCompare(b.name))
                                         .map(t => (
-                                            <option key={t.id} value={t.name} className="font-medium text-slate-800 dark:text-white">{t.name}</option>
+                                            <option key={t.id} value={t.name} className="font-medium text-slate-800 dark:text-white dark:bg-gray-800">{t.name}</option>
                                         ))
                                     }
                                 </select>
@@ -487,7 +487,7 @@ const ManagePlayers = () => {
                                     }}
                                 >
                                     {positions.map(p => (
-                                        <option key={p} value={p} className="text-slate-900 dark:text-white">
+                                        <option key={p} value={p} className="text-slate-900 dark:text-white dark:bg-gray-800">
                                             {p}
                                         </option>
                                     ))}
@@ -508,15 +508,15 @@ const ManagePlayers = () => {
                                     className="w-full bg-white dark:bg-gray-800/50 border border-slate-200 dark:border-white/10 p-3.5 rounded-xl text-slate-900 dark:text-white focus:ring-2 focus:ring-violet-500 focus:border-violet-500 outline-none transition-all shadow-sm font-medium appearance-none cursor-pointer"
                                     required
                                 >
-                                    <option value="" disabled>Select District</option>
-                                    <optgroup label="Jammu Division" className="font-bold text-violet-500">
+                                    <option value="" disabled className="dark:bg-gray-800">Select District</option>
+                                    <optgroup label="Jammu Division" className="font-bold text-violet-500 dark:bg-gray-800 text-slate-900 bg-white">
                                         {DISTRICTS.JAMMU.map(district => (
-                                            <option key={district} value={district} className="text-slate-900 dark:text-white font-medium">{district}</option>
+                                            <option key={district} value={district} className="text-slate-900 dark:text-white font-medium dark:bg-gray-800">{district}</option>
                                         ))}
                                     </optgroup>
-                                    <optgroup label="Kashmir Division" className="font-bold text-fuchsia-500">
+                                    <optgroup label="Kashmir Division" className="font-bold text-fuchsia-500 dark:bg-gray-800 text-slate-900 bg-white">
                                         {DISTRICTS.KASHMIR.map(district => (
-                                            <option key={district} value={district} className="text-slate-900 dark:text-white font-medium">{district}</option>
+                                            <option key={district} value={district} className="text-slate-900 dark:text-white font-medium dark:bg-gray-800">{district}</option>
                                         ))}
                                     </optgroup>
                                 </select>
@@ -688,9 +688,9 @@ const ManagePlayers = () => {
                         onChange={(e) => setTeamFilter(e.target.value)}
                         className="bg-slate-50 dark:bg-gray-800 border border-slate-200 dark:border-gray-700 rounded-lg px-4 py-2 text-slate-900 dark:text-white focus:ring-2 focus:ring-brand-500 outline-none"
                     >
-                        <option value="All">All Teams</option>
+                        <option value="All" className="dark:bg-gray-800">All Teams</option>
                         {teams.map(t => (
-                            <option key={t.id} value={t.name}>{t.name}</option>
+                            <option key={t.id} value={t.name} className="dark:bg-gray-800">{t.name}</option>
                         ))}
                     </select>
                 </div>

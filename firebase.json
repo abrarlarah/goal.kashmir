@@ -1,5 +1,6 @@
 {
   "hosting": {
+    "site": "goalkashmir",
     "public": "build",
     "ignore": [
       "firebase.json",
