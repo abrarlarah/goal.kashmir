@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { X, Trophy, Save, Activity, Trash2, Loader2 } from 'lucide-react';
-import { updateDoc, doc, deleteDoc, serverTimestamp } from 'firebase/firestore';
+import { updateDoc, doc, deleteDoc, serverTimestamp, collection, query, where, getDocs } from 'firebase/firestore';
 import { db } from '../../firebase';
 
 const QuickMatchEditModal = ({ match, isOpen, onClose, isSuperAdmin }) => { // Added isSuperAdmin prop
@@ -44,13 +44,29 @@ const QuickMatchEditModal = ({ match, isOpen, onClose, isSuperAdmin }) => { // A
     };
 
     const handleDeleteMatch = async () => {
-        if (!window.confirm("Are you sure you want to delete this match? This action cannot be undone.")) {
+        if (!window.confirm("Are you sure you want to delete this match? This action cannot be undone and will delete all associated lineups and events.")) {
             return;
         }
         setIsLoading(true);
         setError('');
         try {
+            const deletePromises = [];
+            
+            // 1. Cascade delete lineups
+            const lineupsQ = query(collection(db, 'lineups'), where('matchId', '==', match.id));
+            const lineupsSnap = await getDocs(lineupsQ);
+            lineupsSnap.forEach(docSnap => deletePromises.push(deleteDoc(docSnap.ref)));
+
+            // 2. Cascade delete events
+            const eventsQ = collection(db, 'matches', match.id, 'events');
+            const eventsSnap = await getDocs(eventsQ);
+            eventsSnap.forEach(docSnap => deletePromises.push(deleteDoc(docSnap.ref)));
+
+            await Promise.all(deletePromises);
+
+            // 3. Delete match
             await deleteDoc(doc(db, 'matches', match.id));
+            
             onClose();
         } catch (error) {
             console.error("Error deleting match", error);

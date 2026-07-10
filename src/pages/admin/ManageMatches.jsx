@@ -1,5 +1,5 @@
 import React, { useState, useMemo } from 'react';
-import { collection, addDoc, updateDoc, deleteDoc, doc } from 'firebase/firestore';
+import { collection, addDoc, updateDoc, deleteDoc, doc, query, where, getDocs } from 'firebase/firestore';
 import { db } from '../../firebase';
 import { useData } from '../../context/DataContext';
 import { useAuth } from '../../context/AuthContext';
@@ -172,16 +172,33 @@ const ManageMatches = () => {
   };
 
   const handleDelete = async (id) => {
-    if (window.confirm('Are you sure you want to delete this match?')) {
+    if (window.confirm('Are you sure you want to delete this match? This will also delete its lineups and live events.')) {
       const match = matches.find(m => m.id === id);
       try {
+        const deletePromises = [];
+        
+        // 1. Find and delete associated lineups
+        const lineupsQ = query(collection(db, 'lineups'), where('matchId', '==', id));
+        const lineupsSnap = await getDocs(lineupsQ);
+        lineupsSnap.forEach(docSnap => deletePromises.push(deleteDoc(docSnap.ref)));
+
+        // 2. Find and delete associated events (goals, cards, etc.)
+        const eventsQ = collection(db, 'matches', id, 'events');
+        const eventsSnap = await getDocs(eventsQ);
+        eventsSnap.forEach(docSnap => deletePromises.push(deleteDoc(docSnap.ref)));
+
+        // Execute cascade deletes
+        await Promise.all(deletePromises);
+
+        // 3. Delete the match itself
         await deleteDoc(doc(db, 'matches', id));
+        
         logAuditEvent('DELETE_MATCH', {
           entityType: 'match',
           entityId: id,
           entityName: match ? `${match.teamA} vs ${match.teamB}` : 'Unknown',
         });
-        setSuccessMessage('Match deleted successfully!');
+        setSuccessMessage('Match and all associated data deleted successfully!');
         setTimeout(() => setSuccessMessage(''), 3000);
       } catch (error) {
         console.error("Error deleting match: ", error);

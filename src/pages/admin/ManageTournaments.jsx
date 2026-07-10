@@ -174,16 +174,38 @@ const ManageTournaments = () => {
     };
 
     const handleDelete = async (id) => {
-        if (window.confirm('Delete this tournament? This action cannot be undone.')) {
+        if (window.confirm('Delete this tournament and all its associated matches? This action cannot be undone.')) {
             const tournament = tournaments.find(t => t.id === id);
             try {
+                // Find all associated matches
+                const matchRefs = new Map();
+                
+                // Matches linked by tournamentId
+                const q1 = query(collection(db, 'matches'), where('tournamentId', '==', id));
+                const q1Snapshot = await getDocs(q1);
+                q1Snapshot.forEach(docSnap => matchRefs.set(docSnap.id, docSnap.ref));
+
+                // Legacy matches linked by competition name
+                if (tournament?.name) {
+                    const q2 = query(collection(db, 'matches'), where('competition', '==', tournament.name));
+                    const q2Snapshot = await getDocs(q2);
+                    q2Snapshot.forEach(docSnap => matchRefs.set(docSnap.id, docSnap.ref));
+                }
+
+                // Delete all matches concurrently
+                const deletePromises = Array.from(matchRefs.values()).map(ref => deleteDoc(ref));
+                await Promise.all(deletePromises);
+
+                // Finally delete the tournament
                 await deleteDoc(doc(db, 'tournaments', id));
+                
                 logAuditEvent('DELETE_TOURNAMENT', {
                     entityType: 'tournament',
                     entityId: id,
                     entityName: tournament?.name || 'Unknown',
                 });
-                setSuccessMessage('Tournament deleted successfully!');
+                
+                setSuccessMessage('Tournament and associated matches deleted successfully!');
                 setTimeout(() => setSuccessMessage(''), 3000);
             } catch (error) {
                 console.error("Error deleting: ", error);

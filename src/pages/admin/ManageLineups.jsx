@@ -247,6 +247,10 @@ const ManageLineups = () => {
                     bench: lineup.bench,
                     createdAt: new Date()
                 });
+                
+                // CRITICAL FIX: Save the new ID in state so future saves update instead of creating duplicates
+                setLineup(prev => ({ ...prev, id: docRef.id }));
+
                 logAuditEvent('CREATE_LINEUP', {
                     entityType: 'lineup',
                     entityId: docRef.id,
@@ -357,6 +361,10 @@ const ManageLineups = () => {
                     ...lineupData,
                     createdAt: new Date()
                 });
+                
+                // CRITICAL FIX: Save the new ID in state so future saves update instead of creating duplicates
+                setManualLineup(prev => ({ ...prev, id: docRef.id }));
+
                 logAuditEvent('CREATE_LINEUP', {
                     entityType: 'lineup',
                     entityId: docRef.id,
