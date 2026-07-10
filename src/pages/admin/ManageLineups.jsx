@@ -388,22 +388,22 @@ const ManageLineups = () => {
     };
 
     return (
-        <div className="container mx-auto px-4 py-8 text-slate-900 dark:text-white">
+        <div className="container mx-auto px-4 py-8 text-white text-white">
             <h2 className="text-3xl font-bold mb-6">⚽ Manage Match Lineups</h2>
 
             {successMessage && (
-                <div className="bg-green-600 text-slate-900 dark:text-white p-3 rounded mb-4 animate-pulse">
+                <div className="bg-green-600 text-white text-white p-3 rounded mb-4 animate-pulse">
                     {successMessage}
                 </div>
             )}
 
             {/* Match Selection */}
-            <div className="bg-slate-50 dark:bg-gray-800 p-6 rounded-lg mb-6">
+            <div className="bg-[#0B1220] dark:bg-gray-800 p-6 rounded-lg mb-6">
                 <h3 className="text-xl mb-4">Select Match</h3>
                 <select
                     value={selectedMatch}
                     onChange={(e) => handleMatchChange(e.target.value)}
-                    className="bg-slate-100 dark:bg-gray-700 p-3 rounded text-slate-900 dark:text-white w-full mb-4"
+                    className="bg-[#101827] dark:bg-gray-700 p-3 rounded text-white text-white w-full mb-4"
                 >
                     <option value="">Select a match</option>
                     {scopedMatches.filter(m => m.status !== 'finished').map(match => (
@@ -426,7 +426,7 @@ const ManageLineups = () => {
                                     className={`flex-1 p-4 rounded-xl border-2 transition-all flex flex-col items-center gap-2 ${
                                         selectedTeam === teamName 
                                         ? 'bg-brand-500/10 border-brand-500 text-brand-500' 
-                                        : 'bg-white/5 border-white/5 hover:bg-white/10 hover:border-white/20'
+                                        : 'bg-[#131D31]/50 border-white/5 hover:bg-white/10 hover:border-white/20'
                                     }`}
                                 >
                                     <Shield size={32} />
@@ -437,8 +437,8 @@ const ManageLineups = () => {
 
                         {/* Template Controls */}
                         {selectedTeam && (
-                            <div className="mt-4 p-4 bg-slate-100 dark:bg-gray-700/50 rounded-xl flex items-center justify-between gap-4 border border-white/5">
-                                <div className="flex items-center gap-2 text-slate-500 dark:text-gray-400">
+                            <div className="mt-4 p-4 bg-[#101827] dark:bg-gray-700/50 rounded-xl flex items-center justify-between gap-4 border border-white/5">
+                                <div className="flex items-center gap-2 text-[#64748B] dark:text-gray-400">
                                     <Users size={18} />
                                     <span className="text-sm font-medium">Lineup Templates</span>
                                 </div>
@@ -465,13 +465,13 @@ const ManageLineups = () => {
             {/* Mode toggle when team is selected */}
             {selectedTeam && (
                 <div className="mb-6">
-                    <div className="flex rounded-xl overflow-hidden border border-slate-200 dark:border-white/10 bg-slate-50 dark:bg-gray-800">
+                    <div className="flex rounded-xl overflow-hidden border border-[#24344D] border-[#24344D] bg-[#0B1220] dark:bg-gray-800">
                         <button
                             onClick={() => setIsManualMode(false)}
                             className={`flex-1 flex items-center justify-center gap-2 px-4 py-3 text-sm font-bold transition-all ${
                                 !isManualMode
                                     ? 'bg-brand-500 text-white shadow-lg'
-                                    : 'text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-white/5'
+                                    : 'text-[#64748B] text-[#94A3B8] hover:text-white hover:text-white hover:bg-[#18253C] hover:bg-[#18253C]'
                             }`}
                         >
                             <Users size={16} />
@@ -482,7 +482,7 @@ const ManageLineups = () => {
                             className={`flex-1 flex items-center justify-center gap-2 px-4 py-3 text-sm font-bold transition-all ${
                                 isManualMode
                                     ? 'bg-gradient-to-r from-amber-500 to-orange-500 text-white shadow-lg'
-                                    : 'text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-white/5'
+                                    : 'text-[#64748B] text-[#94A3B8] hover:text-white hover:text-white hover:bg-[#18253C] hover:bg-[#18253C]'
                             }`}
                         >
                             <UserPlus size={16} />
@@ -502,7 +502,7 @@ const ManageLineups = () => {
             {selectedTeam && isManualMode && (
                 <div className="space-y-6">
                     {/* Manual Player Input */}
-                    <div className="bg-slate-50 dark:bg-gray-800 p-6 rounded-lg">
+                    <div className="bg-[#0B1220] dark:bg-gray-800 p-6 rounded-lg">
                         <h3 className="text-xl mb-4 flex items-center gap-2">
                             <UserPlus size={20} className="text-amber-500" />
                             Add Player Manually
@@ -520,12 +520,12 @@ const ManageLineups = () => {
                                         else if (manualLineup.bench.length < 6) addManualToBench();
                                     }
                                 }}
-                                className="flex-1 bg-white dark:bg-gray-700 border border-slate-200 dark:border-gray-600 rounded-xl px-4 py-3 text-slate-900 dark:text-white focus:ring-2 focus:ring-amber-500 outline-none font-bold"
+                                className="flex-1 bg-[#131D31] dark:bg-gray-700 border border-[#24344D] dark:border-gray-600 rounded-xl px-4 py-3 text-white text-white focus:ring-2 focus:ring-amber-500 outline-none font-bold"
                             />
                             <select
                                 value={manualPlayerPosition}
                                 onChange={(e) => setManualPlayerPosition(e.target.value)}
-                                className="bg-white dark:bg-gray-700 border border-slate-200 dark:border-gray-600 rounded-xl px-4 py-3 text-slate-900 dark:text-white focus:ring-2 focus:ring-amber-500 outline-none font-bold w-full sm:w-40"
+                                className="bg-[#131D31] dark:bg-gray-700 border border-[#24344D] dark:border-gray-600 rounded-xl px-4 py-3 text-white text-white focus:ring-2 focus:ring-amber-500 outline-none font-bold w-full sm:w-40"
                             >
                                 <option value="">Position</option>
                                 <option value="GK">GK</option>
@@ -563,11 +563,11 @@ const ManageLineups = () => {
 
                     <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                         {/* Manual Starting 11 */}
-                        <div className="bg-slate-50 dark:bg-gray-800 p-6 rounded-lg">
+                        <div className="bg-[#0B1220] dark:bg-gray-800 p-6 rounded-lg">
                             <h3 className="text-xl mb-4 flex items-center gap-2">
                                 <Shield size={18} className="text-green-500" />
                                 Starting Lineup
-                                <span className={`ml-2 text-sm text-slate-400`}>
+                                <span className={`ml-2 text-sm text-[#64748B]`}>
                                     ({manualLineup.starting11.length})
                                 </span>
                             </h3>
@@ -587,16 +587,16 @@ const ManageLineups = () => {
                                     </div>
                                 ))}
                                 {manualLineup.starting11.length === 0 && (
-                                    <p className="text-slate-500 dark:text-gray-400 text-sm text-center py-4">No players added yet. Type a name above.</p>
+                                    <p className="text-[#64748B] dark:text-gray-400 text-sm text-center py-4">No players added yet. Type a name above.</p>
                                 )}
                             </div>
                         </div>
 
                         {/* Manual Bench */}
-                        <div className="bg-slate-50 dark:bg-gray-800 p-6 rounded-lg">
+                        <div className="bg-[#0B1220] dark:bg-gray-800 p-6 rounded-lg">
                             <h3 className="text-xl mb-4 flex items-center gap-2">
                                 Bench
-                                <span className={`ml-2 text-sm ${manualLineup.bench.length === 6 ? 'text-green-400' : 'text-slate-500 dark:text-gray-400'}`}>
+                                <span className={`ml-2 text-sm ${manualLineup.bench.length === 6 ? 'text-green-400' : 'text-[#64748B] dark:text-gray-400'}`}>
                                     ({manualLineup.bench.length}/6)
                                 </span>
                             </h3>
@@ -616,7 +616,7 @@ const ManageLineups = () => {
                                     </div>
                                 ))}
                                 {manualLineup.bench.length === 0 && (
-                                    <p className="text-slate-500 dark:text-gray-400 text-sm text-center py-4">No bench players</p>
+                                    <p className="text-[#64748B] dark:text-gray-400 text-sm text-center py-4">No bench players</p>
                                 )}
                             </div>
                         </div>
@@ -628,17 +628,17 @@ const ManageLineups = () => {
             {selectedTeam && !isManualMode && (
                 <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
                     {/* Available Players */}
-                    <div className="bg-slate-50 dark:bg-gray-800 p-6 rounded-lg">
+                    <div className="bg-[#0B1220] dark:bg-gray-800 p-6 rounded-lg">
                         <div className="flex flex-col mb-4">
                             <h3 className="text-xl mb-2">Available Players</h3>
                             <div className="relative">
-                                <Search className="absolute left-2 top-1/2 -translate-y-1/2 text-slate-500 dark:text-gray-500" size={14} />
+                                <Search className="absolute left-2 top-1/2 -translate-y-1/2 text-[#64748B] dark:text-gray-500" size={14} />
                                 <input
                                     type="text"
                                     placeholder="Search team players..."
                                     value={searchTerm}
                                     onChange={(e) => setSearchTerm(e.target.value)}
-                                    className="w-full bg-slate-100 dark:bg-gray-700 border border-gray-600 rounded pl-8 pr-2 py-1.5 text-xs text-slate-900 dark:text-white focus:ring-1 focus:ring-green-500 outline-none"
+                                    className="w-full bg-[#101827] dark:bg-gray-700 border border-gray-600 rounded pl-8 pr-2 py-1.5 text-xs text-white text-white focus:ring-1 focus:ring-green-500 outline-none"
                                 />
                             </div>
                         </div>
@@ -646,10 +646,10 @@ const ManageLineups = () => {
                             {teamPlayers
                                 .filter(p => !selectedPlayerIds.includes(p.id))
                                 .map(player => (
-                                    <div key={player.id} className="bg-slate-100 dark:bg-gray-700 p-3 rounded flex justify-between items-center">
+                                    <div key={player.id} className="bg-[#101827] dark:bg-gray-700 p-3 rounded flex justify-between items-center">
                                         <div>
                                             <div className="font-medium">{player.name}</div>
-                                            <div className="text-xs text-slate-500 dark:text-gray-400">{player.position}</div>
+                                            <div className="text-xs text-[#64748B] dark:text-gray-400">{player.position}</div>
                                         </div>
                                         <div className="flex gap-2">
                                             <button
@@ -671,7 +671,7 @@ const ManageLineups = () => {
                                 ))}
                             {teamPlayers.filter(p => !selectedPlayerIds.includes(p.id)).length === 0 && (
                                 <div className="text-center py-4">
-                                    <p className="text-slate-500 dark:text-gray-400 text-sm">
+                                    <p className="text-[#64748B] dark:text-gray-400 text-sm">
                                         {teamPlayers.length === 0 ? 'No registered players for this team.' : 'All players assigned'}
                                     </p>
                                     {teamPlayers.length === 0 && (
@@ -688,10 +688,10 @@ const ManageLineups = () => {
                     </div>
 
                     {/* Starting 11 */}
-                    <div className="bg-slate-50 dark:bg-gray-800 p-6 rounded-lg">
+                    <div className="bg-[#0B1220] dark:bg-gray-800 p-6 rounded-lg">
                         <h3 className="text-xl mb-4">
                             Starting Lineup
-                            <span className={`ml-2 text-sm text-slate-400`}>
+                            <span className={`ml-2 text-sm text-[#64748B]`}>
                                 ({lineup.starting11.length})
                             </span>
                         </h3>
@@ -702,7 +702,7 @@ const ManageLineups = () => {
                                     <div key={playerId} className="bg-green-900 p-3 rounded flex justify-between items-center">
                                         <div>
                                             <div className="font-medium">#{index + 1} {player.name}</div>
-                                            <div className="text-xs text-slate-600 dark:text-gray-300">{player.position}</div>
+                                            <div className="text-xs text-[#94A3B8] dark:text-gray-300">{player.position}</div>
                                         </div>
                                         <button
                                             onClick={() => removeFromStarting11(playerId)}
@@ -714,16 +714,16 @@ const ManageLineups = () => {
                                 ) : null;
                             })}
                             {lineup.starting11.length === 0 && (
-                                <p className="text-slate-500 dark:text-gray-400 text-sm text-center py-4">No players selected</p>
+                                <p className="text-[#64748B] dark:text-gray-400 text-sm text-center py-4">No players selected</p>
                             )}
                         </div>
                     </div>
 
                     {/* Bench */}
-                    <div className="bg-slate-50 dark:bg-gray-800 p-6 rounded-lg">
+                    <div className="bg-[#0B1220] dark:bg-gray-800 p-6 rounded-lg">
                         <h3 className="text-xl mb-4">
                             Bench
-                            <span className={`ml-2 text-sm ${lineup.bench.length === 6 ? 'text-green-400' : 'text-slate-500 dark:text-gray-400'}`}>
+                            <span className={`ml-2 text-sm ${lineup.bench.length === 6 ? 'text-green-400' : 'text-[#64748B] dark:text-gray-400'}`}>
                                 ({lineup.bench.length}/6)
                             </span>
                         </h3>
@@ -734,7 +734,7 @@ const ManageLineups = () => {
                                     <div key={playerId} className="bg-blue-900 p-3 rounded flex justify-between items-center">
                                         <div>
                                             <div className="font-medium">{player.name}</div>
-                                            <div className="text-xs text-slate-600 dark:text-gray-300">{player.position}</div>
+                                            <div className="text-xs text-[#94A3B8] dark:text-gray-300">{player.position}</div>
                                         </div>
                                         <button
                                             onClick={() => removeFromBench(playerId)}
@@ -746,7 +746,7 @@ const ManageLineups = () => {
                                 ) : null;
                             })}
                             {lineup.bench.length === 0 && (
-                                <p className="text-slate-500 dark:text-gray-400 text-sm text-center py-4">No bench players</p>
+                                <p className="text-[#64748B] dark:text-gray-400 text-sm text-center py-4">No bench players</p>
                             )}
                         </div>
                     </div>
@@ -773,9 +773,9 @@ const ManageLineups = () => {
 
             {/* Instructions */}
             {!selectedMatch && (
-                <div className="bg-slate-50 dark:bg-gray-800 p-6 rounded-lg mt-6">
+                <div className="bg-[#0B1220] dark:bg-gray-800 p-6 rounded-lg mt-6">
                     <h3 className="text-xl mb-4">📋 How to Create a Lineup</h3>
-                    <ol className="list-decimal list-inside space-y-2 text-slate-600 dark:text-gray-300">
+                    <ol className="list-decimal list-inside space-y-2 text-[#94A3B8] dark:text-gray-300">
                         <li>Select a match from the dropdown</li>
                         <li>Choose which team you want to create a lineup for</li>
                         <li>Toggle <strong>"Manual Entry"</strong> to type player names directly, or <strong>"Select from Roster"</strong> to pick from registered players</li>

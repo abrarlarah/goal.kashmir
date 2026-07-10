@@ -79,7 +79,7 @@ const SubstitutionManager = ({ lineup, players, onSubstitutionComplete }) => {
     };
 
     return (
-        <div className="bg-slate-50 dark:bg-gray-800 p-4 rounded-lg border-2 border-yellow-500">
+        <div className="bg-[#0B1220] dark:bg-gray-800 p-4 rounded-lg border-2 border-yellow-500">
             <h3 className="text-lg font-bold mb-4 text-yellow-400 flex items-center">
                 🔄 Make Substitution
             </h3>
@@ -87,13 +87,13 @@ const SubstitutionManager = ({ lineup, players, onSubstitutionComplete }) => {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
                 {/* Player to Replace (from Starting 11) */}
                 <div>
-                    <label className="block text-sm font-medium mb-2 text-slate-600 dark:text-gray-300">
+                    <label className="block text-sm font-medium mb-2 text-[#94A3B8] dark:text-gray-300">
                         Player to Replace (Starting 11)
                     </label>
                     <select
                         value={selectedStarter}
                         onChange={(e) => setSelectedStarter(e.target.value)}
-                        className="w-full bg-slate-100 dark:bg-gray-700 text-slate-900 dark:text-white p-2 rounded border border-gray-600"
+                        className="w-full bg-[#101827] dark:bg-gray-700 text-white text-white p-2 rounded border border-gray-600"
                     >
                         <option value="">Select player to replace</option>
                         {lineup.starting11.map(playerId => {
@@ -109,13 +109,13 @@ const SubstitutionManager = ({ lineup, players, onSubstitutionComplete }) => {
 
                 {/* Substitute (from Bench) */}
                 <div>
-                    <label className="block text-sm font-medium mb-2 text-slate-600 dark:text-gray-300">
+                    <label className="block text-sm font-medium mb-2 text-[#94A3B8] dark:text-gray-300">
                         Substitute (Bench)
                     </label>
                     <select
                         value={selectedBench}
                         onChange={(e) => setSelectedBench(e.target.value)}
-                        className="w-full bg-slate-100 dark:bg-gray-700 text-slate-900 dark:text-white p-2 rounded border border-gray-600"
+                        className="w-full bg-[#101827] dark:bg-gray-700 text-white text-white p-2 rounded border border-gray-600"
                     >
                         <option value="">Select substitute</option>
                         {lineup.bench && lineup.bench.map(playerId => {
@@ -132,12 +132,12 @@ const SubstitutionManager = ({ lineup, players, onSubstitutionComplete }) => {
 
             {/* Preview */}
             {selectedStarter && selectedBench && (
-                <div className="bg-slate-100 dark:bg-gray-700 p-3 rounded mb-4 text-sm">
+                <div className="bg-[#101827] dark:bg-gray-700 p-3 rounded mb-4 text-sm">
                     <div className="flex items-center justify-center gap-4">
                         <span className="text-red-400">
                             ⬇️ {getPlayer(selectedStarter)?.name}
                         </span>
-                        <span className="text-slate-500 dark:text-gray-400">→</span>
+                        <span className="text-[#64748B] dark:text-gray-400">→</span>
                         <span className="text-green-400">
                             ⬆️ {getPlayer(selectedBench)?.name}
                         </span>
@@ -149,12 +149,12 @@ const SubstitutionManager = ({ lineup, players, onSubstitutionComplete }) => {
             <button
                 onClick={handleSubstitution}
                 disabled={!selectedStarter || !selectedBench || isSubstituting}
-                className="w-full bg-yellow-600 hover:bg-yellow-700 disabled:bg-gray-600 disabled:cursor-not-allowed text-slate-900 dark:text-white font-bold py-2 px-4 rounded transition-colors"
+                className="w-full bg-yellow-600 hover:bg-yellow-700 disabled:bg-gray-600 disabled:cursor-not-allowed text-white text-white font-bold py-2 px-4 rounded transition-colors"
             >
                 {isSubstituting ? 'Making Substitution...' : 'Confirm Substitution'}
             </button>
 
-            <p className="text-xs text-slate-500 dark:text-gray-400 mt-2 text-center">
+            <p className="text-xs text-[#64748B] dark:text-gray-400 mt-2 text-center">
                 This will swap the selected players between starting 11 and bench
             </p>
         </div>

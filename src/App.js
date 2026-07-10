@@ -38,7 +38,7 @@ function App() {
   return (
     <ThemeProvider>
       <DataProvider>
-        <div className="min-h-screen bg-white dark:bg-dark-bg text-slate-900 dark:text-white transition-colors duration-300">
+        <div className="min-h-screen bg-[#131D31] bg-[#0B1220] text-white text-white transition-colors duration-300">
           <Navbar />
           <main className="container mx-auto px-4 py-8">
             <Routes>

@@ -40,7 +40,7 @@ const NewsDetail = () => {
     if (!article) {
         return (
             <div className="max-w-7xl mx-auto px-4 py-20 text-center">
-                <h2 className="text-2xl font-bold text-slate-900 dark:text-white mb-4">Article Not Found</h2>
+                <h2 className="text-2xl font-bold text-white text-white mb-4">Article Not Found</h2>
                 <Link to="/news" className="text-brand-400 hover:text-brand-300 flex items-center justify-center gap-2">
                     <ChevronLeft size={20} /> Back to News
                 </Link>
@@ -60,7 +60,7 @@ const NewsDetail = () => {
         >
             <Link
                 to="/news"
-                className="inline-flex items-center gap-2 text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:text-white transition-colors mb-8 group"
+                className="inline-flex items-center gap-2 text-[#94A3B8] text-[#94A3B8] hover:text-white text-white transition-colors mb-8 group"
             >
                 <ChevronLeft size={20} className="group-hover:-translate-x-1 transition-transform" />
                 Back to Latest News
@@ -81,7 +81,7 @@ const NewsDetail = () => {
                         initial={{ y: 20, opacity: 0 }}
                         animate={{ y: 0, opacity: 1 }}
                         transition={{ delay: 0.1 }}
-                        className="text-3xl md:text-5xl font-display font-bold text-slate-900 dark:text-white leading-tight"
+                        className="text-3xl md:text-5xl font-display font-bold text-white text-white leading-tight"
                     >
                         {article.title}
                     </motion.h1>
@@ -90,7 +90,7 @@ const NewsDetail = () => {
                         initial={{ y: 20, opacity: 0 }}
                         animate={{ y: 0, opacity: 1 }}
                         transition={{ delay: 0.2 }}
-                        className="flex flex-wrap items-center gap-6 text-slate-600 dark:text-slate-400 text-sm py-4 border-y border-slate-200/5 dark:border-white/5"
+                        className="flex flex-wrap items-center gap-6 text-[#94A3B8] text-[#94A3B8] text-sm py-4 border-y border-[#24344D]/30 border-[#24344D]/50"
                     >
                         <div className="flex items-center gap-2">
                             <Calendar size={16} className="text-brand-500" />
@@ -128,10 +128,10 @@ const NewsDetail = () => {
                     transition={{ delay: 0.4 }}
                     className="prose prose-invert prose-brand max-w-none"
                 >
-                    <p className="text-xl text-slate-700 dark:text-slate-300 font-medium leading-relaxed mb-8">
+                    <p className="text-xl text-[#94A3B8] text-[#94A3B8] font-medium leading-relaxed mb-8">
                         {article.excerpt}
                     </p>
-                    <div className="text-slate-600 dark:text-slate-400 leading-relaxed text-lg whitespace-pre-wrap">
+                    <div className="text-[#94A3B8] text-[#94A3B8] leading-relaxed text-lg whitespace-pre-wrap">
                         {article.content}
                     </div>
                 </motion.div>
@@ -141,7 +141,7 @@ const NewsDetail = () => {
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     transition={{ delay: 0.5 }}
-                    className="pt-12 mt-12 border-t border-slate-200/5 dark:border-white/5 flex items-center justify-between"
+                    className="pt-12 mt-12 border-t border-[#24344D]/30 border-[#24344D]/50 flex items-center justify-between"
                 >
                     <div className="flex items-center gap-4">
                         <button 
@@ -150,14 +150,14 @@ const NewsDetail = () => {
                                 article.excerpt || `Read this article on Goal Kashmir`, 
                                 `/news/${article.id}`
                             )}
-                            className="flex items-center gap-2 px-4 py-2 bg-white/5 hover:bg-white/10 text-slate-900 dark:text-white rounded-xl transition-colors"
+                            className="flex items-center gap-2 px-4 py-2 bg-[#131D31]/50 hover:bg-white/10 text-white text-white rounded-xl transition-colors"
                         >
                             <Share2 size={18} />
                             Share Article
                         </button>
                     </div>
 
-                    <div className="flex items-center gap-2 text-slate-500 text-sm">
+                    <div className="flex items-center gap-2 text-[#64748B] text-sm">
                         <Tag size={16} />
                         {article.tags || article.category || 'Soccer'}
                     </div>

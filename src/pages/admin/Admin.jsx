@@ -41,8 +41,8 @@ const Admin = () => {
       {/* Header with Role Badge */}
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4">
         <div>
-          <h1 className="text-3xl font-bold text-slate-900 dark:text-white">Admin Dashboard</h1>
-          <p className="text-slate-500 dark:text-gray-400 text-sm mt-1">
+          <h1 className="text-3xl font-bold text-white text-white">Admin Dashboard</h1>
+          <p className="text-[#64748B] dark:text-gray-400 text-sm mt-1">
             Welcome back, {userProfile?.displayName || 'Admin'}
           </p>
         </div>
@@ -64,7 +64,7 @@ const Admin = () => {
         </div>
       )}
       {!isSuperAdmin && !isAdmin && isTeamAdmin && (
-        <div className="bg-emerald-500/10 border border-emerald-500/20 rounded-2xl p-4 mb-8 text-sm text-emerald-300">
+        <div className="bg-green-500/10 border border-green-500/20 rounded-2xl p-4 mb-8 text-sm text-green-400">
           <ShieldCheck size={16} className="inline mr-2" />
           <strong>Team Admin Mode:</strong> You can manage your teams, players, and and user-created matches.
         </div>
@@ -84,10 +84,10 @@ const Admin = () => {
             className={`group bg-gradient-to-br ${card.color} border p-6 rounded-2xl shadow-lg hover:scale-[1.02] transition-all duration-300`}
           >
             <div className="flex items-center gap-3 mb-3">
-              <card.icon className="text-slate-900/70 dark:text-white/70 group-hover:text-slate-900 dark:text-white transition-colors" size={22} />
-              <h2 className="text-xl font-semibold text-slate-900 dark:text-white">{card.title}</h2>
+              <card.icon className="text-slate-900/70 dark:text-white/70 group-hover:text-slate-900 text-white transition-colors" size={22} />
+              <h2 className="text-xl font-semibold text-white text-white">{card.title}</h2>
             </div>
-            <p className="text-slate-500 dark:text-gray-400 text-sm">{card.desc}</p>
+            <p className="text-[#64748B] dark:text-gray-400 text-sm">{card.desc}</p>
           </Link>
         ))}
 
@@ -102,9 +102,9 @@ const Admin = () => {
             </div>
             <div className="flex items-center gap-3 mb-3">
               <UserCog className="text-yellow-400/70 group-hover:text-yellow-400 transition-colors" size={22} />
-              <h2 className="text-xl font-semibold text-slate-900 dark:text-white">👑 Manage Users</h2>
+              <h2 className="text-xl font-semibold text-white text-white">👑 Manage Users</h2>
             </div>
-            <p className="text-slate-500 dark:text-gray-400 text-sm">Assign roles and manage admin access</p>
+            <p className="text-[#64748B] dark:text-gray-400 text-sm">Assign roles and manage admin access</p>
           </Link>
         )}
 
@@ -119,9 +119,9 @@ const Admin = () => {
             </div>
             <div className="flex items-center gap-3 mb-3">
               <ScrollText className="text-amber-400/70 group-hover:text-amber-400 transition-colors" size={22} />
-              <h2 className="text-xl font-semibold text-slate-900 dark:text-white">📋 Audit Logs</h2>
+              <h2 className="text-xl font-semibold text-white text-white">📋 Audit Logs</h2>
             </div>
-            <p className="text-slate-500 dark:text-gray-400 text-sm">View a trail of all admin actions across the platform</p>
+            <p className="text-[#64748B] dark:text-gray-400 text-sm">View a trail of all admin actions across the platform</p>
           </Link>
         )}
       </div>

@@ -79,17 +79,17 @@ const QuickMatchEditModal = ({ match, isOpen, onClose, isSuperAdmin }) => { // A
 
     return (
         <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
-            <div className="absolute inset-0 bg-slate-900/60 backdrop-blur-sm" onClick={onClose} />
+            <div className="absolute inset-0 bg-[#0B1220]/80 backdrop-blur-sm" onClick={onClose} />
             <motion.div
                 initial={{ scale: 0.95, opacity: 0, y: 20 }}
                 animate={{ scale: 1, opacity: 1, y: 0 }}
                 exit={{ scale: 0.95, opacity: 0, y: 20 }}
-                className="relative bg-white dark:bg-[#0f172a] rounded-[2rem] w-full max-w-md shadow-2xl overflow-hidden border border-slate-200/50 dark:border-white/10"
+                className="relative bg-[#131D31] bg-[#0B1220] rounded-[2rem] w-full max-w-md shadow-2xl overflow-hidden border border-[#24344D]/50 border-[#24344D]"
             >
                 <div className="absolute top-0 inset-x-0 h-1.5 bg-gradient-to-r from-emerald-500 to-cyan-500"></div>
                 <button 
                     onClick={onClose}
-                    className="absolute top-6 right-6 p-2 rounded-full bg-slate-100 dark:bg-white/5 text-slate-500 dark:text-slate-400 hover:bg-slate-200 dark:hover:bg-white/10 transition-colors z-20"
+                    className="absolute top-6 right-6 p-2 rounded-full bg-[#101827] bg-[#131D31]/50 text-[#64748B] text-[#94A3B8] hover:bg-slate-200 hover:bg-[#18253C] transition-colors z-20"
                 >
                     <X size={20} />
                 </button>
@@ -100,8 +100,8 @@ const QuickMatchEditModal = ({ match, isOpen, onClose, isSuperAdmin }) => { // A
                             <Activity size={24} />
                         </div>
                         <div>
-                            <h2 className="text-xl font-black text-slate-900 dark:text-white font-display mb-1">Manage Match</h2>
-                            <p className="text-slate-500 dark:text-slate-400 text-[10px] font-bold uppercase tracking-widest">{match.teamA} VS {match.teamB}</p>
+                            <h2 className="text-xl font-black text-white text-white font-display mb-1">Manage Match</h2>
+                            <p className="text-[#64748B] text-[#94A3B8] text-[10px] font-bold uppercase tracking-widest">{match.teamA} VS {match.teamB}</p>
                         </div>
                     </div>
 
@@ -112,50 +112,50 @@ const QuickMatchEditModal = ({ match, isOpen, onClose, isSuperAdmin }) => { // A
                         <div className="grid grid-cols-2 gap-6 items-center">
                             <div className="space-y-4">
                                 <div className="space-y-1.5">
-                                    <label className="text-xs font-bold text-slate-500 uppercase tracking-widest">Team A Name</label>
+                                    <label className="text-xs font-bold text-[#64748B] uppercase tracking-widest">Team A Name</label>
                                     <input
                                         type="text"
                                         value={teamA}
                                         onChange={(e) => setTeamA(e.target.value)}
-                                        className="w-full bg-slate-100 dark:bg-white/5 border border-slate-200 dark:border-white/10 p-3 rounded-xl text-slate-900 dark:text-white font-bold focus:ring-2 focus:ring-emerald-500 outline-none transition-all"
+                                        className="w-full bg-[#101827] bg-[#131D31]/50 border border-[#24344D] border-[#24344D] p-3 rounded-xl text-white text-white font-bold focus:ring-2 focus:ring-emerald-500 outline-none transition-all"
                                     />
                                 </div>
                                 <div className="space-y-1.5">
-                                    <label className="text-xs font-bold text-slate-500 uppercase tracking-widest text-center block">Score A</label>
+                                    <label className="text-xs font-bold text-[#64748B] uppercase tracking-widest text-center block">Score A</label>
                                     <div className="flex items-center gap-2">
-                                        <button type="button" onClick={() => setScoreA(Math.max(0, scoreA - 1))} className="p-2 bg-slate-100 dark:bg-white/5 rounded-lg text-slate-600 dark:text-slate-400 hover:bg-slate-200 dark:hover:bg-white/10 transition-all">-</button>
+                                        <button type="button" onClick={() => setScoreA(Math.max(0, scoreA - 1))} className="p-2 bg-[#101827] bg-[#131D31]/50 rounded-lg text-[#94A3B8] text-[#94A3B8] hover:bg-slate-200 hover:bg-[#18253C] transition-all">-</button>
                                         <input
                                             type="number"
                                             value={scoreA}
                                             onChange={(e) => setScoreA(parseInt(e.target.value) || 0)}
-                                            className="flex-1 bg-white dark:bg-gray-800 border border-slate-200 dark:border-white/10 p-2 text-center text-xl font-black text-emerald-500 rounded-lg"
+                                            className="flex-1 bg-[#131D31] dark:bg-gray-800 border border-[#24344D] border-[#24344D] p-2 text-center text-xl font-black text-green-400 rounded-lg"
                                         />
-                                        <button type="button" onClick={() => setScoreA(scoreA + 1)} className="p-2 bg-slate-100 dark:bg-white/5 rounded-lg text-slate-600 dark:text-slate-400 hover:bg-slate-200 dark:hover:bg-white/10 transition-all">+</button>
+                                        <button type="button" onClick={() => setScoreA(scoreA + 1)} className="p-2 bg-[#101827] bg-[#131D31]/50 rounded-lg text-[#94A3B8] text-[#94A3B8] hover:bg-slate-200 hover:bg-[#18253C] transition-all">+</button>
                                     </div>
                                 </div>
                             </div>
 
                             <div className="space-y-4">
                                 <div className="space-y-1.5">
-                                    <label className="text-xs font-bold text-slate-500 uppercase tracking-widest">Team B Name</label>
+                                    <label className="text-xs font-bold text-[#64748B] uppercase tracking-widest">Team B Name</label>
                                     <input
                                         type="text"
                                         value={teamB}
                                         onChange={(e) => setTeamB(e.target.value)}
-                                        className="w-full bg-slate-100 dark:bg-white/5 border border-slate-200 dark:border-white/10 p-3 rounded-xl text-slate-900 dark:text-white font-bold focus:ring-2 focus:ring-emerald-500 outline-none transition-all"
+                                        className="w-full bg-[#101827] bg-[#131D31]/50 border border-[#24344D] border-[#24344D] p-3 rounded-xl text-white text-white font-bold focus:ring-2 focus:ring-emerald-500 outline-none transition-all"
                                     />
                                 </div>
                                 <div className="space-y-1.5">
-                                    <label className="text-xs font-bold text-slate-500 uppercase tracking-widest text-center block">Score B</label>
+                                    <label className="text-xs font-bold text-[#64748B] uppercase tracking-widest text-center block">Score B</label>
                                     <div className="flex items-center gap-2">
-                                        <button type="button" onClick={() => setScoreB(Math.max(0, scoreB - 1))} className="p-2 bg-slate-100 dark:bg-white/5 rounded-lg text-slate-600 dark:text-slate-400 hover:bg-slate-200 dark:hover:bg-white/10 transition-all">-</button>
+                                        <button type="button" onClick={() => setScoreB(Math.max(0, scoreB - 1))} className="p-2 bg-[#101827] bg-[#131D31]/50 rounded-lg text-[#94A3B8] text-[#94A3B8] hover:bg-slate-200 hover:bg-[#18253C] transition-all">-</button>
                                         <input
                                             type="number"
                                             value={scoreB}
                                             onChange={(e) => setScoreB(parseInt(e.target.value) || 0)}
-                                            className="flex-1 bg-white dark:bg-gray-800 border border-slate-200 dark:border-white/10 p-2 text-center text-xl font-black text-emerald-500 rounded-lg"
+                                            className="flex-1 bg-[#131D31] dark:bg-gray-800 border border-[#24344D] border-[#24344D] p-2 text-center text-xl font-black text-green-400 rounded-lg"
                                         />
-                                        <button type="button" onClick={() => setScoreB(scoreB + 1)} className="p-2 bg-slate-100 dark:bg-white/5 rounded-lg text-slate-600 dark:text-slate-400 hover:bg-slate-200 dark:hover:bg-white/10 transition-all">+</button>
+                                        <button type="button" onClick={() => setScoreB(scoreB + 1)} className="p-2 bg-[#101827] bg-[#131D31]/50 rounded-lg text-[#94A3B8] text-[#94A3B8] hover:bg-slate-200 hover:bg-[#18253C] transition-all">+</button>
                                     </div>
                                 </div>
                             </div>
@@ -163,20 +163,20 @@ const QuickMatchEditModal = ({ match, isOpen, onClose, isSuperAdmin }) => { // A
 
                         <div className="grid grid-cols-2 gap-4">
                             <div>
-                                <label className="text-[10px] font-black tracking-wider text-slate-500 uppercase block mb-1.5 ml-1">Match Minute</label>
+                                <label className="text-[10px] font-black tracking-wider text-[#64748B] uppercase block mb-1.5 ml-1">Match Minute</label>
                                 <input 
                                     type="number" 
                                     value={minute} // Changed to minute
                                     onChange={e => setMinute(e.target.value)} // Changed to setMinute
-                                    className="w-full bg-slate-50 dark:bg-black/20 border border-slate-200 dark:border-white/10 p-3 rounded-xl text-slate-900 dark:text-white outline-none focus:ring-2 focus:ring-emerald-500 font-black text-center" 
+                                    className="w-full bg-[#0B1220] bg-[#0B1220] border border-[#24344D] border-[#24344D] p-3 rounded-xl text-white text-white outline-none focus:ring-2 focus:ring-emerald-500 font-black text-center" 
                                 />
                             </div>
                             <div>
-                                <label className="text-[10px] font-black tracking-wider text-slate-500 uppercase block mb-1.5 ml-1">Status</label>
+                                <label className="text-[10px] font-black tracking-wider text-[#64748B] uppercase block mb-1.5 ml-1">Status</label>
                                 <select 
                                     value={status} 
                                     onChange={e => setStatus(e.target.value)}
-                                    className="w-full bg-slate-50 dark:bg-black/20 border border-slate-200 dark:border-white/10 p-3 rounded-xl text-slate-900 dark:text-white outline-none focus:ring-2 focus:ring-emerald-500 font-bold appearance-none text-center uppercase text-xs tracking-wider"
+                                    className="w-full bg-[#0B1220] bg-[#0B1220] border border-[#24344D] border-[#24344D] p-3 rounded-xl text-white text-white outline-none focus:ring-2 focus:ring-emerald-500 font-bold appearance-none text-center uppercase text-xs tracking-wider"
                                 >
                                     <option value="live">Live</option>
                                     <option value="halftime">Half Time</option>
@@ -186,13 +186,13 @@ const QuickMatchEditModal = ({ match, isOpen, onClose, isSuperAdmin }) => { // A
                         </div>
 
                         <div>
-                            <label className="text-[10px] font-black tracking-wider text-slate-500 uppercase block mb-1.5 ml-1">Location / Ground</label>
+                            <label className="text-[10px] font-black tracking-wider text-[#64748B] uppercase block mb-1.5 ml-1">Location / Ground</label>
                             <input 
                                 type="text" 
                                 value={location} 
                                 onChange={e => setLocation(e.target.value)} 
                                 placeholder="e.g. City Ground"
-                                className="w-full bg-slate-50 dark:bg-black/20 border border-slate-200 dark:border-white/10 p-3 rounded-xl text-slate-900 dark:text-white outline-none focus:ring-2 focus:ring-emerald-500 font-bold" 
+                                className="w-full bg-[#0B1220] bg-[#0B1220] border border-[#24344D] border-[#24344D] p-3 rounded-xl text-white text-white outline-none focus:ring-2 focus:ring-emerald-500 font-bold" 
                             />
                         </div>
 

@@ -38,9 +38,9 @@ const SponsorsCarousel = () => {
     if (loading || sponsors.length === 0) return null;
 
     return (
-        <section className="py-8 border-t border-slate-200/10 dark:border-white/10 mt-12 overflow-hidden relative">
+        <section className="py-8 border-t border-slate-200/10 border-[#24344D] mt-12 overflow-hidden relative">
             <div className="container mx-auto px-4 mb-8">
-                <h3 className="text-center text-sm font-bold tracking-widest text-slate-500 uppercase">Our Official Partners</h3>
+                <h3 className="text-center text-sm font-bold tracking-widest text-[#64748B] uppercase">Our Official Partners</h3>
             </div>
 
             <div className="w-full inline-flex flex-nowrap overflow-hidden [mask-image:_linear-gradient(to_right,transparent_0,_black_128px,_black_calc(100%-128px),transparent_100%)]">
@@ -64,7 +64,7 @@ const SponsorsCarousel = () => {
                                     className="h-full w-full object-cover shadow-inner"
                                 />
                             </a>
-                            <span className="text-sm font-semibold text-slate-700 dark:text-slate-300 tracking-wide">
+                            <span className="text-sm font-semibold text-[#94A3B8] text-[#94A3B8] tracking-wide">
                                 {sponsor.name}
                             </span>
                         </li>

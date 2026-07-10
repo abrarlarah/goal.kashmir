@@ -11,7 +11,7 @@ import {
 const statusConfig = {
   upcoming: { label: 'Upcoming', color: 'bg-blue-500/15 text-blue-400 border-blue-500/20', dot: 'bg-blue-400' },
   ongoing: { label: 'Live', color: 'bg-green-500/15 text-green-400 border-green-500/20', dot: 'bg-green-400 animate-pulse' },
-  finished: { label: 'Completed', color: 'bg-slate-500/15 text-slate-500 dark:text-slate-400 border-slate-500/20', dot: 'bg-slate-400' },
+  finished: { label: 'Completed', color: 'bg-slate-500/15 text-[#64748B] text-[#94A3B8] border-slate-500/20', dot: 'bg-slate-400' },
 };
 
 const typeConfig = {
@@ -76,7 +76,7 @@ const Tournaments = () => {
       <div className="flex h-[80vh] items-center justify-center">
         <div className="flex flex-col items-center gap-4">
           <div className="h-12 w-12 animate-spin rounded-full border-4 border-brand-500 border-t-transparent shadow-lg shadow-brand-500/20"></div>
-          <div className="text-slate-600 dark:text-slate-400 font-display font-medium animate-pulse">Loading Tournaments...</div>
+          <div className="text-[#94A3B8] text-[#94A3B8] font-display font-medium animate-pulse">Loading Tournaments...</div>
         </div>
       </div>
     );
@@ -97,11 +97,11 @@ const Tournaments = () => {
           <div>
             <div className="flex items-center gap-3 mb-3">
               <div className="w-12 h-12 bg-gradient-to-br from-yellow-400 to-orange-500 rounded-2xl flex items-center justify-center shadow-lg shadow-yellow-500/20">
-                <Trophy size={24} className="text-slate-900 dark:text-white" />
+                <Trophy size={24} className="text-white text-white" />
               </div>
               <div>
-                <h1 className="text-2xl sm:text-3xl md:text-4xl font-display font-bold text-slate-900 dark:text-white">Tournaments</h1>
-                <p className="text-slate-500 text-sm mt-0.5">Explore local football competitions across J&K</p>
+                <h1 className="text-2xl sm:text-3xl md:text-4xl font-display font-bold text-white text-white">Tournaments</h1>
+                <p className="text-[#64748B] text-sm mt-0.5">Explore local football competitions across J&K</p>
               </div>
             </div>
           </div>
@@ -110,17 +110,17 @@ const Tournaments = () => {
           <div className="flex items-center gap-2 sm:gap-4 flex-shrink-0">
             <div className="text-center px-2 sm:px-4 py-2">
               <div className="text-xl sm:text-2xl font-display font-bold text-green-400">{ongoingCount}</div>
-              <div className="text-[9px] sm:text-[10px] text-slate-500 uppercase font-bold tracking-wider">Live</div>
+              <div className="text-[9px] sm:text-[10px] text-[#64748B] uppercase font-bold tracking-wider">Live</div>
             </div>
-            <div className="w-px h-8 sm:h-10 bg-white/10" />
+            <div className="w-px h-8 sm:h-10 bg-[#1E2B42]" />
             <div className="text-center px-2 sm:px-4 py-2">
               <div className="text-xl sm:text-2xl font-display font-bold text-blue-400">{upcomingCount}</div>
-              <div className="text-[9px] sm:text-[10px] text-slate-500 uppercase font-bold tracking-wider">Upcoming</div>
+              <div className="text-[9px] sm:text-[10px] text-[#64748B] uppercase font-bold tracking-wider">Upcoming</div>
             </div>
-            <div className="w-px h-8 sm:h-10 bg-white/10" />
+            <div className="w-px h-8 sm:h-10 bg-[#1E2B42]" />
             <div className="text-center px-2 sm:px-4 py-2">
-              <div className="text-xl sm:text-2xl font-display font-bold text-slate-500 dark:text-slate-400">{finishedCount}</div>
-              <div className="text-[9px] sm:text-[10px] text-slate-500 uppercase font-bold tracking-wider">Done</div>
+              <div className="text-xl sm:text-2xl font-display font-bold text-[#64748B] text-[#94A3B8]">{finishedCount}</div>
+              <div className="text-[9px] sm:text-[10px] text-[#64748B] uppercase font-bold tracking-wider">Done</div>
             </div>
           </div>
         </div>
@@ -131,23 +131,23 @@ const Tournaments = () => {
         initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.1 }}
-        className="rounded-xl sm:rounded-2xl bg-gradient-to-br from-white to-slate-50 dark:from-[#0f172a] dark:to-[#020617] ring-1 ring-slate-200/80 dark:ring-white/5 shadow-sm p-3 sm:p-4"
+        className="rounded-xl sm:rounded-2xl bg-gradient-to-br from-white to-[#0B1220] dark:from-[#0f172a] to-[#0B1220] ring-1 ring-slate-200/80 dark:ring-white/5 shadow-sm p-3 sm:p-4"
       >
         <div className="flex flex-col lg:flex-row items-start lg:items-center gap-2 sm:gap-3 md:gap-4">
           {/* Search */}
           <div className="relative flex-1 w-full lg:w-auto">
-            <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-500 dark:text-slate-400" />
+            <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-[#64748B] text-[#94A3B8]" />
             <input
               type="text"
               placeholder="Search tournaments..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full bg-white/5 border border-slate-200/10 dark:border-white/10 rounded-lg md:rounded-xl pl-8 sm:pl-10 pr-3 sm:pr-4 py-2 sm:py-2.5 text-xs sm:text-sm text-slate-900 dark:text-white placeholder-slate-400 focus:ring-2 focus:ring-brand-500/50 focus:border-brand-500 outline-none transition-all"
+              className="w-full bg-[#131D31]/50 border border-slate-200/10 border-[#24344D] rounded-lg md:rounded-xl pl-8 sm:pl-10 pr-3 sm:pr-4 py-2 sm:py-2.5 text-xs sm:text-sm text-white text-white placeholder-[#64748B] focus:ring-2 focus:ring-brand-500/50 focus:border-brand-500 outline-none transition-all"
             />
           </div>
 
           {/* Tab Filters */}
-          <div className="flex items-center gap-0.5 sm:gap-1 bg-white/5 rounded-lg md:rounded-xl p-0.5 sm:p-1 border border-slate-200/5 dark:border-white/5 overflow-x-auto scrollbar-none w-full sm:w-auto">
+          <div className="flex items-center gap-0.5 sm:gap-1 bg-[#131D31]/50 rounded-lg md:rounded-xl p-0.5 sm:p-1 border border-[#24344D]/30 border-[#24344D]/50 overflow-x-auto scrollbar-none w-full sm:w-auto">
             {[
               { key: 'all', label: 'All', count: tournaments.length },
               { key: 'ongoing', label: 'Live', count: ongoingCount },
@@ -158,8 +158,8 @@ const Tournaments = () => {
                 key={tab.key}
                 onClick={() => setActiveTab(tab.key)}
                 className={`px-1.5 sm:px-2 md:px-3 py-1 sm:py-1.5 rounded-md md:rounded-lg text-[9px] sm:text-[10px] md:text-xs font-bold transition-all whitespace-nowrap ${activeTab === tab.key
-                    ? 'bg-brand-500 text-slate-900 dark:text-white shadow-md shadow-brand-500/20'
-                    : 'text-slate-500 hover:text-slate-900 dark:text-white hover:bg-white/5'
+                    ? 'bg-brand-500 text-white text-white shadow-md shadow-brand-500/20'
+                    : 'text-[#64748B] hover:text-white text-white hover:bg-white/5'
                   }`}
               >
                 {tab.label} ({tab.count})
@@ -169,30 +169,30 @@ const Tournaments = () => {
 
           {/* Dropdowns */}
           <div className="flex flex-nowrap items-center gap-1.5 sm:gap-2 overflow-x-auto scrollbar-none w-full sm:w-auto">
-            <div className="flex items-center gap-1.5 sm:gap-2 bg-white/5 px-2 sm:px-3 py-1.5 sm:py-2 rounded-lg md:rounded-xl border border-slate-200/5 dark:border-white/5 flex-shrink-0">
+            <div className="flex items-center gap-1.5 sm:gap-2 bg-[#131D31]/50 px-2 sm:px-3 py-1.5 sm:py-2 rounded-lg md:rounded-xl border border-[#24344D]/30 border-[#24344D]/50 flex-shrink-0">
               <Calendar size={14} className="text-brand-400" />
               <select
                 value={selectedYear}
                 onChange={(e) => setSelectedYear(e.target.value)}
-                className="bg-transparent text-[10px] sm:text-xs text-slate-900 dark:text-white outline-none font-medium"
+                className="bg-transparent text-[10px] sm:text-xs text-white text-white outline-none font-medium"
               >
-                <option value="All" className="bg-white dark:bg-slate-900">All Years</option>
+                <option value="All" className="bg-[#131D31] bg-[#0B1220]">All Years</option>
                 {availableYears.map(year => (
-                  <option key={year} value={year} className="bg-white dark:bg-slate-900">{year}</option>
+                  <option key={year} value={year} className="bg-[#131D31] bg-[#0B1220]">{year}</option>
                 ))}
               </select>
             </div>
 
-            <div className="flex items-center gap-1.5 sm:gap-2 bg-white/5 px-2 sm:px-3 py-1.5 sm:py-2 rounded-lg md:rounded-xl border border-slate-200/5 dark:border-white/5 flex-shrink-0">
+            <div className="flex items-center gap-1.5 sm:gap-2 bg-[#131D31]/50 px-2 sm:px-3 py-1.5 sm:py-2 rounded-lg md:rounded-xl border border-[#24344D]/30 border-[#24344D]/50 flex-shrink-0">
               <MapPin size={14} className="text-brand-400" />
               <select
                 value={selectedDistrict}
                 onChange={(e) => setSelectedDistrict(e.target.value)}
-                className="bg-transparent text-[10px] sm:text-xs text-slate-900 dark:text-white outline-none font-medium"
+                className="bg-transparent text-[10px] sm:text-xs text-white text-white outline-none font-medium"
               >
-                <option value="All" className="bg-white dark:bg-slate-900">All Districts</option>
+                <option value="All" className="bg-[#131D31] bg-[#0B1220]">All Districts</option>
                 {availableDistricts.map(district => (
-                  <option key={district} value={district} className="bg-white dark:bg-slate-900">{district}</option>
+                  <option key={district} value={district} className="bg-[#131D31] bg-[#0B1220]">{district}</option>
                 ))}
               </select>
             </div>
@@ -202,7 +202,7 @@ const Tournaments = () => {
           {isSuperAdmin && (
             <Link
               to="/admin/tournaments"
-              className="flex items-center gap-2 px-4 py-2.5 bg-gradient-to-r from-brand-600 to-brand-500 hover:from-brand-500 hover:to-brand-400 text-slate-900 dark:text-white rounded-xl text-xs font-bold transition-all shadow-lg shadow-brand-500/20 whitespace-nowrap"
+              className="flex items-center gap-2 px-4 py-2.5 bg-gradient-to-r from-brand-600 to-brand-500 hover:from-brand-500 hover:to-brand-400 text-white text-white rounded-xl text-xs font-bold transition-all shadow-lg shadow-brand-500/20 whitespace-nowrap"
             >
               <Plus size={14} /> Add Tournament
             </Link>
@@ -215,11 +215,11 @@ const Tournaments = () => {
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          className="text-center py-20 rounded-3xl bg-gradient-to-br from-white to-slate-50 dark:from-[#0f172a] dark:to-[#020617] ring-1 ring-slate-200/80 dark:ring-white/5 shadow-sm"
+          className="text-center py-20 rounded-3xl bg-gradient-to-br from-white to-[#0B1220] dark:from-[#0f172a] to-[#0B1220] ring-1 ring-slate-200/80 dark:ring-white/5 shadow-sm"
         >
-          <Trophy size={56} className="mx-auto text-slate-600 dark:text-slate-300 dark:text-slate-700 mb-4" strokeWidth={1.5} />
-          <h3 className="text-xl font-display font-bold text-slate-900 dark:text-white mb-2">No Tournaments Found</h3>
-          <p className="text-slate-500 text-sm max-w-md mx-auto">
+          <Trophy size={56} className="mx-auto text-[#94A3B8] text-[#94A3B8] dark:text-slate-700 mb-4" strokeWidth={1.5} />
+          <h3 className="text-xl font-display font-bold text-white text-white mb-2">No Tournaments Found</h3>
+          <p className="text-[#64748B] text-sm max-w-md mx-auto">
             {searchQuery ? `No results for "${searchQuery}". Try a different search.` : 'No tournaments match your current filters.'}
           </p>
         </motion.div>
@@ -239,7 +239,7 @@ const Tournaments = () => {
               <motion.div key={tournament.id} variants={item}>
                 <Link
                   to={`/tournaments/${tournament.id}`}
-                  className="block rounded-3xl bg-gradient-to-br from-white to-slate-50 dark:from-[#0f172a] dark:to-[#020617] ring-1 ring-slate-200/80 dark:ring-white/5 overflow-hidden group transition-all duration-300 hover:shadow-xl dark:shadow-md hover:ring-2 hover:ring-brand-500/30 dark:hover:shadow-cyan-500/10 hover:-translate-y-1"
+                  className="block rounded-3xl bg-gradient-to-br from-white to-[#0B1220] dark:from-[#0f172a] to-[#0B1220] ring-1 ring-slate-200/80 dark:ring-white/5 overflow-hidden group transition-all duration-300 hover:shadow-xl dark:shadow-md hover:ring-2 hover:ring-brand-500/30 dark:hover:shadow-cyan-500/10 hover:-translate-y-1"
                 >
                   {/* Card Top Gradient Bar */}
                   <div className={`h-1.5 bg-gradient-to-r ${type.gradient}`} />
@@ -258,26 +258,26 @@ const Tournaments = () => {
                               e.preventDefault();
                               navigate('/admin/tournaments', { state: { editTournament: tournament } });
                             }}
-                            className="p-1.5 rounded-lg bg-white/5 hover:bg-brand-500/20 text-slate-500 hover:text-brand-400 border border-slate-200/5 dark:border-white/5 transition-colors shadow-sm"
+                            className="p-1.5 rounded-lg bg-[#131D31]/50 hover:bg-brand-500/20 text-[#64748B] hover:text-brand-400 border border-[#24344D]/30 border-[#24344D]/50 transition-colors shadow-sm"
                             title="Edit Tournament"
                           >
                             <Edit3 size={14} />
                           </button>
                         )}
-                        <span className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-lg text-[10px] font-bold bg-white/5 text-slate-500 dark:text-slate-400 border border-slate-200/5 dark:border-white/5`}>
+                        <span className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-lg text-[10px] font-bold bg-[#131D31]/50 text-[#64748B] text-[#94A3B8] border border-[#24344D]/30 border-[#24344D]/50`}>
                           {type.icon} {type.label}
                         </span>
                       </div>
                     </div>
 
                     {/* Title */}
-                    <h2 className="text-base sm:text-xl font-display font-bold text-slate-900 dark:text-white mb-1 group-hover:text-brand-400 transition-colors leading-tight line-clamp-2">
+                    <h2 className="text-base sm:text-xl font-display font-bold text-white text-white mb-1 group-hover:text-brand-400 transition-colors leading-tight line-clamp-2">
                       {tournament.name}
                     </h2>
 
                     {/* Location */}
                     {tournament.district && (
-                      <div className="flex items-center gap-1.5 text-xs text-slate-500 mb-4">
+                      <div className="flex items-center gap-1.5 text-xs text-[#64748B] mb-4">
                         <MapPin size={12} className="text-brand-400" />
                         {tournament.district}
                       </div>
@@ -285,34 +285,34 @@ const Tournaments = () => {
 
                     {/* Stats Row */}
                     <div className="grid grid-cols-3 gap-2 sm:gap-3 mb-4">
-                      <div className="bg-white/5 rounded-xl p-2 sm:p-3 text-center border border-slate-200/5 dark:border-white/5">
+                      <div className="bg-[#131D31]/50 rounded-xl p-2 sm:p-3 text-center border border-[#24344D]/30 border-[#24344D]/50">
                         <Users size={14} className="mx-auto text-blue-400 mb-1" />
-                        <div className="text-lg font-display font-bold text-slate-900 dark:text-white">{tournament.teamsCount || 0}</div>
-                        <div className="text-[9px] text-slate-500 uppercase font-bold tracking-wider">Teams</div>
+                        <div className="text-lg font-display font-bold text-white text-white">{tournament.teamsCount || 0}</div>
+                        <div className="text-[9px] text-[#64748B] uppercase font-bold tracking-wider">Teams</div>
                       </div>
-                      <div className="bg-white/5 rounded-xl p-2 sm:p-3 text-center border border-slate-200/5 dark:border-white/5">
+                      <div className="bg-[#131D31]/50 rounded-xl p-2 sm:p-3 text-center border border-[#24344D]/30 border-[#24344D]/50">
                         <Swords size={14} className="mx-auto text-brand-400 mb-1" />
-                        <div className="text-lg font-display font-bold text-slate-900 dark:text-white">{matchCount}</div>
-                        <div className="text-[9px] text-slate-500 uppercase font-bold tracking-wider">Matches</div>
+                        <div className="text-lg font-display font-bold text-white text-white">{matchCount}</div>
+                        <div className="text-[9px] text-[#64748B] uppercase font-bold tracking-wider">Matches</div>
                       </div>
-                      <div className="bg-white/5 rounded-xl p-2 sm:p-3 text-center border border-slate-200/5 dark:border-white/5">
+                      <div className="bg-[#131D31]/50 rounded-xl p-2 sm:p-3 text-center border border-[#24344D]/30 border-[#24344D]/50">
                         <Calendar size={14} className="mx-auto text-yellow-400 mb-1" />
-                        <div className="text-sm font-bold text-slate-900 dark:text-white">
+                        <div className="text-sm font-bold text-white text-white">
                           {tournament.startDate ? new Date(tournament.startDate).toLocaleDateString('en-IN', { day: 'numeric', month: 'short' }) : 'TBD'}
                         </div>
-                        <div className="text-[9px] text-slate-500 uppercase font-bold tracking-wider">Start</div>
+                        <div className="text-[9px] text-[#64748B] uppercase font-bold tracking-wider">Start</div>
                       </div>
                     </div>
 
                     {/* Teams List Preview */}
                     {tournament.teamsList && tournament.teamsList.length > 0 && (
-                      <div className="mb-4 pt-3 border-t border-slate-200/5 dark:border-white/5">
-                        <p className="text-[10px] text-slate-500 uppercase font-bold tracking-wider mb-2 flex items-center gap-1">
+                      <div className="mb-4 pt-3 border-t border-[#24344D]/30 border-[#24344D]/50">
+                        <p className="text-[10px] text-[#64748B] uppercase font-bold tracking-wider mb-2 flex items-center gap-1">
                           <Users size={10} /> Registered Teams
                         </p>
                         <div className="flex flex-wrap gap-1">
                           {tournament.teamsList.slice(0, 5).map((team, idx) => (
-                            <span key={idx} className="text-[10px] px-2 py-0.5 rounded-lg bg-white/5 text-slate-500 dark:text-slate-400 border border-slate-200/5 dark:border-white/5">
+                            <span key={idx} className="text-[10px] px-2 py-0.5 rounded-lg bg-[#131D31]/50 text-[#64748B] text-[#94A3B8] border border-[#24344D]/30 border-[#24344D]/50">
                               {team}
                             </span>
                           ))}
@@ -326,7 +326,7 @@ const Tournaments = () => {
                     )}
 
                     {/* View Details Button */}
-                    <div className="flex items-center justify-between pt-3 border-t border-slate-200/5 dark:border-white/5">
+                    <div className="flex items-center justify-between pt-3 border-t border-[#24344D]/30 border-[#24344D]/50">
                       <span className="text-xs font-bold text-brand-400 group-hover:text-brand-300 transition-colors flex items-center gap-1">
                         View Tournament
                         <ArrowRight size={14} className="group-hover:translate-x-1 transition-transform" />
@@ -351,7 +351,7 @@ const Tournaments = () => {
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          className="text-center text-xs text-slate-500 py-4"
+          className="text-center text-xs text-[#64748B] py-4"
         >
           Showing {filteredTournaments.length} of {tournaments.length} tournaments
         </motion.div>

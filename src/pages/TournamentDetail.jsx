@@ -350,8 +350,8 @@ const TournamentDetail = () => {
         return groups;
     }, [tournamentMatches, tournament]);
 
-    if (loading) return <div className="flex h-screen items-center justify-center text-slate-900 dark:text-white">Loading...</div>;
-    if (!tournament) return <div className="text-slate-900 dark:text-white p-20 text-center">Tournament not found</div>;
+    if (loading) return <div className="flex h-screen items-center justify-center text-white text-white">Loading...</div>;
+    if (!tournament) return <div className="text-white text-white p-20 text-center">Tournament not found</div>;
 
     const tabs = [
         { id: 'fixtures', label: 'Fixtures', icon: Calendar },
@@ -368,14 +368,14 @@ const TournamentDetail = () => {
         <div className="max-w-7xl mx-auto px-4 py-8 space-y-8">
             {successMessage && (
                 <div className="fixed top-24 right-4 z-50 animate-bounce">
-                    <div className="bg-green-500 text-slate-900 dark:text-white px-6 py-3 rounded-2xl shadow-2xl font-black text-sm border border-slate-200/20 dark:border-white/20 flex items-center gap-3">
-                        <div className="h-2 w-2 rounded-full bg-white animate-pulse" />
+                    <div className="bg-green-500 text-white text-white px-6 py-3 rounded-2xl shadow-2xl font-black text-sm border border-[#24344D] dark:border-white/20 flex items-center gap-3">
+                        <div className="h-2 w-2 rounded-full bg-[#131D31] animate-pulse" />
                         {successMessage}
                     </div>
                 </div>
             )}
             {/* Hero Header */}
-            <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-brand-900 to-slate-900 border border-slate-200/10 dark:border-white/10 p-8 shadow-2xl">
+            <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-brand-900 to-slate-900 border border-slate-200/10 border-[#24344D] p-8 shadow-2xl">
                 <div className="absolute top-0 right-0 p-12 opacity-10">
                     <Trophy size={200} />
                 </div>
@@ -399,10 +399,10 @@ const TournamentDetail = () => {
                                 {tournament.status}
                             </span>
                         </div>
-                        <h1 className="text-4xl md:text-5xl font-display font-black text-slate-900 dark:text-white mb-4 italic">
+                        <h1 className="text-4xl md:text-5xl font-display font-black text-white text-white mb-4 italic">
                             {tournament.name}
                         </h1>
-                        <div className="flex flex-wrap items-center justify-center md:justify-start gap-6 text-slate-600 dark:text-slate-400">
+                        <div className="flex flex-wrap items-center justify-center md:justify-start gap-6 text-[#94A3B8] text-[#94A3B8]">
                             <div className="flex items-center gap-2">
                                 <MapPin size={18} className="text-brand-500" />
                                 <span>{tournament.district}</span>
@@ -415,13 +415,13 @@ const TournamentDetail = () => {
                     </div>
 
                     <div className="grid grid-cols-2 gap-4">
-                        <div className="bg-white/5 backdrop-blur-sm rounded-2xl p-4 border border-slate-200/5 dark:border-white/5 text-center">
-                            <div className="text-2xl font-black text-slate-900 dark:text-white">{tournament.teamsCount || 0}</div>
-                            <div className="text-[10px] text-slate-500 uppercase font-bold">Teams</div>
+                        <div className="bg-[#131D31]/50 backdrop-blur-sm rounded-2xl p-4 border border-[#24344D]/30 border-[#24344D]/50 text-center">
+                            <div className="text-2xl font-black text-white text-white">{tournament.teamsCount || 0}</div>
+                            <div className="text-[10px] text-[#64748B] uppercase font-bold">Teams</div>
                         </div>
-                        <div className="bg-white/5 backdrop-blur-sm rounded-2xl p-4 border border-slate-200/5 dark:border-white/5 text-center">
-                            <div className="text-2xl font-black text-slate-900 dark:text-white">{tournamentMatches.length || tournament.matchesCount || 0}</div>
-                            <div className="text-[10px] text-slate-500 uppercase font-bold">Matches</div>
+                        <div className="bg-[#131D31]/50 backdrop-blur-sm rounded-2xl p-4 border border-[#24344D]/30 border-[#24344D]/50 text-center">
+                            <div className="text-2xl font-black text-white text-white">{tournamentMatches.length || tournament.matchesCount || 0}</div>
+                            <div className="text-[10px] text-[#64748B] uppercase font-bold">Matches</div>
                         </div>
                     </div>
                 </div>
@@ -436,8 +436,8 @@ const TournamentDetail = () => {
                         className={cn(
                             "flex items-center gap-2 px-6 py-3 rounded-xl font-bold text-sm transition-all whitespace-nowrap",
                             activeTab === tab.id
-                                ? "bg-brand-500 text-slate-900 dark:text-white shadow-lg shadow-brand-500/20"
-                                : "bg-white/5 text-slate-600 dark:text-slate-400 hover:bg-white/10"
+                                ? "bg-brand-500 text-white text-white shadow-lg shadow-brand-500/20"
+                                : "bg-[#131D31]/50 text-[#94A3B8] text-[#94A3B8] hover:bg-white/10"
                         )}
                     >
                         <tab.icon size={18} />
@@ -451,7 +451,7 @@ const TournamentDetail = () => {
                 {activeTab === 'fixtures' && (
                     <div className="space-y-8">
                         <div className="flex justify-between items-center">
-                            <h3 className="text-xl font-display font-black text-slate-900 dark:text-white flex items-center gap-3">
+                            <h3 className="text-xl font-display font-black text-white text-white flex items-center gap-3">
                                 <span className="h-6 w-1 bg-brand-500 rounded-full"></span>
                                 Match Schedule
                             </h3>
@@ -460,7 +460,7 @@ const TournamentDetail = () => {
                                     {tournamentMatches.length > 0 && canEditTournament && (
                                         <button
                                             onClick={handleSyncTeamNames}
-                                            className="flex items-center gap-2 px-4 py-2 bg-indigo-500/10 text-indigo-500 rounded-xl font-bold text-sm hover:bg-indigo-500 hover:text-slate-900 dark:text-white transition-all border border-indigo-500/20"
+                                            className="flex items-center gap-2 px-4 py-2 bg-indigo-500/10 text-indigo-500 rounded-xl font-bold text-sm hover:bg-indigo-500 hover:text-white text-white transition-all border border-indigo-500/20"
                                             title="Sync 'Team 1, 2...' with actual team names"
                                         >
                                             <Users size={18} />
@@ -470,7 +470,7 @@ const TournamentDetail = () => {
                                     {tournamentMatches.length === 0 && (
                                         <button
                                             onClick={handleSeedBracket}
-                                            className="flex items-center gap-2 px-4 py-2 bg-indigo-600 text-slate-900 dark:text-white rounded-xl font-bold text-sm hover:bg-indigo-700 transition-all shadow-lg shadow-indigo-500/20"
+                                            className="flex items-center gap-2 px-4 py-2 bg-indigo-600 text-white text-white rounded-xl font-bold text-sm hover:bg-indigo-700 transition-all shadow-lg shadow-indigo-500/20"
                                         >
                                             <List size={18} />
                                             Generate {tournament.type === 'league' ? 'League' : 'Bracket'}
@@ -478,7 +478,7 @@ const TournamentDetail = () => {
                                     )}
                                     <button
                                         onClick={() => setShowScheduleMatch(true)}
-                                        className="flex items-center gap-2 px-4 py-2 bg-brand-500 text-slate-900 dark:text-white rounded-xl font-bold text-sm hover:bg-brand-600 transition-all shadow-lg"
+                                        className="flex items-center gap-2 px-4 py-2 bg-brand-500 text-white text-white rounded-xl font-bold text-sm hover:bg-brand-600 transition-all shadow-lg"
                                     >
                                         <Plus size={18} />
                                         Schedule Match
@@ -506,7 +506,7 @@ const TournamentDetail = () => {
                                 })
                                 .map(([round, matches]) => (
                                 <div key={round} className="space-y-4">
-                                    <h3 className="text-xl font-display font-black text-slate-900 dark:text-white flex items-center gap-3">
+                                    <h3 className="text-xl font-display font-black text-white text-white flex items-center gap-3">
                                         <span className="h-6 w-1 bg-brand-500 rounded-full"></span>
                                         {round}
                                     </h3>
@@ -518,32 +518,32 @@ const TournamentDetail = () => {
                                                 <Link
                                                     key={match.id}
                                                     to={`/live/${match.id}`}
-                                                    className="group relative bg-white dark:bg-slate-900 border border-slate-200/5 dark:border-white/5 rounded-2xl p-5 hover:border-brand-500/30 transition-all shadow-lg"
+                                                    className="group relative bg-[#131D31] bg-[#0B1220] border border-[#24344D]/30 border-[#24344D]/50 rounded-2xl p-5 hover:border-brand-500/30 transition-all shadow-lg"
                                                 >
                                                     {canEditTournament && (
-                                                        <div className="absolute top-2 right-2 p-2 bg-brand-500 text-slate-900 rounded-lg opacity-0 group-hover:opacity-100 transition-all z-20">
+                                                        <div className="absolute top-2 right-2 p-2 bg-brand-500 text-white rounded-lg opacity-0 group-hover:opacity-100 transition-all z-20">
                                                             <Edit3 size={14} />
                                                         </div>
                                                     )}
                                                     <div className="flex items-center justify-between gap-4">
                                                         <div className="flex-1 flex flex-col items-center">
-                                                            <div className="w-12 h-12 bg-white/5 rounded-full flex items-center justify-center mb-2 overflow-hidden border border-slate-200/5 dark:border-white/5 group-hover:border-brand-500/30 transition-colors p-2">
+                                                            <div className="w-12 h-12 bg-[#131D31]/50 rounded-full flex items-center justify-center mb-2 overflow-hidden border border-[#24344D]/30 border-[#24344D]/50 group-hover:border-brand-500/30 transition-colors p-2">
                                                                 {teamA?.logoUrl ? (
                                                                     <img src={teamA.logoUrl} alt="" className="w-full h-full object-contain" />
                                                                 ) : (
-                                                                    <span className="text-sm font-black text-slate-500">{match.teamA.substring(0, 2).toUpperCase()}</span>
+                                                                    <span className="text-sm font-black text-[#64748B]">{match.teamA.substring(0, 2).toUpperCase()}</span>
                                                                 )}
                                                             </div>
-                                                            <span className="text-sm font-bold text-slate-900 dark:text-white text-center group-hover:text-brand-400 transition-colors truncate w-full">{match.teamA}</span>
+                                                            <span className="text-sm font-bold text-white text-white text-center group-hover:text-brand-400 transition-colors truncate w-full">{match.teamA}</span>
                                                         </div>
 
                                                         <div className="text-center px-4">
-                                                            <div className="text-2xl font-black text-slate-900 dark:text-white mb-1 tracking-tighter">
+                                                            <div className="text-2xl font-black text-white text-white mb-1 tracking-tighter">
                                                                 {match.status === 'scheduled' ? `${match.time}` :
                                                                     match.status === 'live' ? <div className="text-brand-400 font-mono"><MatchTimer match={match} /></div> :
                                                                         `${match.scoreA} - ${match.scoreB}`}
                                                             </div>
-                                                            <div className="text-[10px] text-slate-500 font-black uppercase tracking-widest whitespace-nowrap flex flex-col items-center">
+                                                            <div className="text-[10px] text-[#64748B] font-black uppercase tracking-widest whitespace-nowrap flex flex-col items-center">
                                                                 {match.status === 'scheduled' && <span>{match.date}</span>}
                                                                 {match.status === 'live' && (
                                                                     <span className="flex items-center gap-1 text-red-500">
@@ -556,14 +556,14 @@ const TournamentDetail = () => {
                                                         </div>
 
                                                         <div className="flex-1 flex flex-col items-center">
-                                                            <div className="w-12 h-12 bg-white/5 rounded-full flex items-center justify-center mb-2 overflow-hidden border border-slate-200/5 dark:border-white/5 group-hover:border-brand-500/30 transition-colors p-2">
+                                                            <div className="w-12 h-12 bg-[#131D31]/50 rounded-full flex items-center justify-center mb-2 overflow-hidden border border-[#24344D]/30 border-[#24344D]/50 group-hover:border-brand-500/30 transition-colors p-2">
                                                                 {teamB?.logoUrl ? (
                                                                     <img src={teamB.logoUrl} alt="" className="w-full h-full object-contain" />
                                                                 ) : (
-                                                                    <span className="text-sm font-black text-slate-500">{match.teamB.substring(0, 2).toUpperCase()}</span>
+                                                                    <span className="text-sm font-black text-[#64748B]">{match.teamB.substring(0, 2).toUpperCase()}</span>
                                                                 )}
                                                             </div>
-                                                            <span className="text-sm font-bold text-slate-900 dark:text-white text-center group-hover:text-brand-400 transition-colors truncate w-full">{match.teamB}</span>
+                                                            <span className="text-sm font-bold text-white text-white text-center group-hover:text-brand-400 transition-colors truncate w-full">{match.teamB}</span>
                                                         </div>
                                                     </div>
                                                 </Link>
@@ -573,19 +573,19 @@ const TournamentDetail = () => {
                                 </div>
                             ))
                         ) : (
-                            <div className="text-center py-20 bg-white/5 rounded-3xl border border-dashed border-slate-200/10 dark:border-white/10">
-                                <Calendar size={48} className="mx-auto text-slate-600 mb-4" />
-                                <h3 className="text-lg font-bold text-slate-900 dark:text-white">No fixtures found</h3>
-                                <p className="text-slate-500">Wait for the organizers to schedule matches.</p>
+                            <div className="text-center py-20 bg-[#131D31]/50 rounded-3xl border border-dashed border-slate-200/10 border-[#24344D]">
+                                <Calendar size={48} className="mx-auto text-[#94A3B8] mb-4" />
+                                <h3 className="text-lg font-bold text-white text-white">No fixtures found</h3>
+                                <p className="text-[#64748B]">Wait for the organizers to schedule matches.</p>
                             </div>
                         )}
                         {/* Schedule Match Modal */}
                         {showScheduleMatch && (
                             <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-sm">
-                                <div className="bg-white dark:bg-slate-900 border border-slate-200/10 dark:border-white/10 rounded-3xl shadow-2xl w-full max-w-xl overflow-hidden">
-                                    <div className="p-6 border-b border-slate-200/5 dark:border-white/5 flex justify-between items-center bg-brand-500/5">
-                                        <h3 className="text-xl font-black text-slate-900 dark:text-white italic">Schedule New Match</h3>
-                                        <button onClick={() => setShowScheduleMatch(false)} className="text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:text-white transition-colors">
+                                <div className="bg-[#131D31] bg-[#0B1220] border border-slate-200/10 border-[#24344D] rounded-3xl shadow-2xl w-full max-w-xl overflow-hidden">
+                                    <div className="p-6 border-b border-[#24344D]/30 border-[#24344D]/50 flex justify-between items-center bg-brand-500/5">
+                                        <h3 className="text-xl font-black text-white text-white italic">Schedule New Match</h3>
+                                        <button onClick={() => setShowScheduleMatch(false)} className="text-[#94A3B8] text-[#94A3B8] hover:text-white text-white transition-colors">
                                             <X size={24} />
                                         </button>
                                     </div>
@@ -593,12 +593,12 @@ const TournamentDetail = () => {
                                     <form onSubmit={handleScheduleMatch} className="p-6 space-y-4">
                                         <div className="grid grid-cols-2 gap-4">
                                             <div>
-                                                <label className="text-[10px] text-slate-500 uppercase font-black mb-1 block">Home Team</label>
+                                                <label className="text-[10px] text-[#64748B] uppercase font-black mb-1 block">Home Team</label>
                                                 <select
                                                     name="teamA"
                                                     value={matchFormData.teamA}
                                                     onChange={handleMatchInputChange}
-                                                    className="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200/5 dark:border-white/5 rounded-xl p-3 text-slate-900 dark:text-white outline-none focus:border-brand-500 transition-all"
+                                                    className="w-full bg-[#0B1220] bg-[#131D31] border border-[#24344D]/30 border-[#24344D]/50 rounded-xl p-3 text-white text-white outline-none focus:border-brand-500 transition-all"
                                                     required
                                                 >
                                                     <option value="">Select Home Team</option>
@@ -610,12 +610,12 @@ const TournamentDetail = () => {
                                                 </select>
                                             </div>
                                             <div>
-                                                <label className="text-[10px] text-slate-500 uppercase font-black mb-1 block">Away Team</label>
+                                                <label className="text-[10px] text-[#64748B] uppercase font-black mb-1 block">Away Team</label>
                                                 <select
                                                     name="teamB"
                                                     value={matchFormData.teamB}
                                                     onChange={handleMatchInputChange}
-                                                    className="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200/5 dark:border-white/5 rounded-xl p-3 text-slate-900 dark:text-white outline-none focus:border-brand-500 transition-all"
+                                                    className="w-full bg-[#0B1220] bg-[#131D31] border border-[#24344D]/30 border-[#24344D]/50 rounded-xl p-3 text-white text-white outline-none focus:border-brand-500 transition-all"
                                                     required
                                                 >
                                                     <option value="">Select Away Team</option>
@@ -630,36 +630,36 @@ const TournamentDetail = () => {
 
                                         <div className="grid grid-cols-2 gap-4">
                                             <div>
-                                                <label className="text-[10px] text-slate-500 uppercase font-black mb-1 block">Date</label>
+                                                <label className="text-[10px] text-[#64748B] uppercase font-black mb-1 block">Date</label>
                                                 <input
                                                     type="date"
                                                     name="date"
                                                     value={matchFormData.date}
                                                     onChange={handleMatchInputChange}
-                                                    className="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200/5 dark:border-white/5 rounded-xl p-3 text-slate-900 dark:text-white outline-none focus:border-brand-500 transition-all"
+                                                    className="w-full bg-[#0B1220] bg-[#131D31] border border-[#24344D]/30 border-[#24344D]/50 rounded-xl p-3 text-white text-white outline-none focus:border-brand-500 transition-all"
                                                     required
                                                 />
                                             </div>
                                             <div>
-                                                <label className="text-[10px] text-slate-500 uppercase font-black mb-1 block">Time</label>
+                                                <label className="text-[10px] text-[#64748B] uppercase font-black mb-1 block">Time</label>
                                                 <input
                                                     type="time"
                                                     name="time"
                                                     value={matchFormData.time}
                                                     onChange={handleMatchInputChange}
-                                                    className="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200/5 dark:border-white/5 rounded-xl p-3 text-slate-900 dark:text-white outline-none focus:border-brand-500 transition-all"
+                                                    className="w-full bg-[#0B1220] bg-[#131D31] border border-[#24344D]/30 border-[#24344D]/50 rounded-xl p-3 text-white text-white outline-none focus:border-brand-500 transition-all"
                                                     required
                                                 />
                                             </div>
                                         </div>
 
                                         <div>
-                                            <label className="text-[10px] text-slate-500 uppercase font-black mb-1 block">Round / Stage</label>
+                                            <label className="text-[10px] text-[#64748B] uppercase font-black mb-1 block">Round / Stage</label>
                                             <select
                                                 name="round"
                                                 value={matchFormData.round}
                                                 onChange={handleMatchInputChange}
-                                                className="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200/5 dark:border-white/5 rounded-xl p-3 text-slate-900 dark:text-white outline-none focus:border-brand-500 transition-all"
+                                                className="w-full bg-[#0B1220] bg-[#131D31] border border-[#24344D]/30 border-[#24344D]/50 rounded-xl p-3 text-white text-white outline-none focus:border-brand-500 transition-all"
                                                 required
                                             >
                                                 <option value="">Select Stage</option>
@@ -686,7 +686,7 @@ const TournamentDetail = () => {
                                         <button
                                             type="submit"
                                             disabled={isSavingMatch}
-                                            className="w-full py-4 bg-brand-500 hover:bg-brand-600 disabled:opacity-50 text-slate-900 dark:text-white font-black uppercase tracking-widest rounded-2xl transition-all shadow-xl shadow-brand-500/20"
+                                            className="w-full py-4 bg-brand-500 hover:bg-brand-600 disabled:opacity-50 text-white text-white font-black uppercase tracking-widest rounded-2xl transition-all shadow-xl shadow-brand-500/20"
                                         >
                                             {isSavingMatch ? 'Scheduling...' : 'Create Match'}
                                         </button>
@@ -698,9 +698,9 @@ const TournamentDetail = () => {
                 )}
 
                 {activeTab === 'standings' && (
-                    <div className="bg-white dark:bg-slate-900 rounded-3xl border border-slate-200/10 dark:border-white/10 overflow-hidden">
+                    <div className="bg-[#131D31] bg-[#0B1220] rounded-3xl border border-slate-200/10 border-[#24344D] overflow-hidden">
                         <table className="w-full text-left">
-                            <thead className="bg-white/5 border-b border-slate-200/10 dark:border-white/10 text-[10px] uppercase font-black text-slate-500 tracking-widest">
+                            <thead className="bg-[#131D31]/50 border-b border-slate-200/10 border-[#24344D] text-[10px] uppercase font-black text-[#64748B] tracking-widest">
                                 <tr>
                                     <th className="px-6 py-4">Pos</th>
                                     <th className="px-6 py-4">Team</th>
@@ -715,9 +715,9 @@ const TournamentDetail = () => {
                             <tbody className="divide-y divide-white/5">
                                 {standings.map((team, idx) => (
                                     <tr key={team.id} className="hover:bg-white/5 transition-colors">
-                                        <td className="px-6 py-4 font-black text-slate-500">{idx + 1}</td>
+                                        <td className="px-6 py-4 font-black text-[#64748B]">{idx + 1}</td>
                                         <td className="px-6 py-4">
-                                            <Link to={`/teams/${team.id}`} className="flex items-center gap-3 text-slate-900 dark:text-white font-bold hover:text-brand-400 transition-colors">
+                                            <Link to={`/teams/${team.id}`} className="flex items-center gap-3 text-white text-white font-bold hover:text-brand-400 transition-colors">
                                                 {team.logoUrl ? (
                                                     <img src={team.logoUrl} className="w-8 h-8 object-contain" alt="" />
                                                 ) : (
@@ -728,12 +728,12 @@ const TournamentDetail = () => {
                                                 {team.name}
                                             </Link>
                                         </td>
-                                        <td className="px-4 py-4 text-center font-bold text-slate-600 dark:text-slate-400">{team.played}</td>
-                                        <td className="px-4 py-4 text-center font-bold text-slate-600 dark:text-slate-400">{team.wins}</td>
-                                        <td className="px-4 py-4 text-center font-bold text-slate-600 dark:text-slate-400">{team.draws}</td>
-                                        <td className="px-4 py-4 text-center font-bold text-slate-600 dark:text-slate-400">{team.losses}</td>
+                                        <td className="px-4 py-4 text-center font-bold text-[#94A3B8] text-[#94A3B8]">{team.played}</td>
+                                        <td className="px-4 py-4 text-center font-bold text-[#94A3B8] text-[#94A3B8]">{team.wins}</td>
+                                        <td className="px-4 py-4 text-center font-bold text-[#94A3B8] text-[#94A3B8]">{team.draws}</td>
+                                        <td className="px-4 py-4 text-center font-bold text-[#94A3B8] text-[#94A3B8]">{team.losses}</td>
                                         <td className="px-4 py-4 text-center font-bold text-brand-400">{team.gd}</td>
-                                        <td className="px-6 py-4 text-center font-black text-slate-900 dark:text-white bg-brand-500/5">{team.pts}</td>
+                                        <td className="px-6 py-4 text-center font-black text-white text-white bg-brand-500/5">{team.pts}</td>
                                     </tr>
                                 ))}
                             </tbody>
@@ -746,15 +746,15 @@ const TournamentDetail = () => {
                     <div className="space-y-8">
                         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
                             {/* Pool A */}
-                            <div className="bg-white dark:bg-slate-900 rounded-3xl border border-slate-200/10 dark:border-white/10 overflow-hidden">
-                                <div className="px-6 py-4 bg-indigo-500/10 border-b border-slate-200/5 dark:border-white/5">
-                                    <h3 className="text-lg font-display font-black text-slate-900 dark:text-white flex items-center gap-2">
-                                        <span className="h-6 w-6 bg-indigo-500 rounded-lg flex items-center justify-center text-xs font-black text-slate-900 dark:text-white">A</span>
+                            <div className="bg-[#131D31] bg-[#0B1220] rounded-3xl border border-slate-200/10 border-[#24344D] overflow-hidden">
+                                <div className="px-6 py-4 bg-indigo-500/10 border-b border-[#24344D]/30 border-[#24344D]/50">
+                                    <h3 className="text-lg font-display font-black text-white text-white flex items-center gap-2">
+                                        <span className="h-6 w-6 bg-indigo-500 rounded-lg flex items-center justify-center text-xs font-black text-white text-white">A</span>
                                         Pool A
                                     </h3>
                                 </div>
                                 <table className="w-full text-left">
-                                    <thead className="bg-white/5 border-b border-slate-200/10 dark:border-white/10 text-[10px] uppercase font-black text-slate-500 tracking-widest">
+                                    <thead className="bg-[#131D31]/50 border-b border-slate-200/10 border-[#24344D] text-[10px] uppercase font-black text-[#64748B] tracking-widest">
                                         <tr>
                                             <th className="px-4 py-3">#</th>
                                             <th className="px-4 py-3">Team</th>
@@ -772,36 +772,36 @@ const TournamentDetail = () => {
                                                 "hover:bg-white/5 transition-colors",
                                                 idx < 2 && "border-l-2 border-l-green-500"
                                             )}>
-                                                <td className="px-4 py-3 font-black text-slate-500">{idx + 1}</td>
+                                                <td className="px-4 py-3 font-black text-[#64748B]">{idx + 1}</td>
                                                 <td className="px-4 py-3">
-                                                    <span className="font-bold text-slate-900 dark:text-white">{team.name}</span>
+                                                    <span className="font-bold text-white text-white">{team.name}</span>
                                                     {idx < 2 && <span className="ml-2 text-[8px] bg-green-500/10 text-green-400 px-1.5 py-0.5 rounded-full font-bold">Q</span>}
                                                 </td>
-                                                <td className="px-3 py-3 text-center text-slate-500 dark:text-slate-400">{team.played}</td>
-                                                <td className="px-3 py-3 text-center text-slate-500 dark:text-slate-400">{team.wins}</td>
-                                                <td className="px-3 py-3 text-center text-slate-500 dark:text-slate-400">{team.draws}</td>
-                                                <td className="px-3 py-3 text-center text-slate-500 dark:text-slate-400">{team.losses}</td>
+                                                <td className="px-3 py-3 text-center text-[#64748B] text-[#94A3B8]">{team.played}</td>
+                                                <td className="px-3 py-3 text-center text-[#64748B] text-[#94A3B8]">{team.wins}</td>
+                                                <td className="px-3 py-3 text-center text-[#64748B] text-[#94A3B8]">{team.draws}</td>
+                                                <td className="px-3 py-3 text-center text-[#64748B] text-[#94A3B8]">{team.losses}</td>
                                                 <td className="px-3 py-3 text-center font-bold text-brand-400">{team.gd}</td>
-                                                <td className="px-4 py-3 text-center font-black text-slate-900 dark:text-white bg-brand-500/5">{team.pts}</td>
+                                                <td className="px-4 py-3 text-center font-black text-white text-white bg-brand-500/5">{team.pts}</td>
                                             </tr>
                                         ))}
                                         {poolAStandings.length === 0 && (
-                                            <tr><td colSpan={8} className="px-4 py-8 text-center text-slate-500 text-sm">No matches played yet</td></tr>
+                                            <tr><td colSpan={8} className="px-4 py-8 text-center text-[#64748B] text-sm">No matches played yet</td></tr>
                                         )}
                                     </tbody>
                                 </table>
                             </div>
 
                             {/* Pool B */}
-                            <div className="bg-white dark:bg-slate-900 rounded-3xl border border-slate-200/10 dark:border-white/10 overflow-hidden">
-                                <div className="px-6 py-4 bg-orange-500/10 border-b border-slate-200/5 dark:border-white/5">
-                                    <h3 className="text-lg font-display font-black text-slate-900 dark:text-white flex items-center gap-2">
-                                        <span className="h-6 w-6 bg-orange-500 rounded-lg flex items-center justify-center text-xs font-black text-slate-900 dark:text-white">B</span>
+                            <div className="bg-[#131D31] bg-[#0B1220] rounded-3xl border border-slate-200/10 border-[#24344D] overflow-hidden">
+                                <div className="px-6 py-4 bg-orange-500/10 border-b border-[#24344D]/30 border-[#24344D]/50">
+                                    <h3 className="text-lg font-display font-black text-white text-white flex items-center gap-2">
+                                        <span className="h-6 w-6 bg-orange-500 rounded-lg flex items-center justify-center text-xs font-black text-white text-white">B</span>
                                         Pool B
                                     </h3>
                                 </div>
                                 <table className="w-full text-left">
-                                    <thead className="bg-white/5 border-b border-slate-200/10 dark:border-white/10 text-[10px] uppercase font-black text-slate-500 tracking-widest">
+                                    <thead className="bg-[#131D31]/50 border-b border-slate-200/10 border-[#24344D] text-[10px] uppercase font-black text-[#64748B] tracking-widest">
                                         <tr>
                                             <th className="px-4 py-3">#</th>
                                             <th className="px-4 py-3">Team</th>
@@ -819,21 +819,21 @@ const TournamentDetail = () => {
                                                 "hover:bg-white/5 transition-colors",
                                                 idx < 2 && "border-l-2 border-l-green-500"
                                             )}>
-                                                <td className="px-4 py-3 font-black text-slate-500">{idx + 1}</td>
+                                                <td className="px-4 py-3 font-black text-[#64748B]">{idx + 1}</td>
                                                 <td className="px-4 py-3">
-                                                    <span className="font-bold text-slate-900 dark:text-white">{team.name}</span>
+                                                    <span className="font-bold text-white text-white">{team.name}</span>
                                                     {idx < 2 && <span className="ml-2 text-[8px] bg-green-500/10 text-green-400 px-1.5 py-0.5 rounded-full font-bold">Q</span>}
                                                 </td>
-                                                <td className="px-3 py-3 text-center text-slate-500 dark:text-slate-400">{team.played}</td>
-                                                <td className="px-3 py-3 text-center text-slate-500 dark:text-slate-400">{team.wins}</td>
-                                                <td className="px-3 py-3 text-center text-slate-500 dark:text-slate-400">{team.draws}</td>
-                                                <td className="px-3 py-3 text-center text-slate-500 dark:text-slate-400">{team.losses}</td>
+                                                <td className="px-3 py-3 text-center text-[#64748B] text-[#94A3B8]">{team.played}</td>
+                                                <td className="px-3 py-3 text-center text-[#64748B] text-[#94A3B8]">{team.wins}</td>
+                                                <td className="px-3 py-3 text-center text-[#64748B] text-[#94A3B8]">{team.draws}</td>
+                                                <td className="px-3 py-3 text-center text-[#64748B] text-[#94A3B8]">{team.losses}</td>
                                                 <td className="px-3 py-3 text-center font-bold text-brand-400">{team.gd}</td>
-                                                <td className="px-4 py-3 text-center font-black text-slate-900 dark:text-white bg-brand-500/5">{team.pts}</td>
+                                                <td className="px-4 py-3 text-center font-black text-white text-white bg-brand-500/5">{team.pts}</td>
                                             </tr>
                                         ))}
                                         {poolBStandings.length === 0 && (
-                                            <tr><td colSpan={8} className="px-4 py-8 text-center text-slate-500 text-sm">No matches played yet</td></tr>
+                                            <tr><td colSpan={8} className="px-4 py-8 text-center text-[#64748B] text-sm">No matches played yet</td></tr>
                                         )}
                                     </tbody>
                                 </table>
@@ -841,13 +841,13 @@ const TournamentDetail = () => {
                         </div>
 
                         {/* Qualification Info */}
-                        <div className="flex items-center justify-center gap-6 py-3 bg-white/5 rounded-2xl border border-slate-200/5 dark:border-white/5">
+                        <div className="flex items-center justify-center gap-6 py-3 bg-[#131D31]/50 rounded-2xl border border-[#24344D]/30 border-[#24344D]/50">
                             <div className="flex items-center gap-2">
                                 <div className="w-3 h-1 bg-green-500 rounded" />
-                                <span className="text-[10px] text-slate-500 dark:text-slate-400 font-bold uppercase tracking-wider">Qualifies to Semi-Finals</span>
+                                <span className="text-[10px] text-[#64748B] text-[#94A3B8] font-bold uppercase tracking-wider">Qualifies to Semi-Finals</span>
                             </div>
-                            <span className="text-slate-600">•</span>
-                            <span className="text-[10px] text-slate-500">Semi-Finals: A1 vs B2, B1 vs A2 → Final</span>
+                            <span className="text-[#94A3B8]">•</span>
+                            <span className="text-[10px] text-[#64748B]">Semi-Finals: A1 vs B2, B1 vs A2 → Final</span>
                         </div>
                     </div>
                 )}
@@ -873,7 +873,7 @@ const TournamentDetail = () => {
                                                 }
                                             }
                                         }}
-                                        className="px-4 py-2 bg-red-500/10 text-red-500 rounded-xl font-bold text-xs hover:bg-red-500 hover:text-slate-900 dark:text-white transition-all border border-red-500/20"
+                                        className="px-4 py-2 bg-red-500/10 text-red-500 rounded-xl font-bold text-xs hover:bg-red-500 hover:text-white text-white transition-all border border-red-500/20"
                                     >
                                         Delete & Reset Bracket
                                     </button>
@@ -881,7 +881,7 @@ const TournamentDetail = () => {
                                 {tournamentMatches.length === 0 && (
                                     <button
                                         onClick={handleSeedBracket}
-                                        className="px-4 py-2 bg-brand-500 text-slate-900 dark:text-white rounded-xl font-black text-xs hover:scale-105 transition-all shadow-lg shadow-brand-500/20"
+                                        className="px-4 py-2 bg-brand-500 text-white text-white rounded-xl font-black text-xs hover:scale-105 transition-all shadow-lg shadow-brand-500/20"
                                     >
                                         <Plus size={14} className="inline mr-1" />
                                         Initialize {tournament.type === 'league' ? 'League' : (tournament.type === 'dual_knockout' ? '2-Pool' : 'Bracket')}
@@ -891,7 +891,7 @@ const TournamentDetail = () => {
                         )}
 
                         {tournamentMatches.length === 0 && !canEditTournament && (
-                            <div className="text-center py-20 text-slate-500 italic">
+                            <div className="text-center py-20 text-[#64748B] italic">
                                 Bracket has not been initialized by admin yet.
                             </div>
                         )}
@@ -916,14 +916,14 @@ const TournamentDetail = () => {
                 {activeTab === 'teams' && (
                     <div className="space-y-6">
                         <div className="flex justify-between items-center">
-                            <h3 className="text-xl font-display font-black text-slate-900 dark:text-white flex items-center gap-3">
+                            <h3 className="text-xl font-display font-black text-white text-white flex items-center gap-3">
                                 <span className="h-6 w-1 bg-brand-500 rounded-full"></span>
                                 Participating Teams ({tournamentTeams.length})
                             </h3>
                             {canEditTournament && (
                                 <button
                                     onClick={() => setShowAddTeam(true)}
-                                    className="flex items-center gap-2 px-4 py-2 bg-brand-500 text-slate-900 dark:text-white rounded-xl font-bold text-sm hover:bg-brand-600 transition-all shadow-lg shadow-brand-500/20"
+                                    className="flex items-center gap-2 px-4 py-2 bg-brand-500 text-white text-white rounded-xl font-bold text-sm hover:bg-brand-600 transition-all shadow-lg shadow-brand-500/20"
                                 >
                                     <Plus size={18} />
                                     Add Team
@@ -936,7 +936,7 @@ const TournamentDetail = () => {
                                 <Link
                                     key={team.id}
                                     to={`/teams/${team.id}`}
-                                    className="relative group bg-white dark:bg-slate-900 border border-slate-200/5 dark:border-white/5 p-6 rounded-3xl hover:border-brand-500/20 transition-all text-center flex flex-col items-center shadow-lg"
+                                    className="relative group bg-[#131D31] bg-[#0B1220] border border-[#24344D]/30 border-[#24344D]/50 p-6 rounded-3xl hover:border-brand-500/20 transition-all text-center flex flex-col items-center shadow-lg"
                                 >
                                     {canEditTournament && (
                                         <button
@@ -944,7 +944,7 @@ const TournamentDetail = () => {
                                                 e.preventDefault(); // Prevent navigating to team detail
                                                 handleRemoveTeam(team);
                                             }}
-                                            className="absolute top-2 right-2 p-2 bg-red-500/10 text-red-500 rounded-full opacity-0 group-hover:opacity-100 hover:bg-red-500 hover:text-slate-900 dark:text-white transition-all z-20"
+                                            className="absolute top-2 right-2 p-2 bg-red-500/10 text-red-500 rounded-full opacity-0 group-hover:opacity-100 hover:bg-red-500 hover:text-white text-white transition-all z-20"
                                         >
                                             <X size={14} />
                                         </button>
@@ -952,12 +952,12 @@ const TournamentDetail = () => {
                                     {team.logoUrl ? (
                                         <img src={team.logoUrl} className="w-20 h-20 object-contain mb-4" alt="" />
                                     ) : (
-                                        <div className="w-20 h-20 bg-brand-500 rounded-3xl flex items-center justify-center text-2xl font-black text-slate-900 dark:text-white mb-4 shadow-xl">
+                                        <div className="w-20 h-20 bg-brand-500 rounded-3xl flex items-center justify-center text-2xl font-black text-white text-white mb-4 shadow-xl">
                                             {team.name.substring(0, 2).toUpperCase()}
                                         </div>
                                     )}
-                                    <h4 className="text-lg font-bold text-slate-900 dark:text-white mb-1 group-hover:text-brand-400 transition-colors">{team.name}</h4>
-                                    <p className="text-xs text-slate-500 uppercase tracking-widest font-bold">{team.shortName || 'Club'}</p>
+                                    <h4 className="text-lg font-bold text-white text-white mb-1 group-hover:text-brand-400 transition-colors">{team.name}</h4>
+                                    <p className="text-xs text-[#64748B] uppercase tracking-widest font-bold">{team.shortName || 'Club'}</p>
                                 </Link>
                             ))}
                         </div>
@@ -965,23 +965,23 @@ const TournamentDetail = () => {
                         {/* Add Team Modal */}
                         {showAddTeam && (
                             <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-sm">
-                                <div className="bg-white dark:bg-slate-900 border border-slate-200/10 dark:border-white/10 rounded-3xl shadow-2xl w-full max-w-lg overflow-hidden">
-                                    <div className="p-6 border-b border-slate-200/5 dark:border-white/5 flex justify-between items-center bg-brand-500/5">
-                                        <h3 className="text-xl font-black text-slate-900 dark:text-white italic">Add Team to {tournament.name}</h3>
-                                        <button onClick={() => setShowAddTeam(false)} className="text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:text-white transition-colors">
+                                <div className="bg-[#131D31] bg-[#0B1220] border border-slate-200/10 border-[#24344D] rounded-3xl shadow-2xl w-full max-w-lg overflow-hidden">
+                                    <div className="p-6 border-b border-[#24344D]/30 border-[#24344D]/50 flex justify-between items-center bg-brand-500/5">
+                                        <h3 className="text-xl font-black text-white text-white italic">Add Team to {tournament.name}</h3>
+                                        <button onClick={() => setShowAddTeam(false)} className="text-[#94A3B8] text-[#94A3B8] hover:text-white text-white transition-colors">
                                             <X size={24} />
                                         </button>
                                     </div>
 
                                     <div className="p-6 space-y-4">
                                         <div className="relative">
-                                            <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-500" size={18} />
+                                            <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-[#64748B]" size={18} />
                                             <input
                                                 type="text"
                                                 placeholder="Search available teams..."
                                                 value={searchTerm}
                                                 onChange={(e) => setSearchTerm(e.target.value)}
-                                                className="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200/5 dark:border-white/5 rounded-2xl py-3 pl-10 pr-4 text-slate-900 dark:text-white placeholder:text-slate-500 focus:border-brand-500 focus:ring-1 focus:ring-brand-500 outline-none transition-all"
+                                                className="w-full bg-[#0B1220] bg-[#131D31] border border-[#24344D]/30 border-[#24344D]/50 rounded-2xl py-3 pl-10 pr-4 text-white text-white placeholder:text-slate-500 focus:border-brand-500 focus:ring-1 focus:ring-brand-500 outline-none transition-all"
                                             />
                                         </div>
 
@@ -992,25 +992,25 @@ const TournamentDetail = () => {
                                                         <button
                                                             key={team.id}
                                                             onClick={() => handleAddTeam(team)}
-                                                            className="flex items-center gap-4 p-3 rounded-2xl bg-white/5 hover:bg-brand-500/10 border border-transparent hover:border-brand-500/20 transition-all text-left"
+                                                            className="flex items-center gap-4 p-3 rounded-2xl bg-[#131D31]/50 hover:bg-brand-500/10 border border-transparent hover:border-brand-500/20 transition-all text-left"
                                                         >
-                                                            <div className="w-10 h-10 bg-slate-50 dark:bg-slate-800 rounded-xl flex items-center justify-center border border-slate-200/5 dark:border-white/5">
+                                                            <div className="w-10 h-10 bg-[#0B1220] bg-[#131D31] rounded-xl flex items-center justify-center border border-[#24344D]/30 border-[#24344D]/50">
                                                                 {team.logoUrl ? (
                                                                     <img src={team.logoUrl} className="w-6 h-6 object-contain" alt="" />
                                                                 ) : (
-                                                                    <span className="text-xs font-black text-slate-500">{team.name.substring(0, 2).toUpperCase()}</span>
+                                                                    <span className="text-xs font-black text-[#64748B]">{team.name.substring(0, 2).toUpperCase()}</span>
                                                                 )}
                                                             </div>
                                                             <div className="flex-1">
-                                                                <div className="font-bold text-slate-900 dark:text-white">{team.name}</div>
-                                                                <div className="text-[10px] text-slate-500 uppercase tracking-widest font-bold">{team.shortName}</div>
+                                                                <div className="font-bold text-white text-white">{team.name}</div>
+                                                                <div className="text-[10px] text-[#64748B] uppercase tracking-widest font-bold">{team.shortName}</div>
                                                             </div>
                                                             <Plus size={18} className="text-brand-500" />
                                                         </button>
                                                     ))}
                                                 </div>
                                             ) : (
-                                                <div className="text-center py-8 text-slate-500 font-medium">
+                                                <div className="text-center py-8 text-[#64748B] font-medium">
                                                     No available teams found
                                                 </div>
                                             )}

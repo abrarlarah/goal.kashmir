@@ -1,7 +1,7 @@
 // tailwind.config.js
 module.exports = {
   darkMode: 'class',
-  content: [  // Changed from purge to content for v3+ compatibility but keeping valid syntax
+  content: [
     './src/**/*.{js,jsx,ts,tsx}',
     './public/index.html'
   ],
@@ -14,28 +14,49 @@ module.exports = {
       },
       colors: {
         brand: {
-          50: '#f0f9ff',
-          100: '#e0f2fe',
-          200: '#bae6fd',
-          300: '#7dd3fc',
-          400: '#38bdf8',
-          500: '#0ea5e9', // Royal Blue
-          600: '#0284c7', // Deep Royal Blue
-          700: '#0369a1',
-          800: '#075985',
-          900: '#0c4a6e',
-          DEFAULT: '#0ea5e9',
+          50: '#eff6ff',
+          100: '#dbeafe',
+          200: '#bfdbfe',
+          300: '#93c5fd',
+          400: '#60a5fa',
+          500: '#3B82F6',
+          600: '#2563EB',
+          700: '#1d4ed8',
+          800: '#1e40af',
+          900: '#1e3a8a',
+          DEFAULT: '#3B82F6',
         },
         dark: {
-          bg: '#0f172a', // Deep Slate
-          card: '#1e293b',
-          surface: '#334155',
+          bg: '#0B1220',
+          card: '#131D31',
+          surface: '#18253C',
+          elevated: '#1E2B42',
         },
         accent: {
-          cyan: '#06b6d4',
+          cyan: '#06B6D4',
           purple: '#8b5cf6',
           yellow: '#eab308',
-        }
+        },
+        // Semantic surface colors
+        surface: {
+          primary: '#0B1220',
+          secondary: '#101827',
+          card: '#131D31',
+          elevated: '#18253C',
+          border: '#24344D',
+          divider: '#1E2B42',
+        },
+        // Semantic text colors
+        'text-primary': '#F8FAFC',
+        'text-secondary': '#94A3B8',
+        'text-muted': '#64748B',
+        // Status colors
+        status: {
+          live: '#EF4444',
+          upcoming: '#3B82F6',
+          completed: '#22C55E',
+          cancelled: '#6B7280',
+        },
       },
       animation: {
         'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',

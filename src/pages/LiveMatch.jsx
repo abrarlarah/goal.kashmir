@@ -619,13 +619,13 @@ const LiveMatch = () => {
       >
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
           <div>
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-brand-500/10 border border-brand-500/20 text-brand-600 dark:text-brand-400 text-sm font-medium mb-4">
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-brand-500/10 border border-brand-500/20 text-brand-400 text-brand-400 text-sm font-medium mb-4">
               <Activity size={14} className="animate-pulse" /> Live Coverage
             </div>
-            <h1 className="text-3xl md:text-5xl font-display font-black text-slate-900 dark:text-white tracking-tight mb-2">
+            <h1 className="text-3xl md:text-5xl font-display font-black text-white text-white tracking-tight mb-2">
               Match <span className="text-transparent bg-clip-text bg-gradient-to-r from-brand-400 to-brand-600">Center</span>
             </h1>
-            <p className="text-slate-600 dark:text-slate-400 max-w-2xl text-sm md:text-base">
+            <p className="text-[#94A3B8] text-[#94A3B8] max-w-2xl text-sm md:text-base">
               Track live scores, fixtures and statistics in real-time.
             </p>
           </div>
@@ -636,7 +636,7 @@ const LiveMatch = () => {
                       `Check out the match between ${match.teamA} and ${match.teamB} on Goal Kashmir!`,
                       `/live/${matchId}`
                   )}
-                  className="flex items-center gap-2 px-5 py-2.5 bg-brand-500/10 hover:bg-brand-500 text-brand-600 dark:text-brand-400 hover:text-slate-900 dark:text-white rounded-xl font-bold transition-all"
+                  className="flex items-center gap-2 px-5 py-2.5 bg-brand-500/10 hover:bg-brand-500 text-brand-400 text-brand-400 hover:text-white text-white rounded-xl font-bold transition-all"
               >
                   <Share2 size={18} />
                   Share Match
@@ -649,20 +649,20 @@ const LiveMatch = () => {
 
         {/* Admin Controls (Match Control Center) */}
         {canEditMatch && (
-          <div className="mb-8 rounded-3xl overflow-hidden bg-white/80 dark:bg-slate-900/80 backdrop-blur-xl border border-slate-200/10 dark:border-white/10 shadow-[0_0_40px_rgba(0,0,0,0.5)]">
-            <div className="bg-gradient-to-r from-slate-800 to-slate-900 p-4 border-b border-slate-200/5 dark:border-white/5 flex items-center justify-between">
+          <div className="mb-8 rounded-3xl overflow-hidden bg-white/80 dark:bg-slate-900/80 backdrop-blur-xl border border-slate-200/10 border-[#24344D] shadow-[0_0_40px_rgba(0,0,0,0.5)]">
+            <div className="bg-gradient-to-r from-slate-800 to-slate-900 p-4 border-b border-[#24344D]/30 border-[#24344D]/50 flex items-center justify-between">
               <div className="flex items-center gap-3">
                 <div className="p-2 bg-brand-500/20 text-brand-400 rounded-lg border border-brand-500/30">
                   <Activity size={20} className={match.status === 'live' ? "animate-pulse" : ""} />
                 </div>
-                <h3 className="text-slate-900 dark:text-white font-black uppercase tracking-widest text-lg drop-shadow-md">Match Control Center</h3>
+                <h3 className="text-white text-white font-black uppercase tracking-widest text-lg drop-shadow-md">Match Control Center</h3>
               </div>
               <div className="flex items-center gap-2">
                 <span className={cn(
                   "px-3 py-1 text-xs font-black uppercase tracking-widest rounded-full border",
                   match.status === 'live' ? "bg-red-500/10 text-red-400 border-red-500/30 animate-pulse" : 
                   match.status === 'finished' ? "bg-green-500/10 text-green-400 border-green-500/30" : 
-                  "bg-slate-500/10 text-slate-500 dark:text-slate-400 border-slate-500/30"
+                  "bg-slate-500/10 text-[#64748B] text-[#94A3B8] border-slate-500/30"
                 )}>
                   {match.status === 'live' ? "Live Now" : match.status === 'finished' ? "Match Ended" : "Scheduled"}
                 </span>
@@ -677,7 +677,7 @@ const LiveMatch = () => {
                       stadium: match.stadium || ''
                     });
                   }}
-                  className="p-2 hover:bg-white/10 rounded-lg text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:text-white transition-colors border border-transparent hover:border-slate-200/10 dark:border-white/10"
+                  className="p-2 hover:bg-white/10 rounded-lg text-[#64748B] text-[#94A3B8] hover:text-white text-white transition-colors border border-transparent hover:border-slate-200/10 border-[#24344D]"
                   title="Edit Match Details"
                 >
                   <Edit3 size={18} />
@@ -689,13 +689,13 @@ const LiveMatch = () => {
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2 sm:gap-6">
 
                 {/* Team A Score Controls */}
-                <div className="bg-slate-950/50 rounded-xl sm:rounded-2xl p-3 sm:p-5 border border-slate-200/5 dark:border-white/5 relative overflow-hidden group">
+                <div className="bg-slate-950/50 rounded-xl sm:rounded-2xl p-3 sm:p-5 border border-[#24344D]/30 border-[#24344D]/50 relative overflow-hidden group">
                   <div className="absolute top-0 right-0 p-4 opacity-5 pointer-events-none group-hover:scale-110 transition-transform duration-500">
                     <Trophy size={64} />
                   </div>
                   <div className="text-center mb-3 sm:mb-6">
-                    <span className="text-[9px] sm:text-xs font-bold text-slate-500 uppercase tracking-widest">Home Team</span>
-                    <h2 className="text-lg sm:text-2xl font-black text-slate-900 dark:text-white truncate leading-tight mt-0.5 sm:mt-1" title={match.teamA}>{match.teamA}</h2>
+                    <span className="text-[9px] sm:text-xs font-bold text-[#64748B] uppercase tracking-widest">Home Team</span>
+                    <h2 className="text-lg sm:text-2xl font-black text-white text-white truncate leading-tight mt-0.5 sm:mt-1" title={match.teamA}>{match.teamA}</h2>
                     <div className="text-3xl sm:text-6xl font-black text-brand-400 my-2 sm:my-4 drop-shadow-[0_0_15px_rgba(14,165,233,0.3)]">{match.scoreA || 0}</div>
                   </div>
                   
@@ -714,7 +714,7 @@ const LiveMatch = () => {
                     </button>
                   </div>
 
-                  <div className="flex gap-2 border-t border-slate-200/5 dark:border-white/5 pt-4">
+                  <div className="flex gap-2 border-t border-[#24344D]/30 border-[#24344D]/50 pt-4">
                     <button 
                       onClick={() => setShowCardSelect({ team: 'A', type: 'yellow' })} 
                       className="flex-1 flex items-center justify-center gap-1 bg-yellow-500/10 text-yellow-500 hover:bg-yellow-500/20 border border-yellow-500/30 py-2 rounded-lg text-xs font-bold transition-all"
@@ -736,23 +736,23 @@ const LiveMatch = () => {
                   <div className="bg-slate-950/80 rounded-xl sm:rounded-2xl p-3 sm:p-6 border-2 border-slate-800 text-center flex flex-col items-center justify-center shadow-inner relative overflow-hidden">
                     <div className="absolute inset-0 bg-gradient-to-br from-brand-500/5 to-transparent pointer-events-none" />
                     
-                    <span className="text-xs font-bold text-slate-500 uppercase tracking-widest mb-2 flex items-center gap-2">
+                    <span className="text-xs font-bold text-[#64748B] uppercase tracking-widest mb-2 flex items-center gap-2">
                        <Clock size={14} /> Match Clock
                     </span>
                     
                     <div className={cn(
                       "text-3xl sm:text-6xl font-mono font-black tracking-tighter tabular-nums drop-shadow-xl",
-                      match.timerRunning ? "text-brand-400" : "text-slate-900 dark:text-white"
+                      match.timerRunning ? "text-brand-400" : "text-white text-white"
                     )}>
                       <MatchTimer match={match} />
                     </div>
 
                     {/* Clock manipulation */}
                     <div className="flex items-center justify-center gap-1 sm:gap-2 mt-2 sm:mt-6 w-full">
-                      <button onClick={() => updateMinute(-1)} className="flex-1 h-8 sm:h-10 flex items-center justify-center bg-slate-50 dark:bg-slate-800 hover:bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 rounded sm:rounded-lg text-[10px] sm:text-sm font-bold border border-slate-200 dark:border-slate-700 transition-colors">-1</button>
-                      <button onClick={() => updateMinute(1)} className="flex-1 h-8 sm:h-10 flex items-center justify-center bg-slate-50 dark:bg-slate-800 hover:bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 rounded sm:rounded-lg text-[10px] sm:text-sm font-bold border border-slate-200 dark:border-slate-700 transition-colors">+1</button>
-                      <button onClick={() => updateMinute(5)} className="flex-1 h-8 sm:h-10 flex items-center justify-center bg-slate-50 dark:bg-slate-800 hover:bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 rounded sm:rounded-lg text-[10px] sm:text-sm font-bold border border-slate-200 dark:border-slate-700 transition-colors">+5m</button>
-                      <button onClick={resetTimer} className="flex-1 h-8 sm:h-10 flex items-center justify-center bg-slate-50 dark:bg-slate-800 hover:bg-red-500/20 text-slate-500 hover:text-red-400 rounded sm:rounded-lg border border-slate-200 dark:border-slate-700 hover:border-red-500/30 transition-colors" title="Reset Clock to 00:00">
+                      <button onClick={() => updateMinute(-1)} className="flex-1 h-8 sm:h-10 flex items-center justify-center bg-[#0B1220] bg-[#131D31] hover:bg-[#18253C] dark:bg-slate-700 text-[#94A3B8] text-[#94A3B8] rounded sm:rounded-lg text-[10px] sm:text-sm font-bold border border-[#24344D] border-[#24344D] transition-colors">-1</button>
+                      <button onClick={() => updateMinute(1)} className="flex-1 h-8 sm:h-10 flex items-center justify-center bg-[#0B1220] bg-[#131D31] hover:bg-[#18253C] dark:bg-slate-700 text-[#94A3B8] text-[#94A3B8] rounded sm:rounded-lg text-[10px] sm:text-sm font-bold border border-[#24344D] border-[#24344D] transition-colors">+1</button>
+                      <button onClick={() => updateMinute(5)} className="flex-1 h-8 sm:h-10 flex items-center justify-center bg-[#0B1220] bg-[#131D31] hover:bg-[#18253C] dark:bg-slate-700 text-[#94A3B8] text-[#94A3B8] rounded sm:rounded-lg text-[10px] sm:text-sm font-bold border border-[#24344D] border-[#24344D] transition-colors">+5m</button>
+                      <button onClick={resetTimer} className="flex-1 h-8 sm:h-10 flex items-center justify-center bg-[#0B1220] bg-[#131D31] hover:bg-red-500/20 text-[#64748B] hover:text-red-400 rounded sm:rounded-lg border border-[#24344D] border-[#24344D] hover:border-red-500/30 transition-colors" title="Reset Clock to 00:00">
                         <RotateCcw size={12} className="sm:w-4 sm:h-4" />
                       </button>
                     </div>
@@ -778,7 +778,7 @@ const LiveMatch = () => {
                         "flex flex-col items-center justify-center gap-1 py-1 sm:py-2 rounded-xl sm:rounded-2xl font-black uppercase tracking-wider transition-all border shadow-lg",
                         match.status === 'halftime' 
                           ? "bg-orange-500/10 text-orange-500 border-orange-500/30 hover:bg-orange-500/20 shadow-[0_0_20px_rgba(249,115,22,0.1)] hover:shadow-[0_0_20px_rgba(249,115,22,0.2)]" 
-                          : "bg-slate-100/30 dark:bg-slate-700/30 text-slate-600 dark:text-slate-300 border-slate-600/30 hover:bg-slate-600/40"
+                          : "bg-slate-100/30 dark:bg-slate-700/30 text-[#94A3B8] text-[#94A3B8] border-slate-600/30 hover:bg-slate-600/40"
                       )}
                     >
                       <Clock size={16} className="sm:w-[26px] sm:h-[26px]" />
@@ -803,13 +803,13 @@ const LiveMatch = () => {
                 </div>
 
                 {/* Team B Score Controls */}
-                <div className="bg-slate-950/50 rounded-xl sm:rounded-2xl p-3 sm:p-5 border border-slate-200/5 dark:border-white/5 relative overflow-hidden group">
+                <div className="bg-slate-950/50 rounded-xl sm:rounded-2xl p-3 sm:p-5 border border-[#24344D]/30 border-[#24344D]/50 relative overflow-hidden group">
                   <div className="absolute top-0 right-0 p-4 opacity-5 pointer-events-none group-hover:scale-110 transition-transform duration-500">
                     <Trophy size={64} />
                   </div>
                   <div className="text-center mb-3 sm:mb-6">
-                    <span className="text-[9px] sm:text-xs font-bold text-slate-500 uppercase tracking-widest">Away Team</span>
-                    <h2 className="text-lg sm:text-2xl font-black text-slate-900 dark:text-white truncate leading-tight mt-0.5 sm:mt-1" title={match.teamB}>{match.teamB}</h2>
+                    <span className="text-[9px] sm:text-xs font-bold text-[#64748B] uppercase tracking-widest">Away Team</span>
+                    <h2 className="text-lg sm:text-2xl font-black text-white text-white truncate leading-tight mt-0.5 sm:mt-1" title={match.teamB}>{match.teamB}</h2>
                     <div className="text-3xl sm:text-6xl font-black text-brand-400 my-2 sm:my-4 drop-shadow-[0_0_15px_rgba(14,165,233,0.3)]">{match.scoreB || 0}</div>
                   </div>
                   
@@ -828,7 +828,7 @@ const LiveMatch = () => {
                     </button>
                   </div>
 
-                  <div className="flex gap-2 border-t border-slate-200/5 dark:border-white/5 pt-4">
+                  <div className="flex gap-2 border-t border-[#24344D]/30 border-[#24344D]/50 pt-4">
                     <button 
                       onClick={() => setShowCardSelect({ team: 'B', type: 'yellow' })} 
                       className="flex-1 flex items-center justify-center gap-1 bg-yellow-500/10 text-yellow-500 hover:bg-yellow-500/20 border border-yellow-500/30 py-2 rounded-lg text-xs font-bold transition-all"
@@ -850,7 +850,7 @@ const LiveMatch = () => {
             {/* Editing Teams Panel (Drops down when hitting edit) */}
             {isEditingTeams && (
               <div className="border-t border-brand-500/30 bg-white/90 dark:bg-slate-900/90 p-6 animate-in slide-in-from-top-4 relative">
-                <button onClick={() => setIsEditingTeams(false)} className="absolute top-4 right-4 p-2 text-slate-500 hover:text-slate-900 dark:text-white rounded-full hover:bg-white/5 transition-colors">
+                <button onClick={() => setIsEditingTeams(false)} className="absolute top-4 right-4 p-2 text-[#64748B] hover:text-white text-white rounded-full hover:bg-white/5 transition-colors">
                   <X size={20} />
                 </button>
                 <h4 className="flex items-center gap-2 text-sm font-black uppercase tracking-widest text-brand-400 mb-6">
@@ -859,11 +859,11 @@ const LiveMatch = () => {
 
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
                   <div className="lg:col-span-2">
-                    <label className="text-[10px] text-slate-500 dark:text-gray-400 uppercase font-bold mb-1.5 block">Home Team</label>
+                    <label className="text-[10px] text-[#64748B] dark:text-gray-400 uppercase font-bold mb-1.5 block">Home Team</label>
                     <select
                       value={editFormData.teamA}
                       onChange={(e) => setEditFormData({ ...editFormData, teamA: e.target.value })}
-                      className="w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-slate-900 dark:text-white focus:border-brand-500 focus:ring-1 focus:ring-brand-500 transition-all outline-none"
+                      className="w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-white text-white focus:border-brand-500 focus:ring-1 focus:ring-brand-500 transition-all outline-none"
                     >
                       <option value="">Select Home Team</option>
                       {tournamentTeams.map(t => (
@@ -875,11 +875,11 @@ const LiveMatch = () => {
                     </select>
                   </div>
                   <div className="lg:col-span-2">
-                    <label className="text-[10px] text-slate-500 dark:text-gray-400 uppercase font-bold mb-1.5 block">Away Team</label>
+                    <label className="text-[10px] text-[#64748B] dark:text-gray-400 uppercase font-bold mb-1.5 block">Away Team</label>
                     <select
                       value={editFormData.teamB}
                       onChange={(e) => setEditFormData({ ...editFormData, teamB: e.target.value })}
-                      className="w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-slate-900 dark:text-white focus:border-brand-500 focus:ring-1 focus:ring-brand-500 transition-all outline-none"
+                      className="w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-white text-white focus:border-brand-500 focus:ring-1 focus:ring-brand-500 transition-all outline-none"
                     >
                       <option value="">Select Away Team</option>
                       {tournamentTeams.map(t => (
@@ -894,38 +894,38 @@ const LiveMatch = () => {
                   <div className="flex items-end">
                      <button
                         onClick={handleUpdateTeams}
-                        className="w-full h-[50px] bg-brand-500 hover:bg-brand-400 text-slate-900 rounded-xl font-black uppercase tracking-widest text-xs transition-colors shadow-lg shadow-brand-500/20 flex items-center justify-center gap-2"
+                        className="w-full h-[50px] bg-brand-500 hover:bg-brand-400 text-white rounded-xl font-black uppercase tracking-widest text-xs transition-colors shadow-lg shadow-brand-500/20 flex items-center justify-center gap-2"
                       >
                         <Check size={16} /> Save
                       </button>
                   </div>
 
                   <div className="lg:col-span-2">
-                    <label className="text-[10px] text-slate-500 dark:text-gray-400 uppercase font-bold mb-1.5 block">Date</label>
+                    <label className="text-[10px] text-[#64748B] dark:text-gray-400 uppercase font-bold mb-1.5 block">Date</label>
                     <input
                       type="date"
                       value={editFormData.date}
                       onChange={(e) => setEditFormData({ ...editFormData, date: e.target.value })}
-                      className="w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-slate-900 dark:text-white focus:border-brand-500 outline-none"
+                      className="w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-white text-white focus:border-brand-500 outline-none"
                     />
                   </div>
                   <div className="lg:col-span-1">
-                    <label className="text-[10px] text-slate-500 dark:text-gray-400 uppercase font-bold mb-1.5 block">Time</label>
+                    <label className="text-[10px] text-[#64748B] dark:text-gray-400 uppercase font-bold mb-1.5 block">Time</label>
                     <input
                       type="time"
                       value={editFormData.time}
                       onChange={(e) => setEditFormData({ ...editFormData, time: e.target.value })}
-                      className="w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-slate-900 dark:text-white focus:border-brand-500 outline-none"
+                      className="w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-white text-white focus:border-brand-500 outline-none"
                     />
                   </div>
                   <div className="lg:col-span-2">
-                    <label className="text-[10px] text-slate-500 dark:text-gray-400 uppercase font-bold mb-1.5 block">Venue</label>
+                    <label className="text-[10px] text-[#64748B] dark:text-gray-400 uppercase font-bold mb-1.5 block">Venue</label>
                     <input
                       type="text"
                       placeholder="Stadium"
                       value={editFormData.stadium}
                       onChange={(e) => setEditFormData({ ...editFormData, stadium: e.target.value })}
-                      className="w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-slate-900 dark:text-white focus:border-brand-500 outline-none"
+                      className="w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-white text-white focus:border-brand-500 outline-none"
                     />
                   </div>
                 </div>
@@ -934,7 +934,7 @@ const LiveMatch = () => {
 
             {/* Dynamic Popups for Goal Scorer and Cards */}
             {(showScorerSelect || showCardSelect || showCancelSelect || showPotmSelect) && (
-              <div className="border-t border-slate-200/10 dark:border-white/10 bg-slate-950/80 p-6 animate-in slide-in-from-bottom-4 relative">
+              <div className="border-t border-slate-200/10 border-[#24344D] bg-slate-950/80 p-6 animate-in slide-in-from-bottom-4 relative">
                 
                 {/* Cancel Goal Context */}
                 {showCancelSelect && (
@@ -943,26 +943,26 @@ const LiveMatch = () => {
                       <h4 className="text-red-400 font-bold flex items-center gap-2">
                         <Trash2 size={18} /> Cancel Goal for {showCancelSelect.team === 'A' ? match.teamA : match.teamB}
                       </h4>
-                      <button onClick={() => setShowCancelSelect(null)} className="p-1.5 bg-slate-50 dark:bg-slate-800 hover:bg-slate-100 dark:bg-slate-700 rounded-lg text-slate-500 dark:text-slate-400"><X size={16} /></button>
+                      <button onClick={() => setShowCancelSelect(null)} className="p-1.5 bg-[#0B1220] bg-[#131D31] hover:bg-[#18253C] dark:bg-slate-700 rounded-lg text-[#64748B] text-[#94A3B8]"><X size={16} /></button>
                     </div>
 
                     <div className="space-y-2 max-h-48 overflow-y-auto pr-2 custom-scrollbar">
                       {events.filter(e => e.type === 'goal' && e.team === (showCancelSelect.team === 'A' ? match.teamA : match.teamB)).length > 0 ? (
                         events.filter(e => e.type === 'goal' && e.team === (showCancelSelect.team === 'A' ? match.teamA : match.teamB)).map(goal => (
-                          <div key={goal.id} className="flex justify-between items-center bg-white dark:bg-slate-900 border border-slate-200/5 dark:border-white/5 p-3 rounded-xl hover:border-red-500/30 transition-colors">
-                            <span className="text-sm font-bold text-slate-900 dark:text-white flex items-center gap-2">
+                          <div key={goal.id} className="flex justify-between items-center bg-[#131D31] bg-[#0B1220] border border-[#24344D]/30 border-[#24344D]/50 p-3 rounded-xl hover:border-red-500/30 transition-colors">
+                            <span className="text-sm font-bold text-white text-white flex items-center gap-2">
                               <span className="text-brand-400 p-1 bg-brand-500/10 rounded">{goal.minute}'</span> {goal.player}
                             </span>
                             <button
                               onClick={() => confirmCancelGoal(goal)}
-                              className="bg-red-500/20 hover:bg-red-500 border border-red-500/50 hover:text-slate-900 text-red-500 text-xs py-1.5 px-4 rounded-lg font-black uppercase tracking-widest transition-all"
+                              className="bg-red-500/20 hover:bg-red-500 border border-red-500/50 hover:text-white text-red-500 text-xs py-1.5 px-4 rounded-lg font-black uppercase tracking-widest transition-all"
                             >
                               Revoke Goal
                             </button>
                           </div>
                         ))
                       ) : (
-                        <div className="text-center text-slate-500 py-6 border border-dashed border-slate-200/10 dark:border-white/10 rounded-xl font-bold">
+                        <div className="text-center text-[#64748B] py-6 border border-dashed border-slate-200/10 border-[#24344D] rounded-xl font-bold">
                           No goal events recorded yet.
                         </div>
                       )}
@@ -977,16 +977,16 @@ const LiveMatch = () => {
                       <h4 className="font-bold flex items-center gap-2 text-lg text-brand-400">
                         <Trophy size={20} />
                         {showScorerSelect.step === 'scorer' ? 'Select Goal Scorer' : 'Select Assist'}
-                        <span className="text-slate-900 dark:text-white ml-2 opacity-50 px-2 py-0.5 bg-slate-50 dark:bg-slate-800 rounded text-xs uppercase tracking-widest border border-slate-200/10 dark:border-white/10">
+                        <span className="text-white text-white ml-2 opacity-50 px-2 py-0.5 bg-[#0B1220] bg-[#131D31] rounded text-xs uppercase tracking-widest border border-slate-200/10 border-[#24344D]">
                           {showScorerSelect.team === 'A' ? match.teamA : match.teamB}
                         </span>
                       </h4>
-                      <button onClick={() => setShowScorerSelect(null)} className="p-1.5 bg-slate-50 dark:bg-slate-800 hover:bg-slate-100 dark:bg-slate-700 rounded-lg text-slate-500 dark:text-slate-400"><X size={16} /></button>
+                      <button onClick={() => setShowScorerSelect(null)} className="p-1.5 bg-[#0B1220] bg-[#131D31] hover:bg-[#18253C] dark:bg-slate-700 rounded-lg text-[#64748B] text-[#94A3B8]"><X size={16} /></button>
                     </div>
 
                     {showScorerSelect.step === 'scorer' && (
                       <div className="mb-4 flex flex-wrap gap-2">
-                        <label className={cn("flex flex-1 items-center justify-center gap-2 text-xs sm:text-sm font-bold p-3 rounded-xl border cursor-pointer transition-colors min-w-[100px]", showScorerSelect.goalType === 'regular' || !showScorerSelect.goalType ? "bg-brand-500/10 border-brand-500/30 text-brand-400" : "bg-white/50 dark:bg-slate-900/50 border-slate-200/5 dark:border-white/5 text-slate-500 dark:text-slate-400 hover:border-brand-500/30")}>
+                        <label className={cn("flex flex-1 items-center justify-center gap-2 text-xs sm:text-sm font-bold p-3 rounded-xl border cursor-pointer transition-colors min-w-[100px]", showScorerSelect.goalType === 'regular' || !showScorerSelect.goalType ? "bg-brand-500/10 border-brand-500/30 text-brand-400" : "bg-white/50 dark:bg-slate-900/50 border-[#24344D]/30 border-[#24344D]/50 text-[#64748B] text-[#94A3B8] hover:border-brand-500/30")}>
                           <input 
                             type="radio" 
                             name="goalType"
@@ -996,7 +996,7 @@ const LiveMatch = () => {
                           />
                           Regular Goal
                         </label>
-                        <label className={cn("flex flex-1 items-center justify-center gap-2 text-xs sm:text-sm font-bold p-3 rounded-xl border cursor-pointer transition-colors min-w-[100px]", showScorerSelect.goalType === 'freekick' ? "bg-orange-500/10 border-orange-500/30 text-orange-400" : "bg-white/50 dark:bg-slate-900/50 border-slate-200/5 dark:border-white/5 text-slate-500 dark:text-slate-400 hover:border-orange-500/30")}>
+                        <label className={cn("flex flex-1 items-center justify-center gap-2 text-xs sm:text-sm font-bold p-3 rounded-xl border cursor-pointer transition-colors min-w-[100px]", showScorerSelect.goalType === 'freekick' ? "bg-orange-500/10 border-orange-500/30 text-orange-400" : "bg-white/50 dark:bg-slate-900/50 border-[#24344D]/30 border-[#24344D]/50 text-[#64748B] text-[#94A3B8] hover:border-orange-500/30")}>
                           <input 
                             type="radio" 
                             name="goalType"
@@ -1006,7 +1006,7 @@ const LiveMatch = () => {
                           />
                           Free Kick
                         </label>
-                        <label className={cn("flex flex-1 items-center justify-center gap-2 text-xs sm:text-sm font-bold p-3 rounded-xl border cursor-pointer transition-colors min-w-[100px]", showScorerSelect.goalType === 'penalty' ? "bg-red-500/10 border-red-500/30 text-red-400" : "bg-white/50 dark:bg-slate-900/50 border-slate-200/5 dark:border-white/5 text-slate-500 dark:text-slate-400 hover:border-red-500/30")}>
+                        <label className={cn("flex flex-1 items-center justify-center gap-2 text-xs sm:text-sm font-bold p-3 rounded-xl border cursor-pointer transition-colors min-w-[100px]", showScorerSelect.goalType === 'penalty' ? "bg-red-500/10 border-red-500/30 text-red-400" : "bg-white/50 dark:bg-slate-900/50 border-[#24344D]/30 border-[#24344D]/50 text-[#64748B] text-[#94A3B8] hover:border-red-500/30")}>
                           <input 
                             type="radio" 
                             name="goalType"
@@ -1034,10 +1034,10 @@ const LiveMatch = () => {
                                 confirmGoal(showScorerSelect.team, showScorerSelect.scorer, player, showScorerSelect.goalType || 'regular');
                               }
                             }}
-                            className="text-left p-3 rounded-xl border font-bold text-sm transition-all flex items-center gap-2 truncate bg-white dark:bg-slate-900 border-slate-200/5 dark:border-white/5 hover:border-brand-500 text-slate-600 dark:text-slate-300 hover:text-brand-400"
+                            className="text-left p-3 rounded-xl border font-bold text-sm transition-all flex items-center gap-2 truncate bg-[#131D31] bg-[#0B1220] border-[#24344D]/30 border-[#24344D]/50 hover:border-brand-500 text-[#94A3B8] text-[#94A3B8] hover:text-brand-400"
                             title={player.name}
                           >
-                            <span className="w-6 h-6 shrink-0 bg-slate-50 dark:bg-slate-800 rounded-md flex items-center justify-center text-[10px] text-slate-500">{player.number || '#'}</span>
+                            <span className="w-6 h-6 shrink-0 bg-[#0B1220] bg-[#131D31] rounded-md flex items-center justify-center text-[10px] text-[#64748B]">{player.number || '#'}</span>
                             <span className="truncate">{player.name}</span>
                           </button>
                         ))}
@@ -1049,7 +1049,7 @@ const LiveMatch = () => {
                             confirmGoal(showScorerSelect.team, showScorerSelect.scorer, null, showScorerSelect.goalType || 'regular');
                           }
                         }}
-                        className="p-3 rounded-xl border border-dashed border-slate-200/20 dark:border-white/20 hover:border-slate-200/50 dark:border-white/50 bg-transparent text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:text-white font-bold text-sm transition-all flex items-center justify-center italic"
+                        className="p-3 rounded-xl border border-dashed border-[#24344D] dark:border-white/20 hover:border-slate-200/50 dark:border-white/50 bg-transparent text-[#64748B] text-[#94A3B8] hover:text-white text-white font-bold text-sm transition-all flex items-center justify-center italic"
                       >
                         {showScorerSelect.step === 'scorer' ? 'Select Unknown / Other' : 'No Assist'}
                       </button>
@@ -1070,11 +1070,11 @@ const LiveMatch = () => {
                       )}>
                         <AlertTriangle size={20} />
                         Select Player for {showCardSelect.type} Card
-                        <span className="text-slate-900 dark:text-white ml-2 opacity-50 px-2 py-0.5 bg-slate-50 dark:bg-slate-800 rounded text-xs uppercase tracking-widest border border-slate-200/10 dark:border-white/10">
+                        <span className="text-white text-white ml-2 opacity-50 px-2 py-0.5 bg-[#0B1220] bg-[#131D31] rounded text-xs uppercase tracking-widest border border-slate-200/10 border-[#24344D]">
                           {showCardSelect.team === 'A' ? match.teamA : match.teamB}
                         </span>
                       </h4>
-                      <button onClick={() => setShowCardSelect(null)} className="p-1.5 bg-slate-50 dark:bg-slate-800 hover:bg-slate-100 dark:bg-slate-700 rounded-lg text-slate-500 dark:text-slate-400"><X size={16} /></button>
+                      <button onClick={() => setShowCardSelect(null)} className="p-1.5 bg-[#0B1220] bg-[#131D31] hover:bg-[#18253C] dark:bg-slate-700 rounded-lg text-[#64748B] text-[#94A3B8]"><X size={16} /></button>
                     </div>
 
                     <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3 max-h-60 overflow-y-auto pr-2 custom-scrollbar">
@@ -1087,18 +1087,18 @@ const LiveMatch = () => {
                             onClick={() => confirmCard(showCardSelect.team, player, showCardSelect.type)}
                             className={cn(
                               "text-left p-3 rounded-xl border font-bold text-sm transition-all flex items-center gap-2 truncate",
-                              showCardSelect.type === 'yellow' ? "bg-white dark:bg-slate-900 border-slate-200/5 dark:border-white/5 hover:border-yellow-500 text-slate-600 dark:text-slate-300 hover:text-yellow-500" :
-                              "bg-white dark:bg-slate-900 border-slate-200/5 dark:border-white/5 hover:border-red-500 text-slate-600 dark:text-slate-300 hover:text-red-500"
+                              showCardSelect.type === 'yellow' ? "bg-[#131D31] bg-[#0B1220] border-[#24344D]/30 border-[#24344D]/50 hover:border-yellow-500 text-[#94A3B8] text-[#94A3B8] hover:text-yellow-500" :
+                              "bg-[#131D31] bg-[#0B1220] border-[#24344D]/30 border-[#24344D]/50 hover:border-red-500 text-[#94A3B8] text-[#94A3B8] hover:text-red-500"
                             )}
                             title={player.name}
                           >
-                            <span className="w-6 h-6 shrink-0 bg-slate-50 dark:bg-slate-800 rounded-md flex items-center justify-center text-[10px] text-slate-500">{player.number || '#'}</span>
+                            <span className="w-6 h-6 shrink-0 bg-[#0B1220] bg-[#131D31] rounded-md flex items-center justify-center text-[10px] text-[#64748B]">{player.number || '#'}</span>
                             <span className="truncate">{player.name}</span>
                           </button>
                         ))}
                       <button
                         onClick={() => confirmCard(showCardSelect.team, null, showCardSelect.type)}
-                        className="p-3 rounded-xl border border-dashed border-slate-200/20 dark:border-white/20 hover:border-slate-200/50 dark:border-white/50 bg-transparent text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:text-white font-bold text-sm transition-all flex items-center justify-center italic"
+                        className="p-3 rounded-xl border border-dashed border-[#24344D] dark:border-white/20 hover:border-slate-200/50 dark:border-white/50 bg-transparent text-[#64748B] text-[#94A3B8] hover:text-white text-white font-bold text-sm transition-all flex items-center justify-center italic"
                       >
                         Select Unknown / Other
                       </button>
@@ -1113,13 +1113,13 @@ const LiveMatch = () => {
                         <Trophy size={20} />
                         Select Player of the Match
                       </h4>
-                      <button onClick={() => setShowPotmSelect(false)} className="p-1.5 bg-slate-50 dark:bg-slate-800 hover:bg-slate-100 dark:bg-slate-700 rounded-lg text-slate-500 dark:text-slate-400"><X size={16} /></button>
+                      <button onClick={() => setShowPotmSelect(false)} className="p-1.5 bg-[#0B1220] bg-[#131D31] hover:bg-[#18253C] dark:bg-slate-700 rounded-lg text-[#64748B] text-[#94A3B8]"><X size={16} /></button>
                     </div>
 
                     <div className="space-y-6">
                       {[match.teamA, match.teamB].map(teamName => (
                         <div key={teamName}>
-                          <div className="text-[10px] text-slate-500 uppercase font-black mb-2 tracking-widest">{teamName}</div>
+                          <div className="text-[10px] text-[#64748B] uppercase font-black mb-2 tracking-widest">{teamName}</div>
                           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
                             {players
                               .filter(p => p.team === teamName)
@@ -1128,9 +1128,9 @@ const LiveMatch = () => {
                                 <button
                                   key={player.id}
                                   onClick={() => confirmPotm(player)}
-                                  className="text-left p-3 rounded-xl border border-slate-200/5 dark:border-white/5 bg-white dark:bg-slate-900 font-bold text-sm transition-all flex items-center gap-2 hover:border-brand-500 text-slate-600 dark:text-slate-300 hover:text-brand-500"
+                                  className="text-left p-3 rounded-xl border border-[#24344D]/30 border-[#24344D]/50 bg-[#131D31] bg-[#0B1220] font-bold text-sm transition-all flex items-center gap-2 hover:border-brand-500 text-[#94A3B8] text-[#94A3B8] hover:text-brand-500"
                                 >
-                                  <span className="w-6 h-6 shrink-0 bg-slate-50 dark:bg-slate-800 rounded-md flex items-center justify-center text-[10px] text-slate-500">{player.number || '#'}</span>
+                                  <span className="w-6 h-6 shrink-0 bg-[#0B1220] bg-[#131D31] rounded-md flex items-center justify-center text-[10px] text-[#64748B]">{player.number || '#'}</span>
                                   <span className="truncate">{player.name}</span>
                                 </button>
                               ))}
@@ -1169,7 +1169,7 @@ const LiveMatch = () => {
                 <h3 className="text-[10px] text-brand-400 uppercase font-black tracking-[0.2em] mb-1">Player of the Match</h3>
                 <h4 className="text-2xl font-display font-black text-white italic">{match.potmName}</h4>
                 <div className="flex items-center justify-center md:justify-start gap-2 mt-1">
-                  <span className="text-slate-400 text-xs font-bold">{match.potmTeam}</span>
+                  <span className="text-[#64748B] text-xs font-bold">{match.potmTeam}</span>
                   <div className="h-1 w-1 rounded-full bg-slate-700"></div>
                   <span className="text-brand-400/80 text-[10px] font-black uppercase">Outstanding Performance</span>
                 </div>
@@ -1178,7 +1178,7 @@ const LiveMatch = () => {
               {canEditMatch && (
                 <button 
                   onClick={() => setShowPotmSelect(true)}
-                  className="px-4 py-2 bg-white/5 hover:bg-white/10 border border-white/10 rounded-xl text-[10px] font-bold text-slate-400 hover:text-white transition-all uppercase tracking-widest"
+                  className="px-4 py-2 bg-[#131D31]/50 hover:bg-white/10 border border-white/10 rounded-xl text-[10px] font-bold text-[#64748B] hover:text-white transition-all uppercase tracking-widest"
                 >
                   Change MVP
                 </button>
@@ -1192,7 +1192,7 @@ const LiveMatch = () => {
           <div className="mb-8 flex justify-center">
             <button
               onClick={() => setShowPotmSelect(true)}
-              className="flex items-center gap-3 px-8 py-4 bg-gradient-to-r from-brand-500 to-brand-600 text-slate-900 rounded-2xl font-black text-sm uppercase tracking-widest hover:scale-105 transition-all shadow-xl shadow-brand-500/20 group"
+              className="flex items-center gap-3 px-8 py-4 bg-gradient-to-r from-brand-500 to-brand-600 text-white rounded-2xl font-black text-sm uppercase tracking-widest hover:scale-105 transition-all shadow-xl shadow-brand-500/20 group"
             >
               <Trophy size={18} className="group-hover:rotate-12 transition-transform" />
               Assign Player of the Match
@@ -1211,13 +1211,13 @@ const LiveMatch = () => {
           <div className="relative z-10 p-6 sm:p-8">
             {/* Competition & Status */}
             <div className="text-center mb-6">
-              <div className="text-xs sm:text-sm text-slate-400 uppercase tracking-[0.3em] font-bold mb-1">
+              <div className="text-xs sm:text-sm text-[#64748B] uppercase tracking-[0.3em] font-bold mb-1">
                 {match.competition}
                 {match.status === 'live' && <span className="text-red-400 ml-2 animate-pulse">● LIVE</span>}
                 {match.status === 'halftime' && <span className="text-orange-400 ml-2">● HALF TIME</span>}
-                {match.status === 'finished' && <span className="text-emerald-400 ml-2">● FULL TIME</span>}
+                {match.status === 'finished' && <span className="text-green-400 ml-2">● FULL TIME</span>}
               </div>
-              <div className="text-[11px] text-slate-500 flex items-center justify-center gap-1.5">
+              <div className="text-[11px] text-[#64748B] flex items-center justify-center gap-1.5">
                 <span>🏟️</span>
                 <span>{match.stadium || getTeamInfo(match.teamA).stadium || 'Stadium TBD'}</span>
               </div>
@@ -1231,7 +1231,7 @@ const LiveMatch = () => {
                   {getTeamInfo(match.teamA).logoUrl ? (
                     <img src={getTeamInfo(match.teamA).logoUrl} alt={match.teamA} className="w-10 h-10 sm:w-12 sm:h-12 object-contain" />
                   ) : (
-                    <span className="text-2xl sm:text-3xl font-black text-emerald-300">{match.teamA?.charAt(0)}</span>
+                    <span className="text-2xl sm:text-3xl font-black text-green-400">{match.teamA?.charAt(0)}</span>
                   )}
                 </div>
                 <h2 className="text-base sm:text-xl font-black text-white truncate max-w-[140px] sm:max-w-[200px] mx-auto">{match.teamA}</h2>
@@ -1242,9 +1242,9 @@ const LiveMatch = () => {
               <div className="text-center flex-shrink-0">
                 <div className="relative">
                   <div className="text-5xl sm:text-7xl font-black tracking-tight tabular-nums">
-                    <span className="text-transparent bg-clip-text bg-gradient-to-b from-white to-white/70 drop-shadow-[0_0_40px_rgba(16,185,129,0.3)]">{match.scoreA || 0}</span>
+                    <span className="text-transparent bg-clip-text bg-gradient-to-b from-white to-[#0B1220]/80 drop-shadow-[0_0_40px_rgba(16,185,129,0.3)]">{match.scoreA || 0}</span>
                     <span className="text-violet-400/40 text-4xl sm:text-5xl mx-2">-</span>
-                    <span className="text-transparent bg-clip-text bg-gradient-to-b from-white to-white/70 drop-shadow-[0_0_40px_rgba(59,130,246,0.3)]">{match.scoreB || 0}</span>
+                    <span className="text-transparent bg-clip-text bg-gradient-to-b from-white to-[#0B1220]/80 drop-shadow-[0_0_40px_rgba(59,130,246,0.3)]">{match.scoreB || 0}</span>
                   </div>
                 </div>
                 <div className="mt-3">
@@ -1264,7 +1264,7 @@ const LiveMatch = () => {
                       {match.status === 'halftime' ? <span>HT</span> : <MatchTimer match={match} />}
                     </div>
                   ) : (
-                    <span className="inline-flex items-center gap-1.5 bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 px-4 py-1.5 rounded-full text-xs font-black uppercase tracking-widest">
+                    <span className="inline-flex items-center gap-1.5 bg-green-500/10 text-green-400 border border-green-500/20 px-4 py-1.5 rounded-full text-xs font-black uppercase tracking-widest">
                       <Trophy size={12} /> Full Time
                     </span>
                   )}
@@ -1293,11 +1293,11 @@ const LiveMatch = () => {
                   .filter(e => e.type === 'goal' && e.team === match.teamA)
                   .sort((a, b) => a.minute - b.minute)
                   .map((goal, idx) => (
-                    <div key={idx} className="text-[11px] text-slate-300 flex items-center justify-end gap-1.5">
+                    <div key={idx} className="text-[11px] text-[#94A3B8] flex items-center justify-end gap-1.5">
                       <span className="truncate max-w-[120px] font-semibold" title={goal.player}>{goal.player}</span>
                       {goal.isFreekick && <span className="text-orange-400 font-bold text-[9px]">(FK)</span>}
                       {goal.isPenalty && <span className="text-red-400 font-bold text-[9px]">(PK)</span>}
-                      {goal.assist && <span className="text-slate-500 text-[9px] truncate max-w-[80px]">({goal.assist})</span>}
+                      {goal.assist && <span className="text-[#64748B] text-[9px] truncate max-w-[80px]">({goal.assist})</span>}
                       <span className="text-brand-400 font-mono text-[10px] bg-brand-500/10 px-1.5 py-0.5 rounded">{goal.minute}'</span>
                       <span>⚽</span>
                     </div>
@@ -1309,13 +1309,13 @@ const LiveMatch = () => {
                   .filter(e => e.type === 'goal' && e.team === match.teamB)
                   .sort((a, b) => a.minute - b.minute)
                   .map((goal, idx) => (
-                    <div key={idx} className="text-[11px] text-slate-300 flex items-center justify-start gap-1.5">
+                    <div key={idx} className="text-[11px] text-[#94A3B8] flex items-center justify-start gap-1.5">
                       <span>⚽</span>
                       <span className="text-brand-400 font-mono text-[10px] bg-brand-500/10 px-1.5 py-0.5 rounded">{goal.minute}'</span>
                       <span className="truncate max-w-[120px] font-semibold" title={goal.player}>{goal.player}</span>
                       {goal.isFreekick && <span className="text-orange-400 font-bold text-[9px]">(FK)</span>}
                       {goal.isPenalty && <span className="text-red-400 font-bold text-[9px]">(PK)</span>}
-                      {goal.assist && <span className="text-slate-500 text-[9px] truncate max-w-[80px]">({goal.assist})</span>}
+                      {goal.assist && <span className="text-[#64748B] text-[9px] truncate max-w-[80px]">({goal.assist})</span>}
                     </div>
                   ))}
               </div>
@@ -1328,8 +1328,8 @@ const LiveMatch = () => {
               <div>
                 <div className="text-[10px] text-violet-300/60 uppercase tracking-widest font-bold mb-2">Possession</div>
                 <div className="flex items-center justify-center gap-2">
-                  <span className="text-sm font-black text-emerald-300 w-10 text-right">{match.possessionA || 50}%</span>
-                  <div className="flex-1 max-w-[120px] h-2.5 bg-white/5 rounded-full overflow-hidden">
+                  <span className="text-sm font-black text-green-400 w-10 text-right">{match.possessionA || 50}%</span>
+                  <div className="flex-1 max-w-[120px] h-2.5 bg-[#131D31]/50 rounded-full overflow-hidden">
                     <motion.div
                       initial={{ width: 0 }}
                       animate={{ width: `${match.possessionA || 50}%` }}
@@ -1343,13 +1343,13 @@ const LiveMatch = () => {
               <div>
                 <div className="text-[10px] text-violet-300/60 uppercase tracking-widest font-bold mb-2">Shots</div>
                 <div className="text-lg font-black">
-                  <span className="text-emerald-300">{match.shotsA || 0}</span> <span className="text-violet-500/40 text-sm">-</span> <span className="text-blue-300">{match.shotsB || 0}</span>
+                  <span className="text-green-400">{match.shotsA || 0}</span> <span className="text-violet-500/40 text-sm">-</span> <span className="text-blue-300">{match.shotsB || 0}</span>
                 </div>
               </div>
               <div>
                 <div className="text-[10px] text-violet-300/60 uppercase tracking-widest font-bold mb-2">On Target</div>
                 <div className="text-lg font-black">
-                  <span className="text-emerald-300">{match.shotsOnTargetA || 0}</span> <span className="text-violet-500/40 text-sm">-</span> <span className="text-blue-300">{match.shotsOnTargetB || 0}</span>
+                  <span className="text-green-400">{match.shotsOnTargetA || 0}</span> <span className="text-violet-500/40 text-sm">-</span> <span className="text-blue-300">{match.shotsOnTargetB || 0}</span>
                 </div>
               </div>
             </div>
@@ -1370,7 +1370,7 @@ const LiveMatch = () => {
             <div className="flex justify-between items-center mb-6">
               <h3 className="text-xl font-display font-black text-white flex items-center gap-3">
                 <div className="w-1.5 h-7 bg-gradient-to-b from-emerald-400 to-cyan-500 rounded-full"></div>
-                <Shield size={20} className="text-emerald-400" />
+                <Shield size={20} className="text-green-400" />
                 <span className="text-transparent bg-clip-text bg-gradient-to-r from-white to-white/80">Team Lineups</span>
               </h3>
               {canEditMatch && (
@@ -1387,7 +1387,7 @@ const LiveMatch = () => {
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                 {matchLineups.map(lineup => (
                   <div key={lineup.id} className="space-y-4">
-                    <div className="flex justify-between items-center bg-white/5 rounded-xl px-4 py-3 border border-white/5">
+                    <div className="flex justify-between items-center bg-[#131D31]/50 rounded-xl px-4 py-3 border border-white/5">
                       <h4 className="text-lg font-black text-white">{lineup.teamName}</h4>
                       {canEditMatch && match.status === 'live' && (
                         <button
@@ -1417,12 +1417,12 @@ const LiveMatch = () => {
               </div>
             ) : (
               <div className="py-16 border border-dashed border-white/10 rounded-2xl flex flex-col items-center justify-center text-center bg-white/[0.02]">
-                <UserPlus className="w-12 h-12 text-slate-600 mb-4 opacity-30" />
-                <p className="text-slate-500 text-sm mb-5 font-medium">No lineups have been added for this match yet.</p>
+                <UserPlus className="w-12 h-12 text-[#94A3B8] mb-4 opacity-30" />
+                <p className="text-[#64748B] text-sm mb-5 font-medium">No lineups have been added for this match yet.</p>
                 {canEditMatch && (
                   <Link
                     to={`/admin/lineups/${matchId}`}
-                    className="px-6 py-2.5 bg-gradient-to-r from-brand-500 to-brand-600 text-slate-900 rounded-xl font-black text-sm hover:from-brand-400 hover:to-brand-500 transition-all shadow-lg shadow-brand-500/20"
+                    className="px-6 py-2.5 bg-gradient-to-r from-brand-500 to-brand-600 text-white rounded-xl font-black text-sm hover:from-brand-400 hover:to-brand-500 transition-all shadow-lg shadow-brand-500/20"
                   >
                     Add Match Lineup
                   </Link>
@@ -1478,7 +1478,7 @@ const LiveMatch = () => {
                                 {event.isFreekick && <span className="text-orange-400 text-xs ml-2 font-bold">(Free Kick)</span>}
                                 {event.isPenalty && <span className="text-red-400 text-xs ml-2 font-bold">(Penalty)</span>}
                               </span>
-                              <span className="text-slate-500 text-[11px] uppercase tracking-wider font-bold">
+                              <span className="text-[#64748B] text-[11px] uppercase tracking-wider font-bold">
                                 Goal for {event.team} {event.assist && `• Assist: ${event.assist}`}
                               </span>
                             </div>
@@ -1499,7 +1499,7 @@ const LiveMatch = () => {
                             </div>
                             <div>
                               <span className="font-black text-white text-base sm:text-lg block">{event.player}</span>
-                              <span className="text-slate-500 text-[11px] uppercase tracking-wider font-bold">
+                              <span className="text-[#64748B] text-[11px] uppercase tracking-wider font-bold">
                                 {event.type === 'yellow' ? 'Yellow Card' : 'Red Card'} ({event.team})
                               </span>
                             </div>
@@ -1512,11 +1512,11 @@ const LiveMatch = () => {
                             </div>
                             <div>
                               <div className="flex items-center gap-2 flex-wrap">
-                                <span className="text-emerald-400 font-black text-sm">⬆️ {event.playerIn}</span>
-                                <span className="text-slate-600 text-xs">/</span>
+                                <span className="text-green-400 font-black text-sm">⬆️ {event.playerIn}</span>
+                                <span className="text-[#94A3B8] text-xs">/</span>
                                 <span className="text-red-400 font-black text-sm opacity-80">⬇️ {event.playerOut}</span>
                               </div>
-                              <span className="text-slate-500 text-[11px] uppercase tracking-wider font-bold block mt-0.5">
+                              <span className="text-[#64748B] text-[11px] uppercase tracking-wider font-bold block mt-0.5">
                                 Substitution ({event.team})
                               </span>
                             </div>
@@ -1541,7 +1541,7 @@ const LiveMatch = () => {
                 ))}
               </div>
             ) : (
-              <div className="text-center py-16 text-slate-500 bg-white/[0.02] rounded-2xl border border-dashed border-white/10">
+              <div className="text-center py-16 text-[#64748B] bg-white/[0.02] rounded-2xl border border-dashed border-white/10">
                 <Activity size={32} className="mx-auto mb-3 opacity-20" />
                 <p className="font-bold text-sm">Awaiting match events...</p>
               </div>

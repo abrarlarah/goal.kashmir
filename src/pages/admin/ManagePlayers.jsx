@@ -310,27 +310,27 @@ const ManagePlayers = () => {
     };
 
     return (
-        <div className="container mx-auto px-4 py-8 text-slate-900 dark:text-white">
+        <div className="container mx-auto px-4 py-8 text-white text-white">
             <div className="flex justify-between items-center mb-6">
                 <h2 className="text-2xl font-bold">Manage Players</h2>
                 <button
                     onClick={handleExportCSV}
-                    className="flex items-center gap-2 px-4 py-2 bg-slate-50 dark:bg-slate-800 hover:bg-slate-100 dark:bg-slate-700 text-slate-900 dark:text-white border border-slate-200 dark:border-slate-700 rounded-lg text-sm transition-colors"
+                    className="flex items-center gap-2 px-4 py-2 bg-[#0B1220] bg-[#131D31] hover:bg-[#18253C] dark:bg-slate-700 text-white text-white border border-[#24344D] border-[#24344D] rounded-lg text-sm transition-colors"
                 >
                     <Download size={16} /> Export to CSV
                 </button>
             </div>
 
             {successMessage && (
-                <div className="bg-green-600 text-slate-900 dark:text-white p-3 rounded mb-4 animate-pulse">
+                <div className="bg-green-600 text-white text-white p-3 rounded mb-4 animate-pulse">
                     {successMessage}
                 </div>
             )}
 
             {/* Form */}
-            <div className="rounded-3xl bg-white dark:bg-[#0B1120] border border-slate-200/50 dark:border-white/5 shadow-2xl dark:shadow-brand-500/5 overflow-hidden transition-all mb-10">
+            <div className="rounded-3xl bg-[#131D31] dark:bg-[#0B1120] border border-[#24344D]/50 border-[#24344D]/50 shadow-2xl dark:shadow-brand-500/5 overflow-hidden transition-all mb-10">
                 <div className="bg-gradient-to-r from-violet-600 via-fuchsia-500 to-pink-500 p-6 sm:p-8 relative overflow-hidden">
-                    <div className="absolute top-0 right-0 w-64 h-64 bg-white/10 rounded-full blur-3xl -mr-20 -mt-20 pointer-events-none"></div>
+                    <div className="absolute top-0 right-0 w-64 h-64 bg-[#1E2B42] rounded-full blur-3xl -mr-20 -mt-20 pointer-events-none"></div>
                     <div className="relative z-10 flex items-center gap-4">
                         <div className="p-3 bg-white/20 rounded-2xl backdrop-blur-sm border border-white/20 shadow-lg">
                             <User className="text-white h-7 w-7" />
@@ -348,12 +348,12 @@ const ManagePlayers = () => {
                     <form onSubmit={handleSubmit} className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-x-8 gap-y-6">
                         {/* Player Photo Upload */}
                         <div className="lg:col-span-4">
-                            <label className="text-sm font-bold text-slate-700 dark:text-gray-300 block mb-3 uppercase tracking-wider">Player Portrait</label>
-                            <div className="flex flex-col sm:flex-row items-center gap-6 p-6 border-[1.5px] border-dashed border-slate-300 dark:border-white/10 rounded-2xl bg-white dark:bg-white/5 transition-all hover:border-violet-500/50 hover:bg-violet-50/50 dark:hover:bg-violet-500/5 group shadow-sm">
+                            <label className="text-sm font-bold text-[#94A3B8] dark:text-gray-300 block mb-3 uppercase tracking-wider">Player Portrait</label>
+                            <div className="flex flex-col sm:flex-row items-center gap-6 p-6 border-[1.5px] border-dashed border-[#24344D] border-[#24344D] rounded-2xl bg-[#131D31] bg-[#131D31]/50 transition-all hover:border-violet-500/50 hover:bg-violet-50/50 dark:hover:bg-violet-500/5 group shadow-sm">
                                 {formData.photoUrl ? (
                                     <div className="relative shrink-0">
                                         <div className="absolute inset-0 bg-fuchsia-500/20 blur-xl rounded-full opacity-100 transition-opacity"></div>
-                                        <img src={formData.photoUrl} alt="Preview" className="w-28 h-28 object-cover rounded-full bg-white dark:bg-gray-800 p-1.5 shadow-xl relative z-10 border border-slate-100 dark:border-white/5 mx-auto" />
+                                        <img src={formData.photoUrl} alt="Preview" className="w-28 h-28 object-cover rounded-full bg-[#131D31] dark:bg-gray-800 p-1.5 shadow-xl relative z-10 border border-[#24344D]/50 border-[#24344D]/50 mx-auto" />
                                         <button
                                             type="button"
                                             onClick={removePhoto}
@@ -366,7 +366,7 @@ const ManagePlayers = () => {
                                 ) : (
                                     <div className="flex-1 w-full flex flex-col items-center justify-center py-2">
                                         <label className="flex flex-col items-center justify-center cursor-pointer group/upload w-full">
-                                            <div className="w-20 h-20 rounded-full bg-slate-100 dark:bg-gray-800 shadow-inner border border-slate-200/50 dark:border-white/5 flex items-center justify-center text-violet-500 group-hover/upload:scale-110 group-hover/upload:bg-violet-100 dark:group-hover/upload:bg-violet-500/20 transition-all duration-300">
+                                            <div className="w-20 h-20 rounded-full bg-[#101827] dark:bg-gray-800 shadow-inner border border-[#24344D]/50 border-[#24344D]/50 flex items-center justify-center text-violet-500 group-hover/upload:scale-110 group-hover/upload:bg-violet-100 dark:group-hover/upload:bg-violet-500/20 transition-all duration-300">
                                                 {uploading ? (
                                                     <div className="flex flex-col items-center">
                                                         <div className="w-6 h-6 border-2 border-violet-500 border-t-transparent animate-spin rounded-full"></div>
@@ -375,10 +375,10 @@ const ManagePlayers = () => {
                                                     <User size={32} className="drop-shadow-sm" />
                                                 )}
                                             </div>
-                                            <span className="mt-4 font-semibold text-slate-700 dark:text-gray-300 group-hover/upload:text-violet-600 dark:group-hover/upload:text-violet-400 transition-colors">
+                                            <span className="mt-4 font-semibold text-[#94A3B8] dark:text-gray-300 group-hover/upload:text-violet-600 dark:group-hover/upload:text-violet-400 transition-colors">
                                                 {uploading ? `Uploading ${Math.round(uploadProgress)}%...` : 'Click to Upload Portrait'}
                                             </span>
-                                            <span className="text-xs text-slate-500 mt-1 font-medium bg-slate-100 dark:bg-gray-800 px-3 py-1 rounded-full">PNG, JPG up to 5MB</span>
+                                            <span className="text-xs text-[#64748B] mt-1 font-medium bg-[#101827] dark:bg-gray-800 px-3 py-1 rounded-full">PNG, JPG up to 5MB</span>
                                             <input type="file" className="hidden" accept="image/*" onChange={handlePhotoUpload} disabled={uploading} />
                                         </label>
                                     </div>
@@ -387,21 +387,21 @@ const ManagePlayers = () => {
                                 {!formData.photoUrl && (
                                     <>
                                         <div className="hidden sm:flex flex-col items-center justify-center px-4">
-                                            <div className="w-px h-10 bg-slate-200 dark:bg-white/10"></div>
-                                            <span className="my-3 text-xs font-black text-slate-400 uppercase tracking-widest bg-white dark:bg-[#0B1120] px-2 py-1 rounded-md shadow-sm border border-slate-100 dark:border-white/5">OR</span>
-                                            <div className="w-px h-10 bg-slate-200 dark:bg-white/10"></div>
+                                            <div className="w-px h-10 bg-[#131D31] bg-[#18253C]"></div>
+                                            <span className="my-3 text-xs font-black text-[#64748B] uppercase tracking-widest bg-[#131D31] dark:bg-[#0B1120] px-2 py-1 rounded-md shadow-sm border border-[#24344D]/50 border-[#24344D]/50">OR</span>
+                                            <div className="w-px h-10 bg-[#131D31] bg-[#18253C]"></div>
                                         </div>
                                         <div className="flex sm:hidden items-center justify-center w-full px-4 gap-4 py-2">
-                                            <div className="h-px w-full bg-slate-200 dark:bg-white/10"></div>
-                                            <span className="text-xs font-black text-slate-400 uppercase tracking-widest bg-white dark:bg-[#0B1120] px-2 py-1 rounded-md shadow-sm border border-slate-100 dark:border-white/5">OR</span>
-                                            <div className="h-px w-full bg-slate-200 dark:bg-white/10"></div>
+                                            <div className="h-px w-full bg-[#131D31] bg-[#18253C]"></div>
+                                            <span className="text-xs font-black text-[#64748B] uppercase tracking-widest bg-[#131D31] dark:bg-[#0B1120] px-2 py-1 rounded-md shadow-sm border border-[#24344D]/50 border-[#24344D]/50">OR</span>
+                                            <div className="h-px w-full bg-[#131D31] bg-[#18253C]"></div>
                                         </div>
 
                                         <div className="flex-1 flex justify-center w-full">
                                             <button
                                                 type="button"
                                                 onClick={() => setShowAssetPicker(true)}
-                                                className="flex items-center justify-center gap-2 w-full sm:w-auto px-6 py-3.5 bg-white dark:bg-gray-800 hover:bg-violet-50 hover:text-violet-600 dark:hover:bg-violet-500/10 text-slate-700 dark:text-white border border-slate-200 dark:border-white/10 hover:border-violet-500/30 rounded-xl font-bold shadow-sm transition-all hover:scale-[1.02] active:scale-95 group/btn"
+                                                className="flex items-center justify-center gap-2 w-full sm:w-auto px-6 py-3.5 bg-[#131D31] dark:bg-gray-800 hover:bg-violet-50 hover:text-violet-600 dark:hover:bg-violet-500/10 text-[#94A3B8] text-white border border-[#24344D] border-[#24344D] hover:border-violet-500/30 rounded-xl font-bold shadow-sm transition-all hover:scale-[1.02] active:scale-95 group/btn"
                                             >
                                                 <Folders size={20} className="text-violet-500 group-hover/btn:scale-110 transition-transform" />
                                                 Choose from Directory
@@ -421,24 +421,24 @@ const ManagePlayers = () => {
 
                         {/* Text Inputs */}
                         <div className="md:col-span-2 space-y-1.5 focus-within:text-violet-600 dark:focus-within:text-fuchsia-400 transition-colors">
-                            <label className="text-xs font-bold text-slate-500 dark:text-gray-400 uppercase tracking-wider">Player Name <span className="text-red-500">*</span></label>
+                            <label className="text-xs font-bold text-[#64748B] dark:text-gray-400 uppercase tracking-wider">Player Name <span className="text-red-500">*</span></label>
                             <input
                                 type="text"
                                 name="name"
                                 placeholder="Full Name"
                                 value={formData.name}
                                 onChange={handleInputChange}
-                                className="w-full bg-white dark:bg-gray-800/50 border border-slate-200 dark:border-white/10 p-3.5 rounded-xl text-slate-900 dark:text-white focus:ring-2 focus:ring-violet-500 focus:border-violet-500 outline-none transition-all shadow-sm font-medium"
+                                className="w-full bg-[#131D31] dark:bg-gray-800/50 border border-[#24344D] border-[#24344D] p-3.5 rounded-xl text-white text-white focus:ring-2 focus:ring-violet-500 focus:border-violet-500 outline-none transition-all shadow-sm font-medium"
                                 required
                             />
                         </div>
 
                         <div className="space-y-1.5 focus-within:text-violet-600 dark:focus-within:text-fuchsia-400 transition-colors">
-                            <label className="text-xs font-bold text-slate-500 dark:text-gray-400 uppercase tracking-wider flex justify-between items-center">
+                            <label className="text-xs font-bold text-[#64748B] dark:text-gray-400 uppercase tracking-wider flex justify-between items-center">
                                 <span>Team</span>
                                 {teams.length > 5 && (
-                                    <div className="flex items-center gap-1 bg-slate-100 dark:bg-gray-900/50 px-2 py-0.5 rounded-md border border-slate-200/50 dark:border-white/5">
-                                        <Search size={10} className="text-slate-400 dark:text-gray-500" />
+                                    <div className="flex items-center gap-1 bg-[#101827] dark:bg-gray-900/50 px-2 py-0.5 rounded-md border border-[#24344D]/50 border-[#24344D]/50">
+                                        <Search size={10} className="text-[#64748B] dark:text-gray-500" />
                                         <input
                                             type="text"
                                             placeholder="Find team"
@@ -454,7 +454,7 @@ const ManagePlayers = () => {
                                     name="team"
                                     value={formData.team}
                                     onChange={handleInputChange}
-                                    className="w-full bg-white dark:bg-gray-800/50 border border-slate-200 dark:border-white/10 p-3.5 rounded-xl text-slate-900 dark:text-white focus:ring-2 focus:ring-violet-500 focus:border-violet-500 outline-none transition-all shadow-sm font-medium appearance-none cursor-pointer"
+                                    className="w-full bg-[#131D31] dark:bg-gray-800/50 border border-[#24344D] border-[#24344D] p-3.5 rounded-xl text-white text-white focus:ring-2 focus:ring-violet-500 focus:border-violet-500 outline-none transition-all shadow-sm font-medium appearance-none cursor-pointer"
                                     required
                                 >
                                     <option value="" disabled className="dark:bg-gray-800">Select a Club</option>
@@ -462,24 +462,24 @@ const ManagePlayers = () => {
                                         .filter(t => t.name.toLowerCase().includes(teamSearchText.toLowerCase()))
                                         .sort((a, b) => a.name.localeCompare(b.name))
                                         .map(t => (
-                                            <option key={t.id} value={t.name} className="font-medium text-slate-800 dark:text-white dark:bg-gray-800">{t.name}</option>
+                                            <option key={t.id} value={t.name} className="font-medium text-[#F8FAFC] text-white dark:bg-gray-800">{t.name}</option>
                                         ))
                                     }
                                 </select>
-                                <div className="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none text-slate-400">
+                                <div className="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none text-[#64748B]">
                                     <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7"></path></svg>
                                 </div>
                             </div>
                         </div>
                         
                         <div className="space-y-1.5 focus-within:text-violet-600 dark:focus-within:text-fuchsia-400 transition-colors">
-                            <label className="text-xs font-bold text-slate-500 dark:text-gray-400 uppercase tracking-wider">Position</label>
+                            <label className="text-xs font-bold text-[#64748B] dark:text-gray-400 uppercase tracking-wider">Position</label>
                             <div className="relative">
                                 <select
                                     name="position"
                                     value={formData.position}
                                     onChange={handleInputChange}
-                                    className="w-full bg-white dark:bg-gray-800/50 border border-slate-200 dark:border-white/10 p-3.5 rounded-xl text-slate-900 dark:text-white focus:ring-2 focus:ring-violet-500 focus:border-violet-500 outline-none transition-all shadow-sm font-medium appearance-none cursor-pointer"
+                                    className="w-full bg-[#131D31] dark:bg-gray-800/50 border border-[#24344D] border-[#24344D] p-3.5 rounded-xl text-white text-white focus:ring-2 focus:ring-violet-500 focus:border-violet-500 outline-none transition-all shadow-sm font-medium appearance-none cursor-pointer"
                                     style={{
                                         color: formData.position === 'Forward' ? '#ef4444' :
                                                formData.position === 'Midfielder' ? '#eab308' :
@@ -487,139 +487,139 @@ const ManagePlayers = () => {
                                     }}
                                 >
                                     {positions.map(p => (
-                                        <option key={p} value={p} className="text-slate-900 dark:text-white dark:bg-gray-800">
+                                        <option key={p} value={p} className="text-white text-white dark:bg-gray-800">
                                             {p}
                                         </option>
                                     ))}
                                 </select>
-                                <div className="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none text-slate-400">
+                                <div className="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none text-[#64748B]">
                                     <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7"></path></svg>
                                 </div>
                             </div>
                         </div>
 
                         <div className="space-y-1.5 focus-within:text-violet-600 dark:focus-within:text-fuchsia-400 transition-colors">
-                            <label className="text-xs font-bold text-slate-500 dark:text-gray-400 uppercase tracking-wider">Home District <span className="text-red-500">*</span></label>
+                            <label className="text-xs font-bold text-[#64748B] dark:text-gray-400 uppercase tracking-wider">Home District <span className="text-red-500">*</span></label>
                             <div className="relative">
                                 <select
                                     name="district"
                                     value={formData.district}
                                     onChange={handleInputChange}
-                                    className="w-full bg-white dark:bg-gray-800/50 border border-slate-200 dark:border-white/10 p-3.5 rounded-xl text-slate-900 dark:text-white focus:ring-2 focus:ring-violet-500 focus:border-violet-500 outline-none transition-all shadow-sm font-medium appearance-none cursor-pointer"
+                                    className="w-full bg-[#131D31] dark:bg-gray-800/50 border border-[#24344D] border-[#24344D] p-3.5 rounded-xl text-white text-white focus:ring-2 focus:ring-violet-500 focus:border-violet-500 outline-none transition-all shadow-sm font-medium appearance-none cursor-pointer"
                                     required
                                 >
                                     <option value="" disabled className="dark:bg-gray-800">Select District</option>
-                                    <optgroup label="Jammu Division" className="font-bold text-violet-500 dark:bg-gray-800 text-slate-900 bg-white">
+                                    <optgroup label="Jammu Division" className="font-bold text-violet-500 dark:bg-gray-800 text-white bg-[#131D31]">
                                         {DISTRICTS.JAMMU.map(district => (
-                                            <option key={district} value={district} className="text-slate-900 dark:text-white font-medium dark:bg-gray-800">{district}</option>
+                                            <option key={district} value={district} className="text-white text-white font-medium dark:bg-gray-800">{district}</option>
                                         ))}
                                     </optgroup>
-                                    <optgroup label="Kashmir Division" className="font-bold text-fuchsia-500 dark:bg-gray-800 text-slate-900 bg-white">
+                                    <optgroup label="Kashmir Division" className="font-bold text-fuchsia-500 dark:bg-gray-800 text-white bg-[#131D31]">
                                         {DISTRICTS.KASHMIR.map(district => (
-                                            <option key={district} value={district} className="text-slate-900 dark:text-white font-medium dark:bg-gray-800">{district}</option>
+                                            <option key={district} value={district} className="text-white text-white font-medium dark:bg-gray-800">{district}</option>
                                         ))}
                                     </optgroup>
                                 </select>
-                                <div className="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none text-slate-400">
+                                <div className="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none text-[#64748B]">
                                     <MapPin className="w-4 h-4" />
                                 </div>
                             </div>
                         </div>
 
                         <div className="space-y-1.5 focus-within:text-violet-600 dark:focus-within:text-fuchsia-400 transition-colors">
-                            <label className="text-xs font-bold text-slate-500 dark:text-gray-400 uppercase tracking-wider">Kit Number</label>
+                            <label className="text-xs font-bold text-[#64748B] dark:text-gray-400 uppercase tracking-wider">Kit Number</label>
                             <input
                                 type="number"
                                 name="number"
                                 placeholder="e.g. 10"
                                 value={formData.number}
                                 onChange={handleInputChange}
-                                className="w-full bg-white dark:bg-gray-800/50 border border-slate-200 dark:border-white/10 p-3.5 rounded-xl text-slate-900 dark:text-white focus:ring-2 focus:ring-violet-500 focus:border-violet-500 outline-none transition-all shadow-sm font-black text-center text-lg"
+                                className="w-full bg-[#131D31] dark:bg-gray-800/50 border border-[#24344D] border-[#24344D] p-3.5 rounded-xl text-white text-white focus:ring-2 focus:ring-violet-500 focus:border-violet-500 outline-none transition-all shadow-sm font-black text-center text-lg"
                             />
                         </div>
 
                         <div className="space-y-1.5 focus-within:text-violet-600 dark:focus-within:text-fuchsia-400 transition-colors">
-                            <label className="text-xs font-bold text-slate-500 dark:text-gray-400 uppercase tracking-wider">Nationality</label>
+                            <label className="text-xs font-bold text-[#64748B] dark:text-gray-400 uppercase tracking-wider">Nationality</label>
                             <input
                                 type="text"
                                 name="nationality"
                                 placeholder="Nationality"
                                 value={formData.nationality}
                                 onChange={handleInputChange}
-                                className="w-full bg-white dark:bg-gray-800/50 border border-slate-200 dark:border-white/10 p-3.5 rounded-xl text-slate-900 dark:text-white focus:ring-2 focus:ring-violet-500 focus:border-violet-500 outline-none transition-all shadow-sm font-medium"
+                                className="w-full bg-[#131D31] dark:bg-gray-800/50 border border-[#24344D] border-[#24344D] p-3.5 rounded-xl text-white text-white focus:ring-2 focus:ring-violet-500 focus:border-violet-500 outline-none transition-all shadow-sm font-medium"
                             />
                         </div>
 
                         <div className="space-y-1.5 focus-within:text-violet-600 dark:focus-within:text-fuchsia-400 transition-colors">
-                            <label className="text-xs font-bold text-slate-500 dark:text-gray-400 uppercase tracking-wider">Date of Birth</label>
+                            <label className="text-xs font-bold text-[#64748B] dark:text-gray-400 uppercase tracking-wider">Date of Birth</label>
                             <input
                                 type="date"
                                 name="dob"
                                 value={formData.dob}
                                 onChange={handleInputChange}
-                                className="w-full bg-white dark:bg-gray-800/50 border border-slate-200 dark:border-white/10 p-3.5 rounded-xl text-slate-900 dark:text-white focus:ring-2 focus:ring-violet-500 focus:border-violet-500 outline-none transition-all shadow-sm font-medium"
+                                className="w-full bg-[#131D31] dark:bg-gray-800/50 border border-[#24344D] border-[#24344D] p-3.5 rounded-xl text-white text-white focus:ring-2 focus:ring-violet-500 focus:border-violet-500 outline-none transition-all shadow-sm font-medium"
                             />
                         </div>
 
                         <div className="space-y-1.5">
-                            <label className="text-xs font-bold text-slate-500 dark:text-gray-400 uppercase tracking-wider">Age (Auto Calc)</label>
+                            <label className="text-xs font-bold text-[#64748B] dark:text-gray-400 uppercase tracking-wider">Age (Auto Calc)</label>
                             <input
                                 type="number"
                                 name="age"
                                 placeholder="0"
                                 value={formData.age === 0 ? '' : formData.age}
                                 readOnly
-                                className="w-full bg-slate-100/80 dark:bg-gray-800/80 border border-slate-200/50 dark:border-white/5 p-3.5 rounded-xl text-slate-500 dark:text-gray-400 font-medium cursor-not-allowed text-center"
+                                className="w-full bg-slate-100/80 dark:bg-gray-800/80 border border-[#24344D]/50 border-[#24344D]/50 p-3.5 rounded-xl text-[#64748B] dark:text-gray-400 font-medium cursor-not-allowed text-center"
                             />
                         </div>
 
                         {/* Player Statistics Grids */}
                         <div className="col-span-full pt-4">
-                            <h4 className="text-sm font-black text-slate-800 dark:text-white uppercase tracking-widest mb-4 flex items-center gap-2">
+                            <h4 className="text-sm font-black text-[#F8FAFC] text-white uppercase tracking-widest mb-4 flex items-center gap-2">
                                 <div className="w-2 h-2 rounded-full bg-fuchsia-500"></div> Player Statistics
                             </h4>
-                            <div className="grid grid-cols-2 md:grid-cols-6 gap-3 sm:gap-4 p-4 rounded-2xl bg-slate-50 dark:bg-[#121b2e] border border-slate-200/50 dark:border-white/5">
+                            <div className="grid grid-cols-2 md:grid-cols-6 gap-3 sm:gap-4 p-4 rounded-2xl bg-[#0B1220] dark:bg-[#121b2e] border border-[#24344D]/50 border-[#24344D]/50">
                                 <div className="space-y-1.5 focus-within:text-violet-600 dark:focus-within:text-fuchsia-400 transition-colors">
-                                    <label className="text-[10px] font-bold text-slate-500 dark:text-gray-400 uppercase tracking-wider text-center block">Matches</label>
-                                    <input type="number" name="matches" placeholder="0" value={formData.matches === 0 ? '' : formData.matches} onChange={handleInputChange} className="w-full bg-white dark:bg-gray-800 border border-slate-200 dark:border-white/10 p-2.5 rounded-lg text-slate-900 dark:text-white focus:ring-2 focus:ring-violet-500 focus:border-violet-500 outline-none shadow-sm font-black text-center" />
+                                    <label className="text-[10px] font-bold text-[#64748B] dark:text-gray-400 uppercase tracking-wider text-center block">Matches</label>
+                                    <input type="number" name="matches" placeholder="0" value={formData.matches === 0 ? '' : formData.matches} onChange={handleInputChange} className="w-full bg-[#131D31] dark:bg-gray-800 border border-[#24344D] border-[#24344D] p-2.5 rounded-lg text-white text-white focus:ring-2 focus:ring-violet-500 focus:border-violet-500 outline-none shadow-sm font-black text-center" />
                                 </div>
                                 <div className="space-y-1.5 focus-within:text-violet-600 dark:focus-within:text-fuchsia-400 transition-colors">
-                                    <label className="text-[10px] font-bold text-slate-500 dark:text-gray-400 uppercase tracking-wider text-center block">Goals</label>
-                                    <input type="number" name="goals" placeholder="0" value={formData.goals === 0 ? '' : formData.goals} onChange={handleInputChange} className="w-full bg-white dark:bg-gray-800 border border-slate-200 dark:border-white/10 p-2.5 rounded-lg text-slate-900 dark:text-white focus:ring-2 focus:ring-violet-500 focus:border-violet-500 outline-none shadow-sm font-black text-center text-brand-500" />
+                                    <label className="text-[10px] font-bold text-[#64748B] dark:text-gray-400 uppercase tracking-wider text-center block">Goals</label>
+                                    <input type="number" name="goals" placeholder="0" value={formData.goals === 0 ? '' : formData.goals} onChange={handleInputChange} className="w-full bg-[#131D31] dark:bg-gray-800 border border-[#24344D] border-[#24344D] p-2.5 rounded-lg text-white text-white focus:ring-2 focus:ring-violet-500 focus:border-violet-500 outline-none shadow-sm font-black text-center text-brand-500" />
                                 </div>
                                 <div className="space-y-1.5 focus-within:text-violet-600 dark:focus-within:text-fuchsia-400 transition-colors">
-                                    <label className="text-[10px] font-bold text-slate-500 dark:text-gray-400 uppercase tracking-wider text-center block">Assists</label>
-                                    <input type="number" name="assists" placeholder="0" value={formData.assists === 0 ? '' : formData.assists} onChange={handleInputChange} className="w-full bg-white dark:bg-gray-800 border border-slate-200 dark:border-white/10 p-2.5 rounded-lg text-slate-900 dark:text-white focus:ring-2 focus:ring-violet-500 focus:border-violet-500 outline-none shadow-sm font-black text-center text-blue-500" />
+                                    <label className="text-[10px] font-bold text-[#64748B] dark:text-gray-400 uppercase tracking-wider text-center block">Assists</label>
+                                    <input type="number" name="assists" placeholder="0" value={formData.assists === 0 ? '' : formData.assists} onChange={handleInputChange} className="w-full bg-[#131D31] dark:bg-gray-800 border border-[#24344D] border-[#24344D] p-2.5 rounded-lg text-white text-white focus:ring-2 focus:ring-violet-500 focus:border-violet-500 outline-none shadow-sm font-black text-center text-blue-500" />
                                 </div>
                                 <div className="space-y-1.5 focus-within:text-violet-600 dark:focus-within:text-fuchsia-400 transition-colors">
-                                    <label className="text-[10px] font-bold text-slate-500 dark:text-gray-400 uppercase tracking-wider text-center block">Y. Cards</label>
-                                    <input type="number" name="yellowCards" placeholder="0" value={formData.yellowCards === 0 ? '' : formData.yellowCards} onChange={handleInputChange} className="w-full bg-white dark:bg-gray-800 border border-slate-200 dark:border-white/10 p-2.5 rounded-lg text-slate-900 dark:text-white focus:ring-2 focus:ring-violet-500 focus:border-violet-500 outline-none shadow-sm font-black text-center text-yellow-500" />
+                                    <label className="text-[10px] font-bold text-[#64748B] dark:text-gray-400 uppercase tracking-wider text-center block">Y. Cards</label>
+                                    <input type="number" name="yellowCards" placeholder="0" value={formData.yellowCards === 0 ? '' : formData.yellowCards} onChange={handleInputChange} className="w-full bg-[#131D31] dark:bg-gray-800 border border-[#24344D] border-[#24344D] p-2.5 rounded-lg text-white text-white focus:ring-2 focus:ring-violet-500 focus:border-violet-500 outline-none shadow-sm font-black text-center text-yellow-500" />
                                 </div>
                                 <div className="space-y-1.5 focus-within:text-violet-600 dark:focus-within:text-fuchsia-400 transition-colors">
-                                    <label className="text-[10px] font-bold text-slate-500 dark:text-gray-400 uppercase tracking-wider text-center block">R. Cards</label>
-                                    <input type="number" name="redCards" placeholder="0" value={formData.redCards === 0 ? '' : formData.redCards} onChange={handleInputChange} className="w-full bg-white dark:bg-gray-800 border border-slate-200 dark:border-white/10 p-2.5 rounded-lg text-slate-900 dark:text-white focus:ring-2 focus:ring-violet-500 focus:border-violet-500 outline-none shadow-sm font-black text-center text-red-500" />
+                                    <label className="text-[10px] font-bold text-[#64748B] dark:text-gray-400 uppercase tracking-wider text-center block">R. Cards</label>
+                                    <input type="number" name="redCards" placeholder="0" value={formData.redCards === 0 ? '' : formData.redCards} onChange={handleInputChange} className="w-full bg-[#131D31] dark:bg-gray-800 border border-[#24344D] border-[#24344D] p-2.5 rounded-lg text-white text-white focus:ring-2 focus:ring-violet-500 focus:border-violet-500 outline-none shadow-sm font-black text-center text-red-500" />
                                 </div>
                                 <div className="space-y-1.5 focus-within:text-violet-600 dark:focus-within:text-fuchsia-400 transition-colors">
-                                    <label className="text-[10px] font-bold text-slate-500 dark:text-gray-400 uppercase tracking-wider text-center block">Clean Sht</label>
-                                    <input type="number" name="cleanSheets" placeholder="0" value={formData.cleanSheets === 0 ? '' : formData.cleanSheets} onChange={handleInputChange} className="w-full bg-white dark:bg-gray-800 border border-slate-200 dark:border-white/10 p-2.5 rounded-lg text-slate-900 dark:text-white focus:ring-2 focus:ring-violet-500 focus:border-violet-500 outline-none shadow-sm font-black text-center text-emerald-500" />
+                                    <label className="text-[10px] font-bold text-[#64748B] dark:text-gray-400 uppercase tracking-wider text-center block">Clean Sht</label>
+                                    <input type="number" name="cleanSheets" placeholder="0" value={formData.cleanSheets === 0 ? '' : formData.cleanSheets} onChange={handleInputChange} className="w-full bg-[#131D31] dark:bg-gray-800 border border-[#24344D] border-[#24344D] p-2.5 rounded-lg text-white text-white focus:ring-2 focus:ring-violet-500 focus:border-violet-500 outline-none shadow-sm font-black text-center text-green-400" />
                                 </div>
                             </div>
                         </div>
 
                         <div className="md:col-span-2 lg:col-span-4 space-y-1.5 focus-within:text-violet-600 dark:focus-within:text-fuchsia-400 transition-colors mt-2">
-                            <label className="text-xs font-bold text-slate-500 dark:text-gray-400 uppercase tracking-wider">Player Biography</label>
+                            <label className="text-xs font-bold text-[#64748B] dark:text-gray-400 uppercase tracking-wider">Player Biography</label>
                             <textarea
                                 name="bio"
                                 placeholder="Write about the player's career, strengths, and background..."
                                 value={formData.bio || ''}
                                 onChange={handleInputChange}
                                 rows={3}
-                                className="w-full bg-white dark:bg-gray-800/50 border border-slate-200 dark:border-white/10 p-4 rounded-xl text-slate-900 dark:text-white focus:ring-2 focus:ring-violet-500 focus:border-violet-500 outline-none transition-all shadow-sm font-medium resize-y"
+                                className="w-full bg-[#131D31] dark:bg-gray-800/50 border border-[#24344D] border-[#24344D] p-4 rounded-xl text-white text-white focus:ring-2 focus:ring-violet-500 focus:border-violet-500 outline-none transition-all shadow-sm font-medium resize-y"
                             ></textarea>
                         </div>
 
                         {/* Actions */}
-                        <div className="lg:col-span-4 pt-6 pb-2 border-t border-slate-200 dark:border-white/10 flex flex-col sm:flex-row gap-3 items-center justify-between">
+                        <div className="lg:col-span-4 pt-6 pb-2 border-t border-[#24344D] border-[#24344D] flex flex-col sm:flex-row gap-3 items-center justify-between">
                             <div className="flex w-full gap-3 flex-col sm:flex-row order-1 sm:order-2 sm:justify-end">
                                 {editingId && (
                                     <button
@@ -641,7 +641,7 @@ const ManagePlayers = () => {
                                                 number: ''
                                             });
                                         }}
-                                        className="px-6 py-3.5 rounded-xl font-bold bg-slate-100 hover:bg-slate-200 text-slate-700 dark:bg-white/5 dark:hover:bg-white/10 dark:text-white transition-all w-full sm:w-auto text-center"
+                                        className="px-6 py-3.5 rounded-xl font-bold bg-[#101827] hover:bg-slate-200 text-[#94A3B8] bg-[#131D31]/50 hover:bg-[#18253C] text-white transition-all w-full sm:w-auto text-center"
                                     >
                                         Cancel Edit
                                     </button>
@@ -672,21 +672,21 @@ const ManagePlayers = () => {
             {/* Search and Filters */}
             <div id="player-list-top" className="flex flex-col md:flex-row gap-4 mb-6">
                 <div className="relative flex-1">
-                    <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-500 dark:text-gray-400" size={18} />
+                    <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-[#64748B] dark:text-gray-400" size={18} />
                     <input
                         type="text"
                         placeholder="Search players by name or team..."
                         value={searchTerm}
                         onChange={(e) => setSearchTerm(e.target.value)}
-                        className="w-full bg-slate-50 dark:bg-gray-800 border border-slate-200 dark:border-gray-700 rounded-lg pl-10 pr-4 py-2 text-slate-900 dark:text-white focus:ring-2 focus:ring-brand-500 outline-none"
+                        className="w-full bg-[#0B1220] dark:bg-gray-800 border border-[#24344D] dark:border-gray-700 rounded-lg pl-10 pr-4 py-2 text-white text-white focus:ring-2 focus:ring-brand-500 outline-none"
                     />
                 </div>
                 <div className="flex items-center gap-2">
-                    <Filter className="text-slate-500 dark:text-gray-400" size={18} />
+                    <Filter className="text-[#64748B] dark:text-gray-400" size={18} />
                     <select
                         value={teamFilter}
                         onChange={(e) => setTeamFilter(e.target.value)}
-                        className="bg-slate-50 dark:bg-gray-800 border border-slate-200 dark:border-gray-700 rounded-lg px-4 py-2 text-slate-900 dark:text-white focus:ring-2 focus:ring-brand-500 outline-none"
+                        className="bg-[#0B1220] dark:bg-gray-800 border border-[#24344D] dark:border-gray-700 rounded-lg px-4 py-2 text-white text-white focus:ring-2 focus:ring-brand-500 outline-none"
                     >
                         <option value="All" className="dark:bg-gray-800">All Teams</option>
                         {teams.map(t => (
@@ -698,8 +698,8 @@ const ManagePlayers = () => {
 
             {/* List */}
             <div className="overflow-x-auto">
-                <table className="w-full text-left text-slate-600 dark:text-gray-300">
-                    <thead className="bg-slate-50 dark:bg-gray-800 text-xs uppercase">
+                <table className="w-full text-left text-[#94A3B8] dark:text-gray-300">
+                    <thead className="bg-[#0B1220] dark:bg-gray-800 text-xs uppercase">
                         <tr>
                             <th className="px-4 py-3">Name</th>
                             <th className="px-4 py-3">Team</th>
@@ -712,8 +712,8 @@ const ManagePlayers = () => {
                     </thead>
                     <tbody>
                         {currentItems.map(player => (
-                            <tr key={player.id} className="border-b border-slate-200 dark:border-gray-700 bg-slate-50 dark:bg-gray-800 hover:bg-slate-100 dark:bg-gray-700">
-                                <td className="px-4 py-3 font-medium text-slate-900 dark:text-white">{player.name}</td>
+                            <tr key={player.id} className="border-b border-[#24344D] dark:border-gray-700 bg-[#0B1220] dark:bg-gray-800 hover:bg-[#18253C] dark:bg-gray-700">
+                                <td className="px-4 py-3 font-medium text-white text-white">{player.name}</td>
                                 <td className="px-4 py-3">{player.team}</td>
                                 <td className="px-4 py-3">
                                     <span className="text-xs bg-brand-500/20 text-brand-400 px-2 py-1 rounded">
@@ -731,7 +731,7 @@ const ManagePlayers = () => {
                                     <div className="flex items-center gap-2">
                                         <button
                                             onClick={() => handleEdit(player)}
-                                            className="p-2 bg-blue-500/10 text-blue-500 hover:bg-blue-500 hover:text-slate-900 dark:text-white rounded-lg transition-all"
+                                            className="p-2 bg-blue-500/10 text-blue-500 hover:bg-blue-500 hover:text-white text-white rounded-lg transition-all"
                                             title="Edit Player"
                                         >
                                             <Edit3 size={16} />
@@ -739,7 +739,7 @@ const ManagePlayers = () => {
                                         {isSuperAdmin && (
                                             <button
                                                 onClick={() => handleDelete(player.id)}
-                                                className="p-2 bg-red-500/10 text-red-500 hover:bg-red-500 hover:text-slate-900 dark:text-white rounded-lg transition-all"
+                                                className="p-2 bg-red-500/10 text-red-500 hover:bg-red-500 hover:text-white text-white rounded-lg transition-all"
                                                 title="Delete Player"
                                             >
                                                 <X size={16} />
@@ -753,29 +753,29 @@ const ManagePlayers = () => {
                 </table>
                 {
                     filteredPlayers.length === 0 && !loading && (
-                        <p className="text-center text-slate-500 dark:text-gray-400 mt-4">No players found matching your criteria.</p>
+                        <p className="text-center text-[#64748B] dark:text-gray-400 mt-4">No players found matching your criteria.</p>
                     )
                 }
             </div >
 
             {/* Pagination Controls */}
             {filteredPlayers.length > playersPerPage && (
-                <div className="mt-8 flex flex-col sm:flex-row items-center justify-between gap-4 bg-slate-50/50 dark:bg-gray-800/50 p-4 rounded-2xl border border-slate-200/5 dark:border-white/5">
-                    <div className="text-sm text-slate-500 dark:text-gray-400 font-medium">
-                        Showing <span className="text-slate-900 dark:text-white font-bold">{indexOfFirstPlayer + 1}</span> to <span className="text-slate-900 dark:text-white font-bold">{Math.min(indexOfLastPlayer, filteredPlayers.length)}</span> of <span className="text-slate-900 dark:text-white font-bold">{filteredPlayers.length}</span> players
+                <div className="mt-8 flex flex-col sm:flex-row items-center justify-between gap-4 bg-slate-50/50 dark:bg-gray-800/50 p-4 rounded-2xl border border-[#24344D]/30 border-[#24344D]/50">
+                    <div className="text-sm text-[#64748B] dark:text-gray-400 font-medium">
+                        Showing <span className="text-white text-white font-bold">{indexOfFirstPlayer + 1}</span> to <span className="text-white text-white font-bold">{Math.min(indexOfLastPlayer, filteredPlayers.length)}</span> of <span className="text-white text-white font-bold">{filteredPlayers.length}</span> players
                     </div>
                     <div className="flex items-center gap-2">
                         <button
                             onClick={() => paginate(1)}
                             disabled={currentPage === 1}
-                            className="p-2 rounded-xl bg-slate-50 dark:bg-gray-800 border border-slate-200/5 dark:border-white/5 text-slate-500 dark:text-gray-400 hover:text-slate-900 dark:text-white disabled:opacity-30 disabled:cursor-not-allowed transition-all"
+                            className="p-2 rounded-xl bg-[#0B1220] dark:bg-gray-800 border border-[#24344D]/30 border-[#24344D]/50 text-[#64748B] dark:text-gray-400 hover:text-white text-white disabled:opacity-30 disabled:cursor-not-allowed transition-all"
                         >
                             <ChevronsLeft size={18} />
                         </button>
                         <button
                             onClick={() => paginate(currentPage - 1)}
                             disabled={currentPage === 1}
-                            className="p-2 rounded-xl bg-slate-50 dark:bg-gray-800 border border-slate-200/5 dark:border-white/5 text-slate-500 dark:text-gray-400 hover:text-slate-900 dark:text-white disabled:opacity-30 disabled:cursor-not-allowed transition-all"
+                            className="p-2 rounded-xl bg-[#0B1220] dark:bg-gray-800 border border-[#24344D]/30 border-[#24344D]/50 text-[#64748B] dark:text-gray-400 hover:text-white text-white disabled:opacity-30 disabled:cursor-not-allowed transition-all"
                         >
                             <ChevronLeft size={18} />
                         </button>
@@ -794,8 +794,8 @@ const ManagePlayers = () => {
                                             key={pageNum}
                                             onClick={() => paginate(pageNum)}
                                             className={`w-10 h-10 rounded-xl text-sm font-bold transition-all ${currentPage === pageNum
-                                                ? "bg-brand-500 text-slate-900 dark:text-white shadow-lg shadow-brand-500/20"
-                                                : "bg-slate-50 dark:bg-gray-800 border border-slate-200/5 dark:border-white/5 text-slate-500 dark:text-gray-400 hover:text-slate-900 dark:text-white"
+                                                ? "bg-brand-500 text-white text-white shadow-lg shadow-brand-500/20"
+                                                : "bg-[#0B1220] dark:bg-gray-800 border border-[#24344D]/30 border-[#24344D]/50 text-[#64748B] dark:text-gray-400 hover:text-white text-white"
                                                 }`}
                                         >
                                             {pageNum}
@@ -814,14 +814,14 @@ const ManagePlayers = () => {
                         <button
                             onClick={() => paginate(currentPage + 1)}
                             disabled={currentPage === totalPages}
-                            className="p-2 rounded-xl bg-slate-50 dark:bg-gray-800 border border-slate-200/5 dark:border-white/5 text-slate-500 dark:text-gray-400 hover:text-slate-900 dark:text-white disabled:opacity-30 disabled:cursor-not-allowed transition-all"
+                            className="p-2 rounded-xl bg-[#0B1220] dark:bg-gray-800 border border-[#24344D]/30 border-[#24344D]/50 text-[#64748B] dark:text-gray-400 hover:text-white text-white disabled:opacity-30 disabled:cursor-not-allowed transition-all"
                         >
                             <ChevronRight size={18} />
                         </button>
                         <button
                             onClick={() => paginate(totalPages)}
                             disabled={currentPage === totalPages}
-                            className="p-2 rounded-xl bg-slate-50 dark:bg-gray-800 border border-slate-200/5 dark:border-white/5 text-slate-500 dark:text-gray-400 hover:text-slate-900 dark:text-white disabled:opacity-30 disabled:cursor-not-allowed transition-all"
+                            className="p-2 rounded-xl bg-[#0B1220] dark:bg-gray-800 border border-[#24344D]/30 border-[#24344D]/50 text-[#64748B] dark:text-gray-400 hover:text-white text-white disabled:opacity-30 disabled:cursor-not-allowed transition-all"
                         >
                             <ChevronsRight size={18} />
                         </button>

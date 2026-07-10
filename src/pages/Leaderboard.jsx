@@ -204,7 +204,7 @@ const Leaderboard = () => {
     };
   }, [matches, players, teams]);
 
-  if (loading && teams.length === 0) return <div className="text-center text-slate-900 dark:text-white py-20">Loading Standings...</div>;
+  if (loading && teams.length === 0) return <div className="text-center text-white text-white py-20">Loading Standings...</div>;
 
   // Player card component for reuse
   const PlayerCard = ({ player, idx, statValue, statLabel, statColor, icon: Icon, children }) => (
@@ -223,13 +223,13 @@ const Leaderboard = () => {
             "w-6 h-6 sm:w-8 sm:h-8 rounded-lg flex items-center justify-center text-[10px] sm:text-xs font-black shrink-0 border",
             idx < 3
               ? "bg-gradient-to-br from-amber-400/20 to-orange-500/20 text-amber-300 border-amber-500/30 shadow-sm shadow-amber-500/10"
-              : "bg-white/5 text-slate-500 border-white/5"
+              : "bg-[#131D31]/50 text-[#64748B] border-white/5"
           )}>
             {idx + 1}
           </div>
 
           {/* Player photo */}
-          <div className="w-8 h-8 sm:w-12 sm:h-12 rounded-xl bg-white/5 overflow-hidden border border-white/10 group-hover:border-brand-500/30 transition-colors shrink-0">
+          <div className="w-8 h-8 sm:w-12 sm:h-12 rounded-xl bg-[#131D31]/50 overflow-hidden border border-white/10 group-hover:border-brand-500/30 transition-colors shrink-0">
             {player.photoUrl ? (
               <img src={player.photoUrl} alt={player.name} className="w-full h-full object-cover" />
             ) : (
@@ -242,7 +242,7 @@ const Leaderboard = () => {
           {/* Info */}
           <div className="flex-1 min-w-0">
             <h4 className="font-black text-white text-[11px] sm:text-sm group-hover:text-brand-400 transition-colors truncate">{player.name}</h4>
-            <p className="text-[9px] text-slate-500 font-bold uppercase tracking-wider truncate hidden xs:block">{player.team}</p>
+            <p className="text-[9px] text-[#64748B] font-bold uppercase tracking-wider truncate hidden xs:block">{player.team}</p>
           </div>
         </Link>
 
@@ -256,7 +256,7 @@ const Leaderboard = () => {
         {/* Right: Stat */}
         <div className="text-center shrink-0 pl-2 sm:pl-4 border-l border-white/5">
           <div className={cn("text-lg sm:text-2xl font-black", statColor)}>{statValue}</div>
-          <div className="text-[8px] sm:text-[9px] text-slate-500 font-bold uppercase tracking-wider">{statLabel}</div>
+          <div className="text-[8px] sm:text-[9px] text-[#64748B] font-bold uppercase tracking-wider">{statLabel}</div>
         </div>
       </div>
 
@@ -284,7 +284,7 @@ const Leaderboard = () => {
               <h1 className="text-3xl md:text-4xl font-display font-black text-white mb-1">
                 Stats <span className="text-transparent bg-clip-text bg-gradient-to-r from-violet-400 to-fuchsia-400">Dashboard</span>
               </h1>
-              <p className="text-slate-500 text-sm">Comprehensive rankings, statistics and season records.</p>
+              <p className="text-[#64748B] text-sm">Comprehensive rankings, statistics and season records.</p>
             </div>
             <div className="flex flex-wrap md:flex-nowrap gap-2 w-full md:w-auto">
               <select
@@ -293,7 +293,7 @@ const Leaderboard = () => {
                   setSelectedYear(e.target.value);
                   setSelectedCompetitionId('All');
                 }}
-                className="bg-white/5 border border-white/10 rounded-xl px-3 py-2 text-xs md:text-sm font-medium text-white focus:ring-2 focus:ring-violet-500 outline-none transition-all flex-shrink-0"
+                className="bg-[#131D31]/50 border border-white/10 rounded-xl px-3 py-2 text-xs md:text-sm font-medium text-white focus:ring-2 focus:ring-violet-500 outline-none transition-all flex-shrink-0"
               >
                 <option value="All">All Years</option>
                 {availableYears.map(year => (
@@ -307,7 +307,7 @@ const Leaderboard = () => {
                   setSelectedDistrict(e.target.value);
                   setSelectedCompetitionId('All');
                 }}
-                className="bg-white/5 border border-white/10 rounded-xl px-3 py-2 text-xs md:text-sm font-medium text-white focus:ring-2 focus:ring-violet-500 outline-none transition-all flex-shrink-0"
+                className="bg-[#131D31]/50 border border-white/10 rounded-xl px-3 py-2 text-xs md:text-sm font-medium text-white focus:ring-2 focus:ring-violet-500 outline-none transition-all flex-shrink-0"
               >
                 <option value="All">All Districts</option>
                 <optgroup label="Jammu Division">
@@ -325,7 +325,7 @@ const Leaderboard = () => {
               <select
                 value={selectedCompetitionId}
                 onChange={(e) => setSelectedCompetitionId(e.target.value)}
-                className="bg-white/5 border border-white/10 rounded-xl px-3 py-2 text-xs md:text-sm font-medium text-white focus:ring-2 focus:ring-violet-500 outline-none transition-all flex-shrink-0 min-w-[140px] max-w-[180px] md:max-w-none"
+                className="bg-[#131D31]/50 border border-white/10 rounded-xl px-3 py-2 text-xs md:text-sm font-medium text-white focus:ring-2 focus:ring-violet-500 outline-none transition-all flex-shrink-0 min-w-[140px] max-w-[180px] md:max-w-none"
               >
                 {competitions.map(comp => (
                   <option key={comp.id} value={comp.id}>{comp.name}</option>
@@ -338,7 +338,7 @@ const Leaderboard = () => {
           <div className="grid grid-cols-2 lg:grid-cols-5 gap-2 sm:gap-3">
             {[
               { label: 'Matches', value: seasonSummary.totalMatches, icon: Zap, color: 'from-violet-500/20 to-violet-500/5', textColor: 'text-violet-300', borderColor: 'border-violet-500/20' },
-              { label: 'Goals', value: seasonSummary.totalGoals, icon: Target, color: 'from-emerald-500/20 to-emerald-500/5', textColor: 'text-emerald-300', borderColor: 'border-emerald-500/20' },
+              { label: 'Goals', value: seasonSummary.totalGoals, icon: Target, color: 'from-emerald-500/20 to-emerald-500/5', textColor: 'text-green-400', borderColor: 'border-green-500/20' },
               { label: 'Avg/Match', value: seasonSummary.avgGoals, icon: Flame, color: 'from-orange-500/20 to-orange-500/5', textColor: 'text-orange-300', borderColor: 'border-orange-500/20' },
               { label: 'Players', value: seasonSummary.totalPlayers, icon: Users, color: 'from-cyan-500/20 to-cyan-500/5', textColor: 'text-cyan-300', borderColor: 'border-cyan-500/20' },
               { label: 'Teams', value: seasonSummary.totalTeams, icon: ShieldCheck, color: 'from-fuchsia-500/20 to-fuchsia-500/5', textColor: 'text-fuchsia-300', borderColor: 'border-fuchsia-500/20' }
@@ -355,7 +355,7 @@ const Leaderboard = () => {
               >
                 <div className="flex items-center gap-2 mb-1 sm:mb-2">
                   <stat.icon size={14} className={stat.textColor} />
-                  <span className="text-[9px] sm:text-[10px] text-slate-400 font-bold uppercase tracking-widest">{stat.label}</span>
+                  <span className="text-[9px] sm:text-[10px] text-[#64748B] font-bold uppercase tracking-widest">{stat.label}</span>
                 </div>
                 <div className={cn("text-xl sm:text-2xl lg:text-3xl font-black", stat.textColor)}>{stat.value}</div>
               </motion.div>
@@ -382,7 +382,7 @@ const Leaderboard = () => {
               "flex-1 justify-center sm:flex-none sm:justify-start flex items-center gap-2 px-3 sm:px-5 py-2.5 rounded-xl text-[9px] sm:text-xs font-black transition-all whitespace-nowrap min-w-[calc(33.33%-4px)] sm:min-w-0 uppercase tracking-wider",
               activeTab === tab.id
                 ? "bg-gradient-to-r from-violet-500 to-fuchsia-500 text-white shadow-lg shadow-violet-500/20"
-                : "text-slate-500 hover:text-white hover:bg-white/5"
+                : "text-[#64748B] hover:text-white hover:bg-white/5"
             )}
           >
             <tab.icon size={14} />
@@ -415,7 +415,7 @@ const Leaderboard = () => {
                   const gd = team.goalsFor - team.goalsAgainst;
                   return (
                     <tr key={team.id} className="hover:bg-white/[0.03] transition-colors group">
-                      <td className="px-4 sm:px-6 py-3 sm:py-4 whitespace-nowrap text-xs sm:text-sm font-black text-slate-500">{index + 1}</td>
+                      <td className="px-4 sm:px-6 py-3 sm:py-4 whitespace-nowrap text-xs sm:text-sm font-black text-[#64748B]">{index + 1}</td>
                       <td className="px-4 sm:px-6 py-3 sm:py-4 whitespace-nowrap">
                         <Link to={`/teams/${team.id}`} className="flex items-center gap-2 sm:gap-3 group-hover:translate-x-1 transition-transform">
                           <div className="w-6 h-6 sm:w-8 sm:h-8 rounded-lg bg-violet-500/10 flex items-center justify-center text-[9px] sm:text-[10px] font-bold text-violet-300 border border-violet-500/20">
@@ -424,11 +424,11 @@ const Leaderboard = () => {
                           <span className="font-bold text-sm sm:text-base text-white group-hover:text-violet-300 transition-colors truncate max-w-[120px] sm:max-w-[200px]">{team.name}</span>
                         </Link>
                       </td>
-                      <td className="px-2 sm:px-3 py-3 sm:py-4 text-center text-xs sm:text-sm text-slate-400 font-medium">{team.played}</td>
-                      <td className="px-2 sm:px-3 py-3 sm:py-4 text-center text-xs sm:text-sm text-emerald-400 font-bold">{team.wins}</td>
-                      <td className="px-2 sm:px-3 py-3 sm:py-4 text-center text-xs sm:text-sm text-slate-400 font-medium">{team.draws}</td>
+                      <td className="px-2 sm:px-3 py-3 sm:py-4 text-center text-xs sm:text-sm text-[#64748B] font-medium">{team.played}</td>
+                      <td className="px-2 sm:px-3 py-3 sm:py-4 text-center text-xs sm:text-sm text-green-400 font-bold">{team.wins}</td>
+                      <td className="px-2 sm:px-3 py-3 sm:py-4 text-center text-xs sm:text-sm text-[#64748B] font-medium">{team.draws}</td>
                       <td className="px-2 sm:px-3 py-3 sm:py-4 text-center text-xs sm:text-sm text-red-400 font-medium">{team.losses}</td>
-                      <td className={`px-2 sm:px-3 py-3 sm:py-4 text-center text-xs sm:text-sm font-bold ${gd > 0 ? 'text-emerald-400' : gd < 0 ? 'text-red-400' : 'text-slate-500'}`}>
+                      <td className={`px-2 sm:px-3 py-3 sm:py-4 text-center text-xs sm:text-sm font-bold ${gd > 0 ? 'text-green-400' : gd < 0 ? 'text-red-400' : 'text-[#64748B]'}`}>
                         {gd > 0 ? '+' : ''}{gd}
                       </td>
                       <td className="px-4 sm:px-6 py-3 sm:py-4 text-center">
@@ -439,7 +439,7 @@ const Leaderboard = () => {
                           {team.form.slice(-5).map((res, i) => (
                             <span key={i} className={cn(
                               "w-5 h-5 flex items-center justify-center rounded-md text-[9px] font-black",
-                              res === 'W' ? 'bg-emerald-500/20 text-emerald-400' :
+                              res === 'W' ? 'bg-green-500/20 text-green-400' :
                                 res === 'D' ? 'bg-yellow-500/20 text-yellow-400' :
                                   'bg-red-500/20 text-red-400'
                             )}>
@@ -454,7 +454,7 @@ const Leaderboard = () => {
               </tbody>
             </table>
             {tableData.length === 0 && (
-              <div className="text-center py-20 text-slate-500 font-medium italic bg-[#0f172a]">
+              <div className="text-center py-20 text-[#64748B] font-medium italic bg-[#0f172a]">
                 No standings data available for this selection.
               </div>
             )}
@@ -493,13 +493,13 @@ const Leaderboard = () => {
                           <div className="relative z-10 p-4 sm:p-5 pt-5 sm:pt-6">
                             <div className={cn(
                               "w-8 h-8 rounded-full mx-auto mb-3 flex items-center justify-center font-black text-sm shadow-lg",
-                              rank === 1 ? "bg-gradient-to-br from-amber-400 to-orange-500 text-slate-900 shadow-amber-500/20" :
-                              rank === 2 ? "bg-gradient-to-br from-slate-300 to-slate-400 text-slate-900 shadow-white/10" :
+                              rank === 1 ? "bg-gradient-to-br from-amber-400 to-orange-500 text-white shadow-amber-500/20" :
+                              rank === 2 ? "bg-gradient-to-br from-slate-300 to-slate-400 text-white shadow-white/10" :
                               "bg-gradient-to-br from-orange-500 to-orange-700 text-white shadow-orange-500/10"
                             )}>
                               {rank}
                             </div>
-                            <div className="w-14 h-14 sm:w-16 sm:h-16 lg:w-20 lg:h-20 mx-auto rounded-2xl bg-white/5 overflow-hidden border border-white/10 mb-3 group-hover:border-amber-400/30 transition-colors">
+                            <div className="w-14 h-14 sm:w-16 sm:h-16 lg:w-20 lg:h-20 mx-auto rounded-2xl bg-[#131D31]/50 overflow-hidden border border-white/10 mb-3 group-hover:border-amber-400/30 transition-colors">
                               {player.photoUrl ? (
                                 <img src={player.photoUrl} alt={player.name} className="w-full h-full object-cover" />
                               ) : (
@@ -507,7 +507,7 @@ const Leaderboard = () => {
                               )}
                             </div>
                             <h4 className="font-black text-white text-xs sm:text-sm truncate group-hover:text-amber-300 transition-colors px-2">{player.name}</h4>
-                            <p className="text-[9px] sm:text-[10px] text-slate-500 font-bold uppercase mb-2 sm:mb-3 truncate px-2">{player.team}</p>
+                            <p className="text-[9px] sm:text-[10px] text-[#64748B] font-bold uppercase mb-2 sm:mb-3 truncate px-2">{player.team}</p>
                             <div className="text-2xl sm:text-3xl lg:text-4xl font-black text-transparent bg-clip-text bg-gradient-to-r from-emerald-300 to-cyan-300">{player.goals}</div>
                             <p className="text-[8px] sm:text-[9px] text-emerald-400/60 font-bold uppercase tracking-widest">Goals</p>
                           </div>
@@ -539,13 +539,13 @@ const Leaderboard = () => {
                           <div className="relative z-10 p-4 flex items-center gap-4">
                             <div className={cn(
                               "w-8 h-8 rounded-full flex items-center justify-center font-black text-sm shadow-lg shrink-0",
-                              rank === 1 ? "bg-gradient-to-br from-amber-400 to-orange-500 text-slate-900 shadow-amber-500/20" :
-                              rank === 2 ? "bg-gradient-to-br from-slate-300 to-slate-400 text-slate-900 shadow-white/10" :
+                              rank === 1 ? "bg-gradient-to-br from-amber-400 to-orange-500 text-white shadow-amber-500/20" :
+                              rank === 2 ? "bg-gradient-to-br from-slate-300 to-slate-400 text-white shadow-white/10" :
                               "bg-gradient-to-br from-orange-500 to-orange-700 text-white shadow-orange-500/10"
                             )}>
                               {rank}
                             </div>
-                            <div className="w-12 h-12 rounded-xl bg-white/5 overflow-hidden border border-white/10 shrink-0">
+                            <div className="w-12 h-12 rounded-xl bg-[#131D31]/50 overflow-hidden border border-white/10 shrink-0">
                               {player.photoUrl ? (
                                 <img src={player.photoUrl} alt={player.name} className="w-full h-full object-cover" />
                               ) : (
@@ -554,7 +554,7 @@ const Leaderboard = () => {
                             </div>
                             <div className="flex-1 min-w-0">
                               <h4 className="font-black text-white text-sm truncate group-hover:text-amber-300 transition-colors">{player.name}</h4>
-                              <p className="text-[10px] text-slate-500 font-bold uppercase truncate">{player.team}</p>
+                              <p className="text-[10px] text-[#64748B] font-bold uppercase truncate">{player.team}</p>
                             </div>
                             <div className="text-center shrink-0">
                               <div className="text-2xl font-black text-transparent bg-clip-text bg-gradient-to-r from-emerald-300 to-cyan-300">{player.goals}</div>
@@ -568,11 +568,11 @@ const Leaderboard = () => {
                 </div>
               )}
               {topScorers.slice(3).map((player, idx) => (
-                <PlayerCard key={player.id} player={player} idx={idx + 3} statValue={player.goals} statLabel="Goals" statColor="text-emerald-300" icon={Target} />
+                <PlayerCard key={player.id} player={player} idx={idx + 3} statValue={player.goals} statLabel="Goals" statColor="text-green-400" icon={Target} />
               ))}
             </>
           ) : (
-            <div className="text-center py-20 text-slate-500 font-medium italic rounded-2xl bg-[#0f172a] border border-dashed border-white/10">
+            <div className="text-center py-20 text-[#64748B] font-medium italic rounded-2xl bg-[#0f172a] border border-dashed border-white/10">
               No goal records found yet.
             </div>
           )}
@@ -599,7 +599,7 @@ const Leaderboard = () => {
                       <Link 
                         key={m.id} 
                         to={`/live/${m.id}`}
-                        className="px-2.5 py-1 bg-brand-500/5 hover:bg-brand-500/10 border border-brand-500/10 rounded-lg text-[9px] font-bold text-slate-400 hover:text-brand-400 transition-all flex items-center gap-1.5 group/match whitespace-nowrap"
+                        className="px-2.5 py-1 bg-brand-500/5 hover:bg-brand-500/10 border border-brand-500/10 rounded-lg text-[9px] font-bold text-[#64748B] hover:text-brand-400 transition-all flex items-center gap-1.5 group/match whitespace-nowrap"
                       >
                         <span className="w-1 h-1 rounded-full bg-brand-500 group-hover/match:animate-pulse"></span>
                         {m.teamA} vs {m.teamB}
@@ -610,7 +610,7 @@ const Leaderboard = () => {
               </PlayerCard>
             ))
           ) : (
-            <div className="text-center py-20 text-slate-500 font-medium italic rounded-2xl bg-[#0f172a] border border-dashed border-white/10">
+            <div className="text-center py-20 text-[#64748B] font-medium italic rounded-2xl bg-[#0f172a] border border-dashed border-white/10">
               No MVP awards recorded yet.
             </div>
           )}
@@ -623,7 +623,7 @@ const Leaderboard = () => {
               <PlayerCard key={player.id} player={player} idx={idx} statValue={player.assists || 0} statLabel="Assists" statColor="text-cyan-300" icon={Handshake} />
             ))
           ) : (
-            <div className="text-center py-20 text-slate-500 font-medium italic rounded-2xl bg-[#0f172a] border border-dashed border-white/10">
+            <div className="text-center py-20 text-[#64748B] font-medium italic rounded-2xl bg-[#0f172a] border border-dashed border-white/10">
               No assist records found yet.
             </div>
           )}
@@ -644,11 +644,11 @@ const Leaderboard = () => {
                 <div className="relative z-10 p-5 flex items-center gap-4">
                   <div className={cn(
                     "w-8 h-8 rounded-lg flex items-center justify-center text-xs font-black shrink-0 border",
-                    "bg-white/5 text-slate-500 border-white/5"
+                    "bg-[#131D31]/50 text-[#64748B] border-white/5"
                   )}>
                     {idx + 1}
                   </div>
-                  <div className="w-12 h-12 rounded-xl bg-white/5 overflow-hidden border border-white/10 group-hover:border-brand-500/30 transition-colors shrink-0">
+                  <div className="w-12 h-12 rounded-xl bg-[#131D31]/50 overflow-hidden border border-white/10 group-hover:border-brand-500/30 transition-colors shrink-0">
                     {player.photoUrl ? (
                       <img src={player.photoUrl} alt={player.name} className="w-full h-full object-cover" />
                     ) : (
@@ -659,7 +659,7 @@ const Leaderboard = () => {
                   </div>
                   <div className="flex-1 min-w-0">
                     <h4 className="font-black text-white text-sm group-hover:text-brand-400 transition-colors truncate">{player.name}</h4>
-                    <p className="text-[10px] text-slate-500 font-bold uppercase tracking-wider truncate">{player.team}</p>
+                    <p className="text-[10px] text-[#64748B] font-bold uppercase tracking-wider truncate">{player.team}</p>
                   </div>
                   <div className="flex gap-4 shrink-0">
                     {(player.yellowCards || 0) > 0 && (
@@ -679,7 +679,7 @@ const Leaderboard = () => {
               </Link>
             ))
           ) : (
-            <div className="text-center py-20 text-slate-500 font-medium italic rounded-2xl bg-[#0f172a] border border-dashed border-white/10">
+            <div className="text-center py-20 text-[#64748B] font-medium italic rounded-2xl bg-[#0f172a] border border-dashed border-white/10">
               No disciplinary records found yet.
             </div>
           )}
@@ -701,17 +701,17 @@ const Leaderboard = () => {
                   <div className={cn(
                     "w-8 h-8 rounded-lg flex items-center justify-center text-xs font-black shrink-0 border",
                     idx < 3
-                      ? "bg-gradient-to-br from-emerald-400/20 to-cyan-500/20 text-emerald-300 border-emerald-500/30"
-                      : "bg-white/5 text-slate-500 border-white/5"
+                      ? "bg-gradient-to-br from-emerald-400/20 to-cyan-500/20 text-green-400 border-green-500/30"
+                      : "bg-[#131D31]/50 text-[#64748B] border-white/5"
                   )}>
                     {idx + 1}
                   </div>
-                  <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-emerald-500/10 to-cyan-500/5 border border-emerald-500/20 flex items-center justify-center shrink-0">
-                    <ShieldCheck size={20} className="text-emerald-400" />
+                  <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-emerald-500/10 to-cyan-500/5 border border-green-500/20 flex items-center justify-center shrink-0">
+                    <ShieldCheck size={20} className="text-green-400" />
                   </div>
                   <div className="flex-1 min-w-0">
                     <h4 className="font-black text-white text-sm group-hover:text-emerald-300 transition-colors truncate">{team.name}</h4>
-                    <p className="text-[10px] text-slate-500 font-bold uppercase tracking-wider">
+                    <p className="text-[10px] text-[#64748B] font-bold uppercase tracking-wider">
                       {team.played} matches played • {team.goalsAgainst} goals conceded
                     </p>
                   </div>
@@ -726,7 +726,7 @@ const Leaderboard = () => {
               </Link>
             ))
           ) : (
-            <div className="text-center py-20 text-slate-500 font-medium italic rounded-2xl bg-[#0f172a] border border-dashed border-white/10">
+            <div className="text-center py-20 text-[#64748B] font-medium italic rounded-2xl bg-[#0f172a] border border-dashed border-white/10">
               No clean sheet records for this tournament yet.
             </div>
           )}

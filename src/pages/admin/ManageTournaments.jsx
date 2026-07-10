@@ -18,7 +18,7 @@ const DISTRICTS = {
 const statusConfig = {
     upcoming: { label: 'Upcoming', color: 'bg-blue-500/10 text-blue-400 border-blue-500/20', icon: Clock, dot: 'bg-blue-400' },
     ongoing: { label: 'Ongoing', color: 'bg-green-500/10 text-green-400 border-green-500/20', icon: Flag, dot: 'bg-green-400 animate-pulse' },
-    finished: { label: 'Finished', color: 'bg-slate-500/10 text-slate-500 dark:text-slate-400 border-slate-500/20', icon: CheckCircle, dot: 'bg-slate-400' },
+    finished: { label: 'Finished', color: 'bg-slate-500/10 text-[#64748B] text-[#94A3B8] border-slate-500/20', icon: CheckCircle, dot: 'bg-slate-400' },
 };
 
 const typeConfig = {
@@ -287,13 +287,13 @@ const ManageTournaments = () => {
             {/* Header */}
             <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
                 <div>
-                    <h1 className="text-3xl font-display font-bold text-slate-900 dark:text-white flex items-center gap-3">
+                    <h1 className="text-3xl font-display font-bold text-white text-white flex items-center gap-3">
                         <div className="w-10 h-10 bg-gradient-to-br from-yellow-400 to-orange-500 rounded-2xl flex items-center justify-center shadow-lg shadow-yellow-500/20">
-                            <Trophy size={20} className="text-slate-900 dark:text-white" />
+                            <Trophy size={20} className="text-white text-white" />
                         </div>
                         Tournaments
                     </h1>
-                    <p className="text-slate-500 text-sm mt-1">
+                    <p className="text-[#64748B] text-sm mt-1">
                         {isSuperAdmin ? 'Create and manage all tournaments' : 'Manage your assigned tournaments'}
                     </p>
                 </div>
@@ -302,7 +302,7 @@ const ManageTournaments = () => {
                         whileHover={{ scale: 1.03 }}
                         whileTap={{ scale: 0.97 }}
                         onClick={handleExportCSV}
-                        className="flex items-center gap-2 px-5 py-2.5 bg-slate-50 dark:bg-slate-800 hover:bg-slate-100 dark:bg-slate-700 text-slate-900 dark:text-white rounded-xl text-sm font-bold transition-all shadow-lg border border-slate-200 dark:border-slate-700"
+                        className="flex items-center gap-2 px-5 py-2.5 bg-[#0B1220] bg-[#131D31] hover:bg-[#18253C] dark:bg-slate-700 text-white text-white rounded-xl text-sm font-bold transition-all shadow-lg border border-[#24344D] border-[#24344D]"
                     >
                         <Download size={18} /> Export CSV
                     </motion.button>
@@ -311,7 +311,7 @@ const ManageTournaments = () => {
                             whileHover={{ scale: 1.03 }}
                             whileTap={{ scale: 0.97 }}
                             onClick={() => { setShowForm(true); setEditingId(null); }}
-                            className="flex items-center gap-2 px-5 py-2.5 bg-gradient-to-r from-brand-600 to-brand-500 hover:from-brand-500 hover:to-brand-400 text-slate-900 dark:text-white rounded-xl text-sm font-bold transition-all shadow-lg shadow-brand-500/25"
+                            className="flex items-center gap-2 px-5 py-2.5 bg-gradient-to-r from-brand-600 to-brand-500 hover:from-brand-500 hover:to-brand-400 text-white text-white rounded-xl text-sm font-bold transition-all shadow-lg shadow-brand-500/25"
                         >
                             <Plus size={18} /> New Tournament
                         </motion.button>
@@ -350,8 +350,8 @@ const ManageTournaments = () => {
                         className={`bg-gradient-to-br ${stat.color} border rounded-2xl p-4 text-center`}
                     >
                         <stat.icon size={20} className={`mx-auto mb-2 ${stat.iconColor}`} />
-                        <div className="text-2xl font-display font-bold text-slate-900 dark:text-white">{stat.value}</div>
-                        <div className="text-[10px] uppercase tracking-widest font-bold text-slate-500 mt-1">{stat.label}</div>
+                        <div className="text-2xl font-display font-bold text-white text-white">{stat.value}</div>
+                        <div className="text-[10px] uppercase tracking-widest font-bold text-[#64748B] mt-1">{stat.label}</div>
                     </motion.div>
                 ))}
             </div>
@@ -373,23 +373,23 @@ const ManageTournaments = () => {
                         exit={{ opacity: 0, height: 0 }}
                         className="overflow-hidden"
                     >
-                        <div className="glass-card rounded-3xl border border-slate-200/10 dark:border-white/10 overflow-hidden shadow-2xl">
+                        <div className="glass-card rounded-3xl border border-slate-200/10 border-[#24344D] overflow-hidden shadow-2xl">
                             {/* Form Header */}
-                            <div className="bg-gradient-to-r from-brand-600/20 via-brand-500/10 to-transparent p-6 border-b border-slate-200/5 dark:border-white/5 flex items-center justify-between">
+                            <div className="bg-gradient-to-r from-brand-600/20 via-brand-500/10 to-transparent p-6 border-b border-[#24344D]/30 border-[#24344D]/50 flex items-center justify-between">
                                 <div className="flex items-center gap-3">
                                     <div className={`w-10 h-10 rounded-2xl flex items-center justify-center ${editingId ? 'bg-blue-500/20' : 'bg-brand-500/20'}`}>
                                         {editingId ? <Edit3 size={18} className="text-blue-400" /> : <Plus size={18} className="text-brand-400" />}
                                     </div>
                                     <div>
-                                        <h2 className="text-xl font-display font-bold text-slate-900 dark:text-white">
+                                        <h2 className="text-xl font-display font-bold text-white text-white">
                                             {editingId ? 'Edit Tournament' : 'Create New Tournament'}
                                         </h2>
-                                        <p className="text-xs text-slate-500">Fill in the details below</p>
+                                        <p className="text-xs text-[#64748B]">Fill in the details below</p>
                                     </div>
                                 </div>
                                 <button
                                     onClick={resetForm}
-                                    className="p-2 hover:bg-white/10 rounded-xl transition-colors text-slate-500 hover:text-slate-900 dark:text-white"
+                                    className="p-2 hover:bg-white/10 rounded-xl transition-colors text-[#64748B] hover:text-white text-white"
                                 >
                                     <X size={20} />
                                 </button>
@@ -399,28 +399,28 @@ const ManageTournaments = () => {
                             <form onSubmit={handleSubmit} className="p-6 space-y-6">
                                 {/* Tournament Name */}
                                 <div>
-                                    <label className="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Tournament Name</label>
+                                    <label className="block text-xs font-bold text-[#64748B] uppercase tracking-wider mb-2">Tournament Name</label>
                                     <input
                                         type="text"
                                         name="name"
                                         placeholder="e.g. Kashmir Premier League 2026"
                                         value={formData.name}
                                         onChange={handleInputChange}
-                                        className="w-full bg-white/5 border border-slate-200/10 dark:border-white/10 rounded-xl px-4 py-3 text-slate-900 dark:text-white placeholder-slate-400 focus:ring-2 focus:ring-brand-500/50 focus:border-brand-500 outline-none transition-all text-sm"
+                                        className="w-full bg-[#131D31]/50 border border-slate-200/10 border-[#24344D] rounded-xl px-4 py-3 text-white text-white placeholder-[#64748B] focus:ring-2 focus:ring-brand-500/50 focus:border-brand-500 outline-none transition-all text-sm"
                                         required
                                     />
                                 </div>
 
                                 {/* District */}
                                 <div>
-                                    <label className="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">
+                                    <label className="block text-xs font-bold text-[#64748B] uppercase tracking-wider mb-2">
                                         <MapPin size={12} className="inline mr-1" /> District
                                     </label>
                                     <select
                                         name="district"
                                         value={formData.district}
                                         onChange={handleInputChange}
-                                        className="w-full bg-white/5 border border-slate-200/10 dark:border-white/10 rounded-xl px-4 py-3 text-slate-900 dark:text-white focus:ring-2 focus:ring-brand-500/50 outline-none transition-all text-sm"
+                                        className="w-full bg-[#131D31]/50 border border-slate-200/10 border-[#24344D] rounded-xl px-4 py-3 text-white text-white focus:ring-2 focus:ring-brand-500/50 outline-none transition-all text-sm"
                                         required
                                     >
                                         <option value="">Select District</option>
@@ -436,27 +436,27 @@ const ManageTournaments = () => {
                                 {/* Dates */}
                                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                                     <div>
-                                        <label className="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">
+                                        <label className="block text-xs font-bold text-[#64748B] uppercase tracking-wider mb-2">
                                             <Calendar size={12} className="inline mr-1" /> Start Date
                                         </label>
                                         <input type="date" name="startDate" value={formData.startDate} onChange={handleInputChange}
-                                            className="w-full bg-white/5 border border-slate-200/10 dark:border-white/10 rounded-xl px-4 py-3 text-slate-900 dark:text-white focus:ring-2 focus:ring-brand-500/50 outline-none text-sm" />
+                                            className="w-full bg-[#131D31]/50 border border-slate-200/10 border-[#24344D] rounded-xl px-4 py-3 text-white text-white focus:ring-2 focus:ring-brand-500/50 outline-none text-sm" />
                                     </div>
                                     <div>
-                                        <label className="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">
+                                        <label className="block text-xs font-bold text-[#64748B] uppercase tracking-wider mb-2">
                                             <Calendar size={12} className="inline mr-1" /> End Date
                                         </label>
                                         <input type="date" name="endDate" value={formData.endDate} onChange={handleInputChange}
-                                            className="w-full bg-white/5 border border-slate-200/10 dark:border-white/10 rounded-xl px-4 py-3 text-slate-900 dark:text-white focus:ring-2 focus:ring-brand-500/50 outline-none text-sm" />
+                                            className="w-full bg-[#131D31]/50 border border-slate-200/10 border-[#24344D] rounded-xl px-4 py-3 text-white text-white focus:ring-2 focus:ring-brand-500/50 outline-none text-sm" />
                                     </div>
                                 </div>
 
                                 {/* Type & Status */}
                                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                                     <div>
-                                        <label className="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Format</label>
+                                        <label className="block text-xs font-bold text-[#64748B] uppercase tracking-wider mb-2">Format</label>
                                         <select name="type" value={formData.type} onChange={handleInputChange}
-                                            className="w-full bg-white/5 border border-slate-200/10 dark:border-white/10 rounded-xl px-4 py-3 text-slate-900 dark:text-white focus:ring-2 focus:ring-brand-500/50 outline-none text-sm">
+                                            className="w-full bg-[#131D31]/50 border border-slate-200/10 border-[#24344D] rounded-xl px-4 py-3 text-white text-white focus:ring-2 focus:ring-brand-500/50 outline-none text-sm">
                                             <option value="league">🏆 League</option>
                                             <option value="knockout">⚔️ Knockout</option>
                                             <option value="pool">🏊 Pool Group + Knockout</option>
@@ -464,9 +464,9 @@ const ManageTournaments = () => {
                                         </select>
                                     </div>
                                     <div>
-                                        <label className="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Status</label>
+                                        <label className="block text-xs font-bold text-[#64748B] uppercase tracking-wider mb-2">Status</label>
                                         <select name="status" value={formData.status} onChange={handleInputChange}
-                                            className="w-full bg-white/5 border border-slate-200/10 dark:border-white/10 rounded-xl px-4 py-3 text-slate-900 dark:text-white focus:ring-2 focus:ring-brand-500/50 outline-none text-sm">
+                                            className="w-full bg-[#131D31]/50 border border-slate-200/10 border-[#24344D] rounded-xl px-4 py-3 text-white text-white focus:ring-2 focus:ring-brand-500/50 outline-none text-sm">
                                             <option value="upcoming">🕐 Upcoming</option>
                                             <option value="ongoing">🟢 Ongoing</option>
                                             <option value="finished">✅ Finished</option>
@@ -477,11 +477,11 @@ const ManageTournaments = () => {
                                 {/* Teams & Matches Count */}
                                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                                     <div>
-                                        <label className="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">
+                                        <label className="block text-xs font-bold text-[#64748B] uppercase tracking-wider mb-2">
                                             <Users size={12} className="inline mr-1" /> Number of Teams
                                         </label>
                                         <input type="number" name="teamsCount" placeholder="0" min="0" value={formData.teamsCount} onChange={handleInputChange}
-                                            className="w-full bg-white/5 border border-slate-200/10 dark:border-white/10 rounded-xl px-4 py-3 text-slate-900 dark:text-white focus:ring-2 focus:ring-brand-500/50 outline-none text-sm" />
+                                            className="w-full bg-[#131D31]/50 border border-slate-200/10 border-[#24344D] rounded-xl px-4 py-3 text-white text-white focus:ring-2 focus:ring-brand-500/50 outline-none text-sm" />
                                         {formData.teamsCount > 0 && (
                                             <p className="text-[10px] text-brand-400 mt-2 leading-relaxed">
                                                 Teams: {generateTeamsList(formData.teamsCount).join(', ')}
@@ -489,12 +489,12 @@ const ManageTournaments = () => {
                                         )}
                                     </div>
                                     <div>
-                                        <label className="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">
+                                        <label className="block text-xs font-bold text-[#64748B] uppercase tracking-wider mb-2">
                                             <Swords size={12} className="inline mr-1" /> Matches <span className="text-brand-400 normal-case">(auto)</span>
                                         </label>
                                         <input type="number" name="matchesCount" value={formData.matchesCount} readOnly
-                                            className="w-full bg-white/5 border border-slate-200/10 dark:border-white/10 rounded-xl px-4 py-3 text-slate-900 dark:text-white outline-none text-sm opacity-60 cursor-not-allowed" />
-                                        <p className="text-[10px] text-slate-500 mt-2">
+                                            className="w-full bg-[#131D31]/50 border border-slate-200/10 border-[#24344D] rounded-xl px-4 py-3 text-white text-white outline-none text-sm opacity-60 cursor-not-allowed" />
+                                        <p className="text-[10px] text-[#64748B] mt-2">
                                             {formData.type === 'knockout' ? 'Knockout: N-1 matches' : formData.type === 'pool' ? 'Pool RR + Semi + Final' : formData.type === 'dual_knockout' ? '2-Pool + Semi + Final' : 'League: N × (N-1) matches'}
                                         </p>
                                     </div>
@@ -507,7 +507,7 @@ const ManageTournaments = () => {
                                             <Crown size={12} className="inline mr-1" /> Assign Tournament Admin
                                         </label>
                                         <select name="createdBy" value={formData.createdBy || ''} onChange={handleInputChange}
-                                            className="w-full bg-white/5 border border-yellow-400/20 rounded-xl px-4 py-3 text-slate-900 dark:text-white focus:ring-2 focus:ring-yellow-400/50 outline-none text-sm">
+                                            className="w-full bg-[#131D31]/50 border border-yellow-400/20 rounded-xl px-4 py-3 text-white text-white focus:ring-2 focus:ring-yellow-400/50 outline-none text-sm">
                                             <option value={currentUser?.uid || ''}>Myself (Super Admin)</option>
                                             {adminUsers.filter(u => u.uid !== currentUser?.uid).map(admin => (
                                                 <option key={admin.uid || admin.id} value={admin.uid || admin.id}>
@@ -515,7 +515,7 @@ const ManageTournaments = () => {
                                                 </option>
                                             ))}
                                         </select>
-                                        <p className="text-[10px] text-slate-500 mt-2">The assigned admin will have full control over this tournament's data.</p>
+                                        <p className="text-[10px] text-[#64748B] mt-2">The assigned admin will have full control over this tournament's data.</p>
                                     </div>
                                 )}
 
@@ -526,16 +526,16 @@ const ManageTournaments = () => {
                                             <ChevronDown size={14} /> Pool Distribution Preview
                                         </p>
                                         <div className="grid grid-cols-2 gap-4">
-                                            <div className="bg-white/5 p-3 rounded-xl border border-indigo-500/10">
+                                            <div className="bg-[#131D31]/50 p-3 rounded-xl border border-indigo-500/10">
                                                 <p className="text-xs font-bold text-indigo-300 mb-1">Pool A ({Math.ceil(formData.teamsCount / 2)} teams)</p>
-                                                <p className="text-[10px] text-slate-500 dark:text-slate-400">{generateTeamsList(Math.ceil(formData.teamsCount / 2)).join(', ')}</p>
+                                                <p className="text-[10px] text-[#64748B] text-[#94A3B8]">{generateTeamsList(Math.ceil(formData.teamsCount / 2)).join(', ')}</p>
                                             </div>
-                                            <div className="bg-white/5 p-3 rounded-xl border border-indigo-500/10">
+                                            <div className="bg-[#131D31]/50 p-3 rounded-xl border border-indigo-500/10">
                                                 <p className="text-xs font-bold text-indigo-300 mb-1">Pool B ({formData.teamsCount - Math.ceil(formData.teamsCount / 2)} teams)</p>
-                                                <p className="text-[10px] text-slate-500 dark:text-slate-400">{Array.from({ length: formData.teamsCount - Math.ceil(formData.teamsCount / 2) }, (_, i) => `Team ${Math.ceil(formData.teamsCount / 2) + i + 1}`).join(', ')}</p>
+                                                <p className="text-[10px] text-[#64748B] text-[#94A3B8]">{Array.from({ length: formData.teamsCount - Math.ceil(formData.teamsCount / 2) }, (_, i) => `Team ${Math.ceil(formData.teamsCount / 2) + i + 1}`).join(', ')}</p>
                                             </div>
                                         </div>
-                                        <p className="text-[10px] text-slate-500 mt-3">Semi-Finals: A1 vs B2, B1 vs A2 → Final</p>
+                                        <p className="text-[10px] text-[#64748B] mt-3">Semi-Finals: A1 vs B2, B1 vs A2 → Final</p>
                                     </div>
                                 )}
 
@@ -551,7 +551,7 @@ const ManageTournaments = () => {
                                         />
                                         <div>
                                             <span className="text-sm font-bold text-brand-400">Auto-Generate Bracket</span>
-                                            <p className="text-[10px] text-slate-500 mt-0.5">
+                                            <p className="text-[10px] text-[#64748B] mt-0.5">
                                                 {formData.type === 'pool' ? 'Creates pool matches + knockout' : formData.type === 'dual_knockout' ? 'Creates 2-pool knockout bracket' : 'Creates initial knockout bracket'}
                                             </p>
                                         </div>
@@ -565,7 +565,7 @@ const ManageTournaments = () => {
                                         whileTap={{ scale: 0.98 }}
                                         type="submit"
                                         disabled={loading}
-                                        className="flex-1 flex items-center justify-center gap-2 bg-gradient-to-r from-brand-600 to-brand-500 hover:from-brand-500 hover:to-brand-400 text-slate-900 dark:text-white font-bold py-3.5 rounded-xl transition-all shadow-lg shadow-brand-500/20 disabled:opacity-50 disabled:cursor-not-allowed text-sm"
+                                        className="flex-1 flex items-center justify-center gap-2 bg-gradient-to-r from-brand-600 to-brand-500 hover:from-brand-500 hover:to-brand-400 text-white text-white font-bold py-3.5 rounded-xl transition-all shadow-lg shadow-brand-500/20 disabled:opacity-50 disabled:cursor-not-allowed text-sm"
                                     >
                                         {loading ? (
                                             <div className="h-5 w-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
@@ -588,7 +588,7 @@ const ManageTournaments = () => {
                                     <button
                                         type="button"
                                         onClick={resetForm}
-                                        className="flex items-center justify-center gap-2 px-5 py-3.5 bg-white/5 hover:bg-white/10 text-slate-500 dark:text-slate-400 border border-slate-200/10 dark:border-white/10 rounded-xl text-sm font-medium transition-all"
+                                        className="flex items-center justify-center gap-2 px-5 py-3.5 bg-[#131D31]/50 hover:bg-white/10 text-[#64748B] text-[#94A3B8] border border-slate-200/10 border-[#24344D] rounded-xl text-sm font-medium transition-all"
                                     >
                                         <X size={16} /> Cancel
                                     </button>
@@ -601,15 +601,15 @@ const ManageTournaments = () => {
 
             {/* Tournament Cards */}
             <div className="space-y-2">
-                <h3 className="text-sm font-bold text-slate-500 uppercase tracking-widest mb-4">
+                <h3 className="text-sm font-bold text-[#64748B] uppercase tracking-widest mb-4">
                     {isSuperAdmin ? 'All Tournaments' : 'Your Tournaments'} ({scopedTournaments.length})
                 </h3>
 
                 {scopedTournaments.length === 0 ? (
-                    <div className="text-center py-20 glass-card rounded-3xl border border-slate-200/5 dark:border-white/5">
-                        <Trophy size={48} className="mx-auto text-slate-600 dark:text-slate-300 dark:text-slate-700 mb-4" />
-                        <p className="text-slate-500 font-medium">No tournaments found</p>
-                        <p className="text-slate-500 dark:text-slate-400 text-sm mt-1">
+                    <div className="text-center py-20 glass-card rounded-3xl border border-[#24344D]/30 border-[#24344D]/50">
+                        <Trophy size={48} className="mx-auto text-[#94A3B8] text-[#94A3B8] dark:text-slate-700 mb-4" />
+                        <p className="text-[#64748B] font-medium">No tournaments found</p>
+                        <p className="text-[#64748B] text-[#94A3B8] text-sm mt-1">
                             {isSuperAdmin ? 'Create your first tournament to get started' : 'Contact a Super Admin to get assigned'}
                         </p>
                     </div>
@@ -626,7 +626,7 @@ const ManageTournaments = () => {
                                     initial={{ opacity: 0, y: 20 }}
                                     animate={{ opacity: 1, y: 0 }}
                                     transition={{ delay: i * 0.05 }}
-                                    className="glass-card rounded-3xl border border-slate-200/10 dark:border-white/10 overflow-hidden group hover:border-brand-500/30 transition-all duration-300 hover:shadow-lg hover:shadow-brand-500/5"
+                                    className="glass-card rounded-3xl border border-slate-200/10 border-[#24344D] overflow-hidden group hover:border-brand-500/30 transition-all duration-300 hover:shadow-lg hover:shadow-brand-500/5"
                                 >
                                     {/* Card Header */}
                                     <div className="p-5 pb-0">
@@ -638,12 +638,12 @@ const ManageTournaments = () => {
                                             <span className="text-lg">{type.icon}</span>
                                         </div>
 
-                                        <h3 className="text-lg font-display font-bold text-slate-900 dark:text-white leading-tight mb-1 group-hover:text-brand-400 transition-colors">
+                                        <h3 className="text-lg font-display font-bold text-white text-white leading-tight mb-1 group-hover:text-brand-400 transition-colors">
                                             {t.name}
                                         </h3>
 
                                         {t.district && (
-                                            <div className="flex items-center gap-1.5 text-xs text-slate-500 mb-3">
+                                            <div className="flex items-center gap-1.5 text-xs text-[#64748B] mb-3">
                                                 <MapPin size={12} className="text-brand-400" />
                                                 {t.district}
                                             </div>
@@ -653,17 +653,17 @@ const ManageTournaments = () => {
                                     {/* Card Stats */}
                                     <div className="px-5 py-3">
                                         <div className="grid grid-cols-3 gap-3">
-                                            <div className="text-center p-2 bg-white/5 rounded-xl">
-                                                <div className="text-lg font-bold text-slate-900 dark:text-white">{t.teamsCount || 0}</div>
-                                                <div className="text-[9px] text-slate-500 uppercase font-bold tracking-wider">Teams</div>
+                                            <div className="text-center p-2 bg-[#131D31]/50 rounded-xl">
+                                                <div className="text-lg font-bold text-white text-white">{t.teamsCount || 0}</div>
+                                                <div className="text-[9px] text-[#64748B] uppercase font-bold tracking-wider">Teams</div>
                                             </div>
-                                            <div className="text-center p-2 bg-white/5 rounded-xl">
-                                                <div className="text-lg font-bold text-slate-900 dark:text-white">{matchCount}</div>
-                                                <div className="text-[9px] text-slate-500 uppercase font-bold tracking-wider">Matches</div>
+                                            <div className="text-center p-2 bg-[#131D31]/50 rounded-xl">
+                                                <div className="text-lg font-bold text-white text-white">{matchCount}</div>
+                                                <div className="text-[9px] text-[#64748B] uppercase font-bold tracking-wider">Matches</div>
                                             </div>
-                                            <div className="text-center p-2 bg-white/5 rounded-xl">
-                                                <div className="text-lg font-bold text-slate-900 dark:text-white capitalize">{type.label}</div>
-                                                <div className="text-[9px] text-slate-500 uppercase font-bold tracking-wider">Format</div>
+                                            <div className="text-center p-2 bg-[#131D31]/50 rounded-xl">
+                                                <div className="text-lg font-bold text-white text-white capitalize">{type.label}</div>
+                                                <div className="text-[9px] text-[#64748B] uppercase font-bold tracking-wider">Format</div>
                                             </div>
                                         </div>
                                     </div>
@@ -671,7 +671,7 @@ const ManageTournaments = () => {
                                     {/* Card Dates */}
                                     {(t.startDate || t.endDate) && (
                                         <div className="px-5 pb-3">
-                                            <div className="flex items-center gap-2 text-[11px] text-slate-500">
+                                            <div className="flex items-center gap-2 text-[11px] text-[#64748B]">
                                                 <Calendar size={12} />
                                                 {t.startDate && new Date(t.startDate).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' })}
                                                 {t.endDate && ` — ${new Date(t.endDate).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' })}`}
@@ -680,17 +680,17 @@ const ManageTournaments = () => {
                                     )}
 
                                     {/* Card Actions */}
-                                    <div className="px-5 py-4 border-t border-slate-200/5 dark:border-white/5 flex items-center gap-2">
+                                    <div className="px-5 py-4 border-t border-[#24344D]/30 border-[#24344D]/50 flex items-center gap-2">
                                         <button
                                             onClick={() => handleEdit(t)}
-                                            className="flex-1 flex items-center justify-center gap-2 px-4 py-2.5 bg-brand-500/10 hover:bg-brand-500 text-brand-400 hover:text-slate-900 dark:text-white rounded-xl text-xs font-bold transition-all"
+                                            className="flex-1 flex items-center justify-center gap-2 px-4 py-2.5 bg-brand-500/10 hover:bg-brand-500 text-brand-400 hover:text-white text-white rounded-xl text-xs font-bold transition-all"
                                         >
                                             <Edit3 size={14} /> Edit
                                         </button>
                                         {isSuperAdmin && (
                                             <button
                                                 onClick={() => handleDelete(t.id)}
-                                                className="flex items-center justify-center gap-2 px-4 py-2.5 bg-red-500/10 hover:bg-red-500 text-red-400 hover:text-slate-900 dark:text-white rounded-xl text-xs font-bold transition-all"
+                                                className="flex items-center justify-center gap-2 px-4 py-2.5 bg-red-500/10 hover:bg-red-500 text-red-400 hover:text-white text-white rounded-xl text-xs font-bold transition-all"
                                             >
                                                 <Trash2 size={14} />
                                             </button>

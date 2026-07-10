@@ -86,7 +86,7 @@ const TeamDetail = () => {
     if (!team) {
         return (
             <div className="max-w-7xl mx-auto px-4 py-20 text-center">
-                <Shield size={64} className="mx-auto text-slate-700 mb-6 opacity-20" />
+                <Shield size={64} className="mx-auto text-[#94A3B8] mb-6 opacity-20" />
                 <h2 className="text-2xl font-bold mb-4">Club Not Found</h2>
                 <Link to="/teams" className="text-blue-500 hover:underline">Back to Clubs</Link>
             </div>
@@ -114,7 +114,7 @@ const TeamDetail = () => {
             <div className="flex justify-between items-center mb-8">
                 <Link
                     to="/teams"
-                    className="inline-flex items-center gap-2 text-slate-500 hover:text-blue-500 transition-colors group"
+                    className="inline-flex items-center gap-2 text-[#64748B] hover:text-blue-500 transition-colors group"
                 >
                     <ChevronLeft size={20} className="group-hover:-translate-x-1 transition-transform" />
                     <span className="font-semibold">Back to Clubs</span>
@@ -127,7 +127,7 @@ const TeamDetail = () => {
                             `Check out ${team.name}'s squad, matches, and stats on Goal Kashmir!`,
                             `/teams/${team.id}`
                         )}
-                        className="flex items-center gap-2 px-4 py-2 bg-brand-500/10 text-brand-500 hover:bg-brand-500 hover:text-slate-900 dark:text-white rounded-xl text-sm font-bold transition-all shadow-sm"
+                        className="flex items-center gap-2 px-4 py-2 bg-brand-500/10 text-brand-500 hover:bg-brand-500 hover:text-white text-white rounded-xl text-sm font-bold transition-all shadow-sm"
                     >
                         <Share2 size={16} />
                         Share
@@ -135,7 +135,7 @@ const TeamDetail = () => {
                     {canEditTeam() && (
                         <button
                             onClick={() => navigate('/admin/teams', { state: { editTeam: team } })}
-                            className="flex items-center gap-2 px-4 py-2 bg-brand-500/10 text-brand-500 hover:bg-brand-500 hover:text-slate-900 dark:text-white rounded-xl text-sm font-bold transition-all shadow-sm"
+                            className="flex items-center gap-2 px-4 py-2 bg-brand-500/10 text-brand-500 hover:bg-brand-500 hover:text-white text-white rounded-xl text-sm font-bold transition-all shadow-sm"
                         >
                             <Edit2 size={16} />
                             Edit Club
@@ -182,11 +182,11 @@ const TeamDetail = () => {
                         className={cn(
                             `glass-card p-6 rounded-3xl border flex flex-col items-center justify-center transition-all hover:scale-105 active:scale-95`,
                             stat.bg,
-                            filterType === stat.id ? "border-brand-500 shadow-[0_0_20px_rgba(var(--brand-500-rgb),0.2)] ring-2 ring-brand-500/50" : "border-slate-200/5 dark:border-white/5"
+                            filterType === stat.id ? "border-brand-500 shadow-[0_0_20px_rgba(var(--brand-500-rgb),0.2)] ring-2 ring-brand-500/50" : "border-[#24344D]/30 border-[#24344D]/50"
                         )}
                     >
                         <span className={`text-4xl font-black mb-1 ${stat.color}`}>{stat.value}</span>
-                        <span className="text-[10px] uppercase font-bold tracking-widest text-slate-500">{stat.label}</span>
+                        <span className="text-[10px] uppercase font-bold tracking-widest text-[#64748B]">{stat.label}</span>
                         {filterType === stat.id && (
                             <span className="mt-2 text-[8px] font-black uppercase tracking-tighter text-brand-400 animate-pulse">Viewing Report</span>
                         )}
@@ -199,34 +199,34 @@ const TeamDetail = () => {
                 <motion.div
                     initial={{ opacity: 0, scale: 0.95 }}
                     animate={{ opacity: 1, scale: 1 }}
-                    className="lg:col-span-1 glass-card p-8 rounded-3xl border border-slate-200/10 dark:border-white/10 flex flex-col items-center text-center shadow-xl"
+                    className="lg:col-span-1 glass-card p-8 rounded-3xl border border-slate-200/10 border-[#24344D] flex flex-col items-center text-center shadow-xl"
                 >
-                    <div className="w-32 h-32 rounded-3xl bg-white/5 p-4 border border-slate-200/10 dark:border-white/10 flex items-center justify-center mb-6 overflow-hidden">
+                    <div className="w-32 h-32 rounded-3xl bg-[#131D31]/50 p-4 border border-slate-200/10 border-[#24344D] flex items-center justify-center mb-6 overflow-hidden">
                         {team.logoUrl ? (
                             <img src={team.logoUrl} alt={team.name} className="w-full h-full object-contain" />
                         ) : (
-                            <Shield className="w-16 h-16 text-slate-600 dark:text-slate-300 dark:text-slate-700" />
+                            <Shield className="w-16 h-16 text-[#94A3B8] text-[#94A3B8] dark:text-slate-700" />
                         )}
                     </div>
-                    <h1 className="text-3xl font-display font-bold text-slate-900 dark:text-white mb-2">{team.name}</h1>
+                    <h1 className="text-3xl font-display font-bold text-white text-white mb-2">{team.name}</h1>
                     <div className="flex items-center gap-2 mb-6">
                         <span className="px-3 py-1 bg-blue-500/10 text-blue-500 rounded-full text-xs font-bold uppercase tracking-wider border border-blue-500/20">
                             {team.shortName || team.name.substring(0, 3).toUpperCase()}
                         </span>
-                        <span className="text-slate-500 text-sm">Founded {team.founded || 'N/A'}</span>
+                        <span className="text-[#64748B] text-sm">Founded {team.founded || 'N/A'}</span>
                     </div>
 
-                    <div className="w-full pt-6 border-t border-slate-200/5 dark:border-white/5 space-y-4">
+                    <div className="w-full pt-6 border-t border-[#24344D]/30 border-[#24344D]/50 space-y-4">
                         <div className="flex items-center justify-between text-sm">
-                            <span className="text-slate-500 flex items-center gap-2"><UserIcon size={14} /> Manager</span>
-                            <span className="font-bold text-slate-900 dark:text-white">{team.manager || 'N/A'}</span>
+                            <span className="text-[#64748B] flex items-center gap-2"><UserIcon size={14} /> Manager</span>
+                            <span className="font-bold text-white text-white">{team.manager || 'N/A'}</span>
                         </div>
                         <div className="flex items-center justify-between text-sm">
-                            <span className="text-slate-500 flex items-center gap-2"><MapPin size={14} /> Home Grounds</span>
-                            <span className="font-bold text-slate-900 dark:text-white">{team.stadium || 'N/A'}</span>
+                            <span className="text-[#64748B] flex items-center gap-2"><MapPin size={14} /> Home Grounds</span>
+                            <span className="font-bold text-white text-white">{team.stadium || 'N/A'}</span>
                         </div>
                         <div className="pt-2">
-                            <span className="text-slate-500 flex items-center gap-2 text-sm mb-2"><Trophy size={14} /> Registered In</span>
+                            <span className="text-[#64748B] flex items-center gap-2 text-sm mb-2"><Trophy size={14} /> Registered In</span>
                             <div className="flex flex-wrap gap-1.5">
                                 {Array.isArray(team.tournaments) && team.tournaments.length > 0 ? (
                                     team.tournaments.map((t, idx) => (
@@ -235,7 +235,7 @@ const TeamDetail = () => {
                                         </span>
                                     ))
                                 ) : (
-                                    <span className="text-slate-500 text-[10px] italic">No tournaments registered</span>
+                                    <span className="text-[#64748B] text-[10px] italic">No tournaments registered</span>
                                 )}
                             </div>
                         </div>
@@ -256,11 +256,11 @@ const TeamDetail = () => {
                                 initial={{ opacity: 0, y: 20 }}
                                 animate={{ opacity: 1, y: 0 }}
                                 transition={{ delay: idx * 0.1 }}
-                                className="glass-card p-6 rounded-3xl border border-slate-200/5 dark:border-white/5 text-center shadow-lg"
+                                className="glass-card p-6 rounded-3xl border border-[#24344D]/30 border-[#24344D]/50 text-center shadow-lg"
                             >
                                 <div className="flex justify-center mb-3 text-2xl">{stat.icon}</div>
-                                <div className="text-3xl font-display font-bold text-slate-900 dark:text-white mb-1">{stat.value}</div>
-                                <div className="text-[10px] text-slate-500 uppercase font-black tracking-widest">{stat.label}</div>
+                                <div className="text-3xl font-display font-bold text-white text-white mb-1">{stat.value}</div>
+                                <div className="text-[10px] text-[#64748B] uppercase font-black tracking-widest">{stat.label}</div>
                             </motion.div>
                         ))}
                     </div>
@@ -273,7 +273,7 @@ const TeamDetail = () => {
                             animate={{ opacity: 1, y: 0 }}
                             className="space-y-4"
                         >
-                            <h3 className="text-xl font-display font-bold flex items-center justify-between gap-2 text-slate-900 dark:text-white">
+                            <h3 className="text-xl font-display font-bold flex items-center justify-between gap-2 text-white text-white">
                                 <div className="flex items-center gap-2">
                                     <Activity size={20} className="text-blue-500" />
                                     {filterType === 'all' ? 'Recent Fixtures' : `${filterType.toUpperCase()} Matches Report`}
@@ -298,22 +298,22 @@ const TeamDetail = () => {
                                         return true;
                                     })
                                     .map(match => (
-                                        <Link key={match.id} to={`/matches/${match.id}`} className="glass-card p-4 rounded-2xl border border-slate-200/5 dark:border-white/5 flex items-center justify-between hover:bg-white/5 transition-colors group">
+                                        <Link key={match.id} to={`/matches/${match.id}`} className="glass-card p-4 rounded-2xl border border-[#24344D]/30 border-[#24344D]/50 flex items-center justify-between hover:bg-white/5 transition-colors group">
                                             <div className="flex-1 text-right text-sm font-medium pr-4 truncate">
                                                 {match.teamA}
                                             </div>
                                             <div className="flex flex-col items-center px-4 bg-white/50 dark:bg-slate-900/50 rounded-xl py-1 min-w-[80px]">
-                                                <span className="text-lg font-bold text-slate-900 dark:text-white">
+                                                <span className="text-lg font-bold text-white text-white">
                                                     {match.status === 'finished' ? `${match.scoreA} - ${match.scoreB}` : 'vs'}
                                                 </span>
-                                                <span className="text-[9px] uppercase tracking-tighter text-slate-500">{match.date}</span>
+                                                <span className="text-[9px] uppercase tracking-tighter text-[#64748B]">{match.date}</span>
                                             </div>
                                             <div className="flex-1 text-left text-sm font-medium pl-4 truncate">
                                                 {match.teamB}
                                             </div>
                                         </Link>
                                     ))}
-                                {matches.length === 0 && <p className="text-slate-500 text-sm italic">No records found.</p>}
+                                {matches.length === 0 && <p className="text-[#64748B] text-sm italic">No records found.</p>}
                             </div>
                         </motion.div>
 
@@ -323,7 +323,7 @@ const TeamDetail = () => {
                             animate={{ opacity: 1, y: 0 }}
                             className="space-y-4"
                         >
-                            <h3 className="text-xl font-display font-bold flex items-center gap-2 text-slate-900 dark:text-white">
+                            <h3 className="text-xl font-display font-bold flex items-center gap-2 text-white text-white">
                                 <Users size={20} className="text-blue-500" />
                                 Squad Members ({players.length})
                             </h3>
@@ -332,14 +332,14 @@ const TeamDetail = () => {
                                     <Link
                                         key={player.id}
                                         to={`/players/${player.id}`}
-                                        className="flex items-center gap-3 p-3 rounded-2xl hover:bg-white/5 border border-transparent hover:border-slate-200/5 dark:border-white/5 transition-all group"
+                                        className="flex items-center gap-3 p-3 rounded-2xl hover:bg-white/5 border border-transparent hover:border-slate-200/5 border-[#24344D]/50 transition-all group"
                                     >
-                                        <div className="w-10 h-10 rounded-full bg-slate-50 dark:bg-slate-800 flex items-center justify-center font-bold text-sm text-slate-700 dark:text-slate-300 overflow-hidden shrink-0">
+                                        <div className="w-10 h-10 rounded-full bg-[#0B1220] bg-[#131D31] flex items-center justify-center font-bold text-sm text-[#94A3B8] text-[#94A3B8] overflow-hidden shrink-0">
                                             {player.photoUrl ? <img src={player.photoUrl} alt={player.name} className="w-full h-full object-cover" /> : player.name.charAt(0)}
                                         </div>
                                         <div className="flex-1">
-                                            <div className="text-sm font-bold text-slate-900 dark:text-white group-hover:text-blue-500 transition-colors">{player.name}</div>
-                                            <div className="text-[10px] text-slate-500 uppercase tracking-wide">{player.position} • #{player.number || '--'}</div>
+                                            <div className="text-sm font-bold text-white text-white group-hover:text-blue-500 transition-colors">{player.name}</div>
+                                            <div className="text-[10px] text-[#64748B] uppercase tracking-wide">{player.position} • #{player.number || '--'}</div>
                                         </div>
                                         <div className="flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
                                             {canEditTeam() && (
@@ -349,7 +349,7 @@ const TeamDetail = () => {
                                                         e.stopPropagation();
                                                         navigate('/admin/players', { state: { editPlayer: player } });
                                                     }}
-                                                    className="p-1.5 bg-brand-500/10 text-brand-500 hover:bg-brand-500 hover:text-slate-900 dark:text-white rounded-lg transition-all"
+                                                    className="p-1.5 bg-brand-500/10 text-brand-500 hover:bg-brand-500 hover:text-white text-white rounded-lg transition-all"
                                                     title="Edit Player Details"
                                                 >
                                                     <Edit2 size={12} />
@@ -367,10 +367,10 @@ const TeamDetail = () => {
                     <motion.div
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
-                        className="glass-card p-8 rounded-3xl border border-slate-200/5 dark:border-white/5"
+                        className="glass-card p-8 rounded-3xl border border-[#24344D]/30 border-[#24344D]/50"
                     >
-                        <h3 className="text-xl font-display font-bold mb-4 text-slate-900 dark:text-white">Club History & Identity</h3>
-                        <p className="text-slate-600 dark:text-slate-400 leading-relaxed mb-6">
+                        <h3 className="text-xl font-display font-bold mb-4 text-white text-white">Club History & Identity</h3>
+                        <p className="text-[#94A3B8] text-[#94A3B8] leading-relaxed mb-6">
                             {team.description || `${team.name} is a competitive football club participating in multiple tournaments across the region. Known for their resilience and local fans, the club represents the spirit of ${team.district || 'their community'}.`}
                         </p>
                         <div className="flex flex-wrap gap-4">
