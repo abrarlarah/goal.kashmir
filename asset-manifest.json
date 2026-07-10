@@ -1,7 +1,7 @@
 {
   "files": {
-    "main.css": "./static/css/main.65e56641.css",
-    "main.js": "./static/js/main.a1c202c3.js",
+    "main.css": "./static/css/main.2fd2e7c3.css",
+    "main.js": "./static/js/main.d9bf7e91.js",
     "static/media/Abi_abrar.png": "./static/media/Abi_abrar.01c4964c52c3de9dcfbd.png",
     "static/media/danish_akbar.jpg": "./static/media/danish_akbar.05b30d358601901944f0.jpg",
     "static/media/iu.jpg": "./static/media/iu.a60e27ede2b5e10f956c.jpg",
@@ -22,11 +22,11 @@
     "static/media/adil_riyaz.jpg": "./static/media/adil_riyaz.392d81fa8c9a4fccdc02.jpg",
     "static/media/nadeem.jpg": "./static/media/nadeem.edf510bc9f578c6e078d.jpg",
     "index.html": "./index.html",
-    "main.65e56641.css.map": "./static/css/main.65e56641.css.map",
-    "main.a1c202c3.js.map": "./static/js/main.a1c202c3.js.map"
+    "main.2fd2e7c3.css.map": "./static/css/main.2fd2e7c3.css.map",
+    "main.d9bf7e91.js.map": "./static/js/main.d9bf7e91.js.map"
   },
   "entrypoints": [
-    "static/css/main.65e56641.css",
-    "static/js/main.a1c202c3.js"
+    "static/css/main.2fd2e7c3.css",
+    "static/js/main.d9bf7e91.js"
   ]
 }
