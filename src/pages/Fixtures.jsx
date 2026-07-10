@@ -131,7 +131,7 @@ const Fixtures = () => {
       {/* ═══ HERO HEADER ═══ */}
       <div className="relative overflow-hidden rounded-3xl">
         {/* Animated Background */}
-        <div className="absolute inset-0 bg-gradient-to-br from-[#0c0a1d] via-[#1a103d] to-[#0c0a1d]"></div>
+        <div className="absolute inset-0 bg-gradient-to-br from-[#0B1220] via-[#101827] to-[#0B1220]"></div>
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-brand-500/10 via-transparent to-transparent"></div>
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_bottom_left,_var(--tw-gradient-stops))] from-cyan-500/15 via-transparent to-transparent"></div>
         <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[300px] bg-gradient-to-b from-brand-500/10 to-transparent rounded-full blur-3xl"></div>

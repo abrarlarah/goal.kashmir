@@ -1203,7 +1203,7 @@ const LiveMatch = () => {
         {/* ═══ PREMIUM MATCH SCOREBOARD ═══ */}
         <div className="relative rounded-2xl overflow-hidden shadow-2xl shadow-brand-500/10">
           {/* Background gradient */}
-          <div className="absolute inset-0 bg-gradient-to-br from-[#0f172a] via-[#1e1b4b] to-[#0f172a]"></div>
+          <div className="absolute inset-0 bg-gradient-to-br from-[#0B1220] via-[#101827] to-[#0B1220]"></div>
           <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-brand-500/10 via-brand-500/10 to-transparent"></div>
           <div className="absolute top-0 left-0 w-1/3 h-full bg-gradient-to-r from-emerald-500/5 to-transparent"></div>
           <div className="absolute top-0 right-0 w-1/3 h-full bg-gradient-to-l from-blue-500/5 to-transparent"></div>
@@ -1363,7 +1363,7 @@ const LiveMatch = () => {
 
         {/* ═══ TEAM LINEUPS SECTION ═══ */}
         <div className="mt-8 relative rounded-2xl overflow-hidden">
-          <div className="absolute inset-0 bg-gradient-to-br from-[#0f172a]/95 via-[#1e1b4b]/90 to-[#0f172a]/95 backdrop-blur-xl"></div>
+          <div className="absolute inset-0 bg-gradient-to-br from-[#0B1220]/95 via-[#101827]/90 to-[#0B1220]/95 backdrop-blur-xl"></div>
           <div className="absolute inset-0 bg-[radial-gradient(circle_at_bottom_left,_var(--tw-gradient-stops))] from-emerald-500/5 via-transparent to-transparent"></div>
           <div className="relative z-10 p-6 sm:p-8">
             {/* Header with Admin Manage Button */}
@@ -1434,7 +1434,7 @@ const LiveMatch = () => {
 
         {/* ═══ MATCH TIMELINE ═══ */}
         <div className="mt-8 relative rounded-2xl overflow-hidden">
-          <div className="absolute inset-0 bg-gradient-to-br from-[#0f172a]/95 via-[#1e1b4b]/90 to-[#0f172a]/95 backdrop-blur-xl"></div>
+          <div className="absolute inset-0 bg-gradient-to-br from-[#0B1220]/95 via-[#101827]/90 to-[#0B1220]/95 backdrop-blur-xl"></div>
           <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,_var(--tw-gradient-stops))] from-brand-500/5 via-transparent to-transparent"></div>
           <div className="relative z-10 p-6 sm:p-8">
             <h3 className="text-xl font-display font-black text-white mb-8 flex items-center gap-3">

@@ -271,7 +271,7 @@ const Leaderboard = () => {
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
       {/* ═══ HERO HEADER ═══ */}
       <div className="relative overflow-hidden rounded-2xl">
-        <div className="absolute inset-0 bg-gradient-to-br from-[#0B1220] via-[#1e1b4b] to-[#0B1220]"></div>
+        <div className="absolute inset-0 bg-gradient-to-br from-[#0B1220] via-[#101827] to-[#0B1220]"></div>
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-brand-500/10 via-transparent to-transparent"></div>
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_bottom_left,_var(--tw-gradient-stops))] from-emerald-500/5 via-transparent to-transparent"></div>
 
@@ -366,7 +366,7 @@ const Leaderboard = () => {
 
       {/* ═══ TABS ═══ */}
       <div className="relative">
-        <div className="flex flex-wrap sm:flex-nowrap gap-1.5 p-1.5 bg-gradient-to-r from-[#0B1220] to-[#1e1b4b] rounded-2xl border border-white/5 sm:overflow-x-auto scrollbar-none">
+        <div className="flex flex-wrap sm:flex-nowrap gap-1.5 p-1.5 bg-gradient-to-r from-[#0B1220] to-[#101827] rounded-2xl border border-white/5 sm:overflow-x-auto scrollbar-none">
           {[
           { id: 'table', label: 'League Table', icon: Trophy },
           { id: 'scorers', label: 'Top Scorers', icon: Target },

@@ -307,7 +307,7 @@ const ManageMatches = () => {
     <div className="container mx-auto px-4 py-8 text-white">
       {/* Header */}
       <div className="relative overflow-hidden rounded-2xl mb-8">
-        <div className="absolute inset-0 bg-gradient-to-br from-[#0c0a1d] via-[#1a103d] to-[#0c0a1d]"></div>
+        <div className="absolute inset-0 bg-gradient-to-br from-[#0B1220] via-[#101827] to-[#0B1220]"></div>
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-brand-500/10 via-transparent to-transparent"></div>
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_bottom_left,_var(--tw-gradient-stops))] from-cyan-500/15 via-transparent to-transparent"></div>
         <div className="relative z-10 p-6 sm:p-8">

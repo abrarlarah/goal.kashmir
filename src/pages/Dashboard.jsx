@@ -287,7 +287,7 @@ const Dashboard = () => {
                   const isExpanded = expandedMatch === match.id;
                   const matchLineups = getMatchLineups(match.id);
                   return (
-                    <motion.div layout key={match.id} className="relative rounded-2xl overflow-hidden bg-gradient-to-br from-[#0B1220] to-[#0B1220] from-[#0B1220] dark:via-[#0f172a] to-[#0B1220] ring-1 ring-[#24344D]/50 dark:ring-white/10 hover:ring-2 hover:ring-brand-500/50 transition-all shadow-xl shadow-2xl dark:hover:shadow-brand-500/20 group text-white">
+                    <motion.div layout key={match.id} className="relative rounded-2xl overflow-hidden bg-gradient-to-br from-[#0B1220] to-[#0B1220] from-[#0B1220] dark:via-[#0B1220] to-[#0B1220] ring-1 ring-[#24344D]/50 dark:ring-white/10 hover:ring-2 hover:ring-brand-500/50 transition-all shadow-xl shadow-2xl dark:hover:shadow-brand-500/20 group text-white">
                       {/* Premium Top Glow */}
                       <div className="absolute top-0 inset-x-0 h-[2px] bg-gradient-to-r from-transparent via-red-500 to-transparent opacity-70 group-hover:opacity-100 transition-opacity"></div>
                       
