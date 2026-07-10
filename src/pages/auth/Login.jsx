@@ -151,7 +151,7 @@ const Login = () => {
             disabled={loading}
             className="relative w-full group overflow-hidden bg-brand-600 hover:bg-brand-500 text-white font-bold py-4 rounded-xl transition-all shadow-lg shadow-brand-500/15 flex items-center justify-center gap-2 mt-8 disabled:opacity-70 disabled:cursor-not-allowed"
           >
-            <div className="absolute inset-0 w-full h-full bg-white/10 translate-y-full group-hover:translate-y-0 transition-transform duration-300 ease-out"></div>
+            <div className="absolute inset-0 w-full h-full bg-[#131D31]/10 translate-y-full group-hover:translate-y-0 transition-transform duration-300 ease-out"></div>
             <span className="relative flex items-center gap-2">
               {loading ? (
                 <>

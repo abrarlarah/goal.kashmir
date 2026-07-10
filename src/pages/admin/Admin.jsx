@@ -41,7 +41,7 @@ const Admin = () => {
       {/* Header with Role Badge */}
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4">
         <div>
-          <h1 className="text-3xl font-bold text-white text-white">Admin Dashboard</h1>
+          <h1 className="text-3xl font-bold text-white">Admin Dashboard</h1>
           <p className="text-[#64748B] dark:text-gray-400 text-sm mt-1">
             Welcome back, {userProfile?.displayName || 'Admin'}
           </p>
@@ -85,7 +85,7 @@ const Admin = () => {
           >
             <div className="flex items-center gap-3 mb-3">
               <card.icon className="text-slate-900/70 dark:text-white/70 group-hover:text-slate-900 text-white transition-colors" size={22} />
-              <h2 className="text-xl font-semibold text-white text-white">{card.title}</h2>
+              <h2 className="text-xl font-semibold text-white">{card.title}</h2>
             </div>
             <p className="text-[#64748B] dark:text-gray-400 text-sm">{card.desc}</p>
           </Link>
@@ -102,7 +102,7 @@ const Admin = () => {
             </div>
             <div className="flex items-center gap-3 mb-3">
               <UserCog className="text-yellow-400/70 group-hover:text-yellow-400 transition-colors" size={22} />
-              <h2 className="text-xl font-semibold text-white text-white">👑 Manage Users</h2>
+              <h2 className="text-xl font-semibold text-white">👑 Manage Users</h2>
             </div>
             <p className="text-[#64748B] dark:text-gray-400 text-sm">Assign roles and manage admin access</p>
           </Link>
@@ -119,7 +119,7 @@ const Admin = () => {
             </div>
             <div className="flex items-center gap-3 mb-3">
               <ScrollText className="text-amber-400/70 group-hover:text-amber-400 transition-colors" size={22} />
-              <h2 className="text-xl font-semibold text-white text-white">📋 Audit Logs</h2>
+              <h2 className="text-xl font-semibold text-white">📋 Audit Logs</h2>
             </div>
             <p className="text-[#64748B] dark:text-gray-400 text-sm">View a trail of all admin actions across the platform</p>
           </Link>

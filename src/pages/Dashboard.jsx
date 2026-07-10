@@ -170,7 +170,7 @@ const Dashboard = () => {
             <div className="h-14 w-14 animate-spin rounded-full border-4 border-brand-500/30 border-t-brand-500"></div>
             <Zap className="absolute inset-0 m-auto text-brand-400" size={20} />
           </div>
-          <div className="text-[#64748B] text-[#94A3B8] font-medium animate-pulse">Loading Match Data...</div>
+          <div className="text-[#94A3B8] font-medium animate-pulse">Loading Match Data...</div>
         </div>
       </div>
     );
@@ -182,8 +182,8 @@ const Dashboard = () => {
     const team = getTeamInfo(teamName);
     const sizes = { sm: 'h-6 w-6', md: 'h-8 w-8', lg: 'h-10 w-10 text-xs' };
     return (
-      <div className={cn(sizes[size], "rounded-full bg-slate-50/80 dark:bg-slate-800/80 flex items-center justify-center ring-2 ring-white/10 overflow-hidden flex-shrink-0")}>
-        {team.logoUrl ? <img src={team.logoUrl} alt={teamName} className="h-full w-full object-contain p-1 bg-[#131D31]" /> : <span className="font-bold text-[#64748B] text-[#94A3B8]">{teamName?.substring(0, 2).toUpperCase()}</span>}
+      <div className={cn(sizes[size], "rounded-full bg-[#0B1220]/80 dark:bg-slate-800/80 flex items-center justify-center ring-2 ring-white/10 overflow-hidden flex-shrink-0")}>
+        {team.logoUrl ? <img src={team.logoUrl} alt={teamName} className="h-full w-full object-contain p-1 bg-[#131D31]" /> : <span className="font-bold text-[#94A3B8]">{teamName?.substring(0, 2).toUpperCase()}</span>}
       </div>
     );
   };
@@ -192,7 +192,7 @@ const Dashboard = () => {
     <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 py-4 sm:py-8 space-y-5 sm:space-y-8">
 
       {/* ═══ HERO HEADER ═══ */}
-      <motion.div initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }} className="relative overflow-hidden rounded-2xl sm:rounded-3xl bg-gradient-to-br from-white via-slate-50 to-brand-50/50 dark:from-[#020617] dark:via-[#1e1b4b] dark:to-[#0f172a] border border-slate-200/80 dark:border-brand-500/20 shadow-xl dark:shadow-2xl dark:shadow-brand-900/40">
+      <motion.div initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }} className="relative overflow-hidden rounded-2xl sm:rounded-3xl bg-gradient-to-br from-[#0B1220] via-[#101827] to-brand-50/50 from-[#0B1220] via-[#101827] to-[#0B1220] border border-[#24344D]/50 border-brand-500/20 shadow-xl shadow-2xl shadow-brand-900/20">
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,rgba(14,165,233,0.15),transparent_60%)]" />
         <div className="absolute top-0 right-0 w-40 h-40 bg-brand-500/10 rounded-full blur-3xl" />
         <div className="absolute bottom-0 left-0 w-32 h-32 bg-cyan-500/10 rounded-full blur-3xl" />
@@ -204,8 +204,8 @@ const Dashboard = () => {
                   {liveMatches.length > 0 && <span className="flex items-center w-fit gap-1.5 px-2.5 py-1 rounded-full bg-red-500/20 border border-red-500/30 text-red-400 text-[11px] font-bold uppercase tracking-wider"><span className="h-1.5 w-1.5 rounded-full bg-red-500 animate-pulse" />{liveMatches.length} Live</span>}
                 </div>
                 <div className="flex items-center justify-between mb-1">
-                  <h1 className="text-2xl sm:text-4xl font-display font-black text-white text-white drop-shadow-sm dark:drop-shadow-lg flex items-center flex-wrap gap-2 lg:gap-4">
-                    Match <span className="text-transparent bg-clip-text bg-gradient-to-r from-brand-500 to-cyan-500 dark:from-brand-400 dark:to-cyan-400">Center</span>
+                  <h1 className="text-2xl sm:text-4xl font-display font-black text-white drop-shadow-sm dark:drop-shadow-lg flex items-center flex-wrap gap-2 lg:gap-4">
+                    Match <span className="text-transparent bg-clip-text bg-gradient-to-r from-brand-400 to-cyan-400">Center</span>
                   </h1>
                   
                   {/* Quick Match Button - Positioned top right on mobile, inline on desktop */}
@@ -217,7 +217,7 @@ const Dashboard = () => {
                     <span>Quick Match</span>
                   </button>
                 </div>
-                <p className="text-[#64748B] text-[#94A3B8] text-sm sm:text-base">Track live scores, fixtures and statistics in real-time.</p>
+                <p className="text-[#94A3B8] text-sm sm:text-base">Track live scores, fixtures and statistics in real-time.</p>
               </div>
             </div>
 
@@ -228,12 +228,12 @@ const Dashboard = () => {
                 <select
                   value={selectedYear}
                   onChange={(e) => { setSelectedYear(e.target.value); setDashboardCompetitionId('All'); }}
-                  className="w-full bg-white/90 bg-[#18253C] backdrop-blur-md border border-slate-200/80 dark:border-white/20 hover:border-brand-400 dark:hover:border-white/30 rounded-lg md:rounded-xl pl-2 sm:pl-2.5 md:pl-3 pr-5 sm:pr-6 md:pr-8 py-1 sm:py-1.5 md:py-2 text-[9px] sm:text-[10px] md:text-sm font-bold text-white text-white focus:ring-2 focus:ring-brand-500 outline-none transition-all cursor-pointer appearance-none shadow-sm dark:shadow-lg h-7 sm:h-8 md:h-10 [&>option]:text-slate-900"
+                  className="w-full bg-[#131D31]/90 bg-[#18253C] backdrop-blur-md border border-[#24344D]/50 border-[#24344D] hover:border-brand-400 dark:hover:border-white/30 rounded-lg md:rounded-xl pl-2 sm:pl-2.5 md:pl-3 pr-5 sm:pr-6 md:pr-8 py-1 sm:py-1.5 md:py-2 text-[9px] sm:text-[10px] md:text-sm font-bold text-white focus:ring-2 focus:ring-brand-500 outline-none transition-all cursor-pointer appearance-none shadow-sm dark:shadow-lg h-7 sm:h-8 md:h-10 [&>option]:text-slate-900"
                 >
                   <option value="All">Year</option>
                   {availableYears.map(y => <option key={y} value={y}>{y}</option>)}
                 </select>
-                <ChevronRight size={10} className="absolute right-1 sm:right-1.5 md:right-2.5 top-1/2 -translate-y-1/2 text-[#64748B] text-[#94A3B8] rotate-90 pointer-events-none" />
+                <ChevronRight size={10} className="absolute right-1 sm:right-1.5 md:right-2.5 top-1/2 -translate-y-1/2 text-[#94A3B8] rotate-90 pointer-events-none" />
               </div>
 
               {/* District filter */}
@@ -241,13 +241,13 @@ const Dashboard = () => {
                 <select
                   value={selectedDistrict}
                   onChange={(e) => { setSelectedDistrict(e.target.value); setDashboardCompetitionId('All'); }}
-                  className="w-full bg-white/90 bg-[#18253C] backdrop-blur-md border border-slate-200/80 dark:border-white/20 hover:border-brand-400 dark:hover:border-white/30 rounded-lg md:rounded-xl pl-2 sm:pl-2.5 md:pl-3 pr-5 sm:pr-6 md:pr-8 py-1 sm:py-1.5 md:py-2 text-[9px] sm:text-[10px] md:text-sm font-bold text-white text-white focus:ring-2 focus:ring-brand-500 outline-none transition-all cursor-pointer appearance-none shadow-sm dark:shadow-lg h-7 sm:h-8 md:h-10 [&>option]:text-slate-900"
+                  className="w-full bg-[#131D31]/90 bg-[#18253C] backdrop-blur-md border border-[#24344D]/50 border-[#24344D] hover:border-brand-400 dark:hover:border-white/30 rounded-lg md:rounded-xl pl-2 sm:pl-2.5 md:pl-3 pr-5 sm:pr-6 md:pr-8 py-1 sm:py-1.5 md:py-2 text-[9px] sm:text-[10px] md:text-sm font-bold text-white focus:ring-2 focus:ring-brand-500 outline-none transition-all cursor-pointer appearance-none shadow-sm dark:shadow-lg h-7 sm:h-8 md:h-10 [&>option]:text-slate-900"
                 >
                   <option value="All">District</option>
                   <optgroup label="Kashmir">{DISTRICTS.KASHMIR.map(d => <option key={d} value={d}>{d}</option>)}</optgroup>
                   <optgroup label="Jammu">{DISTRICTS.JAMMU.map(d => <option key={d} value={d}>{d}</option>)}</optgroup>
                 </select>
-                <ChevronRight size={10} className="absolute right-1 sm:right-1.5 md:right-2.5 top-1/2 -translate-y-1/2 text-[#64748B] text-[#94A3B8] rotate-90 pointer-events-none" />
+                <ChevronRight size={10} className="absolute right-1 sm:right-1.5 md:right-2.5 top-1/2 -translate-y-1/2 text-[#94A3B8] rotate-90 pointer-events-none" />
               </div>
 
               {/* Tournament filter */}
@@ -255,12 +255,12 @@ const Dashboard = () => {
                 <select
                   value={dashboardCompetitionId}
                   onChange={(e) => setDashboardCompetitionId(e.target.value)}
-                  className="w-full bg-white/90 bg-[#18253C] backdrop-blur-md border border-slate-200/80 dark:border-white/20 hover:border-brand-400 dark:hover:border-white/30 rounded-lg md:rounded-xl pl-2 sm:pl-2.5 md:pl-3 pr-5 sm:pr-6 md:pr-8 py-1 sm:py-1.5 md:py-2 text-[9px] sm:text-[10px] md:text-sm font-bold text-white text-white focus:ring-2 focus:ring-brand-500 outline-none transition-all cursor-pointer appearance-none shadow-sm dark:shadow-lg h-7 sm:h-8 md:h-10 [&>option]:text-slate-900"
+                  className="w-full bg-[#131D31]/90 bg-[#18253C] backdrop-blur-md border border-[#24344D]/50 border-[#24344D] hover:border-brand-400 dark:hover:border-white/30 rounded-lg md:rounded-xl pl-2 sm:pl-2.5 md:pl-3 pr-5 sm:pr-6 md:pr-8 py-1 sm:py-1.5 md:py-2 text-[9px] sm:text-[10px] md:text-sm font-bold text-white focus:ring-2 focus:ring-brand-500 outline-none transition-all cursor-pointer appearance-none shadow-sm dark:shadow-lg h-7 sm:h-8 md:h-10 [&>option]:text-slate-900"
                 >
                   <option value="All">Tournament</option>
                   {filteredTournaments.map(t => <option key={t.id} value={t.id}>{t.name}</option>)}
                 </select>
-                <ChevronRight size={10} className="absolute right-1 sm:right-1.5 md:right-2.5 top-1/2 -translate-y-1/2 text-[#64748B] text-[#94A3B8] rotate-90 pointer-events-none" />
+                <ChevronRight size={10} className="absolute right-1 sm:right-1.5 md:right-2.5 top-1/2 -translate-y-1/2 text-[#94A3B8] rotate-90 pointer-events-none" />
               </div>
             </div>
           </div>
@@ -278,7 +278,7 @@ const Dashboard = () => {
           <motion.section variants={item}>
             <div className="flex items-center gap-2.5 mb-3 sm:mb-4">
               <div className="relative"><span className="h-2.5 w-2.5 absolute -top-0.5 -right-0.5 bg-red-500 rounded-full animate-ping opacity-75" /><Activity className="text-red-500" size={20} /></div>
-              <h2 className="text-lg sm:text-xl font-display font-black text-white text-white drop-shadow-sm">Live Now</h2>
+              <h2 className="text-lg sm:text-xl font-display font-black text-white drop-shadow-sm">Live Now</h2>
             </div>
 
             {liveMatches.length > 0 ? (
@@ -287,13 +287,13 @@ const Dashboard = () => {
                   const isExpanded = expandedMatch === match.id;
                   const matchLineups = getMatchLineups(match.id);
                   return (
-                    <motion.div layout key={match.id} className="relative rounded-2xl overflow-hidden bg-gradient-to-br from-white to-[#0B1220] dark:from-[#020617] dark:via-[#0f172a] to-[#0B1220] ring-1 ring-slate-200/80 dark:ring-white/10 hover:ring-2 hover:ring-brand-500/50 transition-all shadow-xl dark:shadow-2xl dark:hover:shadow-brand-500/20 group text-white text-white">
+                    <motion.div layout key={match.id} className="relative rounded-2xl overflow-hidden bg-gradient-to-br from-[#0B1220] to-[#0B1220] from-[#0B1220] dark:via-[#0f172a] to-[#0B1220] ring-1 ring-[#24344D]/50 dark:ring-white/10 hover:ring-2 hover:ring-brand-500/50 transition-all shadow-xl shadow-2xl dark:hover:shadow-brand-500/20 group text-white">
                       {/* Premium Top Glow */}
                       <div className="absolute top-0 inset-x-0 h-[2px] bg-gradient-to-r from-transparent via-red-500 to-transparent opacity-70 group-hover:opacity-100 transition-opacity"></div>
                       
                       <div className="p-3 sm:p-5 relative z-10">
                         {/* Status bar with Actions - Single Line Layout */}
-                        <div className="flex flex-row justify-between items-center gap-1.5 sm:gap-2 mb-3 bg-white/60 dark:bg-slate-800/60 p-1.5 sm:p-2.5 rounded-xl border border-slate-200/80 border-[#24344D]/50 shadow-inner dark:shadow-none">
+                        <div className="flex flex-row justify-between items-center gap-1.5 sm:gap-2 mb-3 bg-[#131D31]/80 dark:bg-slate-800/60 p-1.5 sm:p-2.5 rounded-xl border border-[#24344D]/50 border-[#24344D]/50 shadow-inner dark:shadow-none">
                           {/* Left: Match # + Status */}
                           <div className="flex items-center gap-1.5 flex-shrink-0">
                             <span className="px-1.5 py-0.5 rounded-md bg-brand-500/10 text-brand-500 text-brand-400 text-[8px] sm:text-[9px] font-black uppercase tracking-wider border border-brand-500/20">{globalMatchNumbers[match.id]}</span>
@@ -315,7 +315,7 @@ const Dashboard = () => {
                                 {match.competition}
                               </Link>
                             ) : (
-                              <span className="text-[9px] sm:text-[10px] font-bold sm:font-black uppercase tracking-wider sm:tracking-[0.2em] text-[#64748B] text-[#94A3B8] truncate max-w-full">
+                              <span className="text-[9px] sm:text-[10px] font-bold sm:font-black uppercase tracking-wider sm:tracking-[0.2em] text-[#94A3B8] truncate max-w-full">
                                 {match.competition}
                               </span>
                             )}
@@ -342,7 +342,7 @@ const Dashboard = () => {
                                 }} 
                                 className={`flex items-center justify-center p-1.5 sm:px-2.5 sm:py-1.5 border rounded-md sm:rounded-lg transition-all active:scale-95 ${
                                   matchLineups.length > 0 
-                                  ? 'bg-[#101827] bg-[#131D31] hover:bg-slate-200 dark:hover:bg-slate-700 border-[#24344D] border-[#24344D] text-[#94A3B8] text-[#94A3B8]' 
+                                  ? 'bg-[#101827] bg-[#131D31] hover:bg-slate-200 dark:hover:bg-[#131D31] border-[#24344D] text-[#94A3B8]' 
                                   : 'bg-indigo-500/10 hover:bg-indigo-500/20 border-indigo-500/20 text-indigo-600 dark:text-indigo-400'
                                 }`} 
                                 title={matchLineups.length > 0 ? (isExpanded ? 'Hide Lineups' : 'Show Lineups') : 'Create Lineup'}
@@ -366,28 +366,28 @@ const Dashboard = () => {
                           {getTeamId(match.teamA) ? (
                             <Link to={`/teams/${getTeamId(match.teamA)}`} className="flex-1 flex flex-col items-center gap-1.5 min-w-0 group/team cursor-pointer">
                               <div className="group-hover/team:scale-110 transition-transform"><TeamLogo teamName={match.teamA} size="md" /></div>
-                              <span className="text-xs font-bold text-white text-white text-center truncate w-full group-hover/team:text-brand-500 transition-colors">{match.teamA}</span>
+                              <span className="text-xs font-bold text-white text-center truncate w-full group-hover/team:text-brand-500 transition-colors">{match.teamA}</span>
                             </Link>
                           ) : (
                             <div className="flex-1 flex flex-col items-center gap-1.5 min-w-0">
                               <TeamLogo teamName={match.teamA} size="md" />
-                              <span className="text-xs font-bold text-white text-white text-center truncate w-full">{match.teamA}</span>
+                              <span className="text-xs font-bold text-white text-center truncate w-full">{match.teamA}</span>
                             </div>
                           )}
 
-                          <div className="px-3 sm:px-4 py-1.5 bg-slate-100/80 dark:bg-black/40 rounded-xl border border-slate-200/80 border-[#24344D]/50 backdrop-blur-md flex-shrink-0">
-                            <span className="font-impact text-xl sm:text-3xl tracking-wider text-white text-white">{match.scoreA}<span className="text-[#94A3B8] mx-1 sm:mx-2">-</span>{match.scoreB}</span>
+                          <div className="px-3 sm:px-4 py-1.5 bg-[#101827]/80 dark:bg-black/40 rounded-xl border border-[#24344D]/50 border-[#24344D]/50 backdrop-blur-md flex-shrink-0">
+                            <span className="font-impact text-xl sm:text-3xl tracking-wider text-white">{match.scoreA}<span className="text-[#94A3B8] mx-1 sm:mx-2">-</span>{match.scoreB}</span>
                           </div>
 
                           {getTeamId(match.teamB) ? (
                             <Link to={`/teams/${getTeamId(match.teamB)}`} className="flex-1 flex flex-col items-center gap-1.5 min-w-0 group/team cursor-pointer">
                               <div className="group-hover/team:scale-110 transition-transform"><TeamLogo teamName={match.teamB} size="md" /></div>
-                              <span className="text-xs font-bold text-white text-white text-center truncate w-full group-hover/team:text-brand-500 transition-colors">{match.teamB}</span>
+                              <span className="text-xs font-bold text-white text-center truncate w-full group-hover/team:text-brand-500 transition-colors">{match.teamB}</span>
                             </Link>
                           ) : (
                             <div className="flex-1 flex flex-col items-center gap-1.5 min-w-0">
                               <TeamLogo teamName={match.teamB} size="md" />
-                              <span className="text-xs font-bold text-white text-white text-center truncate w-full">{match.teamB}</span>
+                              <span className="text-xs font-bold text-white text-center truncate w-full">{match.teamB}</span>
                             </div>
                           )}
                         </div>
@@ -398,7 +398,7 @@ const Dashboard = () => {
                             {/* Team A Goals */}
                             <div className="flex-1 pr-1.5 text-right">
                               {liveMatchEvents[match.id].filter(e => e.team === match.teamA).map((goal, idx) => (
-                                <div key={idx} className="text-[9px] sm:text-[10px] text-[#94A3B8] text-[#94A3B8] font-medium truncate">
+                                <div key={idx} className="text-[9px] sm:text-[10px] text-[#94A3B8] font-medium truncate">
                                   {goal.player}
                                   {goal.isFreekick && <span className="text-orange-400 font-bold ml-0.5" title="Free Kick">(FK)</span>}
                                   {goal.isPenalty && <span className="text-red-400 font-bold ml-0.5" title="Penalty">(PK)</span>}
@@ -411,7 +411,7 @@ const Dashboard = () => {
                             {/* Team B Goals */}
                             <div className="flex-1 pl-1.5 text-left">
                               {liveMatchEvents[match.id].filter(e => e.team === match.teamB).map((goal, idx) => (
-                                <div key={idx} className="text-[9px] sm:text-[10px] text-[#94A3B8] text-[#94A3B8] font-medium truncate">
+                                <div key={idx} className="text-[9px] sm:text-[10px] text-[#94A3B8] font-medium truncate">
                                   <span className="text-brand-400 font-bold mr-1">{goal.minute}'</span> 
                                   {goal.player}
                                   {goal.isFreekick && <span className="text-orange-400 font-bold ml-0.5" title="Free Kick">(FK)</span>}
@@ -425,9 +425,9 @@ const Dashboard = () => {
                       </div>
                       <AnimatePresence>
                         {isExpanded && (
-                          <motion.div initial={{ height: 0, opacity: 0 }} animate={{ height: 'auto', opacity: 1 }} exit={{ height: 0, opacity: 0 }} className="border-t border-[#24344D]/30 border-[#24344D]/50 bg-black/20">
+                          <motion.div initial={{ height: 0, opacity: 0 }} animate={{ height: 'auto', opacity: 1 }} exit={{ height: 0, opacity: 0 }} className="border-t border-[#24344D]/40 bg-black/20">
                             <div className="p-4 sm:p-6 grid sm:grid-cols-2 gap-6">
-                              {matchLineups.map(lineup => (<div key={lineup.id}><h4 className="text-xs font-bold text-[#64748B] uppercase tracking-wider mb-3 border-b border-[#24344D]/30 border-[#24344D]/50 pb-2">{lineup.teamName} XI</h4><LineupDisplay lineup={lineup} players={players} /></div>))}
+                              {matchLineups.map(lineup => (<div key={lineup.id}><h4 className="text-xs font-bold text-[#64748B] uppercase tracking-wider mb-3 border-b border-[#24344D]/40 pb-2">{lineup.teamName} XI</h4><LineupDisplay lineup={lineup} players={players} /></div>))}
                             </div>
                           </motion.div>
                         )}
@@ -437,9 +437,9 @@ const Dashboard = () => {
                 })}
               </div>
             ) : (
-              <div className="p-6 sm:p-8 rounded-2xl border border-dashed border-slate-200/10 border-[#24344D] bg-white/[0.02] flex flex-col items-center justify-center text-center">
+              <div className="p-6 sm:p-8 rounded-2xl border border-dashed border-[#24344D] bg-[#131D31]/[0.02] flex flex-col items-center justify-center text-center">
                 <div className="w-12 h-12 rounded-full bg-[#0B1220] bg-[#131D31] flex items-center justify-center mb-3"><Clock className="text-[#64748B]" size={22} /></div>
-                <h3 className="text-[#94A3B8] text-[#94A3B8] font-semibold text-sm">No Live Matches</h3>
+                <h3 className="text-[#94A3B8] font-semibold text-sm">No Live Matches</h3>
                 <p className="text-[#64748B] text-xs mt-1">Check upcoming fixtures below</p>
               </div>
             )}
@@ -447,17 +447,17 @@ const Dashboard = () => {
 
           {/* ── UPCOMING MATCHES ── */}
           <motion.section variants={item}>
-            <h2 className="text-lg sm:text-xl font-display font-black text-white text-white drop-shadow-sm mb-3 sm:mb-4 flex items-center gap-2"><Calendar className="text-brand-400" size={20} /> Upcoming</h2>
+            <h2 className="text-lg sm:text-xl font-display font-black text-white drop-shadow-sm mb-3 sm:mb-4 flex items-center gap-2"><Calendar className="text-brand-400" size={20} /> Upcoming</h2>
             <div className="space-y-2.5 max-h-[280px] overflow-y-auto pr-1 scrollbar-thin scrollbar-thumb-white/10 scrollbar-track-transparent">
               {upcomingMatches.length > 0 ? upcomingMatches.map(match => (
                 <div onClick={() => navigate(`/live/${match.id}`)} key={match.id} className="group block cursor-pointer">
-                  <div className="flex items-center gap-3 p-3 sm:p-4 rounded-xl bg-gradient-to-r from-white to-[#0B1220] dark:from-[#0f172a] to-[#0B1220] ring-1 ring-slate-200/80 dark:ring-white/5 hover:shadow-lg hover:ring-2 hover:ring-brand-500/30 dark:hover:shadow-cyan-500/10 transition-all shadow-sm dark:shadow-md">
+                  <div className="flex items-center gap-3 p-3 sm:p-4 rounded-xl bg-gradient-to-r from-[#0B1220] to-[#0B1220] from-[#0B1220] to-[#0B1220] ring-1 ring-[#24344D]/50 ring-[#24344D]/50 hover:shadow-lg hover:ring-2 hover:ring-brand-500/30 hover:shadow-brand-500/10 transition-all shadow-sm shadow-md">
                     {/* Date */}
-                    <div className="flex-shrink-0 w-12 text-center px-1 py-1.5 bg-slate-100/50 bg-[#131D31]/50 rounded-lg border border-[#24344D]/50 border-[#24344D]/50">
+                    <div className="flex-shrink-0 w-12 text-center px-1 py-1.5 bg-[#0B1220]/60 bg-[#131D31]/50 rounded-lg border border-[#24344D]/50 border-[#24344D]/50">
                       <div className="text-[8px] font-black text-brand-500 text-brand-400">{globalMatchNumbers[match.id]}</div>
                       <div className="text-[10px] font-bold text-brand-500 text-brand-400 uppercase">{match.date ? new Date(match.date).toLocaleDateString('en-US', { month: 'short' }) : 'TBA'}</div>
-                      <div className="text-lg font-bold text-white text-white leading-tight">{match.date ? new Date(match.date).getDate() : '-'}</div>
-                      <div className="text-[9px] text-[#64748B] text-[#94A3B8]">{match.time || 'TBD'}</div>
+                      <div className="text-lg font-bold text-white leading-tight">{match.date ? new Date(match.date).getDate() : '-'}</div>
+                      <div className="text-[9px] text-[#94A3B8]">{match.time || 'TBD'}</div>
                     </div>
                     {/* Teams */}
                     <div className="flex-1 min-w-0 flex items-center gap-2">
@@ -471,7 +471,7 @@ const Dashboard = () => {
                          <span className="text-xs sm:text-sm font-semibold text-[#94A3B8] text-[#F8FAFC] truncate group-hover/tea:text-brand-500 transition-colors">{match.teamB}</span>
                        </div>
                      </div>
-                     <ChevronRight size={14} className="text-[#64748B] dark:text-slate-600 group-hover:text-brand-500 dark:group-hover:text-brand-400 flex-shrink-0 transition-colors" />
+                     <ChevronRight size={14} className="text-[#64748B] dark:text-[#94A3B8] group-hover:text-brand-500 dark:group-hover:text-brand-400 flex-shrink-0 transition-colors" />
                    </div>
                  </div>
               )) : <div className="text-[#64748B] text-sm text-center py-8">No upcoming matches scheduled.</div>}
@@ -480,11 +480,11 @@ const Dashboard = () => {
 
           {/* ── RECENT RESULTS ── */}
           <motion.section variants={item}>
-            <h2 className="text-lg sm:text-xl font-display font-black text-white text-white drop-shadow-sm mb-3 sm:mb-4 flex items-center gap-2"><Clock className="text-[#64748B] text-[#94A3B8]" size={20} /> Recent Results</h2>
+            <h2 className="text-lg sm:text-xl font-display font-black text-white drop-shadow-sm mb-3 sm:mb-4 flex items-center gap-2"><Clock className="text-[#94A3B8]" size={20} /> Recent Results</h2>
             <div className="space-y-3 max-h-[420px] overflow-y-auto pr-2 scrollbar-thin scrollbar-thumb-slate-300 dark:scrollbar-thumb-white/10 scrollbar-track-transparent">
               {finishedMatches.length > 0 ? finishedMatches.map(match => (
                 <div onClick={() => navigate(`/live/${match.id}`)} key={match.id} className="block group cursor-pointer">
-                  <div className="p-3.5 sm:p-4 rounded-xl bg-gradient-to-br from-white to-[#0B1220] dark:from-[#0f172a] to-[#0B1220] ring-1 ring-slate-200/80 dark:ring-white/5 hover:shadow-lg hover:ring-2 hover:ring-brand-500/30 dark:hover:shadow-cyan-500/10 hover:-translate-y-0.5 transition-all duration-300 shadow-sm dark:shadow-md">
+                  <div className="p-3.5 sm:p-4 rounded-xl bg-gradient-to-br from-[#0B1220] to-[#0B1220] from-[#0B1220] to-[#0B1220] ring-1 ring-[#24344D]/50 ring-[#24344D]/50 hover:shadow-lg hover:ring-2 hover:ring-brand-500/30 hover:shadow-brand-500/10 hover:-translate-y-0.5 transition-all duration-300 shadow-sm shadow-md">
                     <div className="flex justify-between text-[10px] text-[#64748B] mb-2.5">
                       <div className="flex items-center gap-1.5">
                         <span className="px-1.5 py-0.5 rounded bg-brand-500/10 text-brand-500 text-brand-400 text-[8px] font-black border border-brand-500/20">{globalMatchNumbers[match.id]}</span>
@@ -494,15 +494,15 @@ const Dashboard = () => {
                     </div>
                     <div className="space-y-1.5">
                       <div className="flex justify-between items-center">
-                        <div onClick={(e) => handleTeamClick(e, match.teamA)} className="flex items-center gap-2 group/tea hover:text-brand-500 transition-colors"><div className="group-hover/tea:scale-110 transition-transform"><TeamLogo teamName={match.teamA} size="sm" /></div><span className={cn("text-xs sm:text-sm font-semibold group-hover/tea:text-brand-500 transition-colors", match.scoreA > match.scoreB ? "text-white text-white" : "text-[#64748B]")}>{match.teamA}</span></div>
+                        <div onClick={(e) => handleTeamClick(e, match.teamA)} className="flex items-center gap-2 group/tea hover:text-brand-500 transition-colors"><div className="group-hover/tea:scale-110 transition-transform"><TeamLogo teamName={match.teamA} size="sm" /></div><span className={cn("text-xs sm:text-sm font-semibold group-hover/tea:text-brand-500 transition-colors", match.scoreA > match.scoreB ? "text-white" : "text-[#64748B]")}>{match.teamA}</span></div>
                         <span className={cn("text-sm font-bold px-2 py-0.5 rounded", match.scoreA > match.scoreB ? "bg-brand-500/15 text-brand-400" : "bg-[#131D31]/50 text-[#64748B]")}>{match.scoreA}</span>
                       </div>
                       <div className="flex justify-between items-center">
-                        <div onClick={(e) => handleTeamClick(e, match.teamB)} className="flex items-center gap-2 group/tea hover:text-brand-500 transition-colors"><div className="group-hover/tea:scale-110 transition-transform"><TeamLogo teamName={match.teamB} size="sm" /></div><span className={cn("text-xs sm:text-sm font-semibold group-hover/tea:text-brand-500 transition-colors", match.scoreB > match.scoreA ? "text-white text-white" : "text-[#64748B]")}>{match.teamB}</span></div>
+                        <div onClick={(e) => handleTeamClick(e, match.teamB)} className="flex items-center gap-2 group/tea hover:text-brand-500 transition-colors"><div className="group-hover/tea:scale-110 transition-transform"><TeamLogo teamName={match.teamB} size="sm" /></div><span className={cn("text-xs sm:text-sm font-semibold group-hover/tea:text-brand-500 transition-colors", match.scoreB > match.scoreA ? "text-white" : "text-[#64748B]")}>{match.teamB}</span></div>
                         <span className={cn("text-sm font-bold px-2 py-0.5 rounded", match.scoreB > match.scoreA ? "bg-brand-500/15 text-brand-400" : "bg-[#131D31]/50 text-[#64748B]")}>{match.scoreB}</span>
                       </div>
                     </div>
-                    <div className="mt-2.5 pt-2 border-t border-[#24344D]/30 border-[#24344D]/50 text-center"><span className="text-[10px] font-bold text-brand-400/70 uppercase tracking-widest group-hover:text-brand-400 transition-colors">Match Report →</span></div>
+                    <div className="mt-2.5 pt-2 border-t border-[#24344D]/40 text-center"><span className="text-[10px] font-bold text-brand-400/70 uppercase tracking-widest group-hover:text-brand-400 transition-colors">Match Report →</span></div>
                   </div>
                 </div>
               )) : <div className="text-[#64748B] text-sm">No recent matches.</div>}
@@ -514,12 +514,12 @@ const Dashboard = () => {
         <div className="lg:col-span-4 space-y-5 sm:space-y-6">
 
           {/* Standings */}
-          <motion.div variants={item} className="rounded-2xl bg-gradient-to-br from-white to-[#0B1220] dark:from-[#0f172a] dark:via-[#020617] dark:to-[#0f172a] ring-1 ring-slate-200/80 dark:ring-white/5 overflow-hidden shadow-xl dark:shadow-2xl dark:hover:shadow-brand-500/5 transition-all duration-300">
-            <div className="flex items-center justify-between p-4 sm:p-5 border-b border-[#24344D]/30 border-[#24344D]/50">
-              <h3 className="font-display font-bold text-white text-white flex items-center gap-2 text-sm sm:text-base"><Trophy size={16} className="text-yellow-500" /> Standings</h3>
+          <motion.div variants={item} className="rounded-2xl bg-gradient-to-br from-[#0B1220] to-[#0B1220] from-[#0B1220] dark:via-[#020617] to-[#0B1220] ring-1 ring-[#24344D]/50 ring-[#24344D]/50 overflow-hidden shadow-xl shadow-2xl dark:hover:shadow-brand-500/5 transition-all duration-300">
+            <div className="flex items-center justify-between p-4 sm:p-5 border-b border-[#24344D]/40">
+              <h3 className="font-display font-bold text-white flex items-center gap-2 text-sm sm:text-base"><Trophy size={16} className="text-yellow-500" /> Standings</h3>
               <div className="flex items-center gap-2">
                 {dashboardCompetitionId !== 'All' && <Link to={`/tournaments/${dashboardCompetitionId}`} className="text-[10px] font-bold uppercase tracking-wider text-brand-400 hover:text-brand-300 bg-brand-500/5 px-2 py-1 rounded-lg border border-brand-500/10">Details</Link>}
-                <Link to="/leaderboard" className="text-xs text-[#64748B] hover:text-slate-600 text-[#94A3B8] font-medium flex items-center">All <ChevronRight size={14} /></Link>
+                <Link to="/leaderboard" className="text-xs text-[#64748B] hover:text-[#94A3B8] font-medium flex items-center">All <ChevronRight size={14} /></Link>
               </div>
             </div>
             <div className="p-3 sm:p-4">
@@ -528,15 +528,15 @@ const Dashboard = () => {
               ) : topTeams.length > 0 ? (
                 <div className="space-y-1">
                   {topTeams.map((team, idx) => (
-                    <Link to={`/teams/${team.id}`} key={team.id} className="flex items-center justify-between p-2.5 rounded-lg hover:bg-white/5 transition-colors group">
+                    <Link to={`/teams/${team.id}`} key={team.id} className="flex items-center justify-between p-2.5 rounded-lg hover:bg-[#131D31]/5 transition-colors group">
                       <div className="flex items-center gap-2.5 flex-1 min-w-0 pr-2">
-                        <span className={cn("text-xs font-bold w-5 text-center shrink-0", idx === 0 ? "text-yellow-500" : idx === 1 ? "text-[#64748B] text-[#94A3B8]" : idx === 2 ? "text-amber-700" : "text-[#64748B]")}>{idx + 1}</span>
-                        <div className="h-6 w-6 rounded-full bg-slate-200/50 bg-[#18253C] flex items-center justify-center overflow-hidden border border-slate-200/80 border-[#24344D]/50 shrink-0 group-hover:scale-110 transition-transform">{team.logoUrl ? <img src={team.logoUrl} alt="" className="h-full w-full object-contain p-0.5" /> : <span className="text-[8px] text-[#64748B]">{team.name.substring(0, 2)}</span>}</div>
+                        <span className={cn("text-xs font-bold w-5 text-center shrink-0", idx === 0 ? "text-yellow-500" : idx === 1 ? "text-[#94A3B8]" : idx === 2 ? "text-amber-700" : "text-[#64748B]")}>{idx + 1}</span>
+                        <div className="h-6 w-6 rounded-full bg-slate-200/50 bg-[#18253C] flex items-center justify-center overflow-hidden border border-[#24344D]/50 border-[#24344D]/50 shrink-0 group-hover:scale-110 transition-transform">{team.logoUrl ? <img src={team.logoUrl} alt="" className="h-full w-full object-contain p-0.5" /> : <span className="text-[8px] text-[#64748B]">{team.name.substring(0, 2)}</span>}</div>
                         <span className="text-xs sm:text-sm font-medium text-white text-[#F8FAFC] truncate group-hover:text-brand-400 transition-colors">{team.name}</span>
                       </div>
                       <div className="flex items-center gap-3 text-xs shrink-0">
                         <span className="text-[#64748B] w-5 text-center">{team.played}</span>
-                        <span className="font-bold text-white text-white w-6 text-right group-hover:text-brand-400 transition-colors">{team.points}</span>
+                        <span className="font-bold text-white w-6 text-right group-hover:text-brand-400 transition-colors">{team.points}</span>
                       </div>
                     </Link>
                   ))}
@@ -546,23 +546,23 @@ const Dashboard = () => {
           </motion.div>
 
           {/* Top Scorers */}
-          <motion.div variants={item} className="rounded-2xl bg-gradient-to-br from-white to-[#0B1220] dark:from-[#0f172a] dark:via-[#020617] dark:to-[#0f172a] ring-1 ring-slate-200/80 dark:ring-white/5 overflow-hidden shadow-xl dark:shadow-2xl dark:hover:shadow-brand-500/5 transition-all duration-300">
-            <div className="flex items-center justify-between p-4 sm:p-5 border-b border-[#24344D]/30 border-[#24344D]/50">
-              <h3 className="font-display font-bold text-white text-white flex items-center gap-2 text-sm sm:text-base"><Target size={16} className="text-brand-400" /> Top Scorers</h3>
-              <Link to="/players" className="text-xs text-[#64748B] hover:text-slate-600 text-[#94A3B8] font-medium flex items-center">All <ChevronRight size={14} /></Link>
+          <motion.div variants={item} className="rounded-2xl bg-gradient-to-br from-[#0B1220] to-[#0B1220] from-[#0B1220] dark:via-[#020617] to-[#0B1220] ring-1 ring-[#24344D]/50 ring-[#24344D]/50 overflow-hidden shadow-xl shadow-2xl dark:hover:shadow-brand-500/5 transition-all duration-300">
+            <div className="flex items-center justify-between p-4 sm:p-5 border-b border-[#24344D]/40">
+              <h3 className="font-display font-bold text-white flex items-center gap-2 text-sm sm:text-base"><Target size={16} className="text-brand-400" /> Top Scorers</h3>
+              <Link to="/players" className="text-xs text-[#64748B] hover:text-[#94A3B8] font-medium flex items-center">All <ChevronRight size={14} /></Link>
             </div>
             <div className="p-3 sm:p-4 space-y-1">
               {topScorers.length > 0 ? topScorers.map((player, idx) => (
-                <div key={player.id} className="flex items-center justify-between p-2.5 rounded-lg hover:bg-white/5 transition-colors group">
+                <div key={player.id} className="flex items-center justify-between p-2.5 rounded-lg hover:bg-[#131D31]/5 transition-colors group">
                   <div className="flex items-center gap-2.5">
                     <div className="relative flex-shrink-0">
-                      <div className="h-9 w-9 rounded-full bg-[#0B1220] bg-[#131D31] flex items-center justify-center font-bold border border-slate-200/10 border-[#24344D] overflow-hidden text-[#64748B] text-[#94A3B8] text-xs">
+                      <div className="h-9 w-9 rounded-full bg-[#0B1220] bg-[#131D31] flex items-center justify-center font-bold border border-[#24344D] overflow-hidden text-[#94A3B8] text-xs">
                         {player.photoUrl ? <img src={player.photoUrl} alt={player.name} className="h-full w-full object-cover" /> : player.name.charAt(0)}
                       </div>
-                      <div className="absolute -bottom-0.5 -right-0.5 h-4 w-4 rounded-full bg-[#131D31] bg-[#0B1220] border border-slate-200/10 border-[#24344D] flex items-center justify-center text-[9px] text-[#64748B] font-bold">{idx + 1}</div>
+                      <div className="absolute -bottom-0.5 -right-0.5 h-4 w-4 rounded-full bg-[#0B1220] border border-[#24344D] flex items-center justify-center text-[9px] text-[#64748B] font-bold">{idx + 1}</div>
                     </div>
                     <div className="min-w-0">
-                      <div className="text-xs sm:text-sm font-semibold text-white text-white group-hover:text-brand-400 transition-colors truncate">{player.name}</div>
+                      <div className="text-xs sm:text-sm font-semibold text-white group-hover:text-brand-400 transition-colors truncate">{player.name}</div>
                       <div className="text-[10px] text-[#64748B] truncate">{player.team}</div>
                     </div>
                   </div>
@@ -576,29 +576,29 @@ const Dashboard = () => {
           </motion.div>
 
           {/* Top Assists */}
-          <motion.div variants={item} className="rounded-2xl bg-gradient-to-br from-white to-[#0B1220] dark:from-[#0f172a] dark:via-[#020617] dark:to-[#0f172a] ring-1 ring-slate-200/80 dark:ring-white/5 overflow-hidden shadow-xl dark:shadow-2xl dark:hover:shadow-brand-500/5 transition-all duration-300">
-            <div className="flex items-center justify-between p-4 sm:p-5 border-b border-[#24344D]/30 border-[#24344D]/50">
-              <h3 className="font-display font-bold text-white text-white flex items-center gap-2 text-sm sm:text-base">
+          <motion.div variants={item} className="rounded-2xl bg-gradient-to-br from-[#0B1220] to-[#0B1220] from-[#0B1220] dark:via-[#020617] to-[#0B1220] ring-1 ring-[#24344D]/50 ring-[#24344D]/50 overflow-hidden shadow-xl shadow-2xl dark:hover:shadow-brand-500/5 transition-all duration-300">
+            <div className="flex items-center justify-between p-4 sm:p-5 border-b border-[#24344D]/40">
+              <h3 className="font-display font-bold text-white flex items-center gap-2 text-sm sm:text-base">
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-brand-400">
                   <path d="M12 2v20"></path>
                   <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
                 </svg>
                 Top Assists
               </h3>
-              <Link to="/players" className="text-xs text-[#64748B] hover:text-slate-600 text-[#94A3B8] font-medium flex items-center">All <ChevronRight size={14} /></Link>
+              <Link to="/players" className="text-xs text-[#64748B] hover:text-[#94A3B8] font-medium flex items-center">All <ChevronRight size={14} /></Link>
             </div>
             <div className="p-3 sm:p-4 space-y-1">
               {topAssists.length > 0 && topAssists[0].assists > 0 ? topAssists.filter(p => p.assists > 0).slice(0, 5).map((player, idx) => (
-                <div key={player.id} className="flex items-center justify-between p-2.5 rounded-lg hover:bg-white/5 transition-colors group">
+                <div key={player.id} className="flex items-center justify-between p-2.5 rounded-lg hover:bg-[#131D31]/5 transition-colors group">
                   <div className="flex items-center gap-2.5">
                     <div className="relative flex-shrink-0">
-                      <div className="h-9 w-9 rounded-full bg-[#0B1220] bg-[#131D31] flex items-center justify-center font-bold border border-slate-200/10 border-[#24344D] overflow-hidden text-[#64748B] text-[#94A3B8] text-xs">
+                      <div className="h-9 w-9 rounded-full bg-[#0B1220] bg-[#131D31] flex items-center justify-center font-bold border border-[#24344D] overflow-hidden text-[#94A3B8] text-xs">
                         {player.photoUrl ? <img src={player.photoUrl} alt={player.name} className="h-full w-full object-cover" /> : player.name.charAt(0)}
                       </div>
-                      <div className="absolute -bottom-0.5 -right-0.5 h-4 w-4 rounded-full bg-[#131D31] bg-[#0B1220] border border-slate-200/10 border-[#24344D] flex items-center justify-center text-[9px] text-[#64748B] font-bold">{idx + 1}</div>
+                      <div className="absolute -bottom-0.5 -right-0.5 h-4 w-4 rounded-full bg-[#0B1220] border border-[#24344D] flex items-center justify-center text-[9px] text-[#64748B] font-bold">{idx + 1}</div>
                     </div>
                     <div className="min-w-0">
-                      <div className="text-xs sm:text-sm font-semibold text-white text-white group-hover:text-brand-400 transition-colors truncate">{player.name}</div>
+                      <div className="text-xs sm:text-sm font-semibold text-white group-hover:text-brand-400 transition-colors truncate">{player.name}</div>
                       <div className="text-[10px] text-[#64748B] truncate">{player.team}</div>
                     </div>
                   </div>
@@ -612,15 +612,15 @@ const Dashboard = () => {
           </motion.div>
 
           {/* District Stats */}
-          <motion.div variants={item} className="rounded-2xl bg-gradient-to-br from-white to-[#0B1220] dark:from-[#0f172a] dark:via-[#020617] dark:to-[#0f172a] ring-1 ring-slate-200/80 dark:ring-white/5 overflow-hidden shadow-xl dark:shadow-2xl dark:hover:shadow-brand-500/5 transition-all duration-300">
-            <div className="p-4 sm:p-5 border-b border-slate-200/10 border-[#24344D]/50">
-              <h3 className="font-display font-bold text-white text-white flex items-center gap-2 text-sm sm:text-base"><MapPinned size={16} className="text-brand-400" /> District Stats</h3>
+          <motion.div variants={item} className="rounded-2xl bg-gradient-to-br from-[#0B1220] to-[#0B1220] from-[#0B1220] dark:via-[#020617] to-[#0B1220] ring-1 ring-[#24344D]/50 ring-[#24344D]/50 overflow-hidden shadow-xl shadow-2xl dark:hover:shadow-brand-500/5 transition-all duration-300">
+            <div className="p-4 sm:p-5 border-b border-[#24344D]/40">
+              <h3 className="font-display font-bold text-white flex items-center gap-2 text-sm sm:text-base"><MapPinned size={16} className="text-brand-400" /> District Stats</h3>
             </div>
             <div className="p-3 sm:p-4 space-y-3.5">
               {districtStats.slice(0, 5).map(([district, data]) => (
                 <div key={district} className="group">
                   <div className="flex justify-between items-end mb-1.5">
-                    <span className="text-xs sm:text-sm font-bold text-white text-white">{district}</span>
+                    <span className="text-xs sm:text-sm font-bold text-white">{district}</span>
                     <span className="text-[10px] text-[#64748B]">{data.matches} matches</span>
                   </div>
                   <div className="h-1.5 w-full bg-[#131D31] bg-[#131D31]/50 rounded-full overflow-hidden">
@@ -633,16 +633,16 @@ const Dashboard = () => {
           </motion.div>
 
           {/* This Week */}
-          <motion.div variants={item} className="rounded-2xl bg-gradient-to-br from-white to-[#0B1220] dark:from-[#0f172a] dark:via-[#020617] dark:to-[#0f172a] ring-1 ring-slate-200/80 dark:ring-white/5 overflow-hidden shadow-xl dark:shadow-2xl dark:hover:shadow-brand-500/5 transition-all duration-300">
-            <div className="p-4 sm:p-5 border-b border-slate-200/10 border-[#24344D]/50">
-              <h3 className="font-display font-bold text-white text-white flex items-center gap-2 text-sm sm:text-base"><Calendar size={16} className="text-indigo-500 dark:text-indigo-400" /> This Week</h3>
+          <motion.div variants={item} className="rounded-2xl bg-gradient-to-br from-[#0B1220] to-[#0B1220] from-[#0B1220] dark:via-[#020617] to-[#0B1220] ring-1 ring-[#24344D]/50 ring-[#24344D]/50 overflow-hidden shadow-xl shadow-2xl dark:hover:shadow-brand-500/5 transition-all duration-300">
+            <div className="p-4 sm:p-5 border-b border-[#24344D]/40">
+              <h3 className="font-display font-bold text-white flex items-center gap-2 text-sm sm:text-base"><Calendar size={16} className="text-indigo-500 dark:text-indigo-400" /> This Week</h3>
             </div>
             <div className="p-3 sm:p-4 space-y-2 max-h-[220px] overflow-y-auto scrollbar-thin scrollbar-thumb-white/10 scrollbar-track-transparent">
               {weeklyFixtures.length > 0 ? weeklyFixtures.map(match => (
-                <Link to={`/live/${match.id}`} key={match.id} className="flex items-center gap-3 p-2.5 rounded-xl hover:bg-white/5 transition-all group">
+                <Link to={`/live/${match.id}`} key={match.id} className="flex items-center gap-3 p-2.5 rounded-xl hover:bg-[#131D31]/5 transition-all group">
                   <div className="flex-shrink-0 w-9 text-center">
                     <div className="text-[9px] uppercase font-black text-indigo-500 dark:text-indigo-400">{new Date(match.date).toLocaleDateString('en-US', { weekday: 'short' })}</div>
-                    <div className="text-sm font-black text-white text-white leading-tight">{new Date(match.date).getDate()}</div>
+                    <div className="text-sm font-black text-white leading-tight">{new Date(match.date).getDate()}</div>
                   </div>
                   <div className="flex-1 min-w-0">
                     <div className="text-xs font-semibold text-[#94A3B8] text-[#F8FAFC] truncate">{match.teamA} vs {match.teamB}</div>

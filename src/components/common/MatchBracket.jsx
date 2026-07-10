@@ -155,10 +155,10 @@ const MatchBracket = ({ matchesByRound, tournamentTeams = [], canEdit = false })
                 )}
 
                 <div className={cn(
-                    "w-full rounded-xl overflow-hidden border transition-all duration-300 relative bg-white/90 dark:bg-slate-900/90 z-10",
+                    "w-full rounded-xl overflow-hidden border transition-all duration-300 relative bg-[#131D31]/90 dark:bg-slate-900/90 z-10",
                     isFinal
                         ? "border-2 border-brand-500/50 shadow-[0_0_20px_rgba(14,165,233,0.15)]"
-                        : "border-slate-200/10 border-[#24344D] hover:border-brand-500/30",
+                        : "border-[#24344D] hover:border-brand-500/30",
                     match.isPlaceholder && "opacity-50 grayscale",
                     match.status === 'live' && "border-red-500/50 shadow-[0_0_15px_rgba(239,68,68,0.2)]"
                 )}>
@@ -191,16 +191,16 @@ const MatchBracket = ({ matchesByRound, tournamentTeams = [], canEdit = false })
                                 )}>
                                     <div className={cn(
                                         "rounded-md shrink-0 flex items-center justify-center border overflow-hidden",
-                                        isFinal ? "bg-brand-500/10 border-brand-500/20" : "bg-[#0B1220] bg-[#131D31] border-[#24344D]/30 border-[#24344D]/50"
+                                        isFinal ? "bg-brand-500/10 border-brand-500/20" : "bg-[#0B1220] bg-[#131D31] border-[#24344D]/40"
                                     )} style={{ width: LOGO_SIZE, height: LOGO_SIZE }}>
                                         {t.info?.logoUrl
                                             ? <img src={t.info.logoUrl} className="w-full h-full object-contain" alt="" />
-                                            : <span className="font-bold text-[#64748B] text-[#94A3B8]" style={{ fontSize: LOGO_SIZE * 0.45 }}>{t.name?.[0] || '?'}</span>
+                                            : <span className="font-bold text-[#94A3B8]" style={{ fontSize: LOGO_SIZE * 0.45 }}>{t.name?.[0] || '?'}</span>
                                         }
                                     </div>
                                     <span className={cn(
                                         "font-bold truncate leading-tight",
-                                        t.win ? "text-brand-400" : "text-[#94A3B8] text-[#94A3B8]"
+                                        t.win ? "text-brand-400" : "text-[#94A3B8]"
                                     )} style={{ fontSize: TEAM_FONT }}>
                                         {t.name || 'TBD'}
                                     </span>
@@ -228,7 +228,7 @@ const MatchBracket = ({ matchesByRound, tournamentTeams = [], canEdit = false })
     // ─── EMPTY STATE ───
     if (!matchesByRound || Object.keys(matchesByRound).length === 0) {
         return (
-            <div className="text-center py-20 bg-[#131D31]/50 rounded-3xl border border-dashed border-slate-200/10 border-[#24344D]">
+            <div className="text-center py-20 bg-[#131D31]/50 rounded-3xl border border-dashed border-[#24344D]">
                 <Trophy size={48} className="mx-auto text-[#94A3B8] mb-4 opacity-20" />
                 <div className="text-[#64748B] mb-2 font-display font-bold">No Bracket Structure</div>
                 <div className="text-xs text-[#94A3B8] italic">Create a tournament with "Auto-Seed" or add matches manually.</div>
@@ -244,7 +244,7 @@ const MatchBracket = ({ matchesByRound, tournamentTeams = [], canEdit = false })
             {/* Bracket wrapper — safely left-aligned, centered via javascript margin to fix clipping */}
             <div
                 ref={containerRef}
-                className="overflow-hidden rounded-2xl border border-[#24344D]/30 border-[#24344D]/50 bg-slate-950/40 w-full"
+                className="overflow-hidden rounded-2xl border border-[#24344D]/40 bg-slate-950/40 w-full"
                 style={{ height: wrapperHeight !== 'auto' ? wrapperHeight : undefined }}
             >
                 <div
@@ -284,7 +284,7 @@ const MatchBracket = ({ matchesByRound, tournamentTeams = [], canEdit = false })
                             <div className="relative">
                                 <div className="absolute inset-0 bg-brand-500/10 blur-2xl rounded-full scale-150 -z-10" />
                                 {finalMatch ? renderMatchCard(finalMatch, true) : (
-                                    <div className="flex flex-col items-center justify-center bg-slate-950/50 rounded-xl border-2 border-dashed border-slate-200/10 border-[#24344D]" style={{ width: FINAL_CARD_W, height: 80 }}>
+                                    <div className="flex flex-col items-center justify-center bg-slate-950/50 rounded-xl border-2 border-dashed border-[#24344D]" style={{ width: FINAL_CARD_W, height: 80 }}>
                                         <Trophy size={20} className="text-[#94A3B8] mb-1" />
                                         <span className="text-[#94A3B8] font-bold uppercase tracking-widest" style={{ fontSize: 8 }}>Final Match</span>
                                     </div>
@@ -327,7 +327,7 @@ const MatchBracket = ({ matchesByRound, tournamentTeams = [], canEdit = false })
             </div>
 
             {/* ─── Legend ─── */}
-            <div className="flex flex-wrap items-center justify-center gap-4 md:gap-6 mt-6 pt-4 border-t border-[#24344D]/30 border-[#24344D]/50 mx-auto max-w-2xl">
+            <div className="flex flex-wrap items-center justify-center gap-4 md:gap-6 mt-6 pt-4 border-t border-[#24344D]/40 mx-auto max-w-2xl">
                 <div className="flex items-center gap-2">
                     <div className="w-3 h-3 rounded bg-brand-500/20 border border-brand-500/30" />
                     <span className="text-[10px] md:text-xs text-[#64748B] font-extrabold uppercase tracking-widest">Champion Pathway</span>
@@ -337,7 +337,7 @@ const MatchBracket = ({ matchesByRound, tournamentTeams = [], canEdit = false })
                     <span className="text-[10px] md:text-xs text-[#64748B] font-extrabold uppercase tracking-widest">Live Action</span>
                 </div>
                 <div className="flex items-center gap-2">
-                    <div className="w-3 h-3 rounded bg-[#0B1220] bg-[#131D31] border border-[#24344D]/30 border-[#24344D]/50 opacity-50" />
+                    <div className="w-3 h-3 rounded bg-[#0B1220] bg-[#131D31] border border-[#24344D]/40 opacity-50" />
                     <span className="text-[10px] md:text-xs text-[#64748B] font-extrabold uppercase tracking-widest">Unscheduled</span>
                 </div>
             </div>

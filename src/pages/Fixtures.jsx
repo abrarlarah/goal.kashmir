@@ -177,7 +177,7 @@ const Fixtures = () => {
                 placeholder="Search team or tournament..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full bg-white/[0.07] backdrop-blur-md border border-white/10 rounded-xl pl-10 pr-10 py-2.5 text-sm font-medium text-white placeholder-[#64748B] focus:ring-2 focus:ring-violet-500/50 focus:border-violet-500/50 outline-none transition-all"
+                className="w-full bg-[#131D31]/[0.07] backdrop-blur-md border border-white/10 rounded-xl pl-10 pr-10 py-2.5 text-sm font-medium text-white placeholder-[#64748B] focus:ring-2 focus:ring-violet-500/50 focus:border-violet-500/50 outline-none transition-all"
               />
               {searchQuery && (
                 <button onClick={() => setSearchQuery('')} className="absolute right-3 top-1/2 -translate-y-1/2 text-[#64748B] hover:text-white transition-colors">
@@ -191,7 +191,7 @@ const Fixtures = () => {
               <select
                 value={filterStatus}
                 onChange={(e) => setFilterStatus(e.target.value)}
-                className="appearance-none bg-white/[0.07] backdrop-blur-md border border-white/10 rounded-xl pl-4 pr-9 py-2.5 text-sm font-medium text-white focus:ring-2 focus:ring-violet-500/50 outline-none transition-all cursor-pointer [&>option]:text-slate-900 w-full sm:w-auto"
+                className="appearance-none bg-[#131D31]/[0.07] backdrop-blur-md border border-white/10 rounded-xl pl-4 pr-9 py-2.5 text-sm font-medium text-white focus:ring-2 focus:ring-violet-500/50 outline-none transition-all cursor-pointer [&>option]:text-slate-900 w-full sm:w-auto"
               >
                 <option value="All">All Matches</option>
                 <option value="upcoming">Upcoming</option>
@@ -206,7 +206,7 @@ const Fixtures = () => {
               <select
                 value={filterTournament}
                 onChange={(e) => setFilterTournament(e.target.value)}
-                className="appearance-none bg-white/[0.07] backdrop-blur-md border border-white/10 rounded-xl pl-4 pr-9 py-2.5 text-sm font-medium text-white focus:ring-2 focus:ring-violet-500/50 outline-none transition-all cursor-pointer [&>option]:text-slate-900 w-full sm:w-auto"
+                className="appearance-none bg-[#131D31]/[0.07] backdrop-blur-md border border-white/10 rounded-xl pl-4 pr-9 py-2.5 text-sm font-medium text-white focus:ring-2 focus:ring-violet-500/50 outline-none transition-all cursor-pointer [&>option]:text-slate-900 w-full sm:w-auto"
               >
                 <option value="All">All Tournaments</option>
                 {tournaments.map(t => (
@@ -279,8 +279,8 @@ const Fixtures = () => {
                     >
                       <div className={cn(
                         "relative rounded-2xl overflow-hidden transition-all duration-300 hover:-translate-y-1 shadow-lg hover:shadow-2xl",
-                        "bg-gradient-to-br from-white via-white to-[#0B1220] dark:from-[#0f172a] dark:via-[#131b2e] dark:to-[#0c1220]",
-                        "ring-1 ring-slate-200/80 dark:ring-white/[0.06] hover:ring-2",
+                        "bg-gradient-to-br from-[#0B1220] via-white to-[#0B1220] from-[#0B1220] dark:via-[#131b2e] dark:to-[#0c1220]",
+                        "ring-1 ring-[#24344D]/50 dark:ring-white/[0.06] hover:ring-2",
                         isLive ? "hover:ring-red-500/40 hover:shadow-red-500/10" : "hover:ring-violet-500/30 hover:shadow-violet-500/10"
                       )}>
                         {/* Top Gradient Bar */}
@@ -326,7 +326,7 @@ const Fixtures = () => {
                                 </span>
                               )}
                               {match.status === 'scheduled' && (
-                                <span className="inline-flex items-center gap-1.5 bg-[#101827] bg-[#131D31]/50 border border-[#24344D] border-[#24344D] text-[#64748B] text-[#94A3B8] px-2.5 py-1 rounded-lg text-[10px] font-black uppercase tracking-wider">
+                                <span className="inline-flex items-center gap-1.5 bg-[#101827] bg-[#131D31]/50 border border-[#24344D] text-[#94A3B8] px-2.5 py-1 rounded-lg text-[10px] font-black uppercase tracking-wider">
                                   Scheduled
                                 </span>
                               )}
@@ -339,17 +339,17 @@ const Fixtures = () => {
                             <div className="flex-1 flex flex-col items-center gap-2 min-w-0">
                               <div className={cn(
                                 "w-14 h-14 sm:w-16 sm:h-16 rounded-2xl flex items-center justify-center p-2.5 transition-transform group-hover:scale-105",
-                                "bg-gradient-to-br from-[#0B1220] to-slate-100 dark:from-white/[0.06] dark:to-white/[0.02]",
-                                "border border-slate-200/80 border-[#24344D]",
+                                "bg-gradient-to-br from-[#0B1220] to-slate-100 dark:from-[#0B1220]/[0.06] dark:to-[#F8FAFC]/[0.02]",
+                                "border border-[#24344D]/50 border-[#24344D]",
                                 "shadow-sm"
                               )}>
                                 {getTeamLogo(match.teamA) ? (
                                   <img src={getTeamLogo(match.teamA)} alt={match.teamA} className="w-full h-full object-contain" />
                                 ) : (
-                                  <span className="text-2xl font-black text-[#94A3B8] dark:text-slate-600">{match.teamA?.charAt(0)}</span>
+                                  <span className="text-2xl font-black text-[#94A3B8] dark:text-[#94A3B8]">{match.teamA?.charAt(0)}</span>
                                 )}
                               </div>
-                              <span className="text-xs sm:text-sm font-bold text-white text-white text-center line-clamp-2 leading-tight">{match.teamA}</span>
+                              <span className="text-xs sm:text-sm font-bold text-white text-center line-clamp-2 leading-tight">{match.teamA}</span>
                             </div>
 
                             {/* Score / VS */}
@@ -357,10 +357,10 @@ const Fixtures = () => {
                               {isLive || isFinished ? (
                                 <div className={cn(
                                   "px-4 py-2 rounded-xl border",
-                                  isLive ? "bg-red-500/5 border-red-500/20" : "bg-[#0B1220] dark:bg-white/[0.03] border-[#24344D]/50 border-[#24344D]/50"
+                                  isLive ? "bg-red-500/5 border-red-500/20" : "bg-[#0B1220] dark:bg-[#131D31]/[0.03] border-[#24344D]/50 border-[#24344D]/50"
                                 )}>
-                                  <div className="text-3xl sm:text-4xl font-black text-white text-white tracking-tighter">
-                                    {match.scoreA || 0} <span className="text-[#94A3B8] dark:text-slate-600 mx-0.5">-</span> {match.scoreB || 0}
+                                  <div className="text-3xl sm:text-4xl font-black text-white tracking-tighter">
+                                    {match.scoreA || 0} <span className="text-[#94A3B8] dark:text-[#94A3B8] mx-0.5">-</span> {match.scoreB || 0}
                                   </div>
                                 </div>
                               ) : (
@@ -374,23 +374,23 @@ const Fixtures = () => {
                             <div className="flex-1 flex flex-col items-center gap-2 min-w-0">
                               <div className={cn(
                                 "w-14 h-14 sm:w-16 sm:h-16 rounded-2xl flex items-center justify-center p-2.5 transition-transform group-hover:scale-105",
-                                "bg-gradient-to-br from-[#0B1220] to-slate-100 dark:from-white/[0.06] dark:to-white/[0.02]",
-                                "border border-slate-200/80 border-[#24344D]",
+                                "bg-gradient-to-br from-[#0B1220] to-slate-100 dark:from-[#0B1220]/[0.06] dark:to-[#F8FAFC]/[0.02]",
+                                "border border-[#24344D]/50 border-[#24344D]",
                                 "shadow-sm"
                               )}>
                                 {getTeamLogo(match.teamB) ? (
                                   <img src={getTeamLogo(match.teamB)} alt={match.teamB} className="w-full h-full object-contain" />
                                 ) : (
-                                  <span className="text-2xl font-black text-[#94A3B8] dark:text-slate-600">{match.teamB?.charAt(0)}</span>
+                                  <span className="text-2xl font-black text-[#94A3B8] dark:text-[#94A3B8]">{match.teamB?.charAt(0)}</span>
                                 )}
                               </div>
-                              <span className="text-xs sm:text-sm font-bold text-white text-white text-center line-clamp-2 leading-tight">{match.teamB}</span>
+                              <span className="text-xs sm:text-sm font-bold text-white text-center line-clamp-2 leading-tight">{match.teamB}</span>
                             </div>
                           </div>
                         </div>
 
                         {/* Match Footer */}
-                        <div className="bg-slate-50/80 dark:bg-white/[0.02] border-t border-slate-200/60 border-[#24344D]/50 py-2.5 px-4 sm:px-5 flex items-center justify-between text-[10px] sm:text-xs text-[#64748B] font-medium">
+                        <div className="bg-[#0B1220]/80 dark:bg-[#131D31]/[0.02] border-t border-[#24344D]/60 border-[#24344D]/50 py-2.5 px-4 sm:px-5 flex items-center justify-between text-[10px] sm:text-xs text-[#64748B] font-medium">
                           <div className="flex items-center gap-3">
                             <span className="flex items-center gap-1.5">
                               <Clock size={11} className="text-violet-500" />
@@ -416,11 +416,11 @@ const Fixtures = () => {
             </div>
           ))
         ) : (
-          <div className="text-center py-20 px-4 rounded-3xl border border-dashed border-violet-300/30 dark:border-violet-500/20 bg-gradient-to-br from-violet-50/50 to-[#0B1220] dark:from-violet-950/20 dark:to-[#0f172a]">
+          <div className="text-center py-20 px-4 rounded-3xl border border-dashed border-violet-300/30 dark:border-violet-500/20 bg-gradient-to-br from-violet-50/50 to-[#0B1220] dark:from-violet-950/20 to-[#0B1220]">
             <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-violet-500/20 to-cyan-500/20 border border-violet-500/20 flex items-center justify-center mx-auto mb-4">
               <Calendar size={24} className="text-violet-400" />
             </div>
-            <h3 className="text-lg font-bold text-white text-white mb-2">No Fixtures Found</h3>
+            <h3 className="text-lg font-bold text-white mb-2">No Fixtures Found</h3>
             <p className="text-[#64748B] max-w-sm mx-auto">There are no matches matching your current filters. Try selecting a different status or tournament.</p>
           </div>
         )}
@@ -449,7 +449,7 @@ const Fixtures = () => {
                   "w-8 h-8 sm:w-10 sm:h-10 rounded-xl font-bold flex items-center justify-center transition-all border text-sm sm:text-base",
                   currentPage === i 
                     ? "bg-brand-500 text-white border-brand-500 shadow-lg shadow-brand-500/30" 
-                    : "bg-[#101827] bg-[#131D31]/50 border-[#24344D] border-[#24344D] text-[#94A3B8] text-[#94A3B8] hover:bg-slate-200 hover:bg-[#18253C] hover:text-brand-500"
+                    : "bg-[#101827] bg-[#131D31]/50 border-[#24344D] text-[#94A3B8] hover:bg-slate-200 hover:bg-[#18253C] hover:text-brand-500"
                 )}
               >
                 {i}
@@ -465,15 +465,15 @@ const Fixtures = () => {
                   window.scrollTo({ top: 0, behavior: 'smooth' });
                 }}
                 disabled={currentPage === 1}
-                className="w-8 h-8 sm:w-10 sm:h-10 rounded-xl bg-[#101827] bg-[#131D31]/50 border border-[#24344D] border-[#24344D] text-[#94A3B8] text-[#94A3B8] flex items-center justify-center hover:bg-slate-200 hover:bg-[#18253C] hover:text-brand-500 disabled:opacity-50 disabled:cursor-not-allowed transition-all"
+                className="w-8 h-8 sm:w-10 sm:h-10 rounded-xl bg-[#101827] bg-[#131D31]/50 border border-[#24344D] text-[#94A3B8] flex items-center justify-center hover:bg-slate-200 hover:bg-[#18253C] hover:text-brand-500 disabled:opacity-50 disabled:cursor-not-allowed transition-all"
               >
                 <ChevronLeft size={20} />
               </button>
               
               {startPage > 1 && (
                 <>
-                  <button onClick={() => { setCurrentPage(1); window.scrollTo({ top: 0, behavior: 'smooth' }); }} className="hidden sm:flex w-10 h-10 rounded-xl border border-[#24344D] border-[#24344D] bg-[#101827] bg-[#131D31]/50 text-[#94A3B8] text-[#94A3B8] hover:text-brand-500 hover:bg-slate-200 hover:bg-[#18253C] font-bold items-center justify-center transition-all">1</button>
-                  {startPage > 2 && <span className="hidden sm:inline text-[#64748B] dark:text-slate-600 px-1">...</span>}
+                  <button onClick={() => { setCurrentPage(1); window.scrollTo({ top: 0, behavior: 'smooth' }); }} className="hidden sm:flex w-10 h-10 rounded-xl border border-[#24344D] bg-[#101827] bg-[#131D31]/50 text-[#94A3B8] hover:text-brand-500 hover:bg-slate-200 hover:bg-[#18253C] font-bold items-center justify-center transition-all">1</button>
+                  {startPage > 2 && <span className="hidden sm:inline text-[#64748B] dark:text-[#94A3B8] px-1">...</span>}
                 </>
               )}
               
@@ -481,8 +481,8 @@ const Fixtures = () => {
               
               {endPage < totalPages && (
                 <>
-                  {endPage < totalPages - 1 && <span className="hidden sm:inline text-[#64748B] dark:text-slate-600 px-1">...</span>}
-                  <button onClick={() => { setCurrentPage(totalPages); window.scrollTo({ top: 0, behavior: 'smooth' }); }} className="hidden sm:flex w-10 h-10 rounded-xl border border-[#24344D] border-[#24344D] bg-[#101827] bg-[#131D31]/50 text-[#94A3B8] text-[#94A3B8] hover:text-brand-500 hover:bg-slate-200 hover:bg-[#18253C] font-bold items-center justify-center transition-all">{totalPages}</button>
+                  {endPage < totalPages - 1 && <span className="hidden sm:inline text-[#64748B] dark:text-[#94A3B8] px-1">...</span>}
+                  <button onClick={() => { setCurrentPage(totalPages); window.scrollTo({ top: 0, behavior: 'smooth' }); }} className="hidden sm:flex w-10 h-10 rounded-xl border border-[#24344D] bg-[#101827] bg-[#131D31]/50 text-[#94A3B8] hover:text-brand-500 hover:bg-slate-200 hover:bg-[#18253C] font-bold items-center justify-center transition-all">{totalPages}</button>
                 </>
               )}
 
@@ -492,7 +492,7 @@ const Fixtures = () => {
                   window.scrollTo({ top: 0, behavior: 'smooth' });
                 }}
                 disabled={currentPage === totalPages}
-                className="w-8 h-8 sm:w-10 sm:h-10 rounded-xl bg-[#101827] bg-[#131D31]/50 border border-[#24344D] border-[#24344D] text-[#94A3B8] text-[#94A3B8] flex items-center justify-center hover:bg-slate-200 hover:bg-[#18253C] hover:text-brand-500 disabled:opacity-50 disabled:cursor-not-allowed transition-all"
+                className="w-8 h-8 sm:w-10 sm:h-10 rounded-xl bg-[#101827] bg-[#131D31]/50 border border-[#24344D] text-[#94A3B8] flex items-center justify-center hover:bg-slate-200 hover:bg-[#18253C] hover:text-brand-500 disabled:opacity-50 disabled:cursor-not-allowed transition-all"
               >
                 <ChevronRight size={20} />
               </button>

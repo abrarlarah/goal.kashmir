@@ -282,11 +282,11 @@ const ManageTeams = () => {
     }, [searchTerm]);
 
     return (
-        <div className="container mx-auto px-4 py-8 text-white text-white">
+        <div className="container mx-auto px-4 py-8 text-white">
             <h2 className="text-2xl font-bold mb-6">Manage Teams</h2>
 
             {successMessage && (
-                <div className="bg-green-600 text-white text-white p-3 rounded mb-4 animate-pulse">
+                <div className="bg-green-600 text-white p-3 rounded mb-4 animate-pulse">
                     {successMessage}
                 </div>
             )}
@@ -296,7 +296,7 @@ const ManageTeams = () => {
                 <div className="bg-gradient-to-r from-brand-600 via-brand-500 to-sky-500 p-6 sm:p-8 relative overflow-hidden">
                     <div className="absolute top-0 right-0 w-64 h-64 bg-[#1E2B42] rounded-full blur-3xl -mr-20 -mt-20 pointer-events-none"></div>
                     <div className="relative z-10 flex items-center gap-4">
-                        <div className="p-3 bg-white/20 rounded-2xl backdrop-blur-sm border border-white/20 shadow-lg">
+                        <div className="p-3 bg-[#131D31]/10 rounded-2xl backdrop-blur-sm border border-white/20 shadow-lg">
                             <Shield className="text-white h-7 w-7" />
                         </div>
                         <div>
@@ -308,12 +308,12 @@ const ManageTeams = () => {
                     </div>
                 </div>
 
-                <div className="p-6 sm:p-8 bg-slate-50/50 dark:bg-transparent">
+                <div className="p-6 sm:p-8 bg-[#0B1220]/50 dark:bg-transparent">
                     <form onSubmit={handleSubmit} className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-6">
                         {/* Logo Upload Section */}
                         <div className="md:col-span-2">
                             <label className="text-sm font-bold text-[#94A3B8] dark:text-gray-300 block mb-3 uppercase tracking-wider">Team Crest / Logo</label>
-                            <div className="flex flex-col sm:flex-row items-center gap-6 p-6 border-[1.5px] border-dashed border-[#24344D] border-[#24344D] rounded-2xl bg-[#131D31] bg-[#131D31]/50 transition-all hover:border-brand-500/50 hover:bg-brand-50/50 dark:hover:bg-brand-500/5 group shadow-sm">
+                            <div className="flex flex-col sm:flex-row items-center gap-6 p-6 border-[1.5px] border-dashed border-[#24344D] rounded-2xl bg-[#131D31] bg-[#131D31]/50 transition-all hover:border-brand-500/50 hover:bg-brand-50/50 dark:hover:bg-brand-500/5 group shadow-sm">
                                 {formData.logoUrl ? (
                                     <div className="relative shrink-0">
                                         <div className="absolute inset-0 bg-brand-500/20 blur-xl rounded-full opacity-100 transition-opacity"></div>
@@ -365,7 +365,7 @@ const ManageTeams = () => {
                                             <button
                                                 type="button"
                                                 onClick={() => setShowAssetPicker(true)}
-                                                className="flex items-center justify-center gap-2 w-full sm:w-auto px-6 py-3.5 bg-[#131D31] dark:bg-gray-800 hover:bg-brand-50 hover:text-brand-600 dark:hover:bg-brand-500/10 text-[#94A3B8] text-white border border-[#24344D] border-[#24344D] hover:border-brand-500/30 rounded-xl font-bold shadow-sm transition-all hover:scale-[1.02] active:scale-95 group/btn"
+                                                className="flex items-center justify-center gap-2 w-full sm:w-auto px-6 py-3.5 bg-[#131D31] dark:bg-gray-800 hover:bg-brand-50 hover:text-brand-600 dark:hover:bg-brand-500/10 text-[#94A3B8] text-white border border-[#24344D] hover:border-brand-500/30 rounded-xl font-bold shadow-sm transition-all hover:scale-[1.02] active:scale-95 group/btn"
                                             >
                                                 <Folders size={20} className="text-brand-500 group-hover/btn:scale-110 transition-transform" />
                                                 Choose from Gallery
@@ -392,7 +392,7 @@ const ManageTeams = () => {
                                 placeholder="e.g. Real Madrid CF"
                                 value={formData.name}
                                 onChange={handleInputChange}
-                                className="w-full bg-[#131D31] dark:bg-gray-800/50 border border-[#24344D] border-[#24344D] p-3.5 rounded-xl text-white text-white focus:ring-2 focus:ring-brand-500 focus:border-brand-500 outline-none transition-all shadow-sm font-medium"
+                                className="w-full bg-[#131D31] dark:bg-gray-800/50 border border-[#24344D] p-3.5 rounded-xl text-white focus:ring-2 focus:ring-brand-500 focus:border-brand-500 outline-none transition-all shadow-sm font-medium"
                                 required
                             />
                         </div>
@@ -405,7 +405,7 @@ const ManageTeams = () => {
                                 placeholder="e.g. RMA"
                                 value={formData.shortName}
                                 onChange={handleInputChange}
-                                className="w-full bg-[#131D31] dark:bg-gray-800/50 border border-[#24344D] border-[#24344D] p-3.5 rounded-xl text-white text-white focus:ring-2 focus:ring-brand-500 focus:border-brand-500 outline-none transition-all shadow-sm font-medium uppercase"
+                                className="w-full bg-[#131D31] dark:bg-gray-800/50 border border-[#24344D] p-3.5 rounded-xl text-white focus:ring-2 focus:ring-brand-500 focus:border-brand-500 outline-none transition-all shadow-sm font-medium uppercase"
                                 maxLength={5}
                                 required
                             />
@@ -419,7 +419,7 @@ const ManageTeams = () => {
                                 placeholder="e.g. 1902"
                                 value={formData.founded === 0 ? '' : formData.founded}
                                 onChange={handleInputChange}
-                                className="w-full bg-[#131D31] dark:bg-gray-800/50 border border-[#24344D] border-[#24344D] p-3.5 rounded-xl text-white text-white focus:ring-2 focus:ring-brand-500 focus:border-brand-500 outline-none transition-all shadow-sm font-medium"
+                                className="w-full bg-[#131D31] dark:bg-gray-800/50 border border-[#24344D] p-3.5 rounded-xl text-white focus:ring-2 focus:ring-brand-500 focus:border-brand-500 outline-none transition-all shadow-sm font-medium"
                             />
                         </div>
                         
@@ -431,7 +431,7 @@ const ManageTeams = () => {
                                 placeholder="e.g. Santiago Bernabéu"
                                 value={formData.stadium}
                                 onChange={handleInputChange}
-                                className="w-full bg-[#131D31] dark:bg-gray-800/50 border border-[#24344D] border-[#24344D] p-3.5 rounded-xl text-white text-white focus:ring-2 focus:ring-brand-500 focus:border-brand-500 outline-none transition-all shadow-sm font-medium"
+                                className="w-full bg-[#131D31] dark:bg-gray-800/50 border border-[#24344D] p-3.5 rounded-xl text-white focus:ring-2 focus:ring-brand-500 focus:border-brand-500 outline-none transition-all shadow-sm font-medium"
                             />
                         </div>
                         
@@ -443,7 +443,7 @@ const ManageTeams = () => {
                                 placeholder="Manager's Full Name"
                                 value={formData.manager || ''}
                                 onChange={handleInputChange}
-                                className="w-full bg-[#131D31] dark:bg-gray-800/50 border border-[#24344D] border-[#24344D] p-3.5 rounded-xl text-white text-white focus:ring-2 focus:ring-brand-500 focus:border-brand-500 outline-none transition-all shadow-sm font-medium"
+                                className="w-full bg-[#131D31] dark:bg-gray-800/50 border border-[#24344D] p-3.5 rounded-xl text-white focus:ring-2 focus:ring-brand-500 focus:border-brand-500 outline-none transition-all shadow-sm font-medium"
                             />
                         </div>
                         
@@ -455,7 +455,7 @@ const ManageTeams = () => {
                                 placeholder="Number of players"
                                 value={formData.players === 0 ? '' : formData.players}
                                 onChange={handleInputChange}
-                                className="w-full bg-[#131D31] dark:bg-gray-800/50 border border-[#24344D] border-[#24344D] p-3.5 rounded-xl text-white text-white focus:ring-2 focus:ring-brand-500 focus:border-brand-500 outline-none transition-all shadow-sm font-medium"
+                                className="w-full bg-[#131D31] dark:bg-gray-800/50 border border-[#24344D] p-3.5 rounded-xl text-white focus:ring-2 focus:ring-brand-500 focus:border-brand-500 outline-none transition-all shadow-sm font-medium"
                             />
                         </div>
                         
@@ -466,7 +466,7 @@ const ManageTeams = () => {
                                     name="status"
                                     value={formData.status || 'Active'}
                                     onChange={handleInputChange}
-                                    className="w-full bg-[#131D31] dark:bg-gray-800/50 border border-[#24344D] border-[#24344D] p-3.5 rounded-xl text-white text-white focus:ring-2 focus:ring-brand-500 focus:border-brand-500 outline-none transition-all shadow-sm font-medium appearance-none cursor-pointer"
+                                    className="w-full bg-[#131D31] dark:bg-gray-800/50 border border-[#24344D] p-3.5 rounded-xl text-white focus:ring-2 focus:ring-brand-500 focus:border-brand-500 outline-none transition-all shadow-sm font-medium appearance-none cursor-pointer"
                                     style={{
                                         color: formData.status === 'Active' ? '#22c55e' : 
                                                formData.status === 'Inactive' ? '#94a3b8' : 
@@ -491,18 +491,18 @@ const ManageTeams = () => {
                                     name="district"
                                     value={formData.district || ''}
                                     onChange={handleInputChange}
-                                    className="w-full bg-[#131D31] dark:bg-gray-800/50 border border-[#24344D] border-[#24344D] p-3.5 rounded-xl text-white text-white focus:ring-2 focus:ring-brand-500 focus:border-brand-500 outline-none transition-all shadow-sm font-medium appearance-none cursor-pointer"
+                                    className="w-full bg-[#131D31] dark:bg-gray-800/50 border border-[#24344D] p-3.5 rounded-xl text-white focus:ring-2 focus:ring-brand-500 focus:border-brand-500 outline-none transition-all shadow-sm font-medium appearance-none cursor-pointer"
                                 >
                                     <option value="">Select District</option>
                                     <option value="Quick Match">Quick Match Special Category</option>
                                     <optgroup label="Jammu Division" className="font-bold text-brand-500">
                                         {['Jammu', 'Samba', 'Kathua', 'Udhampur', 'Reasi', 'Rajouri', 'Poonch', 'Doda', 'Ramban', 'Kishtwar'].map(d => (
-                                            <option key={d} value={d} className="text-white text-white font-medium">{d}</option>
+                                            <option key={d} value={d} className="text-white font-medium">{d}</option>
                                         ))}
                                     </optgroup>
                                     <optgroup label="Kashmir Division" className="font-bold text-sky-500">
                                         {['Srinagar', 'Ganderbal', 'Budgam', 'Baramulla', 'Bandipora', 'Kupwara', 'Pulwama', 'Shopian', 'Kulgam', 'Anantnag'].map(d => (
-                                            <option key={d} value={d} className="text-white text-white font-medium">{d}</option>
+                                            <option key={d} value={d} className="text-white font-medium">{d}</option>
                                         ))}
                                     </optgroup>
                                 </select>
@@ -519,7 +519,7 @@ const ManageTeams = () => {
                                 placeholder="0"
                                 value={formData.trophies === 0 ? '' : formData.trophies}
                                 onChange={handleInputChange}
-                                className="w-full bg-[#131D31] dark:bg-gray-800/50 border border-[#24344D] border-[#24344D] p-3.5 rounded-xl text-white text-white focus:ring-2 focus:ring-brand-500 focus:border-brand-500 outline-none transition-all shadow-sm font-medium"
+                                className="w-full bg-[#131D31] dark:bg-gray-800/50 border border-[#24344D] p-3.5 rounded-xl text-white focus:ring-2 focus:ring-brand-500 focus:border-brand-500 outline-none transition-all shadow-sm font-medium"
                             />
                         </div>
 
@@ -531,7 +531,7 @@ const ManageTeams = () => {
                                 placeholder="Write about the club's history, values, and achievements..."
                                 value={formData.description || ''}
                                 onChange={handleInputChange}
-                                className="w-full bg-[#131D31] dark:bg-gray-800/50 border border-[#24344D] border-[#24344D] p-4 rounded-xl text-white text-white focus:ring-2 focus:ring-brand-500 focus:border-brand-500 outline-none transition-all shadow-sm font-medium resize-y"
+                                className="w-full bg-[#131D31] dark:bg-gray-800/50 border border-[#24344D] p-4 rounded-xl text-white focus:ring-2 focus:ring-brand-500 focus:border-brand-500 outline-none transition-all shadow-sm font-medium resize-y"
                             ></textarea>
                         </div>
 
@@ -540,7 +540,7 @@ const ManageTeams = () => {
                                 Participating Tournaments
                                 <span className="text-[10px] font-medium opacity-80 normal-case bg-[#131D31] bg-[#18253C] px-2 py-0.5 rounded-full">Select multiple</span>
                             </label>
-                            <div className="flex flex-wrap gap-2.5 bg-[#131D31] dark:bg-gray-800/50 border border-[#24344D] border-[#24344D] p-4 rounded-xl min-h-[58px] items-center shadow-inner">
+                            <div className="flex flex-wrap gap-2.5 bg-[#131D31] dark:bg-gray-800/50 border border-[#24344D] p-4 rounded-xl min-h-[58px] items-center shadow-inner">
                                 {tournaments.map(t => (
                                     <button
                                         key={t.id}
@@ -548,7 +548,7 @@ const ManageTeams = () => {
                                         onClick={() => handleTournamentToggle(t.name)}
                                         className={`text-sm px-4 py-2 rounded-lg font-bold transition-all border ${Array.isArray(formData.tournaments) && formData.tournaments.includes(t.name)
                                             ? 'bg-brand-500/10 border-brand-500/30 text-brand-400 text-brand-400 shadow-sm'
-                                            : 'bg-[#0B1220] bg-[#131D31]/50 border-[#24344D] border-[#24344D] text-[#94A3B8] dark:text-gray-400 hover:bg-[#18253C] hover:bg-[#18253C]'
+                                            : 'bg-[#0B1220] bg-[#131D31]/50 border-[#24344D] text-[#94A3B8] dark:text-gray-400 hover:bg-[#18253C] hover:bg-[#18253C]'
                                             }`}
                                     >
                                         {t.name}
@@ -559,7 +559,7 @@ const ManageTeams = () => {
                         </div>
 
                         {/* Actions */}
-                        <div className="md:col-span-2 pt-6 mt-2 border-t border-[#24344D] border-[#24344D] flex flex-col sm:flex-row gap-3 items-center justify-between">
+                        <div className="md:col-span-2 pt-6 mt-2 border-t border-[#24344D] flex flex-col sm:flex-row gap-3 items-center justify-between">
                             <div className="flex w-full gap-3 flex-col sm:flex-row order-1 sm:order-2 sm:justify-end">
                                 {editingId && (
                                     <button
@@ -617,7 +617,7 @@ const ManageTeams = () => {
                     placeholder="Search teams by name or short name..."
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
-                    className="w-full bg-[#0B1220] dark:bg-gray-800 border border-[#24344D] dark:border-gray-700 rounded-lg pl-10 pr-4 py-2 text-white text-white focus:ring-2 focus:ring-brand-500 outline-none"
+                    className="w-full bg-[#0B1220] dark:bg-gray-800 border border-[#24344D] dark:border-gray-700 rounded-lg pl-10 pr-4 py-2 text-white focus:ring-2 focus:ring-brand-500 outline-none"
                 />
             </div >
 
@@ -627,7 +627,7 @@ const ManageTeams = () => {
                     currentItems.map(team => (
                         <div key={team.id} className="bg-[#0B1220] dark:bg-gray-800 p-4 rounded flex justify-between items-center">
                             <div className="flex items-center gap-4">
-                                <div className="w-12 h-12 rounded bg-[#131D31]/50 flex items-center justify-center border border-[#24344D]/30 border-[#24344D]/50 overflow-hidden">
+                                <div className="w-12 h-12 rounded bg-[#131D31]/50 flex items-center justify-center border border-[#24344D]/40 overflow-hidden">
                                     {team.logoUrl ? (
                                         <img src={team.logoUrl} alt={team.name} className="w-full h-full object-contain p-1" />
                                     ) : (
@@ -641,7 +641,7 @@ const ManageTeams = () => {
                                     </div>
                                 </div>
                             </div>
-                            <div className="flex gap-2 text-white text-white">
+                            <div className="flex gap-2 text-white">
                                 <button
                                     onClick={() => handleEdit(team)}
                                     className="bg-blue-600 hover:bg-blue-700 px-3 py-1 rounded text-sm transition-colors"
@@ -669,22 +669,22 @@ const ManageTeams = () => {
 
             {/* Pagination Controls */}
             {filteredTeams.length > teamsPerPage && (
-                <div className="mt-8 flex flex-col sm:flex-row items-center justify-between gap-4 bg-slate-50/50 dark:bg-gray-800/50 p-4 rounded-2xl border border-[#24344D]/30 border-[#24344D]/50">
+                <div className="mt-8 flex flex-col sm:flex-row items-center justify-between gap-4 bg-[#0B1220]/50 dark:bg-gray-800/50 p-4 rounded-2xl border border-[#24344D]/40">
                     <div className="text-sm text-[#64748B] dark:text-gray-400 font-medium">
-                        Showing <span className="text-white text-white font-bold">{indexOfFirstTeam + 1}</span> to <span className="text-white text-white font-bold">{Math.min(indexOfLastTeam, filteredTeams.length)}</span> of <span className="text-white text-white font-bold">{filteredTeams.length}</span> teams
+                        Showing <span className="text-white font-bold">{indexOfFirstTeam + 1}</span> to <span className="text-white font-bold">{Math.min(indexOfLastTeam, filteredTeams.length)}</span> of <span className="text-white font-bold">{filteredTeams.length}</span> teams
                     </div>
                     <div className="flex items-center gap-2">
                         <button
                             onClick={() => paginate(1)}
                             disabled={currentPage === 1}
-                            className="p-2 rounded-xl bg-[#0B1220] dark:bg-gray-800 border border-[#24344D]/30 border-[#24344D]/50 text-[#64748B] dark:text-gray-400 hover:text-white text-white disabled:opacity-30 disabled:cursor-not-allowed transition-all"
+                            className="p-2 rounded-xl bg-[#0B1220] dark:bg-gray-800 border border-[#24344D]/40 text-[#64748B] dark:text-gray-400 hover:text-white disabled:opacity-30 disabled:cursor-not-allowed transition-all"
                         >
                             <ChevronsLeft size={18} />
                         </button>
                         <button
                             onClick={() => paginate(currentPage - 1)}
                             disabled={currentPage === 1}
-                            className="p-2 rounded-xl bg-[#0B1220] dark:bg-gray-800 border border-[#24344D]/30 border-[#24344D]/50 text-[#64748B] dark:text-gray-400 hover:text-white text-white disabled:opacity-30 disabled:cursor-not-allowed transition-all"
+                            className="p-2 rounded-xl bg-[#0B1220] dark:bg-gray-800 border border-[#24344D]/40 text-[#64748B] dark:text-gray-400 hover:text-white disabled:opacity-30 disabled:cursor-not-allowed transition-all"
                         >
                             <ChevronLeft size={18} />
                         </button>
@@ -703,7 +703,7 @@ const ManageTeams = () => {
                                             onClick={() => paginate(pageNum)}
                                             className={`w-10 h-10 rounded-xl text-sm font-bold transition-all ${currentPage === pageNum
                                                 ? "bg-brand-500 text-white shadow-lg shadow-brand-500/20"
-                                                : "bg-[#0B1220] dark:bg-gray-800 border border-[#24344D]/30 border-[#24344D]/50 text-[#64748B] dark:text-gray-400 hover:text-white text-white"
+                                                : "bg-[#0B1220] dark:bg-gray-800 border border-[#24344D]/40 text-[#64748B] dark:text-gray-400 hover:text-white"
                                                 }`}
                                         >
                                             {pageNum}
@@ -722,14 +722,14 @@ const ManageTeams = () => {
                         <button
                             onClick={() => paginate(currentPage + 1)}
                             disabled={currentPage === totalPages}
-                            className="p-2 rounded-xl bg-[#0B1220] dark:bg-gray-800 border border-[#24344D]/30 border-[#24344D]/50 text-[#64748B] dark:text-gray-400 hover:text-white text-white disabled:opacity-30 disabled:cursor-not-allowed transition-all"
+                            className="p-2 rounded-xl bg-[#0B1220] dark:bg-gray-800 border border-[#24344D]/40 text-[#64748B] dark:text-gray-400 hover:text-white disabled:opacity-30 disabled:cursor-not-allowed transition-all"
                         >
                             <ChevronRight size={18} />
                         </button>
                         <button
                             onClick={() => paginate(totalPages)}
                             disabled={currentPage === totalPages}
-                            className="p-2 rounded-xl bg-[#0B1220] dark:bg-gray-800 border border-[#24344D]/30 border-[#24344D]/50 text-[#64748B] dark:text-gray-400 hover:text-white text-white disabled:opacity-30 disabled:cursor-not-allowed transition-all"
+                            className="p-2 rounded-xl bg-[#0B1220] dark:bg-gray-800 border border-[#24344D]/40 text-[#64748B] dark:text-gray-400 hover:text-white disabled:opacity-30 disabled:cursor-not-allowed transition-all"
                         >
                             <ChevronsRight size={18} />
                         </button>

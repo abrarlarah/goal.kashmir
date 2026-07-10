@@ -310,19 +310,19 @@ const ManagePlayers = () => {
     };
 
     return (
-        <div className="container mx-auto px-4 py-8 text-white text-white">
+        <div className="container mx-auto px-4 py-8 text-white">
             <div className="flex justify-between items-center mb-6">
                 <h2 className="text-2xl font-bold">Manage Players</h2>
                 <button
                     onClick={handleExportCSV}
-                    className="flex items-center gap-2 px-4 py-2 bg-[#0B1220] bg-[#131D31] hover:bg-[#18253C] dark:bg-slate-700 text-white text-white border border-[#24344D] border-[#24344D] rounded-lg text-sm transition-colors"
+                    className="flex items-center gap-2 px-4 py-2 bg-[#0B1220] bg-[#131D31] hover:bg-[#18253C] dark:bg-[#131D31] text-white border border-[#24344D] rounded-lg text-sm transition-colors"
                 >
                     <Download size={16} /> Export to CSV
                 </button>
             </div>
 
             {successMessage && (
-                <div className="bg-green-600 text-white text-white p-3 rounded mb-4 animate-pulse">
+                <div className="bg-green-600 text-white p-3 rounded mb-4 animate-pulse">
                     {successMessage}
                 </div>
             )}
@@ -332,7 +332,7 @@ const ManagePlayers = () => {
                 <div className="bg-gradient-to-r from-violet-600 via-fuchsia-500 to-pink-500 p-6 sm:p-8 relative overflow-hidden">
                     <div className="absolute top-0 right-0 w-64 h-64 bg-[#1E2B42] rounded-full blur-3xl -mr-20 -mt-20 pointer-events-none"></div>
                     <div className="relative z-10 flex items-center gap-4">
-                        <div className="p-3 bg-white/20 rounded-2xl backdrop-blur-sm border border-white/20 shadow-lg">
+                        <div className="p-3 bg-[#131D31]/10 rounded-2xl backdrop-blur-sm border border-white/20 shadow-lg">
                             <User className="text-white h-7 w-7" />
                         </div>
                         <div>
@@ -344,12 +344,12 @@ const ManagePlayers = () => {
                     </div>
                 </div>
 
-                <div className="p-6 sm:p-8 bg-slate-50/50 dark:bg-transparent">
+                <div className="p-6 sm:p-8 bg-[#0B1220]/50 dark:bg-transparent">
                     <form onSubmit={handleSubmit} className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-x-8 gap-y-6">
                         {/* Player Photo Upload */}
                         <div className="lg:col-span-4">
                             <label className="text-sm font-bold text-[#94A3B8] dark:text-gray-300 block mb-3 uppercase tracking-wider">Player Portrait</label>
-                            <div className="flex flex-col sm:flex-row items-center gap-6 p-6 border-[1.5px] border-dashed border-[#24344D] border-[#24344D] rounded-2xl bg-[#131D31] bg-[#131D31]/50 transition-all hover:border-violet-500/50 hover:bg-violet-50/50 dark:hover:bg-violet-500/5 group shadow-sm">
+                            <div className="flex flex-col sm:flex-row items-center gap-6 p-6 border-[1.5px] border-dashed border-[#24344D] rounded-2xl bg-[#131D31] bg-[#131D31]/50 transition-all hover:border-violet-500/50 hover:bg-violet-50/50 dark:hover:bg-violet-500/5 group shadow-sm">
                                 {formData.photoUrl ? (
                                     <div className="relative shrink-0">
                                         <div className="absolute inset-0 bg-fuchsia-500/20 blur-xl rounded-full opacity-100 transition-opacity"></div>
@@ -401,7 +401,7 @@ const ManagePlayers = () => {
                                             <button
                                                 type="button"
                                                 onClick={() => setShowAssetPicker(true)}
-                                                className="flex items-center justify-center gap-2 w-full sm:w-auto px-6 py-3.5 bg-[#131D31] dark:bg-gray-800 hover:bg-violet-50 hover:text-violet-600 dark:hover:bg-violet-500/10 text-[#94A3B8] text-white border border-[#24344D] border-[#24344D] hover:border-violet-500/30 rounded-xl font-bold shadow-sm transition-all hover:scale-[1.02] active:scale-95 group/btn"
+                                                className="flex items-center justify-center gap-2 w-full sm:w-auto px-6 py-3.5 bg-[#131D31] dark:bg-gray-800 hover:bg-violet-50 hover:text-violet-600 dark:hover:bg-violet-500/10 text-[#94A3B8] text-white border border-[#24344D] hover:border-violet-500/30 rounded-xl font-bold shadow-sm transition-all hover:scale-[1.02] active:scale-95 group/btn"
                                             >
                                                 <Folders size={20} className="text-violet-500 group-hover/btn:scale-110 transition-transform" />
                                                 Choose from Directory
@@ -428,7 +428,7 @@ const ManagePlayers = () => {
                                 placeholder="Full Name"
                                 value={formData.name}
                                 onChange={handleInputChange}
-                                className="w-full bg-[#131D31] dark:bg-gray-800/50 border border-[#24344D] border-[#24344D] p-3.5 rounded-xl text-white text-white focus:ring-2 focus:ring-violet-500 focus:border-violet-500 outline-none transition-all shadow-sm font-medium"
+                                className="w-full bg-[#131D31] dark:bg-gray-800/50 border border-[#24344D] p-3.5 rounded-xl text-white focus:ring-2 focus:ring-violet-500 focus:border-violet-500 outline-none transition-all shadow-sm font-medium"
                                 required
                             />
                         </div>
@@ -454,7 +454,7 @@ const ManagePlayers = () => {
                                     name="team"
                                     value={formData.team}
                                     onChange={handleInputChange}
-                                    className="w-full bg-[#131D31] dark:bg-gray-800/50 border border-[#24344D] border-[#24344D] p-3.5 rounded-xl text-white text-white focus:ring-2 focus:ring-violet-500 focus:border-violet-500 outline-none transition-all shadow-sm font-medium appearance-none cursor-pointer"
+                                    className="w-full bg-[#131D31] dark:bg-gray-800/50 border border-[#24344D] p-3.5 rounded-xl text-white focus:ring-2 focus:ring-violet-500 focus:border-violet-500 outline-none transition-all shadow-sm font-medium appearance-none cursor-pointer"
                                     required
                                 >
                                     <option value="" disabled className="dark:bg-gray-800">Select a Club</option>
@@ -479,7 +479,7 @@ const ManagePlayers = () => {
                                     name="position"
                                     value={formData.position}
                                     onChange={handleInputChange}
-                                    className="w-full bg-[#131D31] dark:bg-gray-800/50 border border-[#24344D] border-[#24344D] p-3.5 rounded-xl text-white text-white focus:ring-2 focus:ring-violet-500 focus:border-violet-500 outline-none transition-all shadow-sm font-medium appearance-none cursor-pointer"
+                                    className="w-full bg-[#131D31] dark:bg-gray-800/50 border border-[#24344D] p-3.5 rounded-xl text-white focus:ring-2 focus:ring-violet-500 focus:border-violet-500 outline-none transition-all shadow-sm font-medium appearance-none cursor-pointer"
                                     style={{
                                         color: formData.position === 'Forward' ? '#ef4444' :
                                                formData.position === 'Midfielder' ? '#eab308' :
@@ -487,7 +487,7 @@ const ManagePlayers = () => {
                                     }}
                                 >
                                     {positions.map(p => (
-                                        <option key={p} value={p} className="text-white text-white dark:bg-gray-800">
+                                        <option key={p} value={p} className="text-white dark:bg-gray-800">
                                             {p}
                                         </option>
                                     ))}
@@ -505,18 +505,18 @@ const ManagePlayers = () => {
                                     name="district"
                                     value={formData.district}
                                     onChange={handleInputChange}
-                                    className="w-full bg-[#131D31] dark:bg-gray-800/50 border border-[#24344D] border-[#24344D] p-3.5 rounded-xl text-white text-white focus:ring-2 focus:ring-violet-500 focus:border-violet-500 outline-none transition-all shadow-sm font-medium appearance-none cursor-pointer"
+                                    className="w-full bg-[#131D31] dark:bg-gray-800/50 border border-[#24344D] p-3.5 rounded-xl text-white focus:ring-2 focus:ring-violet-500 focus:border-violet-500 outline-none transition-all shadow-sm font-medium appearance-none cursor-pointer"
                                     required
                                 >
                                     <option value="" disabled className="dark:bg-gray-800">Select District</option>
                                     <optgroup label="Jammu Division" className="font-bold text-violet-500 dark:bg-gray-800 text-white bg-[#131D31]">
                                         {DISTRICTS.JAMMU.map(district => (
-                                            <option key={district} value={district} className="text-white text-white font-medium dark:bg-gray-800">{district}</option>
+                                            <option key={district} value={district} className="text-white font-medium dark:bg-gray-800">{district}</option>
                                         ))}
                                     </optgroup>
                                     <optgroup label="Kashmir Division" className="font-bold text-fuchsia-500 dark:bg-gray-800 text-white bg-[#131D31]">
                                         {DISTRICTS.KASHMIR.map(district => (
-                                            <option key={district} value={district} className="text-white text-white font-medium dark:bg-gray-800">{district}</option>
+                                            <option key={district} value={district} className="text-white font-medium dark:bg-gray-800">{district}</option>
                                         ))}
                                     </optgroup>
                                 </select>
@@ -534,7 +534,7 @@ const ManagePlayers = () => {
                                 placeholder="e.g. 10"
                                 value={formData.number}
                                 onChange={handleInputChange}
-                                className="w-full bg-[#131D31] dark:bg-gray-800/50 border border-[#24344D] border-[#24344D] p-3.5 rounded-xl text-white text-white focus:ring-2 focus:ring-violet-500 focus:border-violet-500 outline-none transition-all shadow-sm font-black text-center text-lg"
+                                className="w-full bg-[#131D31] dark:bg-gray-800/50 border border-[#24344D] p-3.5 rounded-xl text-white focus:ring-2 focus:ring-violet-500 focus:border-violet-500 outline-none transition-all shadow-sm font-black text-center text-lg"
                             />
                         </div>
 
@@ -546,7 +546,7 @@ const ManagePlayers = () => {
                                 placeholder="Nationality"
                                 value={formData.nationality}
                                 onChange={handleInputChange}
-                                className="w-full bg-[#131D31] dark:bg-gray-800/50 border border-[#24344D] border-[#24344D] p-3.5 rounded-xl text-white text-white focus:ring-2 focus:ring-violet-500 focus:border-violet-500 outline-none transition-all shadow-sm font-medium"
+                                className="w-full bg-[#131D31] dark:bg-gray-800/50 border border-[#24344D] p-3.5 rounded-xl text-white focus:ring-2 focus:ring-violet-500 focus:border-violet-500 outline-none transition-all shadow-sm font-medium"
                             />
                         </div>
 
@@ -557,7 +557,7 @@ const ManagePlayers = () => {
                                 name="dob"
                                 value={formData.dob}
                                 onChange={handleInputChange}
-                                className="w-full bg-[#131D31] dark:bg-gray-800/50 border border-[#24344D] border-[#24344D] p-3.5 rounded-xl text-white text-white focus:ring-2 focus:ring-violet-500 focus:border-violet-500 outline-none transition-all shadow-sm font-medium"
+                                className="w-full bg-[#131D31] dark:bg-gray-800/50 border border-[#24344D] p-3.5 rounded-xl text-white focus:ring-2 focus:ring-violet-500 focus:border-violet-500 outline-none transition-all shadow-sm font-medium"
                             />
                         </div>
 
@@ -569,7 +569,7 @@ const ManagePlayers = () => {
                                 placeholder="0"
                                 value={formData.age === 0 ? '' : formData.age}
                                 readOnly
-                                className="w-full bg-slate-100/80 dark:bg-gray-800/80 border border-[#24344D]/50 border-[#24344D]/50 p-3.5 rounded-xl text-[#64748B] dark:text-gray-400 font-medium cursor-not-allowed text-center"
+                                className="w-full bg-[#101827]/80 dark:bg-gray-800/80 border border-[#24344D]/50 border-[#24344D]/50 p-3.5 rounded-xl text-[#64748B] dark:text-gray-400 font-medium cursor-not-allowed text-center"
                             />
                         </div>
 
@@ -581,27 +581,27 @@ const ManagePlayers = () => {
                             <div className="grid grid-cols-2 md:grid-cols-6 gap-3 sm:gap-4 p-4 rounded-2xl bg-[#0B1220] dark:bg-[#121b2e] border border-[#24344D]/50 border-[#24344D]/50">
                                 <div className="space-y-1.5 focus-within:text-violet-600 dark:focus-within:text-fuchsia-400 transition-colors">
                                     <label className="text-[10px] font-bold text-[#64748B] dark:text-gray-400 uppercase tracking-wider text-center block">Matches</label>
-                                    <input type="number" name="matches" placeholder="0" value={formData.matches === 0 ? '' : formData.matches} onChange={handleInputChange} className="w-full bg-[#131D31] dark:bg-gray-800 border border-[#24344D] border-[#24344D] p-2.5 rounded-lg text-white text-white focus:ring-2 focus:ring-violet-500 focus:border-violet-500 outline-none shadow-sm font-black text-center" />
+                                    <input type="number" name="matches" placeholder="0" value={formData.matches === 0 ? '' : formData.matches} onChange={handleInputChange} className="w-full bg-[#131D31] dark:bg-gray-800 border border-[#24344D] p-2.5 rounded-lg text-white focus:ring-2 focus:ring-violet-500 focus:border-violet-500 outline-none shadow-sm font-black text-center" />
                                 </div>
                                 <div className="space-y-1.5 focus-within:text-violet-600 dark:focus-within:text-fuchsia-400 transition-colors">
                                     <label className="text-[10px] font-bold text-[#64748B] dark:text-gray-400 uppercase tracking-wider text-center block">Goals</label>
-                                    <input type="number" name="goals" placeholder="0" value={formData.goals === 0 ? '' : formData.goals} onChange={handleInputChange} className="w-full bg-[#131D31] dark:bg-gray-800 border border-[#24344D] border-[#24344D] p-2.5 rounded-lg text-white text-white focus:ring-2 focus:ring-violet-500 focus:border-violet-500 outline-none shadow-sm font-black text-center text-brand-500" />
+                                    <input type="number" name="goals" placeholder="0" value={formData.goals === 0 ? '' : formData.goals} onChange={handleInputChange} className="w-full bg-[#131D31] dark:bg-gray-800 border border-[#24344D] p-2.5 rounded-lg text-white focus:ring-2 focus:ring-violet-500 focus:border-violet-500 outline-none shadow-sm font-black text-center text-brand-500" />
                                 </div>
                                 <div className="space-y-1.5 focus-within:text-violet-600 dark:focus-within:text-fuchsia-400 transition-colors">
                                     <label className="text-[10px] font-bold text-[#64748B] dark:text-gray-400 uppercase tracking-wider text-center block">Assists</label>
-                                    <input type="number" name="assists" placeholder="0" value={formData.assists === 0 ? '' : formData.assists} onChange={handleInputChange} className="w-full bg-[#131D31] dark:bg-gray-800 border border-[#24344D] border-[#24344D] p-2.5 rounded-lg text-white text-white focus:ring-2 focus:ring-violet-500 focus:border-violet-500 outline-none shadow-sm font-black text-center text-blue-500" />
+                                    <input type="number" name="assists" placeholder="0" value={formData.assists === 0 ? '' : formData.assists} onChange={handleInputChange} className="w-full bg-[#131D31] dark:bg-gray-800 border border-[#24344D] p-2.5 rounded-lg text-white focus:ring-2 focus:ring-violet-500 focus:border-violet-500 outline-none shadow-sm font-black text-center text-blue-500" />
                                 </div>
                                 <div className="space-y-1.5 focus-within:text-violet-600 dark:focus-within:text-fuchsia-400 transition-colors">
                                     <label className="text-[10px] font-bold text-[#64748B] dark:text-gray-400 uppercase tracking-wider text-center block">Y. Cards</label>
-                                    <input type="number" name="yellowCards" placeholder="0" value={formData.yellowCards === 0 ? '' : formData.yellowCards} onChange={handleInputChange} className="w-full bg-[#131D31] dark:bg-gray-800 border border-[#24344D] border-[#24344D] p-2.5 rounded-lg text-white text-white focus:ring-2 focus:ring-violet-500 focus:border-violet-500 outline-none shadow-sm font-black text-center text-yellow-500" />
+                                    <input type="number" name="yellowCards" placeholder="0" value={formData.yellowCards === 0 ? '' : formData.yellowCards} onChange={handleInputChange} className="w-full bg-[#131D31] dark:bg-gray-800 border border-[#24344D] p-2.5 rounded-lg text-white focus:ring-2 focus:ring-violet-500 focus:border-violet-500 outline-none shadow-sm font-black text-center text-yellow-500" />
                                 </div>
                                 <div className="space-y-1.5 focus-within:text-violet-600 dark:focus-within:text-fuchsia-400 transition-colors">
                                     <label className="text-[10px] font-bold text-[#64748B] dark:text-gray-400 uppercase tracking-wider text-center block">R. Cards</label>
-                                    <input type="number" name="redCards" placeholder="0" value={formData.redCards === 0 ? '' : formData.redCards} onChange={handleInputChange} className="w-full bg-[#131D31] dark:bg-gray-800 border border-[#24344D] border-[#24344D] p-2.5 rounded-lg text-white text-white focus:ring-2 focus:ring-violet-500 focus:border-violet-500 outline-none shadow-sm font-black text-center text-red-500" />
+                                    <input type="number" name="redCards" placeholder="0" value={formData.redCards === 0 ? '' : formData.redCards} onChange={handleInputChange} className="w-full bg-[#131D31] dark:bg-gray-800 border border-[#24344D] p-2.5 rounded-lg text-white focus:ring-2 focus:ring-violet-500 focus:border-violet-500 outline-none shadow-sm font-black text-center text-red-500" />
                                 </div>
                                 <div className="space-y-1.5 focus-within:text-violet-600 dark:focus-within:text-fuchsia-400 transition-colors">
                                     <label className="text-[10px] font-bold text-[#64748B] dark:text-gray-400 uppercase tracking-wider text-center block">Clean Sht</label>
-                                    <input type="number" name="cleanSheets" placeholder="0" value={formData.cleanSheets === 0 ? '' : formData.cleanSheets} onChange={handleInputChange} className="w-full bg-[#131D31] dark:bg-gray-800 border border-[#24344D] border-[#24344D] p-2.5 rounded-lg text-white text-white focus:ring-2 focus:ring-violet-500 focus:border-violet-500 outline-none shadow-sm font-black text-center text-green-400" />
+                                    <input type="number" name="cleanSheets" placeholder="0" value={formData.cleanSheets === 0 ? '' : formData.cleanSheets} onChange={handleInputChange} className="w-full bg-[#131D31] dark:bg-gray-800 border border-[#24344D] p-2.5 rounded-lg text-white focus:ring-2 focus:ring-violet-500 focus:border-violet-500 outline-none shadow-sm font-black text-center text-green-400" />
                                 </div>
                             </div>
                         </div>
@@ -614,12 +614,12 @@ const ManagePlayers = () => {
                                 value={formData.bio || ''}
                                 onChange={handleInputChange}
                                 rows={3}
-                                className="w-full bg-[#131D31] dark:bg-gray-800/50 border border-[#24344D] border-[#24344D] p-4 rounded-xl text-white text-white focus:ring-2 focus:ring-violet-500 focus:border-violet-500 outline-none transition-all shadow-sm font-medium resize-y"
+                                className="w-full bg-[#131D31] dark:bg-gray-800/50 border border-[#24344D] p-4 rounded-xl text-white focus:ring-2 focus:ring-violet-500 focus:border-violet-500 outline-none transition-all shadow-sm font-medium resize-y"
                             ></textarea>
                         </div>
 
                         {/* Actions */}
-                        <div className="lg:col-span-4 pt-6 pb-2 border-t border-[#24344D] border-[#24344D] flex flex-col sm:flex-row gap-3 items-center justify-between">
+                        <div className="lg:col-span-4 pt-6 pb-2 border-t border-[#24344D] flex flex-col sm:flex-row gap-3 items-center justify-between">
                             <div className="flex w-full gap-3 flex-col sm:flex-row order-1 sm:order-2 sm:justify-end">
                                 {editingId && (
                                     <button
@@ -678,7 +678,7 @@ const ManagePlayers = () => {
                         placeholder="Search players by name or team..."
                         value={searchTerm}
                         onChange={(e) => setSearchTerm(e.target.value)}
-                        className="w-full bg-[#0B1220] dark:bg-gray-800 border border-[#24344D] dark:border-gray-700 rounded-lg pl-10 pr-4 py-2 text-white text-white focus:ring-2 focus:ring-brand-500 outline-none"
+                        className="w-full bg-[#0B1220] dark:bg-gray-800 border border-[#24344D] dark:border-gray-700 rounded-lg pl-10 pr-4 py-2 text-white focus:ring-2 focus:ring-brand-500 outline-none"
                     />
                 </div>
                 <div className="flex items-center gap-2">
@@ -686,7 +686,7 @@ const ManagePlayers = () => {
                     <select
                         value={teamFilter}
                         onChange={(e) => setTeamFilter(e.target.value)}
-                        className="bg-[#0B1220] dark:bg-gray-800 border border-[#24344D] dark:border-gray-700 rounded-lg px-4 py-2 text-white text-white focus:ring-2 focus:ring-brand-500 outline-none"
+                        className="bg-[#0B1220] dark:bg-gray-800 border border-[#24344D] dark:border-gray-700 rounded-lg px-4 py-2 text-white focus:ring-2 focus:ring-brand-500 outline-none"
                     >
                         <option value="All" className="dark:bg-gray-800">All Teams</option>
                         {teams.map(t => (
@@ -713,7 +713,7 @@ const ManagePlayers = () => {
                     <tbody>
                         {currentItems.map(player => (
                             <tr key={player.id} className="border-b border-[#24344D] dark:border-gray-700 bg-[#0B1220] dark:bg-gray-800 hover:bg-[#18253C] dark:bg-gray-700">
-                                <td className="px-4 py-3 font-medium text-white text-white">{player.name}</td>
+                                <td className="px-4 py-3 font-medium text-white">{player.name}</td>
                                 <td className="px-4 py-3">{player.team}</td>
                                 <td className="px-4 py-3">
                                     <span className="text-xs bg-brand-500/20 text-brand-400 px-2 py-1 rounded">
@@ -731,7 +731,7 @@ const ManagePlayers = () => {
                                     <div className="flex items-center gap-2">
                                         <button
                                             onClick={() => handleEdit(player)}
-                                            className="p-2 bg-blue-500/10 text-blue-500 hover:bg-blue-500 hover:text-white text-white rounded-lg transition-all"
+                                            className="p-2 bg-blue-500/10 text-blue-500 hover:bg-blue-500 hover:text-white rounded-lg transition-all"
                                             title="Edit Player"
                                         >
                                             <Edit3 size={16} />
@@ -739,7 +739,7 @@ const ManagePlayers = () => {
                                         {isSuperAdmin && (
                                             <button
                                                 onClick={() => handleDelete(player.id)}
-                                                className="p-2 bg-red-500/10 text-red-500 hover:bg-red-500 hover:text-white text-white rounded-lg transition-all"
+                                                className="p-2 bg-red-500/10 text-red-500 hover:bg-red-500 hover:text-white rounded-lg transition-all"
                                                 title="Delete Player"
                                             >
                                                 <X size={16} />
@@ -760,22 +760,22 @@ const ManagePlayers = () => {
 
             {/* Pagination Controls */}
             {filteredPlayers.length > playersPerPage && (
-                <div className="mt-8 flex flex-col sm:flex-row items-center justify-between gap-4 bg-slate-50/50 dark:bg-gray-800/50 p-4 rounded-2xl border border-[#24344D]/30 border-[#24344D]/50">
+                <div className="mt-8 flex flex-col sm:flex-row items-center justify-between gap-4 bg-[#0B1220]/50 dark:bg-gray-800/50 p-4 rounded-2xl border border-[#24344D]/40">
                     <div className="text-sm text-[#64748B] dark:text-gray-400 font-medium">
-                        Showing <span className="text-white text-white font-bold">{indexOfFirstPlayer + 1}</span> to <span className="text-white text-white font-bold">{Math.min(indexOfLastPlayer, filteredPlayers.length)}</span> of <span className="text-white text-white font-bold">{filteredPlayers.length}</span> players
+                        Showing <span className="text-white font-bold">{indexOfFirstPlayer + 1}</span> to <span className="text-white font-bold">{Math.min(indexOfLastPlayer, filteredPlayers.length)}</span> of <span className="text-white font-bold">{filteredPlayers.length}</span> players
                     </div>
                     <div className="flex items-center gap-2">
                         <button
                             onClick={() => paginate(1)}
                             disabled={currentPage === 1}
-                            className="p-2 rounded-xl bg-[#0B1220] dark:bg-gray-800 border border-[#24344D]/30 border-[#24344D]/50 text-[#64748B] dark:text-gray-400 hover:text-white text-white disabled:opacity-30 disabled:cursor-not-allowed transition-all"
+                            className="p-2 rounded-xl bg-[#0B1220] dark:bg-gray-800 border border-[#24344D]/40 text-[#64748B] dark:text-gray-400 hover:text-white disabled:opacity-30 disabled:cursor-not-allowed transition-all"
                         >
                             <ChevronsLeft size={18} />
                         </button>
                         <button
                             onClick={() => paginate(currentPage - 1)}
                             disabled={currentPage === 1}
-                            className="p-2 rounded-xl bg-[#0B1220] dark:bg-gray-800 border border-[#24344D]/30 border-[#24344D]/50 text-[#64748B] dark:text-gray-400 hover:text-white text-white disabled:opacity-30 disabled:cursor-not-allowed transition-all"
+                            className="p-2 rounded-xl bg-[#0B1220] dark:bg-gray-800 border border-[#24344D]/40 text-[#64748B] dark:text-gray-400 hover:text-white disabled:opacity-30 disabled:cursor-not-allowed transition-all"
                         >
                             <ChevronLeft size={18} />
                         </button>
@@ -794,8 +794,8 @@ const ManagePlayers = () => {
                                             key={pageNum}
                                             onClick={() => paginate(pageNum)}
                                             className={`w-10 h-10 rounded-xl text-sm font-bold transition-all ${currentPage === pageNum
-                                                ? "bg-brand-500 text-white text-white shadow-lg shadow-brand-500/20"
-                                                : "bg-[#0B1220] dark:bg-gray-800 border border-[#24344D]/30 border-[#24344D]/50 text-[#64748B] dark:text-gray-400 hover:text-white text-white"
+                                                ? "bg-brand-500 text-white shadow-lg shadow-brand-500/20"
+                                                : "bg-[#0B1220] dark:bg-gray-800 border border-[#24344D]/40 text-[#64748B] dark:text-gray-400 hover:text-white"
                                                 }`}
                                         >
                                             {pageNum}
@@ -814,14 +814,14 @@ const ManagePlayers = () => {
                         <button
                             onClick={() => paginate(currentPage + 1)}
                             disabled={currentPage === totalPages}
-                            className="p-2 rounded-xl bg-[#0B1220] dark:bg-gray-800 border border-[#24344D]/30 border-[#24344D]/50 text-[#64748B] dark:text-gray-400 hover:text-white text-white disabled:opacity-30 disabled:cursor-not-allowed transition-all"
+                            className="p-2 rounded-xl bg-[#0B1220] dark:bg-gray-800 border border-[#24344D]/40 text-[#64748B] dark:text-gray-400 hover:text-white disabled:opacity-30 disabled:cursor-not-allowed transition-all"
                         >
                             <ChevronRight size={18} />
                         </button>
                         <button
                             onClick={() => paginate(totalPages)}
                             disabled={currentPage === totalPages}
-                            className="p-2 rounded-xl bg-[#0B1220] dark:bg-gray-800 border border-[#24344D]/30 border-[#24344D]/50 text-[#64748B] dark:text-gray-400 hover:text-white text-white disabled:opacity-30 disabled:cursor-not-allowed transition-all"
+                            className="p-2 rounded-xl bg-[#0B1220] dark:bg-gray-800 border border-[#24344D]/40 text-[#64748B] dark:text-gray-400 hover:text-white disabled:opacity-30 disabled:cursor-not-allowed transition-all"
                         >
                             <ChevronsRight size={18} />
                         </button>

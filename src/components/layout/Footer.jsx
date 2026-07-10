@@ -70,8 +70,8 @@ const Footer = () => {
                                     onClick={handleInstallClick}
                                     className="group relative flex items-center gap-3 px-6 py-3.5 bg-gradient-to-r from-brand-600 to-brand-500 rounded-2xl shadow-xl shadow-brand-500/15 hover:shadow-brand-500/25 transition-all duration-300 hover:-translate-y-1 active:scale-95 overflow-hidden"
                                 >
-                                    <div className="absolute inset-0 bg-white/10 translate-y-full group-hover:translate-y-0 transition-transform duration-300 ease-out" />
-                                    <div className="relative bg-white/15 p-2 rounded-xl backdrop-blur-sm">
+                                    <div className="absolute inset-0 bg-[#131D31]/10 translate-y-full group-hover:translate-y-0 transition-transform duration-300 ease-out" />
+                                    <div className="relative bg-[#131D31]/15 p-2 rounded-xl backdrop-blur-sm">
                                         <Smartphone size={20} className="text-white" />
                                     </div>
                                     <div className="relative text-left">

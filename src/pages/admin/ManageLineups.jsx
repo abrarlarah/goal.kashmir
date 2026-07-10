@@ -388,11 +388,11 @@ const ManageLineups = () => {
     };
 
     return (
-        <div className="container mx-auto px-4 py-8 text-white text-white">
+        <div className="container mx-auto px-4 py-8 text-white">
             <h2 className="text-3xl font-bold mb-6">⚽ Manage Match Lineups</h2>
 
             {successMessage && (
-                <div className="bg-green-600 text-white text-white p-3 rounded mb-4 animate-pulse">
+                <div className="bg-green-600 text-white p-3 rounded mb-4 animate-pulse">
                     {successMessage}
                 </div>
             )}
@@ -403,7 +403,7 @@ const ManageLineups = () => {
                 <select
                     value={selectedMatch}
                     onChange={(e) => handleMatchChange(e.target.value)}
-                    className="bg-[#101827] dark:bg-gray-700 p-3 rounded text-white text-white w-full mb-4"
+                    className="bg-[#101827] dark:bg-gray-700 p-3 rounded text-white w-full mb-4"
                 >
                     <option value="">Select a match</option>
                     {scopedMatches.filter(m => m.status !== 'finished').map(match => (
@@ -426,7 +426,7 @@ const ManageLineups = () => {
                                     className={`flex-1 p-4 rounded-xl border-2 transition-all flex flex-col items-center gap-2 ${
                                         selectedTeam === teamName 
                                         ? 'bg-brand-500/10 border-brand-500 text-brand-500' 
-                                        : 'bg-[#131D31]/50 border-white/5 hover:bg-white/10 hover:border-white/20'
+                                        : 'bg-[#131D31]/50 border-white/5 hover:bg-[#131D31]/10 hover:border-white/20'
                                     }`}
                                 >
                                     <Shield size={32} />
@@ -465,13 +465,13 @@ const ManageLineups = () => {
             {/* Mode toggle when team is selected */}
             {selectedTeam && (
                 <div className="mb-6">
-                    <div className="flex rounded-xl overflow-hidden border border-[#24344D] border-[#24344D] bg-[#0B1220] dark:bg-gray-800">
+                    <div className="flex rounded-xl overflow-hidden border border-[#24344D] bg-[#0B1220] dark:bg-gray-800">
                         <button
                             onClick={() => setIsManualMode(false)}
                             className={`flex-1 flex items-center justify-center gap-2 px-4 py-3 text-sm font-bold transition-all ${
                                 !isManualMode
                                     ? 'bg-brand-500 text-white shadow-lg'
-                                    : 'text-[#64748B] text-[#94A3B8] hover:text-white hover:text-white hover:bg-[#18253C] hover:bg-[#18253C]'
+                                    : 'text-[#94A3B8] hover:text-white hover:text-white hover:bg-[#18253C] hover:bg-[#18253C]'
                             }`}
                         >
                             <Users size={16} />
@@ -482,7 +482,7 @@ const ManageLineups = () => {
                             className={`flex-1 flex items-center justify-center gap-2 px-4 py-3 text-sm font-bold transition-all ${
                                 isManualMode
                                     ? 'bg-gradient-to-r from-amber-500 to-orange-500 text-white shadow-lg'
-                                    : 'text-[#64748B] text-[#94A3B8] hover:text-white hover:text-white hover:bg-[#18253C] hover:bg-[#18253C]'
+                                    : 'text-[#94A3B8] hover:text-white hover:text-white hover:bg-[#18253C] hover:bg-[#18253C]'
                             }`}
                         >
                             <UserPlus size={16} />
@@ -520,12 +520,12 @@ const ManageLineups = () => {
                                         else if (manualLineup.bench.length < 6) addManualToBench();
                                     }
                                 }}
-                                className="flex-1 bg-[#131D31] dark:bg-gray-700 border border-[#24344D] dark:border-gray-600 rounded-xl px-4 py-3 text-white text-white focus:ring-2 focus:ring-amber-500 outline-none font-bold"
+                                className="flex-1 bg-[#131D31] dark:bg-gray-700 border border-[#24344D] dark:border-gray-600 rounded-xl px-4 py-3 text-white focus:ring-2 focus:ring-amber-500 outline-none font-bold"
                             />
                             <select
                                 value={manualPlayerPosition}
                                 onChange={(e) => setManualPlayerPosition(e.target.value)}
-                                className="bg-[#131D31] dark:bg-gray-700 border border-[#24344D] dark:border-gray-600 rounded-xl px-4 py-3 text-white text-white focus:ring-2 focus:ring-amber-500 outline-none font-bold w-full sm:w-40"
+                                className="bg-[#131D31] dark:bg-gray-700 border border-[#24344D] dark:border-gray-600 rounded-xl px-4 py-3 text-white focus:ring-2 focus:ring-amber-500 outline-none font-bold w-full sm:w-40"
                             >
                                 <option value="">Position</option>
                                 <option value="GK">GK</option>
@@ -638,7 +638,7 @@ const ManageLineups = () => {
                                     placeholder="Search team players..."
                                     value={searchTerm}
                                     onChange={(e) => setSearchTerm(e.target.value)}
-                                    className="w-full bg-[#101827] dark:bg-gray-700 border border-gray-600 rounded pl-8 pr-2 py-1.5 text-xs text-white text-white focus:ring-1 focus:ring-green-500 outline-none"
+                                    className="w-full bg-[#101827] dark:bg-gray-700 border border-gray-600 rounded pl-8 pr-2 py-1.5 text-xs text-white focus:ring-1 focus:ring-green-500 outline-none"
                                 />
                             </div>
                         </div>

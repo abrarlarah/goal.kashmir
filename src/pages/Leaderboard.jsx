@@ -204,7 +204,7 @@ const Leaderboard = () => {
     };
   }, [matches, players, teams]);
 
-  if (loading && teams.length === 0) return <div className="text-center text-white text-white py-20">Loading Standings...</div>;
+  if (loading && teams.length === 0) return <div className="text-center text-white py-20">Loading Standings...</div>;
 
   // Player card component for reuse
   const PlayerCard = ({ player, idx, statValue, statLabel, statColor, icon: Icon, children }) => (
@@ -382,7 +382,7 @@ const Leaderboard = () => {
               "flex-1 justify-center sm:flex-none sm:justify-start flex items-center gap-2 px-3 sm:px-5 py-2.5 rounded-xl text-[9px] sm:text-xs font-black transition-all whitespace-nowrap min-w-[calc(33.33%-4px)] sm:min-w-0 uppercase tracking-wider",
               activeTab === tab.id
                 ? "bg-gradient-to-r from-violet-500 to-fuchsia-500 text-white shadow-lg shadow-violet-500/20"
-                : "text-[#64748B] hover:text-white hover:bg-white/5"
+                : "text-[#64748B] hover:text-white hover:bg-[#131D31]/5"
             )}
           >
             <tab.icon size={14} />
@@ -414,7 +414,7 @@ const Leaderboard = () => {
                 {tableData.map((team, index) => {
                   const gd = team.goalsFor - team.goalsAgainst;
                   return (
-                    <tr key={team.id} className="hover:bg-white/[0.03] transition-colors group">
+                    <tr key={team.id} className="hover:bg-[#131D31]/[0.03] transition-colors group">
                       <td className="px-4 sm:px-6 py-3 sm:py-4 whitespace-nowrap text-xs sm:text-sm font-black text-[#64748B]">{index + 1}</td>
                       <td className="px-4 sm:px-6 py-3 sm:py-4 whitespace-nowrap">
                         <Link to={`/teams/${team.id}`} className="flex items-center gap-2 sm:gap-3 group-hover:translate-x-1 transition-transform">

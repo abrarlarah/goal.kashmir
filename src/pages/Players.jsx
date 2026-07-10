@@ -100,7 +100,7 @@ const Players = () => {
       <div className="flex h-[80vh] items-center justify-center">
         <div className="flex flex-col items-center gap-4">
           <div className="h-10 w-10 animate-spin rounded-full border-4 border-brand-500 border-t-transparent"></div>
-          <div className="text-[#94A3B8] text-[#94A3B8] font-medium animate-pulse">Loading Players...</div>
+          <div className="text-[#94A3B8] font-medium animate-pulse">Loading Players...</div>
         </div>
       </div>
     );
@@ -117,8 +117,8 @@ const Players = () => {
       >
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
           <div>
-            <h1 className="text-3xl md:text-4xl font-display font-bold text-white text-white mb-2">Players</h1>
-            <p className="text-[#94A3B8] text-[#94A3B8]">View performance stats and player details.</p>
+            <h1 className="text-3xl md:text-4xl font-display font-bold text-white mb-2">Players</h1>
+            <p className="text-[#94A3B8]">View performance stats and player details.</p>
           </div>
 
           <div className="flex flex-col sm:flex-row gap-3">
@@ -128,7 +128,7 @@ const Players = () => {
               <select
                 value={selectedDistrict}
                 onChange={(e) => setSelectedDistrict(e.target.value)}
-                className="bg-[#131D31] dark:bg-dark-card/50 backdrop-blur-sm border border-slate-200/10 border-[#24344D] rounded-xl px-4 py-2.5 text-sm font-medium text-white text-white focus:ring-2 focus:ring-brand-500 focus:border-brand-500 outline-none transition-all"
+                className="bg-[#131D31] bg-[#131D31]/60 backdrop-blur-sm border border-[#24344D] rounded-xl px-4 py-2.5 text-sm font-medium text-white focus:ring-2 focus:ring-brand-500 focus:border-brand-500 outline-none transition-all"
               >
                 <option value="All">All Districts</option>
                 <optgroup label="Jammu Division">
@@ -145,7 +145,7 @@ const Players = () => {
             </div>
 
             {(isAdmin || isSuperAdmin) && (
-              <Link to="/admin/players" className="flex items-center gap-2 px-5 py-2.5 bg-brand-600 hover:bg-brand-500 text-white text-white rounded-xl text-sm font-semibold transition-all shadow-lg shadow-brand-500/20 hover:scale-105 active:scale-95">
+              <Link to="/admin/players" className="flex items-center gap-2 px-5 py-2.5 bg-brand-600 hover:bg-brand-500 text-white rounded-xl text-sm font-semibold transition-all shadow-lg shadow-brand-500/20 hover:scale-105 active:scale-95">
                 <Plus size={18} /> Add Player
               </Link>
             )}
@@ -159,7 +159,7 @@ const Players = () => {
               <>
                 <button
                   onClick={saveChanges}
-                  className="flex items-center gap-2 px-4 py-2 bg-green-500 hover:bg-green-400 text-white text-white rounded-lg text-sm font-medium transition-colors"
+                  className="flex items-center gap-2 px-4 py-2 bg-green-500 hover:bg-green-400 text-white rounded-lg text-sm font-medium transition-colors"
                 >
                   <Save size={16} /> Save
                 </button>
@@ -173,7 +173,7 @@ const Players = () => {
             ) : (
               <button
                 onClick={() => setEditMode(true)}
-                className="flex items-center gap-2 px-4 py-2 bg-[#131D31]/50 hover:bg-white/10 text-white text-white border border-[#24344D]/30 border-[#24344D]/50 rounded-lg text-sm font-medium transition-colors"
+                className="flex items-center gap-2 px-4 py-2 bg-[#131D31]/50 hover:bg-[#131D31]/10 text-white border border-[#24344D]/40 rounded-lg text-sm font-medium transition-colors"
               >
                 <Edit2 size={16} /> Edit Stats
               </button>
@@ -196,7 +196,7 @@ const Players = () => {
           <input
             type="text"
             placeholder="Search players or teams..."
-            className="block w-full pl-10 pr-3 py-2.5 border border-slate-200/10 border-[#24344D] rounded-xl leading-5 bg-[#131D31]/50 text-[#94A3B8] text-[#94A3B8] placeholder-[#64748B] focus:outline-none focus:bg-white/10 focus:ring-1 focus:ring-brand-500/50 focus:border-brand-500/50 sm:text-sm transition-colors"
+            className="block w-full pl-10 pr-3 py-2.5 border border-[#24344D] rounded-xl leading-5 bg-[#131D31]/50 text-[#94A3B8] placeholder-[#64748B] focus:outline-none focus:bg-[#131D31]/10 focus:ring-1 focus:ring-brand-500/50 focus:border-brand-500/50 sm:text-sm transition-colors"
             value={searchQuery}
             onChange={e => {
               setSearchQuery(e.target.value);
@@ -210,7 +210,7 @@ const Players = () => {
             <Filter className="h-4 w-4 text-[#64748B]" />
           </div>
           <select
-            className="block w-full pl-9 pr-10 py-2.5 border border-slate-200/10 border-[#24344D] rounded-xl leading-5 bg-[#131D31] dark:bg-dark-card text-[#94A3B8] text-[#94A3B8] focus:outline-none focus:ring-1 focus:ring-brand-500/50 sm:text-sm appearance-none cursor-pointer"
+            className="block w-full pl-9 pr-10 py-2.5 border border-[#24344D] rounded-xl leading-5 bg-[#131D31] bg-[#131D31] text-[#94A3B8] focus:outline-none focus:ring-1 focus:ring-brand-500/50 sm:text-sm appearance-none cursor-pointer"
             value={positionFilter}
             onChange={e => {
               setPositionFilter(e.target.value);
@@ -231,22 +231,22 @@ const Players = () => {
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.3 }}
-        className="glass-card rounded-2xl overflow-hidden border border-[#24344D]/30 border-[#24344D]/50"
+        className="glass-card rounded-2xl overflow-hidden border border-[#24344D]/40"
       >
         <div className="overflow-x-auto">
           <table className="min-w-full divide-y divide-white/5">
             <thead className="bg-[#131D31]/50">
               <tr>
-                <th className="px-6 py-4 text-left text-xs font-bold text-[#94A3B8] text-[#94A3B8] uppercase tracking-wider">Player</th>
-                <th className="px-6 py-4 text-left text-xs font-bold text-[#94A3B8] text-[#94A3B8] uppercase tracking-wider">Team</th>
-                <th className="px-6 py-4 text-left text-xs font-bold text-[#94A3B8] text-[#94A3B8] uppercase tracking-wider">Position</th>
-                <th className="px-6 py-4 text-center text-xs font-bold text-[#94A3B8] text-[#94A3B8] uppercase tracking-wider">Kit #</th>
-                <th className="px-6 py-4 text-center text-xs font-bold text-[#94A3B8] text-[#94A3B8] uppercase tracking-wider">Age</th>
-                <th className="px-6 py-4 text-center text-xs font-bold text-[#94A3B8] text-[#94A3B8] uppercase tracking-wider">Matches</th>
-                <th className="px-6 py-4 text-center text-xs font-bold text-[#94A3B8] text-[#94A3B8] uppercase tracking-wider">Goals</th>
-                <th className="px-6 py-4 text-center text-xs font-bold text-[#94A3B8] text-[#94A3B8] uppercase tracking-wider">Assists</th>
-                <th className="px-6 py-4 text-center text-xs font-bold text-[#94A3B8] text-[#94A3B8] uppercase tracking-wider">Cards</th>
-                {isAdmin && <th className="px-6 py-4 text-right text-xs font-bold text-[#94A3B8] text-[#94A3B8] uppercase tracking-wider">Action</th>}
+                <th className="px-6 py-4 text-left text-xs font-bold text-[#94A3B8] uppercase tracking-wider">Player</th>
+                <th className="px-6 py-4 text-left text-xs font-bold text-[#94A3B8] uppercase tracking-wider">Team</th>
+                <th className="px-6 py-4 text-left text-xs font-bold text-[#94A3B8] uppercase tracking-wider">Position</th>
+                <th className="px-6 py-4 text-center text-xs font-bold text-[#94A3B8] uppercase tracking-wider">Kit #</th>
+                <th className="px-6 py-4 text-center text-xs font-bold text-[#94A3B8] uppercase tracking-wider">Age</th>
+                <th className="px-6 py-4 text-center text-xs font-bold text-[#94A3B8] uppercase tracking-wider">Matches</th>
+                <th className="px-6 py-4 text-center text-xs font-bold text-[#94A3B8] uppercase tracking-wider">Goals</th>
+                <th className="px-6 py-4 text-center text-xs font-bold text-[#94A3B8] uppercase tracking-wider">Assists</th>
+                <th className="px-6 py-4 text-center text-xs font-bold text-[#94A3B8] uppercase tracking-wider">Cards</th>
+                {isAdmin && <th className="px-6 py-4 text-right text-xs font-bold text-[#94A3B8] uppercase tracking-wider">Action</th>}
               </tr>
             </thead>
             <tbody className="divide-y divide-white/5 bg-transparent">
@@ -260,23 +260,23 @@ const Players = () => {
                     onClick={() => !editMode && navigate(`/players/${player.id}`)}
                     className={cn(
                       "transition-colors group",
-                      editMode ? "hover:bg-white/5" : "cursor-pointer hover:bg-brand-500/5"
+                      editMode ? "hover:bg-[#131D31]/5" : "cursor-pointer hover:bg-brand-500/5"
                     )}
                   >
                     <td className="px-6 py-4 whitespace-nowrap">
                       <Link to={`/players/${player.id}`} className="flex items-center gap-3">
-                        <div className="h-10 w-10 rounded-full bg-[#101827] dark:bg-slate-700 flex items-center justify-center text-xs font-bold text-[#94A3B8] text-[#94A3B8] overflow-hidden border border-slate-200/10 border-[#24344D] group-hover:border-brand-500/30 transition-colors">
+                        <div className="h-10 w-10 rounded-full bg-[#101827] dark:bg-[#131D31] flex items-center justify-center text-xs font-bold text-[#94A3B8] overflow-hidden border border-[#24344D] group-hover:border-brand-500/30 transition-colors">
                           {player.photoUrl ? (
                             <img src={player.photoUrl} alt={player.name} className="h-full w-full object-cover" />
                           ) : (
                             player.name.charAt(0)
                           )}
                         </div>
-                        <div className="text-sm font-medium text-white text-white group-hover:text-brand-400 transition-colors">{player.name}</div>
+                        <div className="text-sm font-medium text-white group-hover:text-brand-400 transition-colors">{player.name}</div>
                       </Link>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
-                      <div className="flex items-center gap-2 text-sm text-[#94A3B8] text-[#94A3B8]">
+                      <div className="flex items-center gap-2 text-sm text-[#94A3B8]">
                         <Shield size={14} className="text-[#64748B]" />
                         {player.team}
                       </div>
@@ -299,7 +299,7 @@ const Players = () => {
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-center">
                       <div className="flex flex-col items-center">
-                        <span className="text-sm text-white text-white font-medium">
+                        <span className="text-sm text-white font-medium">
                           {player.dob ? calculateAge(player.dob) : (player.age || '-')}
                         </span>
                         {player.dob && (
@@ -314,13 +314,13 @@ const Players = () => {
                       {editMode && canEditPlayer(player) ? (
                         <input
                           type="number"
-                          className="w-16 bg-black/50 border border-slate-200/10 border-[#24344D] rounded px-2 py-1 text-white text-white text-center focus:ring-1 focus:ring-brand-500 outline-none"
+                          className="w-16 bg-black/50 border border-[#24344D] rounded px-2 py-1 text-white text-center focus:ring-1 focus:ring-brand-500 outline-none"
                           value={display.matches || 0}
                           onChange={e => handleStatChange(player.id, 'matches', e.target.value)}
                           onClick={e => e.stopPropagation()}
                         />
                       ) : (
-                        <span className="text-sm text-[#94A3B8] text-[#94A3B8]">{display.matches}</span>
+                        <span className="text-sm text-[#94A3B8]">{display.matches}</span>
                       )}
                     </td>
 
@@ -328,7 +328,7 @@ const Players = () => {
                       {editMode && canEditPlayer(player) ? (
                         <input
                           type="number"
-                          className="w-16 bg-black/50 border border-slate-200/10 border-[#24344D] rounded px-2 py-1 text-white text-white text-center focus:ring-1 focus:ring-brand-500 outline-none"
+                          className="w-16 bg-black/50 border border-[#24344D] rounded px-2 py-1 text-white text-center focus:ring-1 focus:ring-brand-500 outline-none"
                           value={display.goals || 0}
                           onChange={e => handleStatChange(player.id, 'goals', e.target.value)}
                           onClick={e => e.stopPropagation()}
@@ -344,7 +344,7 @@ const Players = () => {
                       {editMode && canEditPlayer(player) ? (
                         <input
                           type="number"
-                          className="w-16 bg-black/50 border border-slate-200/10 border-[#24344D] rounded px-2 py-1 text-white text-white text-center focus:ring-1 focus:ring-brand-500 outline-none"
+                          className="w-16 bg-black/50 border border-[#24344D] rounded px-2 py-1 text-white text-center focus:ring-1 focus:ring-brand-500 outline-none"
                           value={display.assists || 0}
                           onChange={e => handleStatChange(player.id, 'assists', e.target.value)}
                           onClick={e => e.stopPropagation()}
@@ -372,7 +372,7 @@ const Players = () => {
                         {canEditPlayer(player) && (
                           <button
                             onClick={(e) => { e.stopPropagation(); navigate('/admin/players', { state: { editPlayer: player } }); }}
-                            className="p-2 bg-brand-500/10 text-brand-500 hover:bg-brand-500 hover:text-white text-white rounded-lg transition-all"
+                            className="p-2 bg-brand-500/10 text-brand-500 hover:bg-brand-500 hover:text-white rounded-lg transition-all"
                             title="Edit Player Details"
                           >
                             <Edit2 size={14} />
@@ -392,14 +392,14 @@ const Players = () => {
             <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-[#131D31]/50 text-[#64748B] mb-4">
               <Users size={32} strokeWidth={1.5} />
             </div>
-            <h3 className="text-lg font-medium text-white text-white mb-1">No players found</h3>
-            <p className="text-[#94A3B8] text-[#94A3B8]">Try adjusting your filters.</p>
+            <h3 className="text-lg font-medium text-white mb-1">No players found</h3>
+            <p className="text-[#94A3B8]">Try adjusting your filters.</p>
           </div>
         )}
 
         {/* Pagination Controls */}
         {totalPages > 1 && (
-          <div className="px-6 py-6 flex flex-col sm:flex-row items-center justify-between gap-4 border-t border-[#24344D]/30 border-[#24344D]/50 bg-white/2">
+          <div className="px-6 py-6 flex flex-col sm:flex-row items-center justify-between gap-4 border-t border-[#24344D]/40 bg-[#131D31]/20">
             <div className="text-xs text-[#64748B] font-bold uppercase tracking-widest">
               Showing <span className="text-brand-400">{indexOfFirstPlayer + 1}</span> to <span className="text-brand-400">{Math.min(indexOfLastPlayer, filteredPlayers.length)}</span> of <span className="text-brand-400">{filteredPlayers.length}</span> players
             </div>
@@ -408,7 +408,7 @@ const Players = () => {
               <button
                 onClick={() => paginate(1)}
                 disabled={currentPage === 1}
-                className="px-3 py-2 rounded-lg bg-[#131D31]/50 border border-[#24344D]/30 border-[#24344D]/50 text-xs font-bold text-[#64748B] text-[#94A3B8] hover:bg-white/10 disabled:opacity-30 disabled:cursor-not-allowed transition-all"
+                className="px-3 py-2 rounded-lg bg-[#131D31]/50 border border-[#24344D]/40 text-xs font-bold text-[#94A3B8] hover:bg-[#131D31]/10 disabled:opacity-30 disabled:cursor-not-allowed transition-all"
               >
                 First
               </button>
@@ -430,7 +430,7 @@ const Players = () => {
                           "w-9 h-9 flex items-center justify-center rounded-lg text-sm font-bold transition-all",
                           currentPage === page
                             ? "bg-brand-500 text-white shadow-lg shadow-brand-500/20"
-                            : "bg-[#131D31]/50 border border-[#24344D]/30 border-[#24344D]/50 text-[#64748B] text-[#94A3B8] hover:bg-white/10"
+                            : "bg-[#131D31]/50 border border-[#24344D]/40 text-[#94A3B8] hover:bg-[#131D31]/10"
                         )}
                       >
                         {page}
@@ -442,7 +442,7 @@ const Players = () => {
               <button
                 onClick={() => paginate(totalPages)}
                 disabled={currentPage === totalPages}
-                className="px-3 py-2 rounded-lg bg-[#131D31]/50 border border-[#24344D]/30 border-[#24344D]/50 text-xs font-bold text-[#64748B] text-[#94A3B8] hover:bg-white/10 disabled:opacity-30 disabled:cursor-not-allowed transition-all"
+                className="px-3 py-2 rounded-lg bg-[#131D31]/50 border border-[#24344D]/40 text-xs font-bold text-[#94A3B8] hover:bg-[#131D31]/10 disabled:opacity-30 disabled:cursor-not-allowed transition-all"
               >
                 Last
               </button>

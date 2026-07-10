@@ -208,7 +208,7 @@ const AuditLogs = () => {
             <div className="flex h-[60vh] items-center justify-center">
                 <div className="flex flex-col items-center gap-4">
                     <div className="h-12 w-12 animate-spin rounded-full border-4 border-brand-500 border-t-transparent"></div>
-                    <div className="text-[#64748B] text-[#94A3B8] font-medium animate-pulse">Loading Audit Logs...</div>
+                    <div className="text-[#94A3B8] font-medium animate-pulse">Loading Audit Logs...</div>
                 </div>
             </div>
         );
@@ -219,7 +219,7 @@ const AuditLogs = () => {
             {/* Header */}
             <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
                 <div>
-                    <h1 className="text-3xl font-display font-bold text-white text-white flex items-center gap-3">
+                    <h1 className="text-3xl font-display font-bold text-white flex items-center gap-3">
                         <div className="w-10 h-10 bg-gradient-to-br from-amber-400 to-orange-600 rounded-2xl flex items-center justify-center shadow-lg shadow-amber-500/20">
                             <ScrollText size={20} className="text-white" />
                         </div>
@@ -238,7 +238,7 @@ const AuditLogs = () => {
                     </button>
                     <button
                         onClick={handleRefresh}
-                        className="flex items-center gap-2 px-4 py-2.5 bg-[#0B1220] bg-[#131D31] hover:bg-[#18253C] dark:hover:bg-slate-700 text-white text-white rounded-xl text-sm font-bold transition-all border border-[#24344D] border-[#24344D]"
+                        className="flex items-center gap-2 px-4 py-2.5 bg-[#0B1220] bg-[#131D31] hover:bg-[#18253C] dark:hover:bg-[#131D31] text-white rounded-xl text-sm font-bold transition-all border border-[#24344D]"
                     >
                         <RefreshCw size={16} /> Refresh
                     </button>
@@ -254,7 +254,7 @@ const AuditLogs = () => {
                     { label: 'Deletes', value: logs.filter(l => l.action?.startsWith('DELETE') || l.action?.startsWith('REMOVE')).length, color: 'from-red-500/10 to-red-600/5 border-red-500/10 text-red-400' },
                 ].map((stat, i) => (
                     <div key={i} className={`bg-gradient-to-br ${stat.color} border rounded-2xl p-4 text-center`}>
-                        <div className={`text-2xl font-display font-bold text-white text-white`}>{stat.value}</div>
+                        <div className={`text-2xl font-display font-bold text-white`}>{stat.value}</div>
                         <div className="text-[10px] uppercase tracking-widest font-bold text-[#64748B] mt-1">{stat.label}</div>
                     </div>
                 ))}
@@ -262,15 +262,15 @@ const AuditLogs = () => {
 
             {/* Export Panel */}
             {showExportPanel && (
-                <div className="bg-slate-50/80 dark:bg-gray-800/80 backdrop-blur-sm border border-[#24344D] dark:border-gray-700 rounded-2xl p-5 space-y-4">
+                <div className="bg-[#0B1220]/80 dark:bg-gray-800/80 backdrop-blur-sm border border-[#24344D] dark:border-gray-700 rounded-2xl p-5 space-y-4">
                     <div className="flex items-center justify-between">
-                        <h3 className="text-sm font-bold text-white text-white flex items-center gap-2">
+                        <h3 className="text-sm font-bold text-white flex items-center gap-2">
                             <Download size={16} className="text-brand-400" />
                             Export Audit Logs as CSV
                         </h3>
                         <button onClick={() => setShowExportPanel(false)} className="text-[#64748B] hover:text-white hover:text-white text-xs">✕</button>
                     </div>
-                    <p className="text-xs text-[#64748B] text-[#94A3B8]">Optionally select a date range for the export. Leaving blank exports all currently filtered logs.</p>
+                    <p className="text-xs text-[#94A3B8]">Optionally select a date range for the export. Leaving blank exports all currently filtered logs.</p>
                     <div className="flex flex-col sm:flex-row gap-3 items-end">
                         <div className="flex-1 w-full">
                             <label className="block text-[10px] uppercase tracking-wider font-bold text-[#64748B] mb-1">From Date</label>
@@ -278,7 +278,7 @@ const AuditLogs = () => {
                                 type="date"
                                 value={exportDateFrom}
                                 onChange={(e) => setExportDateFrom(e.target.value)}
-                                className="w-full bg-[#131D31] dark:bg-gray-700 border border-[#24344D] dark:border-gray-600 rounded-xl px-3 py-2.5 text-white text-white focus:ring-2 focus:ring-brand-500 outline-none text-sm"
+                                className="w-full bg-[#131D31] dark:bg-gray-700 border border-[#24344D] dark:border-gray-600 rounded-xl px-3 py-2.5 text-white focus:ring-2 focus:ring-brand-500 outline-none text-sm"
                             />
                         </div>
                         <div className="flex-1 w-full">
@@ -287,7 +287,7 @@ const AuditLogs = () => {
                                 type="date"
                                 value={exportDateTo}
                                 onChange={(e) => setExportDateTo(e.target.value)}
-                                className="w-full bg-[#131D31] dark:bg-gray-700 border border-[#24344D] dark:border-gray-600 rounded-xl px-3 py-2.5 text-white text-white focus:ring-2 focus:ring-brand-500 outline-none text-sm"
+                                className="w-full bg-[#131D31] dark:bg-gray-700 border border-[#24344D] dark:border-gray-600 rounded-xl px-3 py-2.5 text-white focus:ring-2 focus:ring-brand-500 outline-none text-sm"
                             />
                         </div>
                         <button
@@ -309,7 +309,7 @@ const AuditLogs = () => {
                         placeholder="Search by admin email, entity name, or action..."
                         value={searchTerm}
                         onChange={(e) => setSearchTerm(e.target.value)}
-                        className="w-full bg-[#0B1220] dark:bg-gray-800 border border-[#24344D] dark:border-gray-700 rounded-xl pl-10 pr-4 py-2.5 text-white text-white focus:ring-2 focus:ring-brand-500 outline-none text-sm"
+                        className="w-full bg-[#0B1220] dark:bg-gray-800 border border-[#24344D] dark:border-gray-700 rounded-xl pl-10 pr-4 py-2.5 text-white focus:ring-2 focus:ring-brand-500 outline-none text-sm"
                     />
                 </div>
                 <div className="flex flex-wrap gap-2">
@@ -318,19 +318,19 @@ const AuditLogs = () => {
                         value={dateFrom}
                         onChange={(e) => setDateFrom(e.target.value)}
                         title="Filter from date"
-                        className="bg-[#0B1220] dark:bg-gray-800 border border-[#24344D] dark:border-gray-700 rounded-xl px-3 py-2.5 text-white text-white focus:ring-2 focus:ring-brand-500 outline-none text-sm"
+                        className="bg-[#0B1220] dark:bg-gray-800 border border-[#24344D] dark:border-gray-700 rounded-xl px-3 py-2.5 text-white focus:ring-2 focus:ring-brand-500 outline-none text-sm"
                     />
                     <input
                         type="date"
                         value={dateTo}
                         onChange={(e) => setDateTo(e.target.value)}
                         title="Filter to date"
-                        className="bg-[#0B1220] dark:bg-gray-800 border border-[#24344D] dark:border-gray-700 rounded-xl px-3 py-2.5 text-white text-white focus:ring-2 focus:ring-brand-500 outline-none text-sm"
+                        className="bg-[#0B1220] dark:bg-gray-800 border border-[#24344D] dark:border-gray-700 rounded-xl px-3 py-2.5 text-white focus:ring-2 focus:ring-brand-500 outline-none text-sm"
                     />
                     <select
                         value={entityFilter}
                         onChange={(e) => setEntityFilter(e.target.value)}
-                        className="bg-[#0B1220] dark:bg-gray-800 border border-[#24344D] dark:border-gray-700 rounded-xl px-3 py-2.5 text-white text-white focus:ring-2 focus:ring-brand-500 outline-none text-sm"
+                        className="bg-[#0B1220] dark:bg-gray-800 border border-[#24344D] dark:border-gray-700 rounded-xl px-3 py-2.5 text-white focus:ring-2 focus:ring-brand-500 outline-none text-sm"
                     >
                         <option value="all">All Entities</option>
                         <option value="player">Players</option>
@@ -345,7 +345,7 @@ const AuditLogs = () => {
                     <select
                         value={actionFilter}
                         onChange={(e) => setActionFilter(e.target.value)}
-                        className="bg-[#0B1220] dark:bg-gray-800 border border-[#24344D] dark:border-gray-700 rounded-xl px-3 py-2.5 text-white text-white focus:ring-2 focus:ring-brand-500 outline-none text-sm"
+                        className="bg-[#0B1220] dark:bg-gray-800 border border-[#24344D] dark:border-gray-700 rounded-xl px-3 py-2.5 text-white focus:ring-2 focus:ring-brand-500 outline-none text-sm"
                     >
                         <option value="all">All Actions</option>
                         <option value="create">Creates</option>
@@ -366,7 +366,7 @@ const AuditLogs = () => {
             {/* Log Entries */}
             <div className="space-y-2">
                 {paginatedLogs.length === 0 ? (
-                    <div className="text-center py-20 rounded-3xl bg-slate-50/50 dark:bg-gray-800/30 border border-[#24344D]/30 border-[#24344D]/50">
+                    <div className="text-center py-20 rounded-3xl bg-[#0B1220]/50 dark:bg-gray-800/30 border border-[#24344D]/40">
                         <ScrollText size={48} className="mx-auto text-[#94A3B8] dark:text-slate-700 mb-4" />
                         <p className="text-[#64748B] font-medium">No audit logs found</p>
                         <p className="text-[#64748B] dark:text-slate-500 text-sm mt-1">
@@ -383,7 +383,7 @@ const AuditLogs = () => {
                         return (
                             <div
                                 key={log.id}
-                                className="flex flex-col md:flex-row md:items-center gap-3 md:gap-4 p-4 rounded-2xl bg-slate-50/50 dark:bg-gray-800/50 border border-slate-200/10 border-[#24344D]/50 hover:border-slate-300/30 dark:hover:border-white/10 transition-all"
+                                className="flex flex-col md:flex-row md:items-center gap-3 md:gap-4 p-4 rounded-2xl bg-[#0B1220]/50 dark:bg-gray-800/50 border border-[#24344D]/40 hover:border-slate-300/30 dark:hover:border-white/10 transition-all"
                             >
                                 {/* Action Icon */}
                                 <div className={`w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0 ${actionStyle.bg} border ${actionStyle.border}`}>
@@ -404,10 +404,10 @@ const AuditLogs = () => {
                                             </span>
                                         )}
                                     </div>
-                                    <p className="text-sm text-white text-white font-medium truncate">
+                                    <p className="text-sm text-white font-medium truncate">
                                         {log.entityName || <span className="text-[#64748B] italic">Unnamed entity</span>}
                                         {log.details?.oldRole && log.details?.newRole && (
-                                            <span className="text-[#64748B] text-[#94A3B8] font-normal ml-2">
+                                            <span className="text-[#94A3B8] font-normal ml-2">
                                                 — {log.details.oldRole || 'User'} → {log.details.newRole || 'User'}
                                             </span>
                                         )}
@@ -416,7 +416,7 @@ const AuditLogs = () => {
 
                                 {/* Admin & Time */}
                                 <div className="flex flex-col items-start md:items-end flex-shrink-0 gap-0.5">
-                                    <div className="flex items-center gap-1.5 text-xs text-[#94A3B8] text-[#94A3B8]">
+                                    <div className="flex items-center gap-1.5 text-xs text-[#94A3B8]">
                                         <UserCog size={12} />
                                         <span className="truncate max-w-[180px]">{log.adminEmail || 'Unknown'}</span>
                                     </div>
@@ -436,27 +436,27 @@ const AuditLogs = () => {
 
             {/* Pagination */}
             {totalPages > 1 && (
-                <div className="flex flex-col sm:flex-row items-center justify-between gap-4 bg-slate-50/50 dark:bg-gray-800/50 p-4 rounded-2xl border border-[#24344D]/30 border-[#24344D]/50">
+                <div className="flex flex-col sm:flex-row items-center justify-between gap-4 bg-[#0B1220]/50 dark:bg-gray-800/50 p-4 rounded-2xl border border-[#24344D]/40">
                     <div className="text-sm text-[#64748B] dark:text-gray-400 font-medium">
-                        Showing <span className="text-white text-white font-bold">{(currentPage - 1) * ITEMS_PER_PAGE + 1}</span> to{' '}
-                        <span className="text-white text-white font-bold">{Math.min(currentPage * ITEMS_PER_PAGE, filteredLogs.length)}</span> of{' '}
-                        <span className="text-white text-white font-bold">{filteredLogs.length}</span> entries
+                        Showing <span className="text-white font-bold">{(currentPage - 1) * ITEMS_PER_PAGE + 1}</span> to{' '}
+                        <span className="text-white font-bold">{Math.min(currentPage * ITEMS_PER_PAGE, filteredLogs.length)}</span> of{' '}
+                        <span className="text-white font-bold">{filteredLogs.length}</span> entries
                     </div>
                     <div className="flex items-center gap-2">
                         <button
                             onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
                             disabled={currentPage === 1}
-                            className="p-2 rounded-xl bg-[#0B1220] dark:bg-gray-800 border border-[#24344D]/30 border-[#24344D]/50 text-[#64748B] dark:text-gray-400 hover:text-white hover:text-white disabled:opacity-30 disabled:cursor-not-allowed transition-all"
+                            className="p-2 rounded-xl bg-[#0B1220] dark:bg-gray-800 border border-[#24344D]/40 text-[#64748B] dark:text-gray-400 hover:text-white hover:text-white disabled:opacity-30 disabled:cursor-not-allowed transition-all"
                         >
                             <ChevronLeft size={18} />
                         </button>
-                        <span className="text-sm font-bold text-white text-white px-2">
+                        <span className="text-sm font-bold text-white px-2">
                             {currentPage} / {totalPages}
                         </span>
                         <button
                             onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
                             disabled={currentPage === totalPages}
-                            className="p-2 rounded-xl bg-[#0B1220] dark:bg-gray-800 border border-[#24344D]/30 border-[#24344D]/50 text-[#64748B] dark:text-gray-400 hover:text-white hover:text-white disabled:opacity-30 disabled:cursor-not-allowed transition-all"
+                            className="p-2 rounded-xl bg-[#0B1220] dark:bg-gray-800 border border-[#24344D]/40 text-[#64748B] dark:text-gray-400 hover:text-white hover:text-white disabled:opacity-30 disabled:cursor-not-allowed transition-all"
                         >
                             <ChevronRight size={18} />
                         </button>

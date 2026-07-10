@@ -84,12 +84,12 @@ const QuickMatchEditModal = ({ match, isOpen, onClose, isSuperAdmin }) => { // A
                 initial={{ scale: 0.95, opacity: 0, y: 20 }}
                 animate={{ scale: 1, opacity: 1, y: 0 }}
                 exit={{ scale: 0.95, opacity: 0, y: 20 }}
-                className="relative bg-[#131D31] bg-[#0B1220] rounded-[2rem] w-full max-w-md shadow-2xl overflow-hidden border border-[#24344D]/50 border-[#24344D]"
+                className="relative bg-[#0B1220] rounded-[2rem] w-full max-w-md shadow-2xl overflow-hidden border border-[#24344D]/50 border-[#24344D]"
             >
                 <div className="absolute top-0 inset-x-0 h-1.5 bg-gradient-to-r from-emerald-500 to-cyan-500"></div>
                 <button 
                     onClick={onClose}
-                    className="absolute top-6 right-6 p-2 rounded-full bg-[#101827] bg-[#131D31]/50 text-[#64748B] text-[#94A3B8] hover:bg-slate-200 hover:bg-[#18253C] transition-colors z-20"
+                    className="absolute top-6 right-6 p-2 rounded-full bg-[#101827] bg-[#131D31]/50 text-[#94A3B8] hover:bg-slate-200 hover:bg-[#18253C] transition-colors z-20"
                 >
                     <X size={20} />
                 </button>
@@ -100,8 +100,8 @@ const QuickMatchEditModal = ({ match, isOpen, onClose, isSuperAdmin }) => { // A
                             <Activity size={24} />
                         </div>
                         <div>
-                            <h2 className="text-xl font-black text-white text-white font-display mb-1">Manage Match</h2>
-                            <p className="text-[#64748B] text-[#94A3B8] text-[10px] font-bold uppercase tracking-widest">{match.teamA} VS {match.teamB}</p>
+                            <h2 className="text-xl font-black text-white font-display mb-1">Manage Match</h2>
+                            <p className="text-[#94A3B8] text-[10px] font-bold uppercase tracking-widest">{match.teamA} VS {match.teamB}</p>
                         </div>
                     </div>
 
@@ -117,20 +117,20 @@ const QuickMatchEditModal = ({ match, isOpen, onClose, isSuperAdmin }) => { // A
                                         type="text"
                                         value={teamA}
                                         onChange={(e) => setTeamA(e.target.value)}
-                                        className="w-full bg-[#101827] bg-[#131D31]/50 border border-[#24344D] border-[#24344D] p-3 rounded-xl text-white text-white font-bold focus:ring-2 focus:ring-emerald-500 outline-none transition-all"
+                                        className="w-full bg-[#101827] bg-[#131D31]/50 border border-[#24344D] p-3 rounded-xl text-white font-bold focus:ring-2 focus:ring-emerald-500 outline-none transition-all"
                                     />
                                 </div>
                                 <div className="space-y-1.5">
                                     <label className="text-xs font-bold text-[#64748B] uppercase tracking-widest text-center block">Score A</label>
                                     <div className="flex items-center gap-2">
-                                        <button type="button" onClick={() => setScoreA(Math.max(0, scoreA - 1))} className="p-2 bg-[#101827] bg-[#131D31]/50 rounded-lg text-[#94A3B8] text-[#94A3B8] hover:bg-slate-200 hover:bg-[#18253C] transition-all">-</button>
+                                        <button type="button" onClick={() => setScoreA(Math.max(0, scoreA - 1))} className="p-2 bg-[#101827] bg-[#131D31]/50 rounded-lg text-[#94A3B8] hover:bg-slate-200 hover:bg-[#18253C] transition-all">-</button>
                                         <input
                                             type="number"
                                             value={scoreA}
                                             onChange={(e) => setScoreA(parseInt(e.target.value) || 0)}
-                                            className="flex-1 bg-[#131D31] dark:bg-gray-800 border border-[#24344D] border-[#24344D] p-2 text-center text-xl font-black text-green-400 rounded-lg"
+                                            className="flex-1 bg-[#131D31] dark:bg-gray-800 border border-[#24344D] p-2 text-center text-xl font-black text-green-400 rounded-lg"
                                         />
-                                        <button type="button" onClick={() => setScoreA(scoreA + 1)} className="p-2 bg-[#101827] bg-[#131D31]/50 rounded-lg text-[#94A3B8] text-[#94A3B8] hover:bg-slate-200 hover:bg-[#18253C] transition-all">+</button>
+                                        <button type="button" onClick={() => setScoreA(scoreA + 1)} className="p-2 bg-[#101827] bg-[#131D31]/50 rounded-lg text-[#94A3B8] hover:bg-slate-200 hover:bg-[#18253C] transition-all">+</button>
                                     </div>
                                 </div>
                             </div>
@@ -142,20 +142,20 @@ const QuickMatchEditModal = ({ match, isOpen, onClose, isSuperAdmin }) => { // A
                                         type="text"
                                         value={teamB}
                                         onChange={(e) => setTeamB(e.target.value)}
-                                        className="w-full bg-[#101827] bg-[#131D31]/50 border border-[#24344D] border-[#24344D] p-3 rounded-xl text-white text-white font-bold focus:ring-2 focus:ring-emerald-500 outline-none transition-all"
+                                        className="w-full bg-[#101827] bg-[#131D31]/50 border border-[#24344D] p-3 rounded-xl text-white font-bold focus:ring-2 focus:ring-emerald-500 outline-none transition-all"
                                     />
                                 </div>
                                 <div className="space-y-1.5">
                                     <label className="text-xs font-bold text-[#64748B] uppercase tracking-widest text-center block">Score B</label>
                                     <div className="flex items-center gap-2">
-                                        <button type="button" onClick={() => setScoreB(Math.max(0, scoreB - 1))} className="p-2 bg-[#101827] bg-[#131D31]/50 rounded-lg text-[#94A3B8] text-[#94A3B8] hover:bg-slate-200 hover:bg-[#18253C] transition-all">-</button>
+                                        <button type="button" onClick={() => setScoreB(Math.max(0, scoreB - 1))} className="p-2 bg-[#101827] bg-[#131D31]/50 rounded-lg text-[#94A3B8] hover:bg-slate-200 hover:bg-[#18253C] transition-all">-</button>
                                         <input
                                             type="number"
                                             value={scoreB}
                                             onChange={(e) => setScoreB(parseInt(e.target.value) || 0)}
-                                            className="flex-1 bg-[#131D31] dark:bg-gray-800 border border-[#24344D] border-[#24344D] p-2 text-center text-xl font-black text-green-400 rounded-lg"
+                                            className="flex-1 bg-[#131D31] dark:bg-gray-800 border border-[#24344D] p-2 text-center text-xl font-black text-green-400 rounded-lg"
                                         />
-                                        <button type="button" onClick={() => setScoreB(scoreB + 1)} className="p-2 bg-[#101827] bg-[#131D31]/50 rounded-lg text-[#94A3B8] text-[#94A3B8] hover:bg-slate-200 hover:bg-[#18253C] transition-all">+</button>
+                                        <button type="button" onClick={() => setScoreB(scoreB + 1)} className="p-2 bg-[#101827] bg-[#131D31]/50 rounded-lg text-[#94A3B8] hover:bg-slate-200 hover:bg-[#18253C] transition-all">+</button>
                                     </div>
                                 </div>
                             </div>
@@ -168,7 +168,7 @@ const QuickMatchEditModal = ({ match, isOpen, onClose, isSuperAdmin }) => { // A
                                     type="number" 
                                     value={minute} // Changed to minute
                                     onChange={e => setMinute(e.target.value)} // Changed to setMinute
-                                    className="w-full bg-[#0B1220] bg-[#0B1220] border border-[#24344D] border-[#24344D] p-3 rounded-xl text-white text-white outline-none focus:ring-2 focus:ring-emerald-500 font-black text-center" 
+                                    className="w-full bg-[#0B1220] bg-[#0B1220] border border-[#24344D] p-3 rounded-xl text-white outline-none focus:ring-2 focus:ring-emerald-500 font-black text-center" 
                                 />
                             </div>
                             <div>
@@ -176,7 +176,7 @@ const QuickMatchEditModal = ({ match, isOpen, onClose, isSuperAdmin }) => { // A
                                 <select 
                                     value={status} 
                                     onChange={e => setStatus(e.target.value)}
-                                    className="w-full bg-[#0B1220] bg-[#0B1220] border border-[#24344D] border-[#24344D] p-3 rounded-xl text-white text-white outline-none focus:ring-2 focus:ring-emerald-500 font-bold appearance-none text-center uppercase text-xs tracking-wider"
+                                    className="w-full bg-[#0B1220] bg-[#0B1220] border border-[#24344D] p-3 rounded-xl text-white outline-none focus:ring-2 focus:ring-emerald-500 font-bold appearance-none text-center uppercase text-xs tracking-wider"
                                 >
                                     <option value="live">Live</option>
                                     <option value="halftime">Half Time</option>
@@ -192,7 +192,7 @@ const QuickMatchEditModal = ({ match, isOpen, onClose, isSuperAdmin }) => { // A
                                 value={location} 
                                 onChange={e => setLocation(e.target.value)} 
                                 placeholder="e.g. City Ground"
-                                className="w-full bg-[#0B1220] bg-[#0B1220] border border-[#24344D] border-[#24344D] p-3 rounded-xl text-white text-white outline-none focus:ring-2 focus:ring-emerald-500 font-bold" 
+                                className="w-full bg-[#0B1220] bg-[#0B1220] border border-[#24344D] p-3 rounded-xl text-white outline-none focus:ring-2 focus:ring-emerald-500 font-bold" 
                             />
                         </div>
 
@@ -214,7 +214,7 @@ const QuickMatchEditModal = ({ match, isOpen, onClose, isSuperAdmin }) => { // A
                                 disabled={isLoading}
                                 className={`flex-[2] px-6 py-3.5 rounded-xl font-black text-white uppercase tracking-widest text-xs flex items-center justify-center gap-2 transition-all ${
                                     isLoading 
-                                    ? 'bg-slate-300 dark:bg-slate-700 cursor-not-allowed' 
+                                    ? 'bg-slate-300 dark:bg-[#131D31] cursor-not-allowed' 
                                     : 'bg-gradient-to-r from-emerald-500 to-cyan-500 hover:from-emerald-600 hover:to-cyan-600 shadow-lg shadow-emerald-500/25'
                                 }`}
                             >

@@ -63,7 +63,7 @@ const InstallPWA = () => {
           
           <button 
             onClick={handleDismiss} 
-            className="absolute top-2 right-2 p-1.5 text-[#64748B] hover:text-slate-600 dark:hover:text-slate-300 rounded-lg hover:bg-[#18253C] dark:hover:bg-slate-700 transition-colors"
+            className="absolute top-2 right-2 p-1.5 text-[#64748B] hover:text-[#94A3B8] dark:hover:text-slate-300 rounded-lg hover:bg-[#18253C] dark:hover:bg-[#131D31] transition-colors"
           >
             <X size={16} />
           </button>
@@ -74,8 +74,8 @@ const InstallPWA = () => {
             </div>
             
             <div className="flex-1 pr-4">
-              <h3 className="font-bold text-white text-white mb-1">Install Goal Kashmir</h3>
-              <p className="text-xs text-[#64748B] text-[#94A3B8] mb-3 leading-relaxed">
+              <h3 className="font-bold text-white mb-1">Install Goal Kashmir</h3>
+              <p className="text-xs text-[#94A3B8] mb-3 leading-relaxed">
                 Install our app for a faster experience, offline access to scores, and easy access from your home screen.
               </p>
               

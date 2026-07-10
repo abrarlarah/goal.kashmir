@@ -38,7 +38,7 @@ const SponsorsCarousel = () => {
     if (loading || sponsors.length === 0) return null;
 
     return (
-        <section className="py-8 border-t border-slate-200/10 border-[#24344D] mt-12 overflow-hidden relative">
+        <section className="py-8 border-t border-[#24344D] mt-12 overflow-hidden relative">
             <div className="container mx-auto px-4 mb-8">
                 <h3 className="text-center text-sm font-bold tracking-widest text-[#64748B] uppercase">Our Official Partners</h3>
             </div>
@@ -56,7 +56,7 @@ const SponsorsCarousel = () => {
                                 href={sponsor.websiteUrl || '#'}
                                 target={sponsor.websiteUrl ? "_blank" : "_self"}
                                 rel="noopener noreferrer"
-                                className="block h-32 sm:h-40 w-64 sm:w-[320px] relative hover:scale-105 transition-transform duration-300 pointer-events-auto rounded-2xl overflow-hidden bg-slate-50/20 dark:bg-slate-800/20"
+                                className="block h-32 sm:h-40 w-64 sm:w-[320px] relative hover:scale-105 transition-transform duration-300 pointer-events-auto rounded-2xl overflow-hidden bg-[#0B1220]/20 dark:bg-slate-800/20"
                             >
                                 <img
                                     src={sponsor.logoUrl}
@@ -64,7 +64,7 @@ const SponsorsCarousel = () => {
                                     className="h-full w-full object-cover shadow-inner"
                                 />
                             </a>
-                            <span className="text-sm font-semibold text-[#94A3B8] text-[#94A3B8] tracking-wide">
+                            <span className="text-sm font-semibold text-[#94A3B8] tracking-wide">
                                 {sponsor.name}
                             </span>
                         </li>

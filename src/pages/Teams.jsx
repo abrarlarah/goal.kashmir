@@ -54,7 +54,7 @@ const Teams = () => {
       <div className="flex h-[80vh] items-center justify-center">
         <div className="flex flex-col items-center gap-4">
           <div className="h-10 w-10 animate-spin rounded-full border-4 border-brand-500 border-t-transparent"></div>
-          <div className="text-[#94A3B8] text-[#94A3B8] font-medium animate-pulse">Loading Teams...</div>
+          <div className="text-[#94A3B8] font-medium animate-pulse">Loading Teams...</div>
         </div>
       </div>
     );
@@ -90,13 +90,13 @@ const Teams = () => {
       >
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
           <div>
-            <h1 className="text-3xl md:text-4xl font-display font-bold text-white text-white mb-2">Clubs</h1>
-            <p className="text-[#94A3B8] text-[#94A3B8]">Manage and view all competing teams.</p>
+            <h1 className="text-3xl md:text-4xl font-display font-bold text-white mb-2">Clubs</h1>
+            <p className="text-[#94A3B8]">Manage and view all competing teams.</p>
           </div>
 
           <div className="flex flex-col sm:flex-row gap-3">
             {/* Tabs */}
-            <div className="flex bg-[#101827] bg-[#131D31]/50 p-1 rounded-xl border border-[#24344D] border-[#24344D]">
+            <div className="flex bg-[#101827] bg-[#131D31]/50 p-1 rounded-xl border border-[#24344D]">
               <button 
                 onClick={() => setActiveTab('registered')}
                 className={cn(
@@ -127,7 +127,7 @@ const Teams = () => {
               <select
                 value={selectedDistrict}
                 onChange={(e) => setSelectedDistrict(e.target.value)}
-                className="bg-[#131D31] dark:bg-dark-card/50 backdrop-blur-sm border border-slate-200/10 border-[#24344D] rounded-xl px-4 py-2.5 text-sm font-medium text-white text-white focus:ring-2 focus:ring-brand-500 focus:border-brand-500 outline-none transition-all"
+                className="bg-[#131D31] bg-[#131D31]/60 backdrop-blur-sm border border-[#24344D] rounded-xl px-4 py-2.5 text-sm font-medium text-white focus:ring-2 focus:ring-brand-500 focus:border-brand-500 outline-none transition-all"
               >
                 <option value="All">All Districts</option>
                 <option value="Quick Match">Quick Match Special</option>
@@ -147,7 +147,7 @@ const Teams = () => {
             {(isAdmin || isSuperAdmin) && (
               <Link
                 to="/admin/teams"
-                className="flex items-center gap-2 px-5 py-2.5 bg-brand-600 hover:bg-brand-500 text-white text-white rounded-xl text-sm font-semibold transition-all shadow-lg shadow-brand-500/20 hover:scale-105 active:scale-95"
+                className="flex items-center gap-2 px-5 py-2.5 bg-brand-600 hover:bg-brand-500 text-white rounded-xl text-sm font-semibold transition-all shadow-lg shadow-brand-500/20 hover:scale-105 active:scale-95"
               >
                 <Plus size={18} /> Add New Team
               </Link>
@@ -169,7 +169,7 @@ const Teams = () => {
         <input
           type="text"
           placeholder="Search teams..."
-          className="block w-full pl-10 pr-3 py-3 border border-slate-200/10 border-[#24344D] rounded-xl leading-5 bg-[#131D31]/50 text-[#94A3B8] text-[#94A3B8] placeholder-[#64748B] focus:outline-none focus:bg-white/10 focus:ring-1 focus:ring-brand-500/50 focus:border-brand-500/50 sm:text-sm transition-colors"
+          className="block w-full pl-10 pr-3 py-3 border border-[#24344D] rounded-xl leading-5 bg-[#131D31]/50 text-[#94A3B8] placeholder-[#64748B] focus:outline-none focus:bg-[#131D31]/10 focus:ring-1 focus:ring-brand-500/50 focus:border-brand-500/50 sm:text-sm transition-colors"
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
         />
@@ -187,7 +187,7 @@ const Teams = () => {
             key={team.id}
             variants={item}
             whileHover={{ y: -5 }}
-            className="group relative rounded-2xl bg-gradient-to-br from-white to-[#0B1220] dark:from-[#0f172a] to-[#0B1220] ring-1 ring-slate-200/80 dark:ring-white/5 overflow-hidden transition-all duration-300 hover:shadow-xl dark:shadow-md hover:ring-2 hover:ring-brand-500/30 dark:hover:shadow-cyan-500/10"
+            className="group relative rounded-2xl bg-gradient-to-br from-[#0B1220] to-[#0B1220] from-[#0B1220] to-[#0B1220] ring-1 ring-[#24344D]/50 ring-[#24344D]/50 overflow-hidden transition-all duration-300 hover:shadow-xl shadow-md hover:ring-2 hover:ring-brand-500/30 hover:shadow-brand-500/10"
           >
             <Link to={`/teams/${team.id}`} className="block">
               {/* Background Glow */}
@@ -207,17 +207,17 @@ const Teams = () => {
                 <div className="flex items-center gap-4">
                   <div className="flex-shrink-0">
                     {team.logoUrl ? (
-                      <div className="w-16 h-16 rounded-xl bg-[#131D31]/50 border border-slate-200/10 border-[#24344D] p-2 flex items-center justify-center overflow-hidden">
+                      <div className="w-16 h-16 rounded-xl bg-[#131D31]/50 border border-[#24344D] p-2 flex items-center justify-center overflow-hidden">
                         <img src={team.logoUrl} alt={team.name} className="w-full h-full object-contain" />
                       </div>
                     ) : (
-                      <div className="w-16 h-16 rounded-xl bg-brand-500 flex items-center justify-center text-white text-white text-2xl font-bold shadow-lg shadow-brand-500/20">
+                      <div className="w-16 h-16 rounded-xl bg-brand-500 flex items-center justify-center text-white text-2xl font-bold shadow-lg shadow-brand-500/20">
                         {team.shortName || team.name.substring(0, 2).toUpperCase()}
                       </div>
                     )}
                   </div>
                   <div>
-                    <h3 className="text-xl font-display font-bold text-white text-white group-hover:text-brand-400 transition-colors">
+                    <h3 className="text-xl font-display font-bold text-white group-hover:text-brand-400 transition-colors">
                       {team.name}
                     </h3>
                     <div className="flex items-center gap-2 mt-1">
@@ -251,7 +251,7 @@ const Teams = () => {
                       bg: 'bg-blue-500/5'
                     }
                   ].map((s, i) => (
-                    <div key={i} className={cn("flex flex-col items-center py-2 rounded-xl border border-[#24344D]/30 border-[#24344D]/50", s.bg)}>
+                    <div key={i} className={cn("flex flex-col items-center py-2 rounded-xl border border-[#24344D]/40", s.bg)}>
                       <span className={cn("text-lg font-black", s.color)}>{s.val}</span>
                       <span className="text-[8px] uppercase font-bold tracking-tighter text-[#64748B]">{s.label}</span>
                     </div>
@@ -261,13 +261,13 @@ const Teams = () => {
             </Link>
 
             {/* Footer Stats/Status */}
-            <div className="px-6 py-4 border-t border-slate-200/80 border-[#24344D]/50 bg-slate-100/50 bg-[#0B1220] flex justify-between items-center relative z-10">
+            <div className="px-6 py-4 border-t border-[#24344D]/50 border-[#24344D]/50 bg-[#0B1220]/60 bg-[#0B1220] flex justify-between items-center relative z-10">
               <div className="flex items-center gap-3">
-                <div className="flex items-center gap-2 text-xs text-[#94A3B8] text-[#94A3B8]">
+                <div className="flex items-center gap-2 text-xs text-[#94A3B8]">
                   <Shield size={14} />
                   <span>Squad: {team.players || 0}</span>
                 </div>
-                <div className="flex items-center gap-2 text-xs text-[#94A3B8] text-[#94A3B8]">
+                <div className="flex items-center gap-2 text-xs text-[#94A3B8]">
                   <Trophy size={14} />
                   <span>Tournaments: {Array.isArray(team.tournaments) ? team.tournaments.length : 0}</span>
                 </div>
@@ -277,7 +277,7 @@ const Teams = () => {
                       e.preventDefault();
                       navigate('/admin/teams', { state: { editTeam: team } });
                     }}
-                    className="p-1.5 bg-brand-500/10 text-brand-500 hover:bg-brand-500 hover:text-white text-white rounded-lg transition-all"
+                    className="p-1.5 bg-brand-500/10 text-brand-500 hover:bg-brand-500 hover:text-white rounded-lg transition-all"
                     title="Edit Team Details"
                   >
                     <Edit2 size={12} />
@@ -287,7 +287,7 @@ const Teams = () => {
 
               <span className={cn(
                 "text-[10px] uppercase font-bold px-2 py-0.5 rounded-full border tracking-wide",
-                team.status === 'Inactive' ? 'bg-[#0B1220] bg-[#131D31] text-[#94A3B8] text-[#94A3B8] border-[#24344D] border-[#24344D]' :
+                team.status === 'Inactive' ? 'bg-[#0B1220] bg-[#131D31] text-[#94A3B8] border-[#24344D]' :
                   team.status === 'Suspended' ? 'bg-red-900/20 text-red-500 border-red-500/20' :
                     team.status === 'Dissolved' ? 'bg-black text-[#94A3B8] border-slate-800' :
                       'bg-green-500/10 text-brand-400 border-brand-500/20'
@@ -308,8 +308,8 @@ const Teams = () => {
           <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-[#131D31]/50 text-[#64748B] mb-4">
             <Trophy size={32} strokeWidth={1.5} />
           </div>
-          <h3 className="text-lg font-medium text-white text-white mb-1">No teams found</h3>
-          <p className="text-[#94A3B8] text-[#94A3B8]">Try adjusting your search criteria.</p>
+          <h3 className="text-lg font-medium text-white mb-1">No teams found</h3>
+          <p className="text-[#94A3B8]">Try adjusting your search criteria.</p>
         </motion.div>
       )}
     </div>

@@ -304,7 +304,7 @@ const ManageMatches = () => {
   };
 
   return (
-    <div className="container mx-auto px-4 py-8 text-white text-white">
+    <div className="container mx-auto px-4 py-8 text-white">
       {/* Header */}
       <div className="relative overflow-hidden rounded-2xl mb-8">
         <div className="absolute inset-0 bg-gradient-to-br from-[#0c0a1d] via-[#1a103d] to-[#0c0a1d]"></div>
@@ -361,7 +361,7 @@ const ManageMatches = () => {
                   animate={{ opacity: 1, scale: 1 }}
                   exit={{ opacity: 0, scale: 0.9 }}
                   key={match.id}
-                  className="relative group rounded-3xl overflow-hidden border border-red-500/20 bg-[#131D31] dark:bg-white/[0.02] shadow-xl shadow-red-500/5 dark:shadow-none backdrop-blur-md"
+                  className="relative group rounded-3xl overflow-hidden border border-red-500/20 bg-[#131D31] dark:bg-[#131D31]/[0.02] shadow-xl shadow-red-500/5 dark:shadow-none backdrop-blur-md"
                 >
                   <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-red-600 via-orange-500 to-red-600"></div>
                   <div className="p-4 sm:p-6">
@@ -373,7 +373,7 @@ const ManageMatches = () => {
                             M#{globalMatchNumbers[match.id]}
                           </span>
                           {match.matchNumber && match.matchNumber !== globalMatchNumbers[match.id]?.toString() && (
-                            <span className="px-2 py-0.5 rounded-md bg-[#101827] bg-[#18253C] text-[#64748B] text-[#94A3B8] border border-[#24344D] border-[#24344D]">
+                            <span className="px-2 py-0.5 rounded-md bg-[#101827] bg-[#18253C] text-[#94A3B8] border border-[#24344D]">
                               {match.matchNumber}
                             </span>
                           )}
@@ -382,7 +382,7 @@ const ManageMatches = () => {
                         
                         <div className="mt-4 flex items-center justify-center md:justify-start gap-4">
                           <div className="flex-1 flex flex-col items-center md:items-start min-w-0">
-                            <span className="text-sm font-black text-white text-white uppercase truncate w-full">{match.teamA}</span>
+                            <span className="text-sm font-black text-white uppercase truncate w-full">{match.teamA}</span>
                           </div>
                           
                           <div className="px-4 py-2 bg-[#0B1220] dark:bg-black rounded-2xl border border-white/5 flex items-center gap-3 shadow-inner">
@@ -395,7 +395,7 @@ const ManageMatches = () => {
                           </div>
 
                           <div className="flex-1 flex flex-col items-center md:items-end min-w-0 text-right">
-                            <span className="text-sm font-black text-white text-white uppercase truncate w-full">{match.teamB}</span>
+                            <span className="text-sm font-black text-white uppercase truncate w-full">{match.teamB}</span>
                           </div>
                         </div>
                       </div>
@@ -404,15 +404,15 @@ const ManageMatches = () => {
                         <div className="grid grid-cols-2 gap-3 mb-1">
                           <div className="flex flex-col items-center gap-1.5">
                             <span className="text-[8px] font-black text-[#64748B] uppercase tracking-widest">Home Goals</span>
-                            <div className="flex items-center bg-[#101827] bg-[#131D31]/50 rounded-xl p-1 border border-[#24344D] border-[#24344D]">
-                              <button onClick={() => updateMatchScore(match.id, 'A', -1)} className="w-8 h-8 rounded-lg hover:bg-white/10 text-[#64748B] hover:text-red-500 transition-all active:scale-90 font-black">-</button>
+                            <div className="flex items-center bg-[#101827] bg-[#131D31]/50 rounded-xl p-1 border border-[#24344D]">
+                              <button onClick={() => updateMatchScore(match.id, 'A', -1)} className="w-8 h-8 rounded-lg hover:bg-[#131D31]/10 text-[#64748B] hover:text-red-500 transition-all active:scale-90 font-black">-</button>
                               <button onClick={() => updateMatchScore(match.id, 'A', 1)} className="w-8 h-8 rounded-lg bg-red-500 text-white shadow-lg shadow-red-500/20 transition-all active:scale-90 font-black">+</button>
                             </div>
                           </div>
                           <div className="flex flex-col items-center gap-1.5">
                             <span className="text-[8px] font-black text-[#64748B] uppercase tracking-widest">Away Goals</span>
-                            <div className="flex items-center bg-[#101827] bg-[#131D31]/50 rounded-xl p-1 border border-[#24344D] border-[#24344D]">
-                              <button onClick={() => updateMatchScore(match.id, 'B', -1)} className="w-8 h-8 rounded-lg hover:bg-white/10 text-[#64748B] hover:text-red-500 transition-all active:scale-90 font-black">-</button>
+                            <div className="flex items-center bg-[#101827] bg-[#131D31]/50 rounded-xl p-1 border border-[#24344D]">
+                              <button onClick={() => updateMatchScore(match.id, 'B', -1)} className="w-8 h-8 rounded-lg hover:bg-[#131D31]/10 text-[#64748B] hover:text-red-500 transition-all active:scale-90 font-black">-</button>
                               <button onClick={() => updateMatchScore(match.id, 'B', 1)} className="w-8 h-8 rounded-lg bg-red-500 text-white shadow-lg shadow-red-500/20 transition-all active:scale-90 font-black">+</button>
                             </div>
                           </div>
@@ -443,14 +443,14 @@ const ManageMatches = () => {
 
       <motion.div 
         id="match-form-section" 
-        className="rounded-3xl mb-12 overflow-hidden border border-[#24344D]/50 border-[#24344D]/50 shadow-2xl bg-[#131D31] bg-[#0B1220] relative"
+        className="rounded-3xl mb-12 overflow-hidden border border-[#24344D]/50 border-[#24344D]/50 shadow-2xl bg-[#0B1220] relative"
       >
         <div className={`h-1.5 w-full ${editingId ? 'bg-gradient-to-r from-violet-600 via-cyan-500 to-violet-600' : 'bg-gradient-to-r from-emerald-600 via-cyan-500 to-emerald-600'}`}></div>
         
         <div className="p-6 sm:p-10">
           <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-8">
             <div>
-              <h3 className="text-2xl font-black text-white text-white flex items-center gap-3">
+              <h3 className="text-2xl font-black text-white flex items-center gap-3">
                 {editingId ? (
                   <><Edit3 size={24} className="text-violet-500" /> <span>Edit Match Details</span></>
                 ) : (
@@ -470,18 +470,18 @@ const ManageMatches = () => {
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
               {/* Competition Details */}
               <div className="lg:col-span-1 space-y-6">
-                <div className="p-6 rounded-3xl bg-[#0B1220] dark:bg-white/[0.02] border border-[#24344D]/50 border-[#24344D]/50">
+                <div className="p-6 rounded-3xl bg-[#0B1220] dark:bg-[#131D31]/[0.02] border border-[#24344D]/50 border-[#24344D]/50">
                   <h4 className="text-[10px] font-black text-[#64748B] uppercase tracking-[0.2em] mb-4 flex items-center gap-2">
                     <Layout size={12} className="text-violet-500" /> Tournament Info
                   </h4>
                   <div className="space-y-4">
                     <div>
-                      <label className="text-[10px] font-black text-[#64748B] text-[#94A3B8] block mb-1.5 uppercase">Competition</label>
+                      <label className="text-[10px] font-black text-[#94A3B8] block mb-1.5 uppercase">Competition</label>
                       <select
                         name="competition"
                         value={formData.competition}
                         onChange={handleInputChange}
-                        className="bg-[#131D31] bg-[#0B1220] border border-[#24344D] border-[#24344D] p-3 rounded-xl text-white text-white w-full focus:ring-2 focus:ring-violet-500/50 outline-none transition-all font-bold"
+                        className="bg-[#0B1220] border border-[#24344D] p-3 rounded-xl text-white w-full focus:ring-2 focus:ring-violet-500/50 outline-none transition-all font-bold"
                         required
                       >
                         <option value="" disabled>Select Competition</option>
@@ -492,18 +492,18 @@ const ManageMatches = () => {
                       </select>
                     </div>
                     <div>
-                      <label className="text-[10px] font-black text-[#64748B] text-[#94A3B8] block mb-1.5 uppercase">Round / Phase</label>
+                      <label className="text-[10px] font-black text-[#94A3B8] block mb-1.5 uppercase">Round / Phase</label>
                       <input
                         type="text"
                         name="round"
                         placeholder="e.g. Semi Final"
                         value={formData.round}
                         onChange={handleInputChange}
-                        className="bg-[#131D31] bg-[#0B1220] border border-[#24344D] border-[#24344D] p-3 rounded-xl text-white text-white w-full focus:ring-2 focus:ring-violet-500/50 outline-none transition-all font-bold"
+                        className="bg-[#0B1220] border border-[#24344D] p-3 rounded-xl text-white w-full focus:ring-2 focus:ring-violet-500/50 outline-none transition-all font-bold"
                       />
                     </div>
                     <div>
-                      <label className="text-[10px] font-black text-[#64748B] text-[#94A3B8] block mb-1.5 uppercase tracking-wider flex items-center gap-1.5">
+                      <label className="text-[10px] font-black text-[#94A3B8] block mb-1.5 uppercase tracking-wider flex items-center gap-1.5">
                         <Hash size={10} /> Custom Match No.
                       </label>
                       <input 
@@ -512,29 +512,29 @@ const ManageMatches = () => {
                         placeholder="Optional manual index" 
                         value={formData.matchNumber} 
                         onChange={handleInputChange} 
-                        className="bg-[#131D31] bg-[#0B1220] border border-[#24344D] border-[#24344D] p-3 rounded-xl text-white text-white w-full focus:ring-2 focus:ring-violet-500/50 outline-none text-sm font-bold" 
+                        className="bg-[#0B1220] border border-[#24344D] p-3 rounded-xl text-white w-full focus:ring-2 focus:ring-violet-500/50 outline-none text-sm font-bold" 
                       />
                     </div>
                   </div>
                 </div>
 
-                <div className="p-6 rounded-3xl bg-[#0B1220] dark:bg-white/[0.02] border border-[#24344D]/50 border-[#24344D]/50">
+                <div className="p-6 rounded-3xl bg-[#0B1220] dark:bg-[#131D31]/[0.02] border border-[#24344D]/50 border-[#24344D]/50">
                   <h4 className="text-[10px] font-black text-[#64748B] uppercase tracking-[0.2em] mb-4 flex items-center gap-2">
                     <Calendar size={12} className="text-green-400" /> Schedule
                   </h4>
                   <div className="grid grid-cols-2 gap-4">
                     <div>
-                      <label className="text-[10px] font-black text-[#64748B] text-[#94A3B8] block mb-1.5 uppercase">Date</label>
-                      <input type="date" name="date" value={formData.date} onChange={handleInputChange} className="bg-[#131D31] bg-[#0B1220] border border-[#24344D] border-[#24344D] p-2.5 rounded-xl text-white text-white w-full focus:ring-2 focus:ring-emerald-500/50 outline-none text-center font-bold text-xs" />
+                      <label className="text-[10px] font-black text-[#94A3B8] block mb-1.5 uppercase">Date</label>
+                      <input type="date" name="date" value={formData.date} onChange={handleInputChange} className="bg-[#0B1220] border border-[#24344D] p-2.5 rounded-xl text-white w-full focus:ring-2 focus:ring-emerald-500/50 outline-none text-center font-bold text-xs" />
                     </div>
                     <div>
-                      <label className="text-[10px] font-black text-[#64748B] text-[#94A3B8] block mb-1.5 uppercase">Time</label>
-                      <input type="time" name="time" value={formData.time} onChange={handleInputChange} className="bg-[#131D31] bg-[#0B1220] border border-[#24344D] border-[#24344D] p-2.5 rounded-xl text-white text-white w-full focus:ring-2 focus:ring-emerald-500/50 outline-none text-center font-bold text-xs" />
+                      <label className="text-[10px] font-black text-[#94A3B8] block mb-1.5 uppercase">Time</label>
+                      <input type="time" name="time" value={formData.time} onChange={handleInputChange} className="bg-[#0B1220] border border-[#24344D] p-2.5 rounded-xl text-white w-full focus:ring-2 focus:ring-emerald-500/50 outline-none text-center font-bold text-xs" />
                     </div>
                   </div>
                   <div className="mt-4">
-                    <label className="text-[10px] font-black text-[#64748B] text-[#94A3B8] block mb-1.5 uppercase flex items-center gap-1.5"><MapPin size={10} /> Stadium / Venue</label>
-                    <input type="text" name="stadium" placeholder="Venues name" value={formData.stadium} onChange={handleInputChange} className="bg-[#131D31] bg-[#0B1220] border border-[#24344D] border-[#24344D] p-3 rounded-xl text-white text-white w-full focus:ring-2 focus:ring-emerald-500/50 outline-none text-sm font-bold" />
+                    <label className="text-[10px] font-black text-[#94A3B8] block mb-1.5 uppercase flex items-center gap-1.5"><MapPin size={10} /> Stadium / Venue</label>
+                    <input type="text" name="stadium" placeholder="Venues name" value={formData.stadium} onChange={handleInputChange} className="bg-[#0B1220] border border-[#24344D] p-3 rounded-xl text-white w-full focus:ring-2 focus:ring-emerald-500/50 outline-none text-sm font-bold" />
                   </div>
                 </div>
               </div>
@@ -543,7 +543,7 @@ const ManageMatches = () => {
               <div className="lg:col-span-2 space-y-8">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-8 relative">
                   {/* Decorative VS */}
-                  <div className="hidden md:flex absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-12 h-12 rounded-full bg-[#131D31] bg-[#0B1220] border-4 border-slate-50 dark:border-[#1e293b] items-center justify-center z-10 font-black text-[#94A3B8] italic text-xl">VS</div>
+                  <div className="hidden md:flex absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-12 h-12 rounded-full bg-[#0B1220] border-4 border-slate-50 dark:border-[#1e293b] items-center justify-center z-10 font-black text-[#94A3B8] italic text-xl">VS</div>
 
                   {/* Home Team */}
                   <div className="p-8 rounded-[2.5rem] bg-gradient-to-br from-violet-500/5 to-transparent dark:from-violet-500/10 dark:to-transparent border border-violet-500/10">
@@ -553,7 +553,7 @@ const ManageMatches = () => {
                       </div>
                       <div>
                         <h4 className="text-[10px] font-black text-violet-500 uppercase tracking-[0.2em]">Home Contender</h4>
-                        <span className="text-xl font-black text-white text-white">Selection</span>
+                        <span className="text-xl font-black text-white">Selection</span>
                       </div>
                     </div>
                     
@@ -561,7 +561,7 @@ const ManageMatches = () => {
                       name="teamA"
                       value={formData.teamA}
                       onChange={handleInputChange}
-                      className="bg-[#131D31] dark:bg-black/40 border-2 border-[#24344D] border-[#24344D]/50 p-4 rounded-2xl text-white text-white w-full focus:border-violet-500 outline-none transition-all font-black text-lg mb-6 shadow-xl"
+                      className="bg-[#131D31] dark:bg-black/40 border-2 border-[#24344D]/50 p-4 rounded-2xl text-white w-full focus:border-violet-500 outline-none transition-all font-black text-lg mb-6 shadow-xl"
                       required
                     >
                       <option value="" disabled>Select Home Team</option>
@@ -574,7 +574,7 @@ const ManageMatches = () => {
                       <div className="flex items-center justify-between gap-4">
                         <div className="flex-1">
                           <label className="text-[10px] font-black text-[#64748B] uppercase block mb-1">Manager</label>
-                          <input type="text" name="managerA" placeholder="Chief Manager" value={formData.managerA || ''} onChange={handleInputChange} className="bg-white/50 bg-[#0B1220] border border-[#24344D] border-[#24344D]/50 p-3 rounded-xl text-white text-white w-full text-sm font-bold" />
+                          <input type="text" name="managerA" placeholder="Chief Manager" value={formData.managerA || ''} onChange={handleInputChange} className="bg-[#131D31]/60 bg-[#0B1220] border border-[#24344D]/50 p-3 rounded-xl text-white w-full text-sm font-bold" />
                         </div>
                         <div className="w-24">
                           <label className="text-[10px] font-black text-[#64748B] uppercase block mb-1 text-center">Score</label>
@@ -589,7 +589,7 @@ const ManageMatches = () => {
                     <div className="flex items-center gap-3 mb-6 justify-end text-right">
                       <div>
                         <h4 className="text-[10px] font-black text-cyan-500 uppercase tracking-[0.2em]">Away Challenger</h4>
-                        <span className="text-xl font-black text-white text-white">Selection</span>
+                        <span className="text-xl font-black text-white">Selection</span>
                       </div>
                       <div className="w-12 h-12 rounded-2xl bg-cyan-500 flex items-center justify-center text-white shadow-lg shadow-cyan-500/30">
                         <Shield size={24} />
@@ -600,7 +600,7 @@ const ManageMatches = () => {
                       name="teamB"
                       value={formData.teamB}
                       onChange={handleInputChange}
-                      className="bg-[#131D31] dark:bg-black/40 border-2 border-[#24344D] border-[#24344D]/50 p-4 rounded-2xl text-white text-white w-full focus:border-cyan-500 outline-none transition-all font-black text-lg mb-6 shadow-xl text-right"
+                      className="bg-[#131D31] dark:bg-black/40 border-2 border-[#24344D]/50 p-4 rounded-2xl text-white w-full focus:border-cyan-500 outline-none transition-all font-black text-lg mb-6 shadow-xl text-right"
                       required
                     >
                       <option value="" disabled>Select Away Team</option>
@@ -617,7 +617,7 @@ const ManageMatches = () => {
                         </div>
                         <div className="flex-1">
                           <label className="text-[10px] font-black text-[#64748B] uppercase block mb-1 text-right">Manager</label>
-                          <input type="text" name="managerB" placeholder="Chief Manager" value={formData.managerB || ''} onChange={handleInputChange} className="bg-white/50 bg-[#0B1220] border border-[#24344D] border-[#24344D]/50 p-3 rounded-xl text-white text-white w-full text-sm font-bold text-right" />
+                          <input type="text" name="managerB" placeholder="Chief Manager" value={formData.managerB || ''} onChange={handleInputChange} className="bg-[#131D31]/60 bg-[#0B1220] border border-[#24344D]/50 p-3 rounded-xl text-white w-full text-sm font-bold text-right" />
                         </div>
                       </div>
                     </div>
@@ -625,9 +625,9 @@ const ManageMatches = () => {
                 </div>
 
                 {/* Status Selection */}
-                <div className="p-8 rounded-[2.5rem] bg-[#0B1220] dark:bg-white/[0.01] border border-[#24344D]/50 border-[#24344D]/50">
+                <div className="p-8 rounded-[2.5rem] bg-[#0B1220] dark:bg-[#131D31]/[0.01] border border-[#24344D]/50 border-[#24344D]/50">
                   <div className="flex flex-col md:flex-row items-center justify-between gap-6">
-                    <div className="flex items-center gap-4 bg-[#131D31] bg-[#0B1220] p-2 rounded-[2rem] border border-[#24344D] border-[#24344D] shadow-inner">
+                    <div className="flex items-center gap-4 bg-[#0B1220] p-2 rounded-[2rem] border border-[#24344D] shadow-inner">
                       {['scheduled', 'live', 'halftime', 'finished'].map(s => (
                         <button
                           key={s}
@@ -636,7 +636,7 @@ const ManageMatches = () => {
                           className={cn(
                             "px-6 py-2.5 rounded-full text-[10px] font-black uppercase tracking-widest transition-all whitespace-nowrap",
                             formData.status === s 
-                              ? "bg-[#0B1220] dark:bg-white text-white text-white shadow-xl scale-105" 
+                              ? "bg-[#0B1220] dark:bg-[#131D31] text-white shadow-xl scale-105" 
                               : "text-[#64748B] hover:text-white hover:text-white"
                           )}
                         >
@@ -720,30 +720,30 @@ const ManageMatches = () => {
               )}
             </div>
             
-            <div className="flex items-center gap-1.5 bg-[#101827] bg-[#131D31]/50 p-1 rounded-xl border border-[#24344D] border-[#24344D]">
+            <div className="flex items-center gap-1.5 bg-[#101827] bg-[#131D31]/50 p-1 rounded-xl border border-[#24344D]">
               <div className="flex items-center pl-2 text-[#64748B]">
                 <Filter size={12} />
               </div>
               <select
                 value={filterStatus}
                 onChange={(e) => setFilterStatus(e.target.value)}
-                className="bg-transparent text-[11px] font-bold text-[#94A3B8] text-[#94A3B8] focus:outline-none px-2 py-1 cursor-pointer hover:text-white hover:text-white transition-colors capitalize appearance-none"
+                className="bg-transparent text-[11px] font-bold text-[#94A3B8] focus:outline-none px-2 py-1 cursor-pointer hover:text-white hover:text-white transition-colors capitalize appearance-none"
               >
-                <option value="all" className="bg-[#131D31] bg-[#0B1220] text-white text-white">All States</option>
-                <option value="scheduled" className="bg-[#131D31] bg-[#0B1220] text-white text-white">Scheduled</option>
-                <option value="live" className="bg-[#131D31] bg-[#0B1220] text-white text-white">Live</option>
-                <option value="halftime" className="bg-[#131D31] bg-[#0B1220] text-white text-white">Half Time</option>
-                <option value="finished" className="bg-[#131D31] bg-[#0B1220] text-white text-white">Finished</option>
+                <option value="all" className="bg-[#0B1220] text-white">All States</option>
+                <option value="scheduled" className="bg-[#0B1220] text-white">Scheduled</option>
+                <option value="live" className="bg-[#0B1220] text-white">Live</option>
+                <option value="halftime" className="bg-[#0B1220] text-white">Half Time</option>
+                <option value="finished" className="bg-[#0B1220] text-white">Finished</option>
               </select>
               <div className="w-px h-4 bg-[#131D31] bg-[#18253C]"></div>
               <select
                 value={filterTournament}
                 onChange={(e) => setFilterTournament(e.target.value)}
-                className="bg-transparent text-[11px] font-bold text-[#94A3B8] text-[#94A3B8] focus:outline-none px-2 py-1 cursor-pointer hover:text-white hover:text-white transition-colors appearance-none"
+                className="bg-transparent text-[11px] font-bold text-[#94A3B8] focus:outline-none px-2 py-1 cursor-pointer hover:text-white hover:text-white transition-colors appearance-none"
               >
-                <option value="all" className="bg-[#131D31] bg-[#0B1220] text-white text-white">All Tournaments</option>
+                <option value="all" className="bg-[#0B1220] text-white">All Tournaments</option>
                 {tournaments.map(t => (
-                  <option key={t.id} value={t.name} className="bg-[#131D31] bg-[#0B1220] text-white text-white">{t.name}</option>
+                  <option key={t.id} value={t.name} className="bg-[#0B1220] text-white">{t.name}</option>
                 ))}
               </select>
             </div>
@@ -800,7 +800,7 @@ const ManageMatches = () => {
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.95 }}
               key={match.id}
-              className="rounded-2xl overflow-hidden border border-[#24344D] border-[#24344D]/50 bg-[#131D31] dark:bg-white/[0.02] hover:border-violet-500/30 transition-all group shadow-sm hover:shadow-xl dark:shadow-none"
+              className="rounded-2xl overflow-hidden border border-[#24344D]/50 bg-[#131D31] dark:bg-[#131D31]/[0.02] hover:border-violet-500/30 transition-all group shadow-sm hover:shadow-xl dark:shadow-none"
             >
               <div className={`h-1 ${
                 match.status === 'live' || match.status === 'halftime' ? 'bg-red-500' : 
@@ -814,17 +814,17 @@ const ManageMatches = () => {
                       M#{globalMatchNumbers[match.id]}
                     </span>
                     {match.matchNumber && match.matchNumber !== globalMatchNumbers[match.id]?.toString() && (
-                      <span className="text-[10px] px-2 py-0.5 rounded bg-[#101827] bg-[#18253C] text-[#64748B] text-[#94A3B8] border border-[#24344D] border-[#24344D] font-black">
+                      <span className="text-[10px] px-2 py-0.5 rounded bg-[#101827] bg-[#18253C] text-[#94A3B8] border border-[#24344D] font-black">
                         {match.matchNumber}
                       </span>
                     )}
-                    <span className="text-white text-white truncate">{match.teamA}</span>
-                    <div className="flex items-center gap-2 px-3 py-1 bg-[#101827] bg-[#131D31]/50 rounded-xl border border-[#24344D] border-[#24344D]/50">
+                    <span className="text-white truncate">{match.teamA}</span>
+                    <div className="flex items-center gap-2 px-3 py-1 bg-[#101827] bg-[#131D31]/50 rounded-xl border border-[#24344D]/50">
                       <span className="text-green-400 font-impact text-xl">{match.scoreA}</span>
                       <span className="text-[#94A3B8]">-</span>
                       <span className="text-green-400 font-impact text-xl">{match.scoreB}</span>
                     </div>
-                    <span className="text-white text-white truncate">{match.teamB}</span>
+                    <span className="text-white truncate">{match.teamB}</span>
                   </div>
                   <div className="flex items-center gap-3 mt-3 flex-wrap">
                     <span className="text-[10px] px-2.5 py-1 rounded-full bg-violet-500/5 text-violet-500 dark:text-violet-400 border border-violet-500/10 font-bold flex items-center gap-1.5">
@@ -873,12 +873,12 @@ const ManageMatches = () => {
             <motion.div 
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
-              className="col-span-full text-center py-24 rounded-3xl border-2 border-dashed border-[#24344D] border-[#24344D]/50 bg-slate-50/50 dark:bg-white/[0.01]"
+              className="col-span-full text-center py-24 rounded-3xl border-2 border-dashed border-[#24344D]/50 bg-[#0B1220]/50 dark:bg-[#131D31]/[0.01]"
             >
               <div className="w-16 h-16 rounded-full bg-[#101827] bg-[#131D31]/50 flex items-center justify-center mx-auto mb-4">
-                <Search className="text-[#94A3B8] dark:text-slate-600" size={32} />
+                <Search className="text-[#94A3B8] dark:text-[#94A3B8]" size={32} />
               </div>
-              <h3 className="text-white text-white font-bold text-lg">No matches found</h3>
+              <h3 className="text-white font-bold text-lg">No matches found</h3>
               <p className="text-[#64748B] text-sm mt-1">Try adjusting your filters or search query.</p>
               <button 
                 onClick={() => { setSearchQuery(''); setFilterStatus('all'); setFilterTournament('all'); }}
@@ -893,22 +893,22 @@ const ManageMatches = () => {
 
       {/* Pagination Controls */}
       {otherMatches.length > matchesPerPage && (
-        <div className="mt-8 flex flex-col sm:flex-row items-center justify-between gap-4 bg-slate-50/50 dark:bg-gray-800/50 p-4 rounded-2xl border border-[#24344D]/30 border-[#24344D]/50">
+        <div className="mt-8 flex flex-col sm:flex-row items-center justify-between gap-4 bg-[#0B1220]/50 dark:bg-gray-800/50 p-4 rounded-2xl border border-[#24344D]/40">
           <div className="text-sm text-[#64748B] dark:text-gray-400 font-medium">
-            Showing <span className="text-white text-white font-bold">{indexOfFirstMatch + 1}</span> to <span className="text-white text-white font-bold">{Math.min(indexOfLastMatch, otherMatches.length)}</span> of <span className="text-white text-white font-bold">{otherMatches.length}</span> matches
+            Showing <span className="text-white font-bold">{indexOfFirstMatch + 1}</span> to <span className="text-white font-bold">{Math.min(indexOfLastMatch, otherMatches.length)}</span> of <span className="text-white font-bold">{otherMatches.length}</span> matches
           </div>
           <div className="flex items-center gap-2">
             <button
               onClick={() => paginate(1)}
               disabled={currentPage === 1}
-              className="p-2 rounded-xl bg-[#0B1220] dark:bg-gray-800 border border-[#24344D]/30 border-[#24344D]/50 text-[#64748B] dark:text-gray-400 hover:text-white text-white disabled:opacity-30 disabled:cursor-not-allowed transition-all"
+              className="p-2 rounded-xl bg-[#0B1220] dark:bg-gray-800 border border-[#24344D]/40 text-[#64748B] dark:text-gray-400 hover:text-white disabled:opacity-30 disabled:cursor-not-allowed transition-all"
             >
               <ChevronsLeft size={18} />
             </button>
             <button
               onClick={() => paginate(currentPage - 1)}
               disabled={currentPage === 1}
-              className="p-2 rounded-xl bg-[#0B1220] dark:bg-gray-800 border border-[#24344D]/30 border-[#24344D]/50 text-[#64748B] dark:text-gray-400 hover:text-white text-white disabled:opacity-30 disabled:cursor-not-allowed transition-all"
+              className="p-2 rounded-xl bg-[#0B1220] dark:bg-gray-800 border border-[#24344D]/40 text-[#64748B] dark:text-gray-400 hover:text-white disabled:opacity-30 disabled:cursor-not-allowed transition-all"
             >
               <ChevronLeft size={18} />
             </button>
@@ -927,7 +927,7 @@ const ManageMatches = () => {
                       onClick={() => paginate(pageNum)}
                       className={`w-10 h-10 rounded-xl text-sm font-bold transition-all ${currentPage === pageNum
                         ? "bg-brand-500 text-white shadow-lg shadow-brand-500/20"
-                        : "bg-[#0B1220] dark:bg-gray-800 border border-[#24344D]/30 border-[#24344D]/50 text-[#64748B] dark:text-gray-400 hover:text-white text-white"
+                        : "bg-[#0B1220] dark:bg-gray-800 border border-[#24344D]/40 text-[#64748B] dark:text-gray-400 hover:text-white"
                         }`}
                     >
                       {pageNum}
@@ -946,14 +946,14 @@ const ManageMatches = () => {
             <button
               onClick={() => paginate(currentPage + 1)}
               disabled={currentPage === totalPages}
-              className="p-2 rounded-xl bg-[#0B1220] dark:bg-gray-800 border border-[#24344D]/30 border-[#24344D]/50 text-[#64748B] dark:text-gray-400 hover:text-white text-white disabled:opacity-30 disabled:cursor-not-allowed transition-all"
+              className="p-2 rounded-xl bg-[#0B1220] dark:bg-gray-800 border border-[#24344D]/40 text-[#64748B] dark:text-gray-400 hover:text-white disabled:opacity-30 disabled:cursor-not-allowed transition-all"
             >
               <ChevronRight size={18} />
             </button>
             <button
               onClick={() => paginate(totalPages)}
               disabled={currentPage === totalPages}
-              className="p-2 rounded-xl bg-[#0B1220] dark:bg-gray-800 border border-[#24344D]/30 border-[#24344D]/50 text-[#64748B] dark:text-gray-400 hover:text-white text-white disabled:opacity-30 disabled:cursor-not-allowed transition-all"
+              className="p-2 rounded-xl bg-[#0B1220] dark:bg-gray-800 border border-[#24344D]/40 text-[#64748B] dark:text-gray-400 hover:text-white disabled:opacity-30 disabled:cursor-not-allowed transition-all"
             >
               <ChevronsRight size={18} />
             </button>

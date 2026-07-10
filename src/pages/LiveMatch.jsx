@@ -622,10 +622,10 @@ const LiveMatch = () => {
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-brand-500/10 border border-brand-500/20 text-brand-400 text-brand-400 text-sm font-medium mb-4">
               <Activity size={14} className="animate-pulse" /> Live Coverage
             </div>
-            <h1 className="text-3xl md:text-5xl font-display font-black text-white text-white tracking-tight mb-2">
+            <h1 className="text-3xl md:text-5xl font-display font-black text-white tracking-tight mb-2">
               Match <span className="text-transparent bg-clip-text bg-gradient-to-r from-brand-400 to-brand-600">Center</span>
             </h1>
-            <p className="text-[#94A3B8] text-[#94A3B8] max-w-2xl text-sm md:text-base">
+            <p className="text-[#94A3B8] max-w-2xl text-sm md:text-base">
               Track live scores, fixtures and statistics in real-time.
             </p>
           </div>
@@ -636,7 +636,7 @@ const LiveMatch = () => {
                       `Check out the match between ${match.teamA} and ${match.teamB} on Goal Kashmir!`,
                       `/live/${matchId}`
                   )}
-                  className="flex items-center gap-2 px-5 py-2.5 bg-brand-500/10 hover:bg-brand-500 text-brand-400 text-brand-400 hover:text-white text-white rounded-xl font-bold transition-all"
+                  className="flex items-center gap-2 px-5 py-2.5 bg-brand-500/10 hover:bg-brand-500 text-brand-400 text-brand-400 hover:text-white rounded-xl font-bold transition-all"
               >
                   <Share2 size={18} />
                   Share Match
@@ -649,20 +649,20 @@ const LiveMatch = () => {
 
         {/* Admin Controls (Match Control Center) */}
         {canEditMatch && (
-          <div className="mb-8 rounded-3xl overflow-hidden bg-white/80 dark:bg-slate-900/80 backdrop-blur-xl border border-slate-200/10 border-[#24344D] shadow-[0_0_40px_rgba(0,0,0,0.5)]">
-            <div className="bg-gradient-to-r from-slate-800 to-slate-900 p-4 border-b border-[#24344D]/30 border-[#24344D]/50 flex items-center justify-between">
+          <div className="mb-8 rounded-3xl overflow-hidden bg-[#131D31]/80 dark:bg-slate-900/80 backdrop-blur-xl border border-[#24344D] shadow-[0_0_40px_rgba(0,0,0,0.5)]">
+            <div className="bg-gradient-to-r from-slate-800 to-slate-900 p-4 border-b border-[#24344D]/40 flex items-center justify-between">
               <div className="flex items-center gap-3">
                 <div className="p-2 bg-brand-500/20 text-brand-400 rounded-lg border border-brand-500/30">
                   <Activity size={20} className={match.status === 'live' ? "animate-pulse" : ""} />
                 </div>
-                <h3 className="text-white text-white font-black uppercase tracking-widest text-lg drop-shadow-md">Match Control Center</h3>
+                <h3 className="text-white font-black uppercase tracking-widest text-lg drop-shadow-md">Match Control Center</h3>
               </div>
               <div className="flex items-center gap-2">
                 <span className={cn(
                   "px-3 py-1 text-xs font-black uppercase tracking-widest rounded-full border",
                   match.status === 'live' ? "bg-red-500/10 text-red-400 border-red-500/30 animate-pulse" : 
                   match.status === 'finished' ? "bg-green-500/10 text-green-400 border-green-500/30" : 
-                  "bg-slate-500/10 text-[#64748B] text-[#94A3B8] border-slate-500/30"
+                  "bg-[#0B1220]0/10 text-[#94A3B8] border-slate-500/30"
                 )}>
                   {match.status === 'live' ? "Live Now" : match.status === 'finished' ? "Match Ended" : "Scheduled"}
                 </span>
@@ -677,7 +677,7 @@ const LiveMatch = () => {
                       stadium: match.stadium || ''
                     });
                   }}
-                  className="p-2 hover:bg-white/10 rounded-lg text-[#64748B] text-[#94A3B8] hover:text-white text-white transition-colors border border-transparent hover:border-slate-200/10 border-[#24344D]"
+                  className="p-2 hover:bg-[#131D31]/10 rounded-lg text-[#94A3B8] hover:text-white transition-colors border border-transparent hover:border-[#24344D]"
                   title="Edit Match Details"
                 >
                   <Edit3 size={18} />
@@ -689,13 +689,13 @@ const LiveMatch = () => {
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2 sm:gap-6">
 
                 {/* Team A Score Controls */}
-                <div className="bg-slate-950/50 rounded-xl sm:rounded-2xl p-3 sm:p-5 border border-[#24344D]/30 border-[#24344D]/50 relative overflow-hidden group">
+                <div className="bg-slate-950/50 rounded-xl sm:rounded-2xl p-3 sm:p-5 border border-[#24344D]/40 relative overflow-hidden group">
                   <div className="absolute top-0 right-0 p-4 opacity-5 pointer-events-none group-hover:scale-110 transition-transform duration-500">
                     <Trophy size={64} />
                   </div>
                   <div className="text-center mb-3 sm:mb-6">
                     <span className="text-[9px] sm:text-xs font-bold text-[#64748B] uppercase tracking-widest">Home Team</span>
-                    <h2 className="text-lg sm:text-2xl font-black text-white text-white truncate leading-tight mt-0.5 sm:mt-1" title={match.teamA}>{match.teamA}</h2>
+                    <h2 className="text-lg sm:text-2xl font-black text-white truncate leading-tight mt-0.5 sm:mt-1" title={match.teamA}>{match.teamA}</h2>
                     <div className="text-3xl sm:text-6xl font-black text-brand-400 my-2 sm:my-4 drop-shadow-[0_0_15px_rgba(14,165,233,0.3)]">{match.scoreA || 0}</div>
                   </div>
                   
@@ -714,7 +714,7 @@ const LiveMatch = () => {
                     </button>
                   </div>
 
-                  <div className="flex gap-2 border-t border-[#24344D]/30 border-[#24344D]/50 pt-4">
+                  <div className="flex gap-2 border-t border-[#24344D]/40 pt-4">
                     <button 
                       onClick={() => setShowCardSelect({ team: 'A', type: 'yellow' })} 
                       className="flex-1 flex items-center justify-center gap-1 bg-yellow-500/10 text-yellow-500 hover:bg-yellow-500/20 border border-yellow-500/30 py-2 rounded-lg text-xs font-bold transition-all"
@@ -733,7 +733,7 @@ const LiveMatch = () => {
                 {/* Main Match / Clock Controls */}
                 <div className="flex flex-col gap-2 sm:gap-4 order-first lg:order-none sm:col-span-2 lg:col-span-1">
                   {/* Timer Display */}
-                  <div className="bg-slate-950/80 rounded-xl sm:rounded-2xl p-3 sm:p-6 border-2 border-slate-800 text-center flex flex-col items-center justify-center shadow-inner relative overflow-hidden">
+                  <div className="bg-[#0B1220]/90 rounded-xl sm:rounded-2xl p-3 sm:p-6 border-2 border-slate-800 text-center flex flex-col items-center justify-center shadow-inner relative overflow-hidden">
                     <div className="absolute inset-0 bg-gradient-to-br from-brand-500/5 to-transparent pointer-events-none" />
                     
                     <span className="text-xs font-bold text-[#64748B] uppercase tracking-widest mb-2 flex items-center gap-2">
@@ -742,17 +742,17 @@ const LiveMatch = () => {
                     
                     <div className={cn(
                       "text-3xl sm:text-6xl font-mono font-black tracking-tighter tabular-nums drop-shadow-xl",
-                      match.timerRunning ? "text-brand-400" : "text-white text-white"
+                      match.timerRunning ? "text-brand-400" : "text-white"
                     )}>
                       <MatchTimer match={match} />
                     </div>
 
                     {/* Clock manipulation */}
                     <div className="flex items-center justify-center gap-1 sm:gap-2 mt-2 sm:mt-6 w-full">
-                      <button onClick={() => updateMinute(-1)} className="flex-1 h-8 sm:h-10 flex items-center justify-center bg-[#0B1220] bg-[#131D31] hover:bg-[#18253C] dark:bg-slate-700 text-[#94A3B8] text-[#94A3B8] rounded sm:rounded-lg text-[10px] sm:text-sm font-bold border border-[#24344D] border-[#24344D] transition-colors">-1</button>
-                      <button onClick={() => updateMinute(1)} className="flex-1 h-8 sm:h-10 flex items-center justify-center bg-[#0B1220] bg-[#131D31] hover:bg-[#18253C] dark:bg-slate-700 text-[#94A3B8] text-[#94A3B8] rounded sm:rounded-lg text-[10px] sm:text-sm font-bold border border-[#24344D] border-[#24344D] transition-colors">+1</button>
-                      <button onClick={() => updateMinute(5)} className="flex-1 h-8 sm:h-10 flex items-center justify-center bg-[#0B1220] bg-[#131D31] hover:bg-[#18253C] dark:bg-slate-700 text-[#94A3B8] text-[#94A3B8] rounded sm:rounded-lg text-[10px] sm:text-sm font-bold border border-[#24344D] border-[#24344D] transition-colors">+5m</button>
-                      <button onClick={resetTimer} className="flex-1 h-8 sm:h-10 flex items-center justify-center bg-[#0B1220] bg-[#131D31] hover:bg-red-500/20 text-[#64748B] hover:text-red-400 rounded sm:rounded-lg border border-[#24344D] border-[#24344D] hover:border-red-500/30 transition-colors" title="Reset Clock to 00:00">
+                      <button onClick={() => updateMinute(-1)} className="flex-1 h-8 sm:h-10 flex items-center justify-center bg-[#0B1220] bg-[#131D31] hover:bg-[#18253C] dark:bg-[#131D31] text-[#94A3B8] rounded sm:rounded-lg text-[10px] sm:text-sm font-bold border border-[#24344D] transition-colors">-1</button>
+                      <button onClick={() => updateMinute(1)} className="flex-1 h-8 sm:h-10 flex items-center justify-center bg-[#0B1220] bg-[#131D31] hover:bg-[#18253C] dark:bg-[#131D31] text-[#94A3B8] rounded sm:rounded-lg text-[10px] sm:text-sm font-bold border border-[#24344D] transition-colors">+1</button>
+                      <button onClick={() => updateMinute(5)} className="flex-1 h-8 sm:h-10 flex items-center justify-center bg-[#0B1220] bg-[#131D31] hover:bg-[#18253C] dark:bg-[#131D31] text-[#94A3B8] rounded sm:rounded-lg text-[10px] sm:text-sm font-bold border border-[#24344D] transition-colors">+5m</button>
+                      <button onClick={resetTimer} className="flex-1 h-8 sm:h-10 flex items-center justify-center bg-[#0B1220] bg-[#131D31] hover:bg-red-500/20 text-[#64748B] hover:text-red-400 rounded sm:rounded-lg border border-[#24344D] hover:border-red-500/30 transition-colors" title="Reset Clock to 00:00">
                         <RotateCcw size={12} className="sm:w-4 sm:h-4" />
                       </button>
                     </div>
@@ -778,7 +778,7 @@ const LiveMatch = () => {
                         "flex flex-col items-center justify-center gap-1 py-1 sm:py-2 rounded-xl sm:rounded-2xl font-black uppercase tracking-wider transition-all border shadow-lg",
                         match.status === 'halftime' 
                           ? "bg-orange-500/10 text-orange-500 border-orange-500/30 hover:bg-orange-500/20 shadow-[0_0_20px_rgba(249,115,22,0.1)] hover:shadow-[0_0_20px_rgba(249,115,22,0.2)]" 
-                          : "bg-slate-100/30 dark:bg-slate-700/30 text-[#94A3B8] text-[#94A3B8] border-slate-600/30 hover:bg-slate-600/40"
+                          : "bg-[#101827]/30 dark:bg-[#131D31]/30 text-[#94A3B8] border-slate-600/30 hover:bg-slate-600/40"
                       )}
                     >
                       <Clock size={16} className="sm:w-[26px] sm:h-[26px]" />
@@ -803,13 +803,13 @@ const LiveMatch = () => {
                 </div>
 
                 {/* Team B Score Controls */}
-                <div className="bg-slate-950/50 rounded-xl sm:rounded-2xl p-3 sm:p-5 border border-[#24344D]/30 border-[#24344D]/50 relative overflow-hidden group">
+                <div className="bg-slate-950/50 rounded-xl sm:rounded-2xl p-3 sm:p-5 border border-[#24344D]/40 relative overflow-hidden group">
                   <div className="absolute top-0 right-0 p-4 opacity-5 pointer-events-none group-hover:scale-110 transition-transform duration-500">
                     <Trophy size={64} />
                   </div>
                   <div className="text-center mb-3 sm:mb-6">
                     <span className="text-[9px] sm:text-xs font-bold text-[#64748B] uppercase tracking-widest">Away Team</span>
-                    <h2 className="text-lg sm:text-2xl font-black text-white text-white truncate leading-tight mt-0.5 sm:mt-1" title={match.teamB}>{match.teamB}</h2>
+                    <h2 className="text-lg sm:text-2xl font-black text-white truncate leading-tight mt-0.5 sm:mt-1" title={match.teamB}>{match.teamB}</h2>
                     <div className="text-3xl sm:text-6xl font-black text-brand-400 my-2 sm:my-4 drop-shadow-[0_0_15px_rgba(14,165,233,0.3)]">{match.scoreB || 0}</div>
                   </div>
                   
@@ -828,7 +828,7 @@ const LiveMatch = () => {
                     </button>
                   </div>
 
-                  <div className="flex gap-2 border-t border-[#24344D]/30 border-[#24344D]/50 pt-4">
+                  <div className="flex gap-2 border-t border-[#24344D]/40 pt-4">
                     <button 
                       onClick={() => setShowCardSelect({ team: 'B', type: 'yellow' })} 
                       className="flex-1 flex items-center justify-center gap-1 bg-yellow-500/10 text-yellow-500 hover:bg-yellow-500/20 border border-yellow-500/30 py-2 rounded-lg text-xs font-bold transition-all"
@@ -849,8 +849,8 @@ const LiveMatch = () => {
 
             {/* Editing Teams Panel (Drops down when hitting edit) */}
             {isEditingTeams && (
-              <div className="border-t border-brand-500/30 bg-white/90 dark:bg-slate-900/90 p-6 animate-in slide-in-from-top-4 relative">
-                <button onClick={() => setIsEditingTeams(false)} className="absolute top-4 right-4 p-2 text-[#64748B] hover:text-white text-white rounded-full hover:bg-white/5 transition-colors">
+              <div className="border-t border-brand-500/30 bg-[#131D31]/90 dark:bg-slate-900/90 p-6 animate-in slide-in-from-top-4 relative">
+                <button onClick={() => setIsEditingTeams(false)} className="absolute top-4 right-4 p-2 text-[#64748B] hover:text-white rounded-full hover:bg-[#131D31]/5 transition-colors">
                   <X size={20} />
                 </button>
                 <h4 className="flex items-center gap-2 text-sm font-black uppercase tracking-widest text-brand-400 mb-6">
@@ -863,7 +863,7 @@ const LiveMatch = () => {
                     <select
                       value={editFormData.teamA}
                       onChange={(e) => setEditFormData({ ...editFormData, teamA: e.target.value })}
-                      className="w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-white text-white focus:border-brand-500 focus:ring-1 focus:ring-brand-500 transition-all outline-none"
+                      className="w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-white focus:border-brand-500 focus:ring-1 focus:ring-brand-500 transition-all outline-none"
                     >
                       <option value="">Select Home Team</option>
                       {tournamentTeams.map(t => (
@@ -879,7 +879,7 @@ const LiveMatch = () => {
                     <select
                       value={editFormData.teamB}
                       onChange={(e) => setEditFormData({ ...editFormData, teamB: e.target.value })}
-                      className="w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-white text-white focus:border-brand-500 focus:ring-1 focus:ring-brand-500 transition-all outline-none"
+                      className="w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-white focus:border-brand-500 focus:ring-1 focus:ring-brand-500 transition-all outline-none"
                     >
                       <option value="">Select Away Team</option>
                       {tournamentTeams.map(t => (
@@ -906,7 +906,7 @@ const LiveMatch = () => {
                       type="date"
                       value={editFormData.date}
                       onChange={(e) => setEditFormData({ ...editFormData, date: e.target.value })}
-                      className="w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-white text-white focus:border-brand-500 outline-none"
+                      className="w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-white focus:border-brand-500 outline-none"
                     />
                   </div>
                   <div className="lg:col-span-1">
@@ -915,7 +915,7 @@ const LiveMatch = () => {
                       type="time"
                       value={editFormData.time}
                       onChange={(e) => setEditFormData({ ...editFormData, time: e.target.value })}
-                      className="w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-white text-white focus:border-brand-500 outline-none"
+                      className="w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-white focus:border-brand-500 outline-none"
                     />
                   </div>
                   <div className="lg:col-span-2">
@@ -925,7 +925,7 @@ const LiveMatch = () => {
                       placeholder="Stadium"
                       value={editFormData.stadium}
                       onChange={(e) => setEditFormData({ ...editFormData, stadium: e.target.value })}
-                      className="w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-white text-white focus:border-brand-500 outline-none"
+                      className="w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-white focus:border-brand-500 outline-none"
                     />
                   </div>
                 </div>
@@ -934,7 +934,7 @@ const LiveMatch = () => {
 
             {/* Dynamic Popups for Goal Scorer and Cards */}
             {(showScorerSelect || showCardSelect || showCancelSelect || showPotmSelect) && (
-              <div className="border-t border-slate-200/10 border-[#24344D] bg-slate-950/80 p-6 animate-in slide-in-from-bottom-4 relative">
+              <div className="border-t border-[#24344D] bg-[#0B1220]/90 p-6 animate-in slide-in-from-bottom-4 relative">
                 
                 {/* Cancel Goal Context */}
                 {showCancelSelect && (
@@ -943,14 +943,14 @@ const LiveMatch = () => {
                       <h4 className="text-red-400 font-bold flex items-center gap-2">
                         <Trash2 size={18} /> Cancel Goal for {showCancelSelect.team === 'A' ? match.teamA : match.teamB}
                       </h4>
-                      <button onClick={() => setShowCancelSelect(null)} className="p-1.5 bg-[#0B1220] bg-[#131D31] hover:bg-[#18253C] dark:bg-slate-700 rounded-lg text-[#64748B] text-[#94A3B8]"><X size={16} /></button>
+                      <button onClick={() => setShowCancelSelect(null)} className="p-1.5 bg-[#0B1220] bg-[#131D31] hover:bg-[#18253C] dark:bg-[#131D31] rounded-lg text-[#94A3B8]"><X size={16} /></button>
                     </div>
 
                     <div className="space-y-2 max-h-48 overflow-y-auto pr-2 custom-scrollbar">
                       {events.filter(e => e.type === 'goal' && e.team === (showCancelSelect.team === 'A' ? match.teamA : match.teamB)).length > 0 ? (
                         events.filter(e => e.type === 'goal' && e.team === (showCancelSelect.team === 'A' ? match.teamA : match.teamB)).map(goal => (
-                          <div key={goal.id} className="flex justify-between items-center bg-[#131D31] bg-[#0B1220] border border-[#24344D]/30 border-[#24344D]/50 p-3 rounded-xl hover:border-red-500/30 transition-colors">
-                            <span className="text-sm font-bold text-white text-white flex items-center gap-2">
+                          <div key={goal.id} className="flex justify-between items-center bg-[#0B1220] border border-[#24344D]/40 p-3 rounded-xl hover:border-red-500/30 transition-colors">
+                            <span className="text-sm font-bold text-white flex items-center gap-2">
                               <span className="text-brand-400 p-1 bg-brand-500/10 rounded">{goal.minute}'</span> {goal.player}
                             </span>
                             <button
@@ -962,7 +962,7 @@ const LiveMatch = () => {
                           </div>
                         ))
                       ) : (
-                        <div className="text-center text-[#64748B] py-6 border border-dashed border-slate-200/10 border-[#24344D] rounded-xl font-bold">
+                        <div className="text-center text-[#64748B] py-6 border border-dashed border-[#24344D] rounded-xl font-bold">
                           No goal events recorded yet.
                         </div>
                       )}
@@ -977,16 +977,16 @@ const LiveMatch = () => {
                       <h4 className="font-bold flex items-center gap-2 text-lg text-brand-400">
                         <Trophy size={20} />
                         {showScorerSelect.step === 'scorer' ? 'Select Goal Scorer' : 'Select Assist'}
-                        <span className="text-white text-white ml-2 opacity-50 px-2 py-0.5 bg-[#0B1220] bg-[#131D31] rounded text-xs uppercase tracking-widest border border-slate-200/10 border-[#24344D]">
+                        <span className="text-white ml-2 opacity-50 px-2 py-0.5 bg-[#0B1220] bg-[#131D31] rounded text-xs uppercase tracking-widest border border-[#24344D]">
                           {showScorerSelect.team === 'A' ? match.teamA : match.teamB}
                         </span>
                       </h4>
-                      <button onClick={() => setShowScorerSelect(null)} className="p-1.5 bg-[#0B1220] bg-[#131D31] hover:bg-[#18253C] dark:bg-slate-700 rounded-lg text-[#64748B] text-[#94A3B8]"><X size={16} /></button>
+                      <button onClick={() => setShowScorerSelect(null)} className="p-1.5 bg-[#0B1220] bg-[#131D31] hover:bg-[#18253C] dark:bg-[#131D31] rounded-lg text-[#94A3B8]"><X size={16} /></button>
                     </div>
 
                     {showScorerSelect.step === 'scorer' && (
                       <div className="mb-4 flex flex-wrap gap-2">
-                        <label className={cn("flex flex-1 items-center justify-center gap-2 text-xs sm:text-sm font-bold p-3 rounded-xl border cursor-pointer transition-colors min-w-[100px]", showScorerSelect.goalType === 'regular' || !showScorerSelect.goalType ? "bg-brand-500/10 border-brand-500/30 text-brand-400" : "bg-white/50 dark:bg-slate-900/50 border-[#24344D]/30 border-[#24344D]/50 text-[#64748B] text-[#94A3B8] hover:border-brand-500/30")}>
+                        <label className={cn("flex flex-1 items-center justify-center gap-2 text-xs sm:text-sm font-bold p-3 rounded-xl border cursor-pointer transition-colors min-w-[100px]", showScorerSelect.goalType === 'regular' || !showScorerSelect.goalType ? "bg-brand-500/10 border-brand-500/30 text-brand-400" : "bg-[#131D31]/60 dark:bg-[#0B1220]/60 border-[#24344D]/40 text-[#94A3B8] hover:border-brand-500/30")}>
                           <input 
                             type="radio" 
                             name="goalType"
@@ -996,7 +996,7 @@ const LiveMatch = () => {
                           />
                           Regular Goal
                         </label>
-                        <label className={cn("flex flex-1 items-center justify-center gap-2 text-xs sm:text-sm font-bold p-3 rounded-xl border cursor-pointer transition-colors min-w-[100px]", showScorerSelect.goalType === 'freekick' ? "bg-orange-500/10 border-orange-500/30 text-orange-400" : "bg-white/50 dark:bg-slate-900/50 border-[#24344D]/30 border-[#24344D]/50 text-[#64748B] text-[#94A3B8] hover:border-orange-500/30")}>
+                        <label className={cn("flex flex-1 items-center justify-center gap-2 text-xs sm:text-sm font-bold p-3 rounded-xl border cursor-pointer transition-colors min-w-[100px]", showScorerSelect.goalType === 'freekick' ? "bg-orange-500/10 border-orange-500/30 text-orange-400" : "bg-[#131D31]/60 dark:bg-[#0B1220]/60 border-[#24344D]/40 text-[#94A3B8] hover:border-orange-500/30")}>
                           <input 
                             type="radio" 
                             name="goalType"
@@ -1006,7 +1006,7 @@ const LiveMatch = () => {
                           />
                           Free Kick
                         </label>
-                        <label className={cn("flex flex-1 items-center justify-center gap-2 text-xs sm:text-sm font-bold p-3 rounded-xl border cursor-pointer transition-colors min-w-[100px]", showScorerSelect.goalType === 'penalty' ? "bg-red-500/10 border-red-500/30 text-red-400" : "bg-white/50 dark:bg-slate-900/50 border-[#24344D]/30 border-[#24344D]/50 text-[#64748B] text-[#94A3B8] hover:border-red-500/30")}>
+                        <label className={cn("flex flex-1 items-center justify-center gap-2 text-xs sm:text-sm font-bold p-3 rounded-xl border cursor-pointer transition-colors min-w-[100px]", showScorerSelect.goalType === 'penalty' ? "bg-red-500/10 border-red-500/30 text-red-400" : "bg-[#131D31]/60 dark:bg-[#0B1220]/60 border-[#24344D]/40 text-[#94A3B8] hover:border-red-500/30")}>
                           <input 
                             type="radio" 
                             name="goalType"
@@ -1034,7 +1034,7 @@ const LiveMatch = () => {
                                 confirmGoal(showScorerSelect.team, showScorerSelect.scorer, player, showScorerSelect.goalType || 'regular');
                               }
                             }}
-                            className="text-left p-3 rounded-xl border font-bold text-sm transition-all flex items-center gap-2 truncate bg-[#131D31] bg-[#0B1220] border-[#24344D]/30 border-[#24344D]/50 hover:border-brand-500 text-[#94A3B8] text-[#94A3B8] hover:text-brand-400"
+                            className="text-left p-3 rounded-xl border font-bold text-sm transition-all flex items-center gap-2 truncate bg-[#0B1220] border-[#24344D]/40 hover:border-brand-500 text-[#94A3B8] hover:text-brand-400"
                             title={player.name}
                           >
                             <span className="w-6 h-6 shrink-0 bg-[#0B1220] bg-[#131D31] rounded-md flex items-center justify-center text-[10px] text-[#64748B]">{player.number || '#'}</span>
@@ -1049,7 +1049,7 @@ const LiveMatch = () => {
                             confirmGoal(showScorerSelect.team, showScorerSelect.scorer, null, showScorerSelect.goalType || 'regular');
                           }
                         }}
-                        className="p-3 rounded-xl border border-dashed border-[#24344D] dark:border-white/20 hover:border-slate-200/50 dark:border-white/50 bg-transparent text-[#64748B] text-[#94A3B8] hover:text-white text-white font-bold text-sm transition-all flex items-center justify-center italic"
+                        className="p-3 rounded-xl border border-dashed border-[#24344D] hover:border-[#24344D]/200 dark:border-white/50 bg-transparent text-[#94A3B8] hover:text-white font-bold text-sm transition-all flex items-center justify-center italic"
                       >
                         {showScorerSelect.step === 'scorer' ? 'Select Unknown / Other' : 'No Assist'}
                       </button>
@@ -1070,11 +1070,11 @@ const LiveMatch = () => {
                       )}>
                         <AlertTriangle size={20} />
                         Select Player for {showCardSelect.type} Card
-                        <span className="text-white text-white ml-2 opacity-50 px-2 py-0.5 bg-[#0B1220] bg-[#131D31] rounded text-xs uppercase tracking-widest border border-slate-200/10 border-[#24344D]">
+                        <span className="text-white ml-2 opacity-50 px-2 py-0.5 bg-[#0B1220] bg-[#131D31] rounded text-xs uppercase tracking-widest border border-[#24344D]">
                           {showCardSelect.team === 'A' ? match.teamA : match.teamB}
                         </span>
                       </h4>
-                      <button onClick={() => setShowCardSelect(null)} className="p-1.5 bg-[#0B1220] bg-[#131D31] hover:bg-[#18253C] dark:bg-slate-700 rounded-lg text-[#64748B] text-[#94A3B8]"><X size={16} /></button>
+                      <button onClick={() => setShowCardSelect(null)} className="p-1.5 bg-[#0B1220] bg-[#131D31] hover:bg-[#18253C] dark:bg-[#131D31] rounded-lg text-[#94A3B8]"><X size={16} /></button>
                     </div>
 
                     <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3 max-h-60 overflow-y-auto pr-2 custom-scrollbar">
@@ -1087,8 +1087,8 @@ const LiveMatch = () => {
                             onClick={() => confirmCard(showCardSelect.team, player, showCardSelect.type)}
                             className={cn(
                               "text-left p-3 rounded-xl border font-bold text-sm transition-all flex items-center gap-2 truncate",
-                              showCardSelect.type === 'yellow' ? "bg-[#131D31] bg-[#0B1220] border-[#24344D]/30 border-[#24344D]/50 hover:border-yellow-500 text-[#94A3B8] text-[#94A3B8] hover:text-yellow-500" :
-                              "bg-[#131D31] bg-[#0B1220] border-[#24344D]/30 border-[#24344D]/50 hover:border-red-500 text-[#94A3B8] text-[#94A3B8] hover:text-red-500"
+                              showCardSelect.type === 'yellow' ? "bg-[#0B1220] border-[#24344D]/40 hover:border-yellow-500 text-[#94A3B8] hover:text-yellow-500" :
+                              "bg-[#0B1220] border-[#24344D]/40 hover:border-red-500 text-[#94A3B8] hover:text-red-500"
                             )}
                             title={player.name}
                           >
@@ -1098,7 +1098,7 @@ const LiveMatch = () => {
                         ))}
                       <button
                         onClick={() => confirmCard(showCardSelect.team, null, showCardSelect.type)}
-                        className="p-3 rounded-xl border border-dashed border-[#24344D] dark:border-white/20 hover:border-slate-200/50 dark:border-white/50 bg-transparent text-[#64748B] text-[#94A3B8] hover:text-white text-white font-bold text-sm transition-all flex items-center justify-center italic"
+                        className="p-3 rounded-xl border border-dashed border-[#24344D] hover:border-[#24344D]/200 dark:border-white/50 bg-transparent text-[#94A3B8] hover:text-white font-bold text-sm transition-all flex items-center justify-center italic"
                       >
                         Select Unknown / Other
                       </button>
@@ -1113,7 +1113,7 @@ const LiveMatch = () => {
                         <Trophy size={20} />
                         Select Player of the Match
                       </h4>
-                      <button onClick={() => setShowPotmSelect(false)} className="p-1.5 bg-[#0B1220] bg-[#131D31] hover:bg-[#18253C] dark:bg-slate-700 rounded-lg text-[#64748B] text-[#94A3B8]"><X size={16} /></button>
+                      <button onClick={() => setShowPotmSelect(false)} className="p-1.5 bg-[#0B1220] bg-[#131D31] hover:bg-[#18253C] dark:bg-[#131D31] rounded-lg text-[#94A3B8]"><X size={16} /></button>
                     </div>
 
                     <div className="space-y-6">
@@ -1128,7 +1128,7 @@ const LiveMatch = () => {
                                 <button
                                   key={player.id}
                                   onClick={() => confirmPotm(player)}
-                                  className="text-left p-3 rounded-xl border border-[#24344D]/30 border-[#24344D]/50 bg-[#131D31] bg-[#0B1220] font-bold text-sm transition-all flex items-center gap-2 hover:border-brand-500 text-[#94A3B8] text-[#94A3B8] hover:text-brand-500"
+                                  className="text-left p-3 rounded-xl border border-[#24344D]/40 bg-[#0B1220] font-bold text-sm transition-all flex items-center gap-2 hover:border-brand-500 text-[#94A3B8] hover:text-brand-500"
                                 >
                                   <span className="w-6 h-6 shrink-0 bg-[#0B1220] bg-[#131D31] rounded-md flex items-center justify-center text-[10px] text-[#64748B]">{player.number || '#'}</span>
                                   <span className="truncate">{player.name}</span>
@@ -1170,7 +1170,7 @@ const LiveMatch = () => {
                 <h4 className="text-2xl font-display font-black text-white italic">{match.potmName}</h4>
                 <div className="flex items-center justify-center md:justify-start gap-2 mt-1">
                   <span className="text-[#64748B] text-xs font-bold">{match.potmTeam}</span>
-                  <div className="h-1 w-1 rounded-full bg-slate-700"></div>
+                  <div className="h-1 w-1 rounded-full bg-[#131D31]"></div>
                   <span className="text-brand-400/80 text-[10px] font-black uppercase">Outstanding Performance</span>
                 </div>
               </div>
@@ -1178,7 +1178,7 @@ const LiveMatch = () => {
               {canEditMatch && (
                 <button 
                   onClick={() => setShowPotmSelect(true)}
-                  className="px-4 py-2 bg-[#131D31]/50 hover:bg-white/10 border border-white/10 rounded-xl text-[10px] font-bold text-[#64748B] hover:text-white transition-all uppercase tracking-widest"
+                  className="px-4 py-2 bg-[#131D31]/50 hover:bg-[#131D31]/10 border border-white/10 rounded-xl text-[10px] font-bold text-[#64748B] hover:text-white transition-all uppercase tracking-widest"
                 >
                   Change MVP
                 </button>
@@ -1242,9 +1242,9 @@ const LiveMatch = () => {
               <div className="text-center flex-shrink-0">
                 <div className="relative">
                   <div className="text-5xl sm:text-7xl font-black tracking-tight tabular-nums">
-                    <span className="text-transparent bg-clip-text bg-gradient-to-b from-white to-[#0B1220]/80 drop-shadow-[0_0_40px_rgba(16,185,129,0.3)]">{match.scoreA || 0}</span>
+                    <span className="text-transparent bg-clip-text bg-gradient-to-b from-white to-white/80 drop-shadow-[0_0_40px_rgba(16,185,129,0.3)]">{match.scoreA || 0}</span>
                     <span className="text-violet-400/40 text-4xl sm:text-5xl mx-2">-</span>
-                    <span className="text-transparent bg-clip-text bg-gradient-to-b from-white to-[#0B1220]/80 drop-shadow-[0_0_40px_rgba(59,130,246,0.3)]">{match.scoreB || 0}</span>
+                    <span className="text-transparent bg-clip-text bg-gradient-to-b from-white to-white/80 drop-shadow-[0_0_40px_rgba(59,130,246,0.3)]">{match.scoreB || 0}</span>
                   </div>
                 </div>
                 <div className="mt-3">
@@ -1416,7 +1416,7 @@ const LiveMatch = () => {
                 ))}
               </div>
             ) : (
-              <div className="py-16 border border-dashed border-white/10 rounded-2xl flex flex-col items-center justify-center text-center bg-white/[0.02]">
+              <div className="py-16 border border-dashed border-white/10 rounded-2xl flex flex-col items-center justify-center text-center bg-[#131D31]/[0.02]">
                 <UserPlus className="w-12 h-12 text-[#94A3B8] mb-4 opacity-30" />
                 <p className="text-[#64748B] text-sm mb-5 font-medium">No lineups have been added for this match yet.</p>
                 {canEditMatch && (
@@ -1466,7 +1466,7 @@ const LiveMatch = () => {
                       </div>
 
                       {/* Event card */}
-                      <div className="flex-1 bg-white/[0.03] hover:bg-white/[0.06] p-4 sm:p-5 rounded-xl border border-white/5 hover:border-white/10 transition-all duration-300 group">
+                      <div className="flex-1 bg-[#131D31]/[0.03] hover:bg-[#131D31]/[0.06] p-4 sm:p-5 rounded-xl border border-white/5 hover:border-white/10 transition-all duration-300 group">
                         {event.type === 'goal' && (
                           <div className="flex items-center gap-3">
                             <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-emerald-500/15 to-cyan-500/10 border border-emerald-400/20 flex items-center justify-center shrink-0 shadow-sm shadow-emerald-500/10">
@@ -1541,7 +1541,7 @@ const LiveMatch = () => {
                 ))}
               </div>
             ) : (
-              <div className="text-center py-16 text-[#64748B] bg-white/[0.02] rounded-2xl border border-dashed border-white/10">
+              <div className="text-center py-16 text-[#64748B] bg-[#131D31]/[0.02] rounded-2xl border border-dashed border-white/10">
                 <Activity size={32} className="mx-auto mb-3 opacity-20" />
                 <p className="font-bold text-sm">Awaiting match events...</p>
               </div>
