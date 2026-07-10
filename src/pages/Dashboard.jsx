@@ -192,7 +192,7 @@ const Dashboard = () => {
     <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 py-4 sm:py-8 space-y-5 sm:space-y-8">
 
       {/* ═══ HERO HEADER ═══ */}
-      <motion.div initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }} className="relative overflow-hidden rounded-2xl sm:rounded-3xl bg-gradient-to-br from-[#0B1220] via-[#101827] to-brand-50/50 from-[#0B1220] via-[#101827] to-[#0B1220] border border-[#24344D]/50 border-brand-500/20 shadow-xl shadow-2xl shadow-brand-900/20">
+      <motion.div initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }} className="relative overflow-hidden rounded-2xl sm:rounded-3xl bg-gradient-to-br from-[#0B1220] via-[#101827] to-[#0B1220] border border-[#24344D] shadow-2xl">
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,rgba(14,165,233,0.15),transparent_60%)]" />
         <div className="absolute top-0 right-0 w-40 h-40 bg-brand-500/10 rounded-full blur-3xl" />
         <div className="absolute bottom-0 left-0 w-32 h-32 bg-cyan-500/10 rounded-full blur-3xl" />
@@ -287,7 +287,7 @@ const Dashboard = () => {
                   const isExpanded = expandedMatch === match.id;
                   const matchLineups = getMatchLineups(match.id);
                   return (
-                    <motion.div layout key={match.id} className="relative rounded-2xl overflow-hidden bg-gradient-to-br from-[#0B1220] to-[#0B1220] from-[#0B1220] dark:via-[#0B1220] to-[#0B1220] ring-1 ring-[#24344D]/50 dark:ring-white/10 hover:ring-2 hover:ring-brand-500/50 transition-all shadow-xl shadow-2xl dark:hover:shadow-brand-500/20 group text-white">
+                    <motion.div layout key={match.id} className="relative rounded-2xl overflow-hidden bg-gradient-to-br from-[#0B1220] to-[#0B1220] ring-1 ring-[#24344D]/50 dark:ring-white/10 hover:ring-2 hover:ring-brand-500/50 transition-all shadow-xl dark:hover:shadow-brand-500/20 group text-white">
                       {/* Premium Top Glow */}
                       <div className="absolute top-0 inset-x-0 h-[2px] bg-gradient-to-r from-transparent via-red-500 to-transparent opacity-70 group-hover:opacity-100 transition-opacity"></div>
                       
@@ -451,7 +451,7 @@ const Dashboard = () => {
             <div className="space-y-2.5 max-h-[280px] overflow-y-auto pr-1 scrollbar-thin scrollbar-thumb-white/10 scrollbar-track-transparent">
               {upcomingMatches.length > 0 ? upcomingMatches.map(match => (
                 <div onClick={() => navigate(`/live/${match.id}`)} key={match.id} className="group block cursor-pointer">
-                  <div className="flex items-center gap-3 p-3 sm:p-4 rounded-xl bg-gradient-to-r from-[#0B1220] to-[#0B1220] from-[#0B1220] to-[#0B1220] ring-1 ring-[#24344D]/50 ring-[#24344D]/50 hover:shadow-lg hover:ring-2 hover:ring-brand-500/30 hover:shadow-brand-500/10 transition-all shadow-sm shadow-md">
+                  <div className="flex items-center gap-3 p-3 sm:p-4 rounded-xl bg-gradient-to-r from-[#0B1220] to-[#0B1220] ring-1 ring-[#24344D]/50 hover:shadow-lg hover:ring-2 hover:ring-brand-500/30 hover:shadow-brand-500/10 transition-all shadow-md">
                     {/* Date */}
                     <div className="flex-shrink-0 w-12 text-center px-1 py-1.5 bg-[#0B1220]/60 bg-[#131D31]/50 rounded-lg border border-[#24344D]/50 border-[#24344D]/50">
                       <div className="text-[8px] font-black text-brand-500 text-brand-400">{globalMatchNumbers[match.id]}</div>
@@ -484,7 +484,7 @@ const Dashboard = () => {
             <div className="space-y-3 max-h-[420px] overflow-y-auto pr-2 scrollbar-thin scrollbar-thumb-slate-300 dark:scrollbar-thumb-white/10 scrollbar-track-transparent">
               {finishedMatches.length > 0 ? finishedMatches.map(match => (
                 <div onClick={() => navigate(`/live/${match.id}`)} key={match.id} className="block group cursor-pointer">
-                  <div className="p-3.5 sm:p-4 rounded-xl bg-gradient-to-br from-[#0B1220] to-[#0B1220] from-[#0B1220] to-[#0B1220] ring-1 ring-[#24344D]/50 ring-[#24344D]/50 hover:shadow-lg hover:ring-2 hover:ring-brand-500/30 hover:shadow-brand-500/10 hover:-translate-y-0.5 transition-all duration-300 shadow-sm shadow-md">
+                  <div className="p-3.5 sm:p-4 rounded-xl bg-gradient-to-br from-[#0B1220] to-[#0B1220] ring-1 ring-[#24344D]/50 hover:shadow-lg hover:ring-2 hover:ring-brand-500/30 hover:shadow-brand-500/10 hover:-translate-y-0.5 transition-all duration-300 shadow-md">
                     <div className="flex justify-between text-[10px] text-[#64748B] mb-2.5">
                       <div className="flex items-center gap-1.5">
                         <span className="px-1.5 py-0.5 rounded bg-brand-500/10 text-brand-500 text-brand-400 text-[8px] font-black border border-brand-500/20">{globalMatchNumbers[match.id]}</span>
@@ -514,7 +514,7 @@ const Dashboard = () => {
         <div className="lg:col-span-4 space-y-5 sm:space-y-6">
 
           {/* Standings */}
-          <motion.div variants={item} className="rounded-2xl bg-gradient-to-br from-[#0B1220] to-[#0B1220] from-[#0B1220] dark:via-[#020617] to-[#0B1220] ring-1 ring-[#24344D]/50 ring-[#24344D]/50 overflow-hidden shadow-xl shadow-2xl dark:hover:shadow-brand-500/5 transition-all duration-300">
+          <motion.div variants={item} className="rounded-2xl bg-gradient-to-br from-[#0B1220] to-[#0B1220] ring-1 ring-[#24344D]/50 overflow-hidden shadow-xl hover:shadow-brand-500/10 transition-all duration-300">
             <div className="flex items-center justify-between p-4 sm:p-5 border-b border-[#24344D]/40">
               <h3 className="font-display font-bold text-white flex items-center gap-2 text-sm sm:text-base"><Trophy size={16} className="text-yellow-500" /> Standings</h3>
               <div className="flex items-center gap-2">
@@ -546,7 +546,7 @@ const Dashboard = () => {
           </motion.div>
 
           {/* Top Scorers */}
-          <motion.div variants={item} className="rounded-2xl bg-gradient-to-br from-[#0B1220] to-[#0B1220] from-[#0B1220] dark:via-[#020617] to-[#0B1220] ring-1 ring-[#24344D]/50 ring-[#24344D]/50 overflow-hidden shadow-xl shadow-2xl dark:hover:shadow-brand-500/5 transition-all duration-300">
+          <motion.div variants={item} className="rounded-2xl bg-gradient-to-br from-[#0B1220] to-[#0B1220] ring-1 ring-[#24344D]/50 overflow-hidden shadow-xl hover:shadow-brand-500/10 transition-all duration-300">
             <div className="flex items-center justify-between p-4 sm:p-5 border-b border-[#24344D]/40">
               <h3 className="font-display font-bold text-white flex items-center gap-2 text-sm sm:text-base"><Target size={16} className="text-brand-400" /> Top Scorers</h3>
               <Link to="/players" className="text-xs text-[#64748B] hover:text-[#94A3B8] font-medium flex items-center">All <ChevronRight size={14} /></Link>
@@ -576,7 +576,7 @@ const Dashboard = () => {
           </motion.div>
 
           {/* Top Assists */}
-          <motion.div variants={item} className="rounded-2xl bg-gradient-to-br from-[#0B1220] to-[#0B1220] from-[#0B1220] dark:via-[#020617] to-[#0B1220] ring-1 ring-[#24344D]/50 ring-[#24344D]/50 overflow-hidden shadow-xl shadow-2xl dark:hover:shadow-brand-500/5 transition-all duration-300">
+          <motion.div variants={item} className="rounded-2xl bg-gradient-to-br from-[#0B1220] to-[#0B1220] ring-1 ring-[#24344D]/50 overflow-hidden shadow-xl hover:shadow-brand-500/10 transition-all duration-300">
             <div className="flex items-center justify-between p-4 sm:p-5 border-b border-[#24344D]/40">
               <h3 className="font-display font-bold text-white flex items-center gap-2 text-sm sm:text-base">
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-brand-400">
@@ -612,7 +612,7 @@ const Dashboard = () => {
           </motion.div>
 
           {/* District Stats */}
-          <motion.div variants={item} className="rounded-2xl bg-gradient-to-br from-[#0B1220] to-[#0B1220] from-[#0B1220] dark:via-[#020617] to-[#0B1220] ring-1 ring-[#24344D]/50 ring-[#24344D]/50 overflow-hidden shadow-xl shadow-2xl dark:hover:shadow-brand-500/5 transition-all duration-300">
+          <motion.div variants={item} className="rounded-2xl bg-gradient-to-br from-[#0B1220] to-[#0B1220] ring-1 ring-[#24344D]/50 overflow-hidden shadow-xl hover:shadow-brand-500/10 transition-all duration-300">
             <div className="p-4 sm:p-5 border-b border-[#24344D]/40">
               <h3 className="font-display font-bold text-white flex items-center gap-2 text-sm sm:text-base"><MapPinned size={16} className="text-brand-400" /> District Stats</h3>
             </div>
@@ -633,7 +633,7 @@ const Dashboard = () => {
           </motion.div>
 
           {/* This Week */}
-          <motion.div variants={item} className="rounded-2xl bg-gradient-to-br from-[#0B1220] to-[#0B1220] from-[#0B1220] dark:via-[#020617] to-[#0B1220] ring-1 ring-[#24344D]/50 ring-[#24344D]/50 overflow-hidden shadow-xl shadow-2xl dark:hover:shadow-brand-500/5 transition-all duration-300">
+          <motion.div variants={item} className="rounded-2xl bg-gradient-to-br from-[#0B1220] to-[#0B1220] ring-1 ring-[#24344D]/50 overflow-hidden shadow-xl hover:shadow-brand-500/10 transition-all duration-300">
             <div className="p-4 sm:p-5 border-b border-[#24344D]/40">
               <h3 className="font-display font-bold text-white flex items-center gap-2 text-sm sm:text-base"><Calendar size={16} className="text-indigo-500 dark:text-indigo-400" /> This Week</h3>
             </div>

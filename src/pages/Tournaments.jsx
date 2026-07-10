@@ -88,7 +88,7 @@ const Tournaments = () => {
       <motion.div
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
-        className="relative overflow-hidden rounded-2xl sm:rounded-3xl bg-gradient-to-br from-[#0B1220] via-[#101827] to-brand-50/50 from-[#0B1220] via-[#101827] to-[#0B1220] border border-[#24344D]/50 border-brand-500/20 shadow-xl shadow-2xl shadow-brand-900/20 p-4 sm:p-8 md:p-10"
+        className="relative overflow-hidden rounded-2xl sm:rounded-3xl bg-gradient-to-br from-[#0B1220] via-[#101827] to-[#0B1220] border border-[#24344D] shadow-2xl p-4 sm:p-8 md:p-10"
       >
         <div className="absolute -top-20 -right-20 w-64 h-64 bg-brand-500/5 rounded-full blur-3xl" />
         <div className="absolute -bottom-20 -left-20 w-48 h-48 bg-yellow-500/5 rounded-full blur-3xl" />
@@ -131,7 +131,7 @@ const Tournaments = () => {
         initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.1 }}
-        className="rounded-xl sm:rounded-2xl bg-gradient-to-br from-[#0B1220] to-[#0B1220] from-[#0B1220] to-[#0B1220] ring-1 ring-[#24344D]/50 ring-[#24344D]/50 shadow-sm p-3 sm:p-4"
+        className="rounded-xl sm:rounded-2xl bg-gradient-to-br from-[#0B1220] to-[#0B1220] ring-1 ring-[#24344D]/50 shadow-sm p-3 sm:p-4"
       >
         <div className="flex flex-col lg:flex-row items-start lg:items-center gap-2 sm:gap-3 md:gap-4">
           {/* Search */}
@@ -215,7 +215,7 @@ const Tournaments = () => {
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          className="text-center py-20 rounded-3xl bg-gradient-to-br from-[#0B1220] to-[#0B1220] from-[#0B1220] to-[#0B1220] ring-1 ring-[#24344D]/50 ring-[#24344D]/50 shadow-sm"
+          className="text-center py-20 rounded-3xl bg-gradient-to-br from-[#0B1220] to-[#0B1220] ring-1 ring-[#24344D]/50 shadow-sm"
         >
           <Trophy size={56} className="mx-auto text-[#94A3B8] dark:text-slate-700 mb-4" strokeWidth={1.5} />
           <h3 className="text-xl font-display font-bold text-white mb-2">No Tournaments Found</h3>
@@ -239,7 +239,7 @@ const Tournaments = () => {
               <motion.div key={tournament.id} variants={item}>
                 <Link
                   to={`/tournaments/${tournament.id}`}
-                  className="block rounded-3xl bg-gradient-to-br from-[#0B1220] to-[#0B1220] from-[#0B1220] to-[#0B1220] ring-1 ring-[#24344D]/50 ring-[#24344D]/50 overflow-hidden group transition-all duration-300 hover:shadow-xl shadow-md hover:ring-2 hover:ring-brand-500/30 hover:shadow-brand-500/10 hover:-translate-y-1"
+                  className="block rounded-3xl bg-gradient-to-br from-[#0B1220] to-[#0B1220] ring-1 ring-[#24344D]/50 overflow-hidden group transition-all duration-300 hover:shadow-xl shadow-md hover:ring-2 hover:ring-brand-500/30 hover:shadow-brand-500/10 hover:-translate-y-1"
                 >
                   {/* Card Top Gradient Bar */}
                   <div className={`h-1.5 bg-gradient-to-r ${type.gradient}`} />
