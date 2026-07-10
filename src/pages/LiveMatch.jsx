@@ -1204,7 +1204,7 @@ const LiveMatch = () => {
         <div className="relative rounded-2xl overflow-hidden shadow-2xl shadow-brand-500/10">
           {/* Background gradient */}
           <div className="absolute inset-0 bg-gradient-to-br from-[#0f172a] via-[#1e1b4b] to-[#0f172a]"></div>
-          <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-violet-500/15 via-brand-500/10 to-transparent"></div>
+          <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-brand-500/10 via-brand-500/10 to-transparent"></div>
           <div className="absolute top-0 left-0 w-1/3 h-full bg-gradient-to-r from-emerald-500/5 to-transparent"></div>
           <div className="absolute top-0 right-0 w-1/3 h-full bg-gradient-to-l from-blue-500/5 to-transparent"></div>
 
@@ -1243,7 +1243,7 @@ const LiveMatch = () => {
                 <div className="relative">
                   <div className="text-5xl sm:text-7xl font-black tracking-tight tabular-nums">
                     <span className="text-transparent bg-clip-text bg-gradient-to-b from-white to-white/80 drop-shadow-[0_0_40px_rgba(16,185,129,0.3)]">{match.scoreA || 0}</span>
-                    <span className="text-violet-400/40 text-4xl sm:text-5xl mx-2">-</span>
+                    <span className="text-brand-400/30 text-4xl sm:text-5xl mx-2">-</span>
                     <span className="text-transparent bg-clip-text bg-gradient-to-b from-white to-white/80 drop-shadow-[0_0_40px_rgba(59,130,246,0.3)]">{match.scoreB || 0}</span>
                   </div>
                 </div>
@@ -1323,10 +1323,10 @@ const LiveMatch = () => {
           </div>
 
           {/* ═══ MATCH STATISTICS BAR ═══ */}
-          <div className="relative z-10 border-t border-violet-500/10 bg-gradient-to-r from-emerald-500/5 via-black/30 to-blue-500/5 backdrop-blur-sm px-6 py-5">
+          <div className="relative z-10 border-t border-brand-500/10 bg-gradient-to-r from-emerald-500/5 via-black/30 to-blue-500/5 backdrop-blur-sm px-6 py-5">
             <div className="grid grid-cols-3 gap-6 text-center">
               <div>
-                <div className="text-[10px] text-violet-300/60 uppercase tracking-widest font-bold mb-2">Possession</div>
+                <div className="text-[10px] text-brand-300/50 uppercase tracking-widest font-bold mb-2">Possession</div>
                 <div className="flex items-center justify-center gap-2">
                   <span className="text-sm font-black text-green-400 w-10 text-right">{match.possessionA || 50}%</span>
                   <div className="flex-1 max-w-[120px] h-2.5 bg-[#131D31]/50 rounded-full overflow-hidden">
@@ -1341,15 +1341,15 @@ const LiveMatch = () => {
                 </div>
               </div>
               <div>
-                <div className="text-[10px] text-violet-300/60 uppercase tracking-widest font-bold mb-2">Shots</div>
+                <div className="text-[10px] text-brand-300/50 uppercase tracking-widest font-bold mb-2">Shots</div>
                 <div className="text-lg font-black">
-                  <span className="text-green-400">{match.shotsA || 0}</span> <span className="text-violet-500/40 text-sm">-</span> <span className="text-blue-300">{match.shotsB || 0}</span>
+                  <span className="text-green-400">{match.shotsA || 0}</span> <span className="text-brand-500/30 text-sm">-</span> <span className="text-blue-300">{match.shotsB || 0}</span>
                 </div>
               </div>
               <div>
-                <div className="text-[10px] text-violet-300/60 uppercase tracking-widest font-bold mb-2">On Target</div>
+                <div className="text-[10px] text-brand-300/50 uppercase tracking-widest font-bold mb-2">On Target</div>
                 <div className="text-lg font-black">
-                  <span className="text-green-400">{match.shotsOnTargetA || 0}</span> <span className="text-violet-500/40 text-sm">-</span> <span className="text-blue-300">{match.shotsOnTargetB || 0}</span>
+                  <span className="text-green-400">{match.shotsOnTargetA || 0}</span> <span className="text-brand-500/30 text-sm">-</span> <span className="text-blue-300">{match.shotsOnTargetB || 0}</span>
                 </div>
               </div>
             </div>
@@ -1435,17 +1435,17 @@ const LiveMatch = () => {
         {/* ═══ MATCH TIMELINE ═══ */}
         <div className="mt-8 relative rounded-2xl overflow-hidden">
           <div className="absolute inset-0 bg-gradient-to-br from-[#0f172a]/95 via-[#1e1b4b]/90 to-[#0f172a]/95 backdrop-blur-xl"></div>
-          <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,_var(--tw-gradient-stops))] from-violet-500/5 via-transparent to-transparent"></div>
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,_var(--tw-gradient-stops))] from-brand-500/5 via-transparent to-transparent"></div>
           <div className="relative z-10 p-6 sm:p-8">
             <h3 className="text-xl font-display font-black text-white mb-8 flex items-center gap-3">
-              <div className="w-1.5 h-7 bg-gradient-to-b from-violet-400 to-fuchsia-500 rounded-full"></div>
-              <Activity size={20} className="text-violet-400" />
+              <div className="w-1.5 h-7 bg-gradient-to-b from-brand-400 to-cyan-500 rounded-full"></div>
+              <Activity size={20} className="text-brand-400" />
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-white to-white/80">Match Timeline</span>
             </h3>
             {events.length > 0 ? (
               <div className="relative ml-4 pl-8 space-y-6">
                 {/* Timeline line */}
-                <div className="absolute left-0 top-0 bottom-0 w-px bg-gradient-to-b from-violet-500/60 via-fuchsia-500/30 to-transparent"></div>
+                <div className="absolute left-0 top-0 bottom-0 w-px bg-gradient-to-b from-brand-500/60 via-cyan-500/30 to-transparent"></div>
 
                 {events.sort((a, b) => b.minute - a.minute).map((event) => (
                   <motion.div
@@ -1456,12 +1456,12 @@ const LiveMatch = () => {
                   >
                     {/* Timeline dot */}
                     <div className="absolute -left-[33px] top-3 flex items-center justify-center z-10">
-                      <div className="h-3 w-3 rounded-full bg-gradient-to-br from-violet-400 to-fuchsia-500 shadow-[0_0_12px_rgba(139,92,246,0.6)]"></div>
+                      <div className="h-3 w-3 rounded-full bg-gradient-to-br from-brand-400 to-cyan-500 shadow-[0_0_12px_rgba(139,92,246,0.6)]"></div>
                     </div>
 
                     <div className="flex items-stretch gap-3">
                       {/* Minute badge */}
-                      <div className="bg-violet-500/10 border border-violet-500/20 px-3 py-1.5 rounded-lg text-xs font-black text-violet-300 whitespace-nowrap min-w-[50px] text-center self-start mt-1.5">
+                      <div className="bg-brand-500/10 border border-brand-500/15 px-3 py-1.5 rounded-lg text-xs font-black text-brand-300 whitespace-nowrap min-w-[50px] text-center self-start mt-1.5">
                         {event.minute}'
                       </div>
 

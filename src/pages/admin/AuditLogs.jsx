@@ -21,7 +21,7 @@ const getActionStyle = (action) => {
 };
 
 const ENTITY_COLORS = {
-    player: 'bg-purple-500/10 text-purple-400 border-purple-500/20',
+    player: 'bg-brand-500/10 text-brand-400 border-brand-500/15',
     team: 'bg-blue-500/10 text-blue-400 border-blue-500/20',
     tournament: 'bg-yellow-500/10 text-yellow-400 border-yellow-500/20',
     user: 'bg-pink-500/10 text-pink-400 border-pink-500/20',

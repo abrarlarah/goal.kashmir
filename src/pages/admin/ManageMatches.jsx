@@ -308,16 +308,16 @@ const ManageMatches = () => {
       {/* Header */}
       <div className="relative overflow-hidden rounded-2xl mb-8">
         <div className="absolute inset-0 bg-gradient-to-br from-[#0c0a1d] via-[#1a103d] to-[#0c0a1d]"></div>
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-violet-600/20 via-transparent to-transparent"></div>
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-brand-500/10 via-transparent to-transparent"></div>
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_bottom_left,_var(--tw-gradient-stops))] from-cyan-500/15 via-transparent to-transparent"></div>
         <div className="relative z-10 p-6 sm:p-8">
           <div className="flex items-center justify-between">
             <div>
-              <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-gradient-to-r from-violet-500/20 to-cyan-500/20 border border-violet-400/20 text-violet-300 text-xs font-bold mb-3">
-                <Sparkles size={12} className="text-violet-400" /> Match Control Panel
+              <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-gradient-to-r from-brand-500/15 to-cyan-500/20 border border-brand-400/15 text-brand-300 text-xs font-bold mb-3">
+                <Sparkles size={12} className="text-brand-400" /> Match Control Panel
               </div>
               <h2 className="text-2xl sm:text-3xl font-display font-black text-white">
-                Manage <span className="text-transparent bg-clip-text bg-gradient-to-r from-violet-400 via-cyan-400 to-emerald-400">Matches</span>
+                Manage <span className="text-transparent bg-clip-text bg-gradient-to-r from-brand-400 via-cyan-400 to-emerald-400">Matches</span>
               </h2>
             </div>
             <div className="flex gap-3">
@@ -368,7 +368,7 @@ const ManageMatches = () => {
                     <div className="flex flex-col md:flex-row items-center justify-between gap-6">
                       <div className="text-center md:text-left flex-1">
                         <div className="font-medium text-[#64748B] text-[10px] flex items-center justify-center md:justify-start gap-2 uppercase tracking-wider font-black">
-                          <Trophy size={12} className="text-violet-500" />
+                          <Trophy size={12} className="text-brand-500" />
                           <span className="px-2 py-0.5 rounded-md bg-red-500/10 text-red-500 border border-red-500/20">
                             M#{globalMatchNumbers[match.id]}
                           </span>
@@ -420,7 +420,7 @@ const ManageMatches = () => {
                         <div className="flex gap-2">
                           <button
                             onClick={() => handleEdit(match)}
-                            className="flex-1 px-4 py-2 rounded-xl bg-violet-600 dark:bg-violet-500/10 text-white dark:text-violet-400 border border-violet-500/20 text-[10px] font-black uppercase tracking-widest transition-all hover:bg-violet-500 active:scale-95 shadow-lg shadow-violet-500/10"
+                            className="flex-1 px-4 py-2 rounded-xl bg-violet-600 dark:bg-brand-500/10 text-white dark:text-brand-400 border border-brand-500/15 text-[10px] font-black uppercase tracking-widest transition-all hover:bg-brand-500 active:scale-95 shadow-lg shadow-brand-500/10"
                           >
                             Edit
                           </button>
@@ -452,7 +452,7 @@ const ManageMatches = () => {
             <div>
               <h3 className="text-2xl font-black text-white flex items-center gap-3">
                 {editingId ? (
-                  <><Edit3 size={24} className="text-violet-500" /> <span>Edit Match Details</span></>
+                  <><Edit3 size={24} className="text-brand-500" /> <span>Edit Match Details</span></>
                 ) : (
                   <><Plus size={24} className="text-green-400" /> <span>Create New Match</span></>
                 )}
@@ -460,7 +460,7 @@ const ManageMatches = () => {
               <p className="text-[#64748B] text-sm font-medium mt-1">Configure teams, time, and tournament details below.</p>
             </div>
             {editingId && (
-              <span className="px-4 py-1.5 rounded-full bg-violet-500/10 text-violet-500 border border-violet-500/20 font-black text-[10px] uppercase tracking-widest animate-pulse">
+              <span className="px-4 py-1.5 rounded-full bg-brand-500/10 text-brand-500 border border-brand-500/15 font-black text-[10px] uppercase tracking-widest animate-pulse">
                 Editing Session Active
               </span>
             )}
@@ -472,7 +472,7 @@ const ManageMatches = () => {
               <div className="lg:col-span-1 space-y-6">
                 <div className="p-6 rounded-3xl bg-[#0B1220] dark:bg-[#131D31]/[0.02] border border-[#24344D]/50 border-[#24344D]/50">
                   <h4 className="text-[10px] font-black text-[#64748B] uppercase tracking-[0.2em] mb-4 flex items-center gap-2">
-                    <Layout size={12} className="text-violet-500" /> Tournament Info
+                    <Layout size={12} className="text-brand-500" /> Tournament Info
                   </h4>
                   <div className="space-y-4">
                     <div>
@@ -481,7 +481,7 @@ const ManageMatches = () => {
                         name="competition"
                         value={formData.competition}
                         onChange={handleInputChange}
-                        className="bg-[#0B1220] border border-[#24344D] p-3 rounded-xl text-white w-full focus:ring-2 focus:ring-violet-500/50 outline-none transition-all font-bold"
+                        className="bg-[#0B1220] border border-[#24344D] p-3 rounded-xl text-white w-full focus:ring-2 focus:ring-brand-500/50 outline-none transition-all font-bold"
                         required
                       >
                         <option value="" disabled>Select Competition</option>
@@ -499,7 +499,7 @@ const ManageMatches = () => {
                         placeholder="e.g. Semi Final"
                         value={formData.round}
                         onChange={handleInputChange}
-                        className="bg-[#0B1220] border border-[#24344D] p-3 rounded-xl text-white w-full focus:ring-2 focus:ring-violet-500/50 outline-none transition-all font-bold"
+                        className="bg-[#0B1220] border border-[#24344D] p-3 rounded-xl text-white w-full focus:ring-2 focus:ring-brand-500/50 outline-none transition-all font-bold"
                       />
                     </div>
                     <div>
@@ -512,7 +512,7 @@ const ManageMatches = () => {
                         placeholder="Optional manual index" 
                         value={formData.matchNumber} 
                         onChange={handleInputChange} 
-                        className="bg-[#0B1220] border border-[#24344D] p-3 rounded-xl text-white w-full focus:ring-2 focus:ring-violet-500/50 outline-none text-sm font-bold" 
+                        className="bg-[#0B1220] border border-[#24344D] p-3 rounded-xl text-white w-full focus:ring-2 focus:ring-brand-500/50 outline-none text-sm font-bold" 
                       />
                     </div>
                   </div>
@@ -546,13 +546,13 @@ const ManageMatches = () => {
                   <div className="hidden md:flex absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-12 h-12 rounded-full bg-[#0B1220] border-4 border-slate-50 dark:border-[#1e293b] items-center justify-center z-10 font-black text-[#94A3B8] italic text-xl">VS</div>
 
                   {/* Home Team */}
-                  <div className="p-8 rounded-[2.5rem] bg-gradient-to-br from-violet-500/5 to-transparent dark:from-violet-500/10 dark:to-transparent border border-violet-500/10">
+                  <div className="p-8 rounded-[2.5rem] bg-gradient-to-br from-brand-500/5 to-transparent dark:from-brand-500/10 dark:to-transparent border border-brand-500/10">
                     <div className="flex items-center gap-3 mb-6">
-                      <div className="w-12 h-12 rounded-2xl bg-violet-500 flex items-center justify-center text-white shadow-lg shadow-violet-500/30">
+                      <div className="w-12 h-12 rounded-2xl bg-brand-500 flex items-center justify-center text-white shadow-lg shadow-brand-500/20">
                         <Shield size={24} />
                       </div>
                       <div>
-                        <h4 className="text-[10px] font-black text-violet-500 uppercase tracking-[0.2em]">Home Contender</h4>
+                        <h4 className="text-[10px] font-black text-brand-500 uppercase tracking-[0.2em]">Home Contender</h4>
                         <span className="text-xl font-black text-white">Selection</span>
                       </div>
                     </div>
@@ -561,7 +561,7 @@ const ManageMatches = () => {
                       name="teamA"
                       value={formData.teamA}
                       onChange={handleInputChange}
-                      className="bg-[#131D31] dark:bg-black/40 border-2 border-[#24344D]/50 p-4 rounded-2xl text-white w-full focus:border-violet-500 outline-none transition-all font-black text-lg mb-6 shadow-xl"
+                      className="bg-[#131D31] dark:bg-black/40 border-2 border-[#24344D]/50 p-4 rounded-2xl text-white w-full focus:border-brand-500 outline-none transition-all font-black text-lg mb-6 shadow-xl"
                       required
                     >
                       <option value="" disabled>Select Home Team</option>
@@ -578,7 +578,7 @@ const ManageMatches = () => {
                         </div>
                         <div className="w-24">
                           <label className="text-[10px] font-black text-[#64748B] uppercase block mb-1 text-center">Score</label>
-                          <input type="number" name="scoreA" value={formData.scoreA} onChange={handleInputChange} className="bg-violet-500/10 border-2 border-violet-500/30 p-3 rounded-xl text-violet-600 dark:text-violet-400 w-full text-center font-impact text-2xl" />
+                          <input type="number" name="scoreA" value={formData.scoreA} onChange={handleInputChange} className="bg-brand-500/10 border-2 border-brand-500/20 p-3 rounded-xl text-violet-600 dark:text-brand-400 w-full text-center font-impact text-2xl" />
                         </div>
                       </div>
                     </div>
@@ -693,7 +693,7 @@ const ManageMatches = () => {
       <div className="flex flex-col gap-6 mb-8">
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
           <h3 id="match-list-top" className="text-xl font-black flex items-center gap-2">
-            <Trophy size={20} className="text-violet-500" /> 
+            <Trophy size={20} className="text-brand-500" /> 
             All Matches
             <span className="text-xs px-2 py-0.5 rounded-full bg-[#131D31]/50 border border-white/10 text-[#64748B] font-bold">
               {otherMatches.length + liveMatches.length}
@@ -708,7 +708,7 @@ const ManageMatches = () => {
                 placeholder="Search by team, competition, or match #..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full pl-10 pr-4 py-2 bg-[#131D31]/50 border border-white/10 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-violet-500/50 transition-all text-white placeholder:text-slate-500"
+                className="w-full pl-10 pr-4 py-2 bg-[#131D31]/50 border border-white/10 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-brand-500/50 transition-all text-white placeholder:text-slate-500"
               />
               {searchQuery && (
                 <button
@@ -757,7 +757,7 @@ const ManageMatches = () => {
             {searchQuery && (
               <button
                 onClick={() => setSearchQuery('')}
-                className="inline-flex items-center gap-1 px-2 py-1 rounded-lg bg-violet-500/10 border border-violet-500/20 text-violet-400 text-[10px] font-bold hover:bg-violet-500/20 transition-all"
+                className="inline-flex items-center gap-1 px-2 py-1 rounded-lg bg-brand-500/10 border border-brand-500/15 text-brand-400 text-[10px] font-bold hover:bg-brand-500/15 transition-all"
               >
                 Search: {searchQuery} <X size={10} />
               </button>
@@ -800,17 +800,17 @@ const ManageMatches = () => {
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.95 }}
               key={match.id}
-              className="rounded-2xl overflow-hidden border border-[#24344D]/50 bg-[#131D31] dark:bg-[#131D31]/[0.02] hover:border-violet-500/30 transition-all group shadow-sm hover:shadow-xl dark:shadow-none"
+              className="rounded-2xl overflow-hidden border border-[#24344D]/50 bg-[#131D31] dark:bg-[#131D31]/[0.02] hover:border-brand-500/20 transition-all group shadow-sm hover:shadow-xl dark:shadow-none"
             >
               <div className={`h-1 ${
                 match.status === 'live' || match.status === 'halftime' ? 'bg-red-500' : 
                 match.status === 'finished' ? 'bg-emerald-500' : 
-                'bg-gradient-to-r from-violet-500 to-cyan-500'
+                'bg-gradient-to-r from-brand-500 to-cyan-500'
               }`}></div>
               <div className="p-4 sm:p-6 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-5">
                 <div className="flex-1 min-w-0">
                   <div className="font-bold text-lg sm:text-xl flex items-center gap-3 flex-wrap">
-                    <span className="text-[10px] px-2 py-0.5 rounded bg-violet-500/10 text-violet-500 dark:text-violet-400 border border-violet-500/20 font-black tracking-widest">
+                    <span className="text-[10px] px-2 py-0.5 rounded bg-brand-500/10 text-brand-500 dark:text-brand-400 border border-brand-500/15 font-black tracking-widest">
                       M#{globalMatchNumbers[match.id]}
                     </span>
                     {match.matchNumber && match.matchNumber !== globalMatchNumbers[match.id]?.toString() && (
@@ -827,7 +827,7 @@ const ManageMatches = () => {
                     <span className="text-white truncate">{match.teamB}</span>
                   </div>
                   <div className="flex items-center gap-3 mt-3 flex-wrap">
-                    <span className="text-[10px] px-2.5 py-1 rounded-full bg-violet-500/5 text-violet-500 dark:text-violet-400 border border-violet-500/10 font-bold flex items-center gap-1.5">
+                    <span className="text-[10px] px-2.5 py-1 rounded-full bg-brand-500/5 text-brand-500 dark:text-brand-400 border border-brand-500/10 font-bold flex items-center gap-1.5">
                       <Trophy size={10} /> {match.competition}
                     </span>
                     {match.round && (
@@ -845,7 +845,7 @@ const ManageMatches = () => {
                     </span>
                     {match.date && (
                       <span className="text-[10px] text-[#64748B] flex items-center gap-1.5 font-medium">
-                        <Calendar size={10} className="text-violet-500" /> {match.date} {match.time && `• ${match.time}`}
+                        <Calendar size={10} className="text-brand-500" /> {match.date} {match.time && `• ${match.time}`}
                       </span>
                     )}
                   </div>
@@ -853,7 +853,7 @@ const ManageMatches = () => {
                 <div className="flex gap-2 w-full sm:w-auto">
                   <button
                     onClick={() => handleEdit(match)}
-                    className="flex-1 sm:flex-initial px-4 py-2.5 rounded-xl bg-violet-500/10 hover:bg-violet-500/20 border border-violet-500/20 text-violet-500 dark:text-violet-400 text-sm font-black transition-all flex items-center justify-center gap-2 uppercase tracking-wider"
+                    className="flex-1 sm:flex-initial px-4 py-2.5 rounded-xl bg-brand-500/10 hover:bg-brand-500/15 border border-brand-500/15 text-brand-500 dark:text-brand-400 text-sm font-black transition-all flex items-center justify-center gap-2 uppercase tracking-wider"
                   >
                     <Edit3 size={14} /> Edit
                   </button>
@@ -882,7 +882,7 @@ const ManageMatches = () => {
               <p className="text-[#64748B] text-sm mt-1">Try adjusting your filters or search query.</p>
               <button 
                 onClick={() => { setSearchQuery(''); setFilterStatus('all'); setFilterTournament('all'); }}
-                className="mt-6 text-sm font-black text-violet-500 uppercase tracking-widest hover:text-violet-400 transition-colors"
+                className="mt-6 text-sm font-black text-brand-500 uppercase tracking-widest hover:text-brand-400 transition-colors"
               >
                 Reset All Filters
               </button>

@@ -195,7 +195,7 @@ const ManageSponsors = () => {
 
     const getTierBadgeColor = (tier) => {
         switch (tier) {
-            case 'Premium': return 'bg-purple-500/20 text-purple-400 border-purple-500/30';
+            case 'Premium': return 'bg-brand-500/15 text-brand-400 border-brand-500/30';
             case 'Gold': return 'bg-yellow-500/20 text-yellow-400 border-yellow-500/30';
             case 'Silver': return 'bg-gray-400/20 text-[#94A3B8] dark:text-gray-300 border-gray-400/30';
             case 'Bronze': return 'bg-orange-700/20 text-orange-500 border-orange-700/30';

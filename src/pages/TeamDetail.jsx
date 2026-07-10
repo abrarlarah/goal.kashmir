@@ -249,7 +249,7 @@ const TeamDetail = () => {
                             { label: 'Squad Size', value: players.length, icon: <Users className="text-blue-500" /> },
                             { label: 'Total Matches', value: matches.length, icon: <Activity className="text-green-500" /> },
                             { label: 'Trophies', value: team.trophies || 0, icon: <Trophy className="text-yellow-500" /> },
-                            { label: 'Tournaments', value: Array.isArray(team.tournaments) ? team.tournaments.length : 0, icon: <Calendar className="text-purple-500" /> }
+                            { label: 'Tournaments', value: Array.isArray(team.tournaments) ? team.tournaments.length : 0, icon: <Calendar className="text-brand-500" /> }
                         ].map((stat, idx) => (
                             <motion.div
                                 key={idx}

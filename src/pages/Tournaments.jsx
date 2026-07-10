@@ -18,7 +18,7 @@ const typeConfig = {
   league: { label: 'League', icon: '🏆', gradient: 'from-yellow-500/20 to-orange-500/10' },
   knockout: { label: 'Knockout', icon: '⚔️', gradient: 'from-red-500/20 to-pink-500/10' },
   pool: { label: 'Pool + KO', icon: '🏊', gradient: 'from-indigo-500/20 to-blue-500/10' },
-  dual_knockout: { label: '2-Pool KO', icon: '🎯', gradient: 'from-purple-500/20 to-violet-500/10' },
+  dual_knockout: { label: '2-Pool KO', icon: '🎯', gradient: 'from-brand-500/15 to-brand-500/10' },
 };
 
 const container = {

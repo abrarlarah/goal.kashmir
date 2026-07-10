@@ -13,7 +13,7 @@ const Admin = () => {
     adminCards.push(
       { to: '/admin/matches', icon: Swords, title: 'Manage Matches', desc: 'Update live scores and match details', color: 'from-green-500/20 to-green-600/5 border-green-500/20' },
       { to: '/admin/teams', icon: Users, title: 'Manage Teams', desc: 'Add, edit, and remove teams', color: 'from-blue-500/20 to-blue-600/5 border-blue-500/20' },
-      { to: '/admin/players', icon: LayoutList, title: 'Manage Players', desc: 'Update player stats and info', color: 'from-purple-500/20 to-purple-600/5 border-purple-500/20' },
+      { to: '/admin/players', icon: LayoutList, title: 'Manage Players', desc: 'Update player stats and info', color: 'from-brand-500/15 to-brand-600/5 border-brand-500/15' },
       { to: '/admin/lineups', icon: Shield, title: '⚽ Manage Lineups', desc: 'Set starting 11 and bench players for matches', color: 'from-teal-500/20 to-teal-600/5 border-teal-500/20' }
     );
   }

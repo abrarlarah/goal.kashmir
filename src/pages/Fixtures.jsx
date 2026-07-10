@@ -132,20 +132,20 @@ const Fixtures = () => {
       <div className="relative overflow-hidden rounded-3xl">
         {/* Animated Background */}
         <div className="absolute inset-0 bg-gradient-to-br from-[#0c0a1d] via-[#1a103d] to-[#0c0a1d]"></div>
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-violet-600/20 via-transparent to-transparent"></div>
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-brand-500/10 via-transparent to-transparent"></div>
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_bottom_left,_var(--tw-gradient-stops))] from-cyan-500/15 via-transparent to-transparent"></div>
         <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[300px] bg-gradient-to-b from-brand-500/10 to-transparent rounded-full blur-3xl"></div>
-        <div className="absolute bottom-0 right-0 w-64 h-64 bg-gradient-to-tl from-violet-600/10 to-transparent rounded-full blur-3xl"></div>
+        <div className="absolute bottom-0 right-0 w-64 h-64 bg-gradient-to-tl from-brand-500/5 to-transparent rounded-full blur-3xl"></div>
 
         <div className="relative z-10 p-6 sm:p-8 lg:p-10">
           {/* Title Row */}
           <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-6 mb-6">
             <div>
-              <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-gradient-to-r from-violet-500/20 to-cyan-500/20 border border-violet-400/20 text-violet-300 text-xs font-bold mb-3">
-                <Sparkles size={12} className="text-violet-400" /> Full Calendar
+              <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-gradient-to-r from-brand-500/15 to-cyan-500/20 border border-brand-400/15 text-brand-300 text-xs font-bold mb-3">
+                <Sparkles size={12} className="text-brand-400" /> Full Calendar
               </div>
               <h1 className="text-3xl md:text-4xl font-display font-black text-white mb-1">
-                Match <span className="text-transparent bg-clip-text bg-gradient-to-r from-violet-400 via-cyan-400 to-brand-400">Fixtures</span>
+                Match <span className="text-transparent bg-clip-text bg-gradient-to-r from-brand-400 via-cyan-400 to-brand-400">Fixtures</span>
               </h1>
               <p className="text-[#64748B] text-sm max-w-xl">Browse all fixtures, live games, and past results across every tournament.</p>
             </div>
@@ -158,11 +158,11 @@ const Fixtures = () => {
               </div>
               <div className="px-4 py-2 rounded-xl bg-green-500/10 border border-green-500/20 backdrop-blur-md text-center">
                 <div className="text-xl font-black text-green-400">{matches.filter(m => m.status === 'live' || m.status === 'halftime').length}</div>
-                <div className="text-[10px] font-bold text-emerald-400/60 uppercase tracking-wider">Live</div>
+                <div className="text-[10px] font-bold text-green-400/60 uppercase tracking-wider">Live</div>
               </div>
-              <div className="px-4 py-2 rounded-xl bg-violet-500/10 border border-violet-500/20 backdrop-blur-md text-center">
-                <div className="text-xl font-black text-violet-400">{matches.filter(m => m.status === 'finished').length}</div>
-                <div className="text-[10px] font-bold text-violet-400/60 uppercase tracking-wider">Played</div>
+              <div className="px-4 py-2 rounded-xl bg-brand-500/10 border border-brand-500/15 backdrop-blur-md text-center">
+                <div className="text-xl font-black text-brand-400">{matches.filter(m => m.status === 'finished').length}</div>
+                <div className="text-[10px] font-bold text-brand-400/50 uppercase tracking-wider">Played</div>
               </div>
             </div>
           </div>
@@ -177,7 +177,7 @@ const Fixtures = () => {
                 placeholder="Search team or tournament..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full bg-[#131D31]/[0.07] backdrop-blur-md border border-white/10 rounded-xl pl-10 pr-10 py-2.5 text-sm font-medium text-white placeholder-[#64748B] focus:ring-2 focus:ring-violet-500/50 focus:border-violet-500/50 outline-none transition-all"
+                className="w-full bg-[#131D31]/[0.07] backdrop-blur-md border border-white/10 rounded-xl pl-10 pr-10 py-2.5 text-sm font-medium text-white placeholder-[#64748B] focus:ring-2 focus:ring-brand-500/50 focus:border-brand-500/50 outline-none transition-all"
               />
               {searchQuery && (
                 <button onClick={() => setSearchQuery('')} className="absolute right-3 top-1/2 -translate-y-1/2 text-[#64748B] hover:text-white transition-colors">
@@ -191,7 +191,7 @@ const Fixtures = () => {
               <select
                 value={filterStatus}
                 onChange={(e) => setFilterStatus(e.target.value)}
-                className="appearance-none bg-[#131D31]/[0.07] backdrop-blur-md border border-white/10 rounded-xl pl-4 pr-9 py-2.5 text-sm font-medium text-white focus:ring-2 focus:ring-violet-500/50 outline-none transition-all cursor-pointer [&>option]:text-slate-900 w-full sm:w-auto"
+                className="appearance-none bg-[#131D31]/[0.07] backdrop-blur-md border border-white/10 rounded-xl pl-4 pr-9 py-2.5 text-sm font-medium text-white focus:ring-2 focus:ring-brand-500/50 outline-none transition-all cursor-pointer [&>option]:text-[#F8FAFC] w-full sm:w-auto"
               >
                 <option value="All">All Matches</option>
                 <option value="upcoming">Upcoming</option>
@@ -206,7 +206,7 @@ const Fixtures = () => {
               <select
                 value={filterTournament}
                 onChange={(e) => setFilterTournament(e.target.value)}
-                className="appearance-none bg-[#131D31]/[0.07] backdrop-blur-md border border-white/10 rounded-xl pl-4 pr-9 py-2.5 text-sm font-medium text-white focus:ring-2 focus:ring-violet-500/50 outline-none transition-all cursor-pointer [&>option]:text-slate-900 w-full sm:w-auto"
+                className="appearance-none bg-[#131D31]/[0.07] backdrop-blur-md border border-white/10 rounded-xl pl-4 pr-9 py-2.5 text-sm font-medium text-white focus:ring-2 focus:ring-brand-500/50 outline-none transition-all cursor-pointer [&>option]:text-[#F8FAFC] w-full sm:w-auto"
               >
                 <option value="All">All Tournaments</option>
                 {tournaments.map(t => (
@@ -222,7 +222,7 @@ const Fixtures = () => {
             <div className="flex flex-wrap items-center gap-2 mt-4">
               <span className="text-[10px] font-bold text-[#64748B] uppercase tracking-wider">Active:</span>
               {filterStatus !== 'All' && (
-                <button onClick={() => setFilterStatus('All')} className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-violet-500/15 border border-violet-500/20 text-violet-300 text-[10px] font-bold hover:bg-violet-500/25 transition-colors">
+                <button onClick={() => setFilterStatus('All')} className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-brand-500/10 border border-brand-500/15 text-brand-300 text-[10px] font-bold hover:bg-brand-500/20 transition-colors">
                   {filterStatus} <X size={10} />
                 </button>
               )}
@@ -256,13 +256,13 @@ const Fixtures = () => {
             <div key={group.date} className="space-y-5">
               {/* Date Header */}
               <div className="flex items-center gap-4">
-                <div className="px-5 py-2 rounded-xl bg-gradient-to-r from-violet-500/10 to-cyan-500/10 border border-violet-500/15 dark:border-violet-400/15 text-sm font-bold text-[#F8FAFC] text-[#F8FAFC] flex items-center gap-2.5 shadow-sm">
-                  <div className="w-6 h-6 rounded-lg bg-gradient-to-br from-violet-500 to-cyan-500 flex items-center justify-center">
+                <div className="px-5 py-2 rounded-xl bg-gradient-to-r from-brand-500/10 to-cyan-500/10 border border-brand-500/10 dark:border-brand-400/15 text-sm font-bold text-[#F8FAFC] text-[#F8FAFC] flex items-center gap-2.5 shadow-sm">
+                  <div className="w-6 h-6 rounded-lg bg-gradient-to-br from-brand-500 to-cyan-500 flex items-center justify-center">
                     <Calendar size={13} className="text-white" />
                   </div>
                   {formatDate(group.date)}
                 </div>
-                <div className="flex-1 h-px bg-gradient-to-r from-violet-500/20 via-slate-200 dark:via-white/10 to-transparent"></div>
+                <div className="flex-1 h-px bg-gradient-to-r from-brand-500/15 via-[#24344D] via-[#24344D] to-transparent"></div>
               </div>
 
               {/* Matches Grid */}
@@ -281,14 +281,14 @@ const Fixtures = () => {
                         "relative rounded-2xl overflow-hidden transition-all duration-300 hover:-translate-y-1 shadow-lg hover:shadow-2xl",
                         "bg-gradient-to-br from-[#0B1220] via-white to-[#0B1220] from-[#0B1220] dark:via-[#131b2e] dark:to-[#0c1220]",
                         "ring-1 ring-[#24344D]/50 dark:ring-white/[0.06] hover:ring-2",
-                        isLive ? "hover:ring-red-500/40 hover:shadow-red-500/10" : "hover:ring-violet-500/30 hover:shadow-violet-500/10"
+                        isLive ? "hover:ring-red-500/40 hover:shadow-red-500/10" : "hover:ring-brand-500/20 hover:shadow-brand-500/10"
                       )}>
                         {/* Top Gradient Bar */}
                         <div className={cn(
                           "h-1 w-full",
                           isLive ? "bg-gradient-to-r from-red-500 via-orange-500 to-red-500" :
                           isFinished ? "bg-gradient-to-r from-emerald-500 via-cyan-500 to-emerald-500" :
-                          "bg-gradient-to-r from-violet-500 via-cyan-400 to-violet-500"
+                          "bg-gradient-to-r from-brand-500 via-cyan-400 to-brand-500"
                         )} />
 
                         <div className="p-4 sm:p-5">
@@ -299,7 +299,7 @@ const Fixtures = () => {
                                 "px-2 py-0.5 rounded-md text-[10px] font-black",
                                 isLive ? "bg-red-500/10 text-red-500 border border-red-500/20" :
                                 isFinished ? "bg-green-500/10 text-green-400 border border-green-500/20" :
-                                "bg-violet-500/10 text-violet-500 dark:text-violet-400 border border-violet-500/20"
+                                "bg-brand-500/10 text-brand-500 dark:text-brand-400 border border-brand-500/15"
                               )}>
                                 Match {globalMatchNumbers[match.id] || '—'}
                               </span>
@@ -321,7 +321,7 @@ const Fixtures = () => {
                                 </span>
                               )}
                               {match.status === 'upcoming' && (
-                                <span className="inline-flex items-center gap-1.5 bg-violet-500/10 border border-violet-500/20 text-violet-500 dark:text-violet-400 px-2.5 py-1 rounded-lg text-[10px] font-black uppercase tracking-wider">
+                                <span className="inline-flex items-center gap-1.5 bg-brand-500/10 border border-brand-500/15 text-brand-500 dark:text-brand-400 px-2.5 py-1 rounded-lg text-[10px] font-black uppercase tracking-wider">
                                   Upcoming
                                 </span>
                               )}
@@ -364,8 +364,8 @@ const Fixtures = () => {
                                   </div>
                                 </div>
                               ) : (
-                                <div className="px-5 py-3 rounded-xl bg-gradient-to-br from-violet-500/10 to-cyan-500/10 border border-violet-500/15 dark:border-violet-400/10">
-                                  <span className="text-lg sm:text-xl font-black text-transparent bg-clip-text bg-gradient-to-r from-violet-500 to-cyan-500">VS</span>
+                                <div className="px-5 py-3 rounded-xl bg-gradient-to-br from-brand-500/10 to-cyan-500/10 border border-brand-500/10 dark:border-brand-400/10">
+                                  <span className="text-lg sm:text-xl font-black text-transparent bg-clip-text bg-gradient-to-r from-brand-500 to-cyan-500">VS</span>
                                 </div>
                               )}
                             </div>
@@ -393,7 +393,7 @@ const Fixtures = () => {
                         <div className="bg-[#0B1220]/80 dark:bg-[#131D31]/[0.02] border-t border-[#24344D]/60 border-[#24344D]/50 py-2.5 px-4 sm:px-5 flex items-center justify-between text-[10px] sm:text-xs text-[#64748B] font-medium">
                           <div className="flex items-center gap-3">
                             <span className="flex items-center gap-1.5">
-                              <Clock size={11} className="text-violet-500" />
+                              <Clock size={11} className="text-brand-500" />
                               {match.time || 'TBD'}
                             </span>
                             {match.stadium && (
@@ -404,7 +404,7 @@ const Fixtures = () => {
                             )}
                           </div>
                           
-                          <div className="flex items-center gap-1 text-violet-500 dark:text-violet-400 font-bold group-hover:translate-x-1 transition-transform">
+                          <div className="flex items-center gap-1 text-brand-500 dark:text-brand-400 font-bold group-hover:translate-x-1 transition-transform">
                             {isLive || isFinished ? 'Details' : 'View'} <ChevronRight size={12} />
                           </div>
                         </div>
@@ -416,9 +416,9 @@ const Fixtures = () => {
             </div>
           ))
         ) : (
-          <div className="text-center py-20 px-4 rounded-3xl border border-dashed border-violet-300/30 dark:border-violet-500/20 bg-gradient-to-br from-violet-50/50 to-[#0B1220] dark:from-violet-950/20 to-[#0B1220]">
-            <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-violet-500/20 to-cyan-500/20 border border-violet-500/20 flex items-center justify-center mx-auto mb-4">
-              <Calendar size={24} className="text-violet-400" />
+          <div className="text-center py-20 px-4 rounded-3xl border border-dashed border-brand-400/20 dark:border-brand-500/15 bg-gradient-to-br from-[#0B1220] to-[#0B1220] dark:from-brand-950/20 to-[#0B1220]">
+            <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-brand-500/15 to-cyan-500/20 border border-brand-500/15 flex items-center justify-center mx-auto mb-4">
+              <Calendar size={24} className="text-brand-400" />
             </div>
             <h3 className="text-lg font-bold text-white mb-2">No Fixtures Found</h3>
             <p className="text-[#64748B] max-w-sm mx-auto">There are no matches matching your current filters. Try selecting a different status or tournament.</p>
