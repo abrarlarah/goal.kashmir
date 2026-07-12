@@ -16,14 +16,18 @@ export function useAuth() {
 
 /**
  * Role-Based Access Control:
- * - 'superadmin': Full access to everything
- * - 'admin': Can only manage tournaments they created + related matches/teams/players
- * - null/undefined: Regular user (no admin access)
+ * - 'super_admin': Full access to everything
+ * - 'tournament_admin': Can manage assigned tournaments + related matches/teams/players
+ * - 'team_manager': Can manage specific teams (lineups, team profile)
+ * - 'referee': Can only update live match events/scores for assigned matches
+ * - 'content_creator': Can manage News and Gallery
+ * - 'suspended': Revoked access
+ * - null/undefined: Regular user
  */
 
 export function AuthProvider({ children }) {
   const [currentUser, setCurrentUser] = useState();
-  const [userRole, setUserRole] = useState(null); // 'superadmin' | 'admin' | null
+  const [userRole, setUserRole] = useState(null); 
   const [userProfile, setUserProfile] = useState(null);
   const [loading, setLoading] = useState(true);
 
@@ -55,17 +59,25 @@ export function AuthProvider({ children }) {
 
       if (userDoc.exists()) {
         const data = userDoc.data();
-        setUserRole(data.role || null);
-        setUserProfile(data);
+        
+        // Handle legacy roles temporarily while migrating
+        let normalizedRole = data.role || null;
+        if (normalizedRole === 'admin') normalizedRole = 'tournament_admin';
+        if (normalizedRole === 'teamadmin') normalizedRole = 'team_manager';
+        if (normalizedRole === 'superadmin') normalizedRole = 'super_admin';
+        if (normalizedRole === 'newsadmin') normalizedRole = 'content_creator';
+
+        setUserRole(normalizedRole);
+        setUserProfile({...data, role: normalizedRole});
       } else {
-        // First-time login: check if any users exist to bootstrap the first superadmin
+        // First-time login: check if any users exist to bootstrap the first super_admin
         const usersSnapshot = await getDocs(collection(db, 'users'));
         const isFirstUser = usersSnapshot.empty;
 
         const newProfile = {
           email: user.email,
           displayName: user.displayName || user.email.split('@')[0],
-          role: isFirstUser ? 'superadmin' : null, // First user becomes superadmin
+          role: isFirstUser ? 'super_admin' : null, 
           createdAt: new Date().toISOString(),
           uid: user.uid
         };
@@ -94,27 +106,29 @@ export function AuthProvider({ children }) {
     return unsubscribe;
   }, []);
 
+  const isSuperAdmin = userRole === 'super_admin';
+  const isTournamentAdmin = isSuperAdmin || userRole === 'tournament_admin';
+  const isTeamManager = isTournamentAdmin || userRole === 'team_manager';
+  const isReferee = isTournamentAdmin || userRole === 'referee';
+  const isContentCreator = isSuperAdmin || userRole === 'content_creator';
+
+  const hasAnyAdminAccess = isSuperAdmin || isTournamentAdmin || isTeamManager || isReferee || isContentCreator;
+
   const value = {
     currentUser,
     userRole,
     userProfile,
-    isSuperAdmin: userRole === 'superadmin',
-    isAdmin: userRole === 'superadmin' || userRole === 'admin',
-    isNewsAdmin: userRole === 'superadmin' || userRole === 'newsadmin',
-    isTeamAdmin: userRole === 'superadmin' || userRole === 'admin' || userRole === 'teamadmin',
-    hasAnyAdminAccess: userRole === 'superadmin' || userRole === 'admin' || userRole === 'newsadmin' || userRole === 'teamadmin',
+    isSuperAdmin,
+    isTournamentAdmin,
+    isTeamManager,
+    isReferee,
+    isContentCreator,
+    hasAnyAdminAccess,
     isLoggedIn: !!currentUser,
     signup,
     login,
     logout,
-    refreshRole: () => fetchUserRole(currentUser),
-    requestTeamAdminAccess: async () => {
-      if (currentUser && !userRole) {
-        const userDocRef = doc(db, 'users', currentUser.uid);
-        await setDoc(userDocRef, { role: 'teamadmin' }, { merge: true });
-        await fetchUserRole(currentUser);
-      }
-    }
+    refreshRole: () => fetchUserRole(currentUser)
   };
 
   return (

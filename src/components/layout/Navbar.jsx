@@ -6,7 +6,7 @@ import { Menu, X, Trophy, Shield, Users, BarChart2, LayoutDashboard, LogOut, Che
 import { cn } from '../../utils/cn';
 
 const Navbar = () => {
-  const { currentUser, isAdmin, isNewsAdmin, logout } = useAuth();
+  const { currentUser, hasAnyAdminAccess, logout } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -42,7 +42,7 @@ const Navbar = () => {
     { name: 'Gallery', path: '/gallery', icon: Camera },
   ];
 
-  if (isAdmin || isNewsAdmin) {
+  if (hasAnyAdminAccess) {
     navItems.push({ name: 'Admin', path: '/admin', icon: User });
   }
 
@@ -66,8 +66,8 @@ const Navbar = () => {
                 <Trophy size={20} className="text-white fill-current" />
               </div>
               <div className="flex flex-col">
-                <span className="font-display font-bold text-xl tracking-tight text-white leading-none">Goal<span className="text-brand-400">Kashmir</span></span>
-                <span className="text-[10px] text-[#64748B] font-medium tracking-wider uppercase">Premium League</span>
+                <span className="font-display font-bold text-xl tracking-tight text-white leading-none">Goal <span className="text-brand-400">Kashmir</span></span>
+
               </div>
             </div>
 

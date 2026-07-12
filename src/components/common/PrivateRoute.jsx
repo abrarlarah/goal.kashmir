@@ -1,8 +1,8 @@
 import { Navigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 
-export default function PrivateRoute({ children, requireSuperAdmin = false, requireTournamentAdmin = false, requireTeamAdmin = false, requireNewsAdmin = false, requireAdminPanelAccess = false }) {
-  const { currentUser, isAdmin, isSuperAdmin, isNewsAdmin, isTeamAdmin, hasAnyAdminAccess } = useAuth();
+export default function PrivateRoute({ children, requireSuperAdmin = false, requireTournamentAdmin = false, requireTeamManager = false, requireReferee = false, requireContentCreator = false, requireAdminPanelAccess = false }) {
+  const { currentUser, isSuperAdmin, isTournamentAdmin, isTeamManager, isReferee, isContentCreator, hasAnyAdminAccess } = useAuth();
   const location = useLocation();
 
   if (!currentUser) {
@@ -24,22 +24,24 @@ export default function PrivateRoute({ children, requireSuperAdmin = false, requ
     );
   }
 
-  // Generic Admin Panel access (blocks pure Team Admins from generic panel)
-  if (requireAdminPanelAccess && !isAdmin && !isNewsAdmin) {
+  // Generic Admin Panel access 
+  if (requireAdminPanelAccess && !hasAnyAdminAccess) {
     return <Navigate to="/" replace />;
   }
 
-  // Check specific required modes
-  if (requireTournamentAdmin && !isAdmin) { // isAdmin acts as tournament admin
+  if (requireTournamentAdmin && !isTournamentAdmin) {
       return <Navigate to="/" replace />;
   }
 
-  // Team admin access: allows teamadmin, admin, and superadmin
-  if (requireTeamAdmin && !isTeamAdmin) {
+  if (requireTeamManager && !isTeamManager) {
       return <Navigate to="/" replace />;
   }
 
-  if (requireNewsAdmin && !isNewsAdmin) { 
+  if (requireReferee && !isReferee) {
+      return <Navigate to="/" replace />;
+  }
+
+  if (requireContentCreator && !isContentCreator) { 
       return <Navigate to="/" replace />;
   }
 

@@ -12,7 +12,7 @@ import { logAuditEvent } from '../../utils/auditLogger';
 
 const ManageTeams = () => {
     const { teams, tournaments } = useData();
-    const { currentUser, isSuperAdmin } = useAuth();
+    const { currentUser, isSuperAdmin, userProfile, isTournamentAdmin, isTeamManager } = useAuth();
     const location = useLocation();
     const [loading, setLoading] = useState(false); // Loading for form submission
     const [formData, setFormData] = useState({
@@ -233,28 +233,33 @@ const ManageTeams = () => {
         setFormData(prev => ({ ...prev, logoUrl: '' }));
     };
 
-    // Scope teams: superadmin sees all, admin sees only teams in their tournaments
-    const myTournamentNames = useMemo(() => {
-        if (isSuperAdmin) return null;
-        return tournaments
-            .filter(t => t.createdBy === currentUser?.uid)
-            .map(t => t.name);
-    }, [tournaments, currentUser, isSuperAdmin]);
-
     const scopedTeams = useMemo(() => {
         if (isSuperAdmin) return teams;
         return teams.filter(team => {
-            // Include teams created by the user (Team Admins)
+            // Tournament Admins see teams belonging to their assigned tournaments
+            if (isTournamentAdmin) {
+                 const managedTournamentIds = userProfile?.tournamentIds || [];
+                 const managedTournamentNames = tournaments
+                     .filter(t => managedTournamentIds.includes(t.id))
+                     .map(t => t.name);
+                 const teamTournaments = Array.isArray(team.tournaments)
+                     ? team.tournaments
+                     : (typeof team.tournaments === 'string' ? team.tournaments.split(',').map(t => t.trim()) : []);
+                 if (teamTournaments.some(tn => managedTournamentNames.includes(tn))) return true;
+            }
+
+            // Team Managers see teams they are explicitly assigned to
+            if (isTeamManager) {
+                 const managedTeamIds = userProfile?.teamIds || [];
+                 if (managedTeamIds.includes(team.id)) return true;
+            }
+            
+            // Legacy fallback: teams created by user
             if (team.createdBy === currentUser?.uid) return true;
 
-            // Include teams in user's tournaments (Tournament Admins)
-            if (!myTournamentNames) return false;
-            const teamTournaments = Array.isArray(team.tournaments)
-                ? team.tournaments
-                : (typeof team.tournaments === 'string' ? team.tournaments.split(',').map(t => t.trim()) : []);
-            return teamTournaments.some(tn => myTournamentNames.includes(tn));
+            return false;
         });
-    }, [teams, myTournamentNames, currentUser, isSuperAdmin]);
+    }, [teams, tournaments, currentUser, isSuperAdmin, isTournamentAdmin, isTeamManager, userProfile]);
 
     const filteredTeams = scopedTeams.filter(team =>
         team.name.toLowerCase().includes(searchTerm.toLowerCase()) ||

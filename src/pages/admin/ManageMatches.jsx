@@ -10,7 +10,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 
 const ManageMatches = () => {
   const { matches, teams, tournaments } = useData();
-  const { currentUser, isSuperAdmin, isTeamAdmin } = useAuth();
+  const { currentUser, isSuperAdmin, userProfile, isTournamentAdmin, isReferee } = useAuth();
   const [loading, setLoading] = useState(false); // Form loading
   const [formData, setFormData] = useState({
     teamA: '',
@@ -240,25 +240,31 @@ const ManageMatches = () => {
     }
   };
 
-  // Filter matches based on role (superadmin sees all, admin sees only their tournaments' matches)
-  const myTournamentNames = useMemo(() => {
-    if (isSuperAdmin) return null; // null = show all
-    return tournaments
-      .filter(t => t.createdBy === currentUser?.uid)
-      .map(t => t.name);
-  }, [tournaments, currentUser, isSuperAdmin]);
-
   const scopedMatches = useMemo(() => {
     if (isSuperAdmin) return matches;
-    const myNames = tournaments
-      .filter(t => t.createdBy === currentUser?.uid)
-      .map(t => t.name);
     
-    return matches.filter(m => 
-      myNames.includes(m.competition) || 
-      (m.isQuickMatch && m.createdBy === currentUser?.uid)
-    );
-  }, [matches, tournaments, currentUser, isSuperAdmin]);
+    return matches.filter(m => {
+        // Referees see matches they are explicitly assigned to
+        if (isReferee) {
+            const managedMatchIds = userProfile?.matchIds || [];
+            if (managedMatchIds.includes(m.id)) return true;
+        }
+
+        // Tournament Admins see matches belonging to their assigned tournaments
+        if (isTournamentAdmin) {
+            const managedTournamentIds = userProfile?.tournamentIds || [];
+            const managedTournamentNames = tournaments
+                .filter(t => managedTournamentIds.includes(t.id))
+                .map(t => t.name);
+            if (managedTournamentNames.includes(m.competition)) return true;
+        }
+
+        // Legacy fallback: Quick matches created by user
+        if (m.isQuickMatch && m.createdBy === currentUser?.uid) return true;
+
+        return false;
+    });
+  }, [matches, tournaments, currentUser, isSuperAdmin, isTournamentAdmin, isReferee, userProfile]);
 
   const filteredScopedMatches = useMemo(() => {
     return scopedMatches.filter(match => {

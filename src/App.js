@@ -72,7 +72,7 @@ function App() {
               <Route
                 path="/admin/matches"
                 element={
-                  <PrivateRoute requireTeamAdmin>
+                  <PrivateRoute requireReferee>
                     <ManageMatches />
                   </PrivateRoute>
                 }
@@ -80,7 +80,7 @@ function App() {
               <Route
                 path="/admin/teams"
                 element={
-                  <PrivateRoute requireTeamAdmin>
+                  <PrivateRoute requireTeamManager>
                     <ManageTeams />
                   </PrivateRoute>
                 }
@@ -88,7 +88,7 @@ function App() {
               <Route
                 path="/admin/players"
                 element={
-                  <PrivateRoute requireTeamAdmin>
+                  <PrivateRoute requireTeamManager>
                     <ManagePlayers />
                   </PrivateRoute>
                 }
@@ -96,7 +96,7 @@ function App() {
               <Route
                 path="/admin/lineups/:matchId?/:teamName?"
                 element={
-                  <PrivateRoute requireTeamAdmin>
+                  <PrivateRoute requireTeamManager>
                     <ManageLineups />
                   </PrivateRoute>
                 }
@@ -112,7 +112,7 @@ function App() {
               <Route
                 path="/admin/news"
                 element={
-                  <PrivateRoute requireNewsAdmin>
+                  <PrivateRoute requireContentCreator>
                     <ManageNews />
                   </PrivateRoute>
                 }
@@ -144,7 +144,7 @@ function App() {
               <Route
                 path="/admin/gallery"
                 element={
-                  <PrivateRoute>
+                  <PrivateRoute requireContentCreator>
                     <ManageGallery />
                   </PrivateRoute>
                 }

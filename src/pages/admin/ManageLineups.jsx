@@ -10,7 +10,7 @@ import { logAuditEvent } from '../../utils/auditLogger';
 const ManageLineups = () => {
     const { matchId, teamName } = useParams();
     const { matches, players, teams, lineups, tournaments } = useData();
-    const { currentUser, isSuperAdmin, isTeamAdmin } = useAuth();
+    const { currentUser, isSuperAdmin, userProfile, isTournamentAdmin, isTeamManager } = useAuth();
     const [selectedMatch, setSelectedMatch] = useState('');
     const [selectedTeam, setSelectedTeam] = useState('');
     const [lineup, setLineup] = useState({
@@ -61,17 +61,35 @@ const ManageLineups = () => {
     // Get match details
     const currentMatch = matches.find(m => m.id === selectedMatch);
 
-    // Scope matches: tournament admin only sees their tournament's matches; team admin sees their created matches
     const scopedMatches = useMemo(() => {
         if (isSuperAdmin) return matches;
-        const myTournamentNames = tournaments
-            .filter(t => t.createdBy === currentUser?.uid)
-            .map(t => t.name);
-        return matches.filter(m => 
-            myTournamentNames.includes(m.competition) || 
-            (m.isQuickMatch && m.createdBy === currentUser?.uid)
-        );
-    }, [matches, tournaments, currentUser, isSuperAdmin]);
+
+        return matches.filter(m => {
+            // Tournament Admins see matches belonging to their assigned tournaments
+            if (isTournamentAdmin) {
+                 const managedTournamentIds = userProfile?.tournamentIds || [];
+                 const managedTournamentNames = tournaments
+                     .filter(t => managedTournamentIds.includes(t.id))
+                     .map(t => t.name);
+                 if (managedTournamentNames.includes(m.competition)) return true;
+            }
+
+            // Team Managers see matches where their assigned teams are playing
+            if (isTeamManager) {
+                 const managedTeamIds = userProfile?.teamIds || [];
+                 const managedTeamNames = teams
+                     .filter(t => managedTeamIds.includes(t.id))
+                     .map(t => t.name);
+                 
+                 if (managedTeamNames.includes(m.teamA) || managedTeamNames.includes(m.teamB)) return true;
+            }
+
+            // Legacy fallback: Quick matches created by user
+            if (m.isQuickMatch && m.createdBy === currentUser?.uid) return true;
+
+            return false;
+        });
+    }, [matches, tournaments, teams, currentUser, isSuperAdmin, isTournamentAdmin, isTeamManager, userProfile]);
 
     // Get players for the selected team with search
     const teamPlayers = players.filter(p => {
@@ -419,20 +437,29 @@ const ManageLineups = () => {
                         <h4 className="text-lg mb-2">Select Team</h4>
                         <div className="flex flex-wrap gap-2">
                             {/* Team Selection Buttons */}
-                            {[currentMatch.teamA, currentMatch.teamB].map(teamName => (
-                                <button
-                                    key={teamName}
-                                    onClick={() => handleTeamChange(teamName)}
-                                    className={`flex-1 p-4 rounded-xl border-2 transition-all flex flex-col items-center gap-2 ${
-                                        selectedTeam === teamName 
-                                        ? 'bg-brand-500/10 border-brand-500 text-brand-500' 
-                                        : 'bg-[#131D31]/50 border-white/5 hover:bg-[#131D31]/10 hover:border-white/20'
-                                    }`}
-                                >
-                                    <Shield size={32} />
-                                    <span className="font-bold">{teamName}</span>
-                                </button>
-                            ))}
+                            {[currentMatch.teamA, currentMatch.teamB].map(teamName => {
+                                const teamDoc = teams.find(t => t.name === teamName);
+                                let isAuthorized = true;
+                                if (isTeamManager && !isSuperAdmin && !isTournamentAdmin) {
+                                    isAuthorized = userProfile?.teamIds?.includes(teamDoc?.id);
+                                }
+                                return (
+                                    <button
+                                        key={teamName}
+                                        onClick={() => isAuthorized && handleTeamChange(teamName)}
+                                        disabled={!isAuthorized}
+                                        className={`flex-1 p-4 rounded-xl border-2 transition-all flex flex-col items-center gap-2 ${
+                                            selectedTeam === teamName 
+                                            ? 'bg-brand-500/10 border-brand-500 text-brand-500' 
+                                            : 'bg-[#131D31]/50 border-white/5 ' + (isAuthorized ? 'hover:bg-[#131D31]/10 hover:border-white/20' : 'opacity-50 cursor-not-allowed')
+                                        }`}
+                                    >
+                                        <Shield size={32} />
+                                        <span className="font-bold">{teamName}</span>
+                                        {!isAuthorized && <span className="text-[10px] text-red-400">Not Authorized</span>}
+                                    </button>
+                                );
+                            })}
                         </div>
 
                         {/* Template Controls */}
