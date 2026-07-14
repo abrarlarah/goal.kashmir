@@ -1,4 +1,4 @@
-﻿// @ts-nocheck
+// @ts-nocheck
 import { Navigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 
@@ -30,19 +30,19 @@ export default function PrivateRoute({ children, requireSuperAdmin = false, requ
     return <Navigate to="/" replace />;
   }
 
-  if (requireTournamentAdmin && !isTournamentAdmin) {
+  if (requireTournamentAdmin && !isTournamentAdmin && !isSuperAdmin) {
       return <Navigate to="/" replace />;
   }
 
-  if (requireTeamManager && !isTeamManager) {
+  if (requireTeamManager && !isTeamManager && !isSuperAdmin) {
       return <Navigate to="/" replace />;
   }
 
-  if (requireReferee && !isReferee) {
+  if (requireReferee && !isReferee && !isSuperAdmin) {
       return <Navigate to="/" replace />;
   }
 
-  if (requireContentCreator && !isContentCreator) { 
+  if (requireContentCreator && !isContentCreator && !isSuperAdmin) { 
       return <Navigate to="/" replace />;
   }
 

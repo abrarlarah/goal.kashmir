@@ -6,6 +6,12 @@ import './index.css';
 import { AuthProvider } from './context/AuthContext';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import * as Sentry from '@sentry/react';
+import { registerSW } from 'virtual:pwa-register';
+
+// Register Vite PWA Service Worker
+if ('serviceWorker' in navigator) {
+  registerSW({ immediate: true });
+}
 
 Sentry.init({
   dsn: import.meta.env.VITE_SENTRY_DSN || "",
