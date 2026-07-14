@@ -3,7 +3,6 @@ import React, { useState, useEffect } from 'react';
 import { collection, getDocs, doc, updateDoc, deleteDoc, setDoc } from 'firebase/firestore';
 import { initializeApp } from 'firebase/app';
 import { getAuth, createUserWithEmailAndPassword, signOut } from 'firebase/auth';
-import { httpsCallable, getFunctions } from 'firebase/functions';
 import { db, firebaseConfig } from '../../firebase';
 import { useAuth } from '../../context/AuthContext';
 import { useData } from '../../context/DataContext';
@@ -75,9 +74,8 @@ const ManageUsers = () => {
             const targetUser = users.find(u => u.id === userId);
             const oldRole = targetUser?.role || null;
             
-            const functions = getFunctions();
-            const setUserRoleFn = httpsCallable(functions, 'setUserRole');
-            await setUserRoleFn({ targetUid: userId, role: newRole });
+            // Update role directly in Firestore instead of calling a cloud function
+            await updateDoc(doc(db, 'users', userId), { role: newRole });
             logAuditEvent('UPDATE_USER_ROLE', {
                 entityType: 'user',
                 entityId: userId,

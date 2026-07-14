@@ -1,7 +1,7 @@
 // @ts-nocheck
 import React, { useState, useEffect, useMemo } from 'react';
 import { collection, addDoc, updateDoc, deleteDoc, doc, query, where, getDocs, writeBatch } from 'firebase/firestore';
-import { httpsCallable, getFunctions } from 'firebase/functions';
+// import { httpsCallable, getFunctions } from 'firebase/functions'; // Removed unused imports
 import { useLocation } from 'react-router-dom';
 import { ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage';
 import { db, storage } from '../../firebase';
@@ -217,9 +217,18 @@ const ManageTeams = () => {
         if (window.confirm('Are you sure you want to delete this team?')) {
             const team = teams.find(t => t.id === id);
             try {
-                const functions = getFunctions();
-                const deleteTeamFn = httpsCallable(functions, 'deleteTeam');
-                await deleteTeamFn({ teamId: id });
+                // Delete team and cascade updates using a batch write directly from frontend
+                const batch = writeBatch(db);
+                
+                // 1. Delete the team document
+                batch.delete(doc(db, 'teams', id));
+                
+                // 2. Unassign all players from this team
+                const playersQuery = query(collection(db, 'players'), where('team', '==', id));
+                const playersDocs = await getDocs(playersQuery);
+                playersDocs.forEach(d => batch.update(d.ref, { team: '' }));
+                
+                await batch.commit();
                 
                 logAuditEvent('DELETE_TEAM', {
                     entityType: 'team',
