@@ -1,8 +1,8 @@
 {
-  "name": "soccer-app",
-  "version": "0.1.0",
+  "name": "goal-kashmir",
+  "version": "0.2.0",
   "private": true,
-  "homepage": ".",
+  "type": "module",
   "dependencies": {
     "@headlessui/react": "^1.7.7",
     "@heroicons/react": "^2.0.17",
@@ -10,51 +10,32 @@
     "firebase": "^9.17.1",
     "framer-motion": "^12.34.0",
     "lucide-react": "^0.563.0",
-    "postcss-flexbugs-fixes": "^5.0.2",
-    "postcss-normalize": "^13.0.1",
-    "postcss-preset-env": "^11.3.2",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-router-dom": "^6.11.1",
-    "react-scripts": "5.0.1",
     "tailwind-merge": "^3.4.0"
   },
   "scripts": {
-    "start": "react-scripts start",
+    "dev": "vite",
+    "start": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
     "predeploy": "npm run build",
     "deploy": "gh-pages -d build",
     "deploy-firebase": "firebase deploy",
-    "deploy-all": "npm run build && gh-pages -d build && firebase deploy",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject"
-  },
-  "eslintConfig": {
-    "extends": [
-      "react-app",
-      "react-app/jest"
-    ]
-  },
-  "browserslist": {
-    "production": [
-      ">0.2%",
-      "not dead",
-      "not op_mini all"
-    ],
-    "development": [
-      "last 1 chrome version",
-      "last 1 firefox version",
-      "last 1 safari version"
-    ]
+    "deploy-all": "npm run build && gh-pages -d build && firebase deploy"
   },
   "devDependencies": {
     "@tailwindcss/aspect-ratio": "^0.4.2",
     "@tailwindcss/forms": "^0.5.7",
-    "@tailwindcss/postcss7-compat": "^2.2.17",
     "@tailwindcss/typography": "^0.5.10",
+    "@vitejs/plugin-react": "^4.3.0",
     "autoprefixer": "^10.4.16",
     "gh-pages": "^6.3.0",
     "postcss": "^8.4.31",
-    "tailwindcss": "^3.3.5"
+    "tailwindcss": "^3.3.5",
+    "vite": "^5.4.0",
+    "vite-plugin-pwa": "^0.20.0"
   }
 }
+

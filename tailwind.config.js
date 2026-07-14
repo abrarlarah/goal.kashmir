@@ -1,9 +1,12 @@
 // tailwind.config.js
-module.exports = {
+import forms from '@tailwindcss/forms';
+import typography from '@tailwindcss/typography';
+
+export default {
   darkMode: 'class',
   content: [
     './src/**/*.{js,jsx,ts,tsx}',
-    './public/index.html'
+    './index.html'
   ],
   theme: {
     extend: {
@@ -79,7 +82,7 @@ module.exports = {
     extend: {},
   },
   plugins: [
-    require('@tailwindcss/forms'),
-    require('@tailwindcss/typography'),
+    forms,
+    typography,
   ],
 }

@@ -4,7 +4,6 @@ import './index.css';
 import App from './App';
 import { HashRouter } from 'react-router-dom';
 import { AuthProvider } from './context/AuthContext';
-import * as serviceWorkerRegistration from './serviceWorkerRegistration';
 
 // Capture the install prompt EARLY before React mounts
 // This ensures we never miss the beforeinstallprompt event
@@ -26,14 +25,3 @@ root.render(
     </HashRouter>
   </React.StrictMode>
 );
-
-// Register the service worker for PWA support
-serviceWorkerRegistration.register({
-  onUpdate: (registration) => {
-    // Automatically skip waiting and reload when an update is found
-    if (registration && registration.waiting) {
-      registration.waiting.postMessage({ type: 'SKIP_WAITING' });
-    }
-    window.location.reload();
-  }
-});

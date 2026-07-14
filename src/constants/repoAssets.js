@@ -1,60 +1,40 @@
 /**
  * This file dynamically loads all images from the src/assets/images folders.
  * Any image you add to those folders will automatically appear in the AssetPicker.
+ *
+ * Uses Vite's import.meta.glob() for dynamic asset loading.
  */
 
-// Function to process a Webpack context and return an array of assets
-const processContext = (context, category) => {
-    return context.keys().map(key => {
-        // Remove './' from start and file extension from end for the name
-        const name = key
-            .replace('./', '')
+// Use import.meta.glob to find all images (Vite equivalent of Webpack's require.context)
+const teamModules = import.meta.glob('../assets/images/teams/*.{png,jpg,jpeg,svg,webp}', { eager: true, query: '?url', import: 'default' });
+const playerModules = import.meta.glob('../assets/images/players/*.{png,jpg,jpeg,svg,webp}', { eager: true, query: '?url', import: 'default' });
+const newsModules = import.meta.glob('../assets/images/news/*.{png,jpg,jpeg,svg,webp}', { eager: true, query: '?url', import: 'default' });
+const sponsorModules = import.meta.glob('../assets/images/sponsors/*.{png,jpg,jpeg,svg,webp}', { eager: true, query: '?url', import: 'default' });
+
+// Function to process glob results and return an array of assets
+const processGlob = (modules, category) => {
+    return Object.entries(modules).map(([path, url]) => {
+        // Extract filename from the path (e.g., '../assets/images/teams/team1.png' → 'team1.png')
+        const filename = path.split('/').pop();
+        // Remove file extension for the display name
+        const name = filename
             .split('.')
             .slice(0, -1)
             .join('.')
             .replace(/[-_]/g, ' ');
 
         return {
-            id: `${category.toLowerCase()}-${key.replace('./', '')}`,
+            id: `${category.toLowerCase()}-${filename}`,
             name: name.charAt(0).toUpperCase() + name.slice(1),
-            url: context(key),
+            url: url,
             category: category
         };
     });
 };
 
-// Use require.context to find all images in the assets folders
-let teams = [];
-let players = [];
-let news = [];
-let sponsors = [];
-
-try {
-    const teamsCtx = require.context('../assets/images/teams', false, /\.(png|jpe?g|svg|webp)$/);
-    teams = processContext(teamsCtx, 'Teams');
-} catch (e) {
-    console.warn('Teams image folder not found or empty');
-}
-
-try {
-    const playersCtx = require.context('../assets/images/players', false, /\.(png|jpe?g|svg|webp)$/);
-    players = processContext(playersCtx, 'Players');
-} catch (e) {
-    console.warn('Players image folder not found or empty');
-}
-
-try {
-    const newsCtx = require.context('../assets/images/news', false, /\.(png|jpe?g|svg|webp)$/);
-    news = processContext(newsCtx, 'News');
-} catch (e) {
-    console.warn('News image folder not found or empty');
-}
-
-try {
-    const sponsorsCtx = require.context('../assets/images/sponsors', false, /\.(png|jpe?g|svg|webp)$/);
-    sponsors = processContext(sponsorsCtx, 'Sponsors');
-} catch (e) {
-    console.warn('Sponsors image folder not found or empty');
-}
+const teams = processGlob(teamModules, 'Teams');
+const players = processGlob(playerModules, 'Players');
+const news = processGlob(newsModules, 'News');
+const sponsors = processGlob(sponsorModules, 'Sponsors');
 
 export const REPO_ASSETS = [...teams, ...players, ...news, ...sponsors];
