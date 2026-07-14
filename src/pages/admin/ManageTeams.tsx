@@ -1,6 +1,7 @@
-﻿// @ts-nocheck
+// @ts-nocheck
 import React, { useState, useEffect, useMemo } from 'react';
 import { collection, addDoc, updateDoc, deleteDoc, doc, query, where, getDocs, writeBatch } from 'firebase/firestore';
+import { httpsCallable, getFunctions } from 'firebase/functions';
 import { useLocation } from 'react-router-dom';
 import { ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage';
 import { db, storage } from '../../firebase';
@@ -216,7 +217,10 @@ const ManageTeams = () => {
         if (window.confirm('Are you sure you want to delete this team?')) {
             const team = teams.find(t => t.id === id);
             try {
-                await deleteDoc(doc(db, 'teams', id));
+                const functions = getFunctions();
+                const deleteTeamFn = httpsCallable(functions, 'deleteTeam');
+                await deleteTeamFn({ teamId: id });
+                
                 logAuditEvent('DELETE_TEAM', {
                     entityType: 'team',
                     entityId: id,
@@ -226,6 +230,7 @@ const ManageTeams = () => {
                 setTimeout(() => setSuccessMessage(''), 3000);
             } catch (error) {
                 console.error("Error deleting team: ", error);
+                alert("Error deleting team: " + error.message);
             }
         }
     };

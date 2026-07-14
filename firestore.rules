@@ -1,10 +1,76 @@
 rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
-    match /{document=**} {
-      // TEMPORARY: Allow all reads and writes to unblock development
-      // WARNING: This is insecure for production. Revert to secure rules before deploying.
-      allow read, write: if true;
+    
+    // Helper functions for Role-Based Access Control
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+    
+    function isAdmin() {
+      return isAuthenticated() && 
+             get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role in ['superadmin', 'tournament_admin'];
+    }
+
+    function isSuperAdmin() {
+      return isAuthenticated() && 
+             get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'superadmin';
+    }
+
+    function hasTeamManagerAccess() {
+      return isAuthenticated() && 
+             get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role in ['superadmin', 'tournament_admin', 'team_manager'];
+    }
+
+    // Users Collection - users can read their own profile, admins can read/write all
+    match /users/{userId} {
+      allow read: if isAuthenticated() && (request.auth.uid == userId || isAdmin());
+      // Only SuperAdmins can write to the users collection directly, or the backend via Cloud Functions
+      allow write: if isSuperAdmin();
+    }
+
+    // Core Data Collections - Public read, protected writes
+    match /teams/{teamId} {
+      allow read: if true;
+      allow write: if hasTeamManagerAccess();
+    }
+
+    match /players/{playerId} {
+      allow read: if true;
+      allow write: if hasTeamManagerAccess();
+    }
+
+    match /tournaments/{tournamentId} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+
+    match /matches/{matchId} {
+      allow read: if true;
+      // Referees can also update matches
+      allow write: if isAuthenticated() && 
+                   get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role in ['superadmin', 'tournament_admin', 'referee'];
+    }
+
+    match /lineups/{lineupId} {
+      allow read: if true;
+      allow write: if hasTeamManagerAccess();
+    }
+    
+    match /news/{newsId} {
+      allow read: if true;
+      allow write: if isAuthenticated() && 
+                   get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role in ['superadmin', 'content_creator'];
+    }
+    
+    match /sponsors/{sponsorId} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+
+    match /audit_logs/{logId} {
+      allow read: if isSuperAdmin();
+      allow write: if isAuthenticated(); // Admins write to this
     }
   }
 }
