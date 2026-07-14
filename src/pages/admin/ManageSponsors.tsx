@@ -12,7 +12,7 @@ import { registerAsset } from '../../utils/assetRegistry';
 import { logAuditEvent } from '../../utils/auditLogger';
 
 const ManageSponsors = () => {
-    const { isAdmin, isSuperAdmin, currentUser } = useAuth();
+    const { isTournamentAdmin, isSuperAdmin, currentUser } = useAuth();
     const [sponsors, setSponsors] = useState([]);
     const [loading, setLoading] = useState(true);
     const [uploading, setUploading] = useState(false);
@@ -193,7 +193,7 @@ const ManageSponsors = () => {
         }
     }
 
-    if (!isAdmin) return <div className="text-white text-center py-20">Access Denied</div>;
+    if (!isTournamentAdmin) return <div className="text-white text-center py-20">Access Denied</div>;
 
     const getTierBadgeColor = (tier) => {
         switch (tier) {
