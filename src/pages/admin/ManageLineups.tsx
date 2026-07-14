@@ -1,6 +1,6 @@
-﻿// @ts-nocheck
+// @ts-nocheck
 import React, { useState, useEffect, useMemo } from 'react';
-import { Search, Plus, X, Users, Shield, UserPlus } from 'lucide-react';
+import { Search, Plus, X, Users, Shield, UserPlus, Pencil } from 'lucide-react';
 import { useParams } from 'react-router-dom';
 import { collection, addDoc, updateDoc, deleteDoc, doc, query, where, getDocs } from 'firebase/firestore';
 import { db } from '../../firebase';
@@ -26,6 +26,7 @@ const ManageLineups = () => {
     const [isManualMode, setIsManualMode] = useState(false);
     const [manualPlayerName, setManualPlayerName] = useState('');
     const [manualPlayerPosition, setManualPlayerPosition] = useState('');
+    const [editingManualIndex, setEditingManualIndex] = useState<{type: 'starting' | 'bench', index: number} | null>(null);
     const [manualLineup, setManualLineup] = useState({
         id: '',
         matchId: '',
@@ -193,6 +194,33 @@ const ManageLineups = () => {
     };
 
     // â”€â”€â”€ MANUAL MODE HANDLERS â”€â”€â”€
+    const startEditManual = (type, index) => {
+        const player = manualLineup[type === 'starting' ? 'starting11' : 'bench'][index];
+        setManualPlayerName(player.name);
+        setManualPlayerPosition(player.position);
+        setEditingManualIndex({ type, index });
+    };
+
+    const cancelEditManual = () => {
+        setManualPlayerName('');
+        setManualPlayerPosition('');
+        setEditingManualIndex(null);
+    };
+
+    const updateManual = () => {
+        if (!manualPlayerName.trim() || !editingManualIndex) return;
+        setManualLineup(prev => {
+            const key = editingManualIndex.type === 'starting' ? 'starting11' : 'bench';
+            const newList = [...prev[key]];
+            newList[editingManualIndex.index] = { 
+                name: manualPlayerName.trim(), 
+                position: manualPlayerPosition.trim() || (editingManualIndex.type === 'starting' ? 'Player' : 'Sub') 
+            };
+            return { ...prev, [key]: newList };
+        });
+        cancelEditManual();
+    };
+
     const addManualToStarting = () => {
         if (!manualPlayerName.trim()) return;
         setManualLineup(prev => ({
@@ -571,20 +599,40 @@ const ManageLineups = () => {
                                 <option value="CF">CF</option>
                             </select>
                             <div className="flex gap-2">
-                                <button
-                                    onClick={addManualToStarting}
-                                    disabled={!manualPlayerName.trim()}
-                                    className="flex-1 sm:flex-initial px-4 py-3 rounded-xl bg-green-600 hover:bg-green-700 disabled:bg-gray-600 disabled:cursor-not-allowed text-white text-xs font-bold uppercase tracking-wider transition-all"
-                                >
-                                    Starting
-                                </button>
-                                <button
-                                    onClick={addManualToBench}
-                                    disabled={!manualPlayerName.trim() || manualLineup.bench.length >= 6}
-                                    className="flex-1 sm:flex-initial px-4 py-3 rounded-xl bg-blue-600 hover:bg-blue-700 disabled:bg-gray-600 disabled:cursor-not-allowed text-white text-xs font-bold uppercase tracking-wider transition-all"
-                                >
-                                    Bench
-                                </button>
+                                {editingManualIndex ? (
+                                    <>
+                                        <button
+                                            onClick={updateManual}
+                                            disabled={!manualPlayerName.trim()}
+                                            className="flex-1 sm:flex-initial px-4 py-3 rounded-xl bg-amber-500 hover:bg-amber-600 disabled:bg-gray-600 disabled:cursor-not-allowed text-white text-xs font-bold uppercase tracking-wider transition-all"
+                                        >
+                                            Update
+                                        </button>
+                                        <button
+                                            onClick={cancelEditManual}
+                                            className="flex-1 sm:flex-initial px-4 py-3 rounded-xl bg-gray-600 hover:bg-gray-700 text-white text-xs font-bold uppercase tracking-wider transition-all"
+                                        >
+                                            Cancel
+                                        </button>
+                                    </>
+                                ) : (
+                                    <>
+                                        <button
+                                            onClick={addManualToStarting}
+                                            disabled={!manualPlayerName.trim()}
+                                            className="flex-1 sm:flex-initial px-4 py-3 rounded-xl bg-green-600 hover:bg-green-700 disabled:bg-gray-600 disabled:cursor-not-allowed text-white text-xs font-bold uppercase tracking-wider transition-all"
+                                        >
+                                            Starting
+                                        </button>
+                                        <button
+                                            onClick={addManualToBench}
+                                            disabled={!manualPlayerName.trim() || manualLineup.bench.length >= 6}
+                                            className="flex-1 sm:flex-initial px-4 py-3 rounded-xl bg-blue-600 hover:bg-blue-700 disabled:bg-gray-600 disabled:cursor-not-allowed text-white text-xs font-bold uppercase tracking-wider transition-all"
+                                        >
+                                            Bench
+                                        </button>
+                                    </>
+                                )}
                             </div>
                         </div>
                     </div>
@@ -606,12 +654,20 @@ const ManageLineups = () => {
                                             <div className="font-bold">#{index + 1} {player.name}</div>
                                             <div className="text-xs text-green-400">{player.position}</div>
                                         </div>
-                                        <button
-                                            onClick={() => removeManualFromStarting(index)}
-                                            className="p-1.5 bg-red-500/10 hover:bg-red-500/20 text-red-500 rounded-lg transition-all"
-                                        >
-                                            <X size={14} />
-                                        </button>
+                                        <div className="flex gap-2">
+                                            <button
+                                                onClick={() => startEditManual('starting', index)}
+                                                className="p-1.5 bg-amber-500/10 hover:bg-amber-500/20 text-amber-500 rounded-lg transition-all"
+                                            >
+                                                <Pencil size={14} />
+                                            </button>
+                                            <button
+                                                onClick={() => removeManualFromStarting(index)}
+                                                className="p-1.5 bg-red-500/10 hover:bg-red-500/20 text-red-500 rounded-lg transition-all"
+                                            >
+                                                <X size={14} />
+                                            </button>
+                                        </div>
                                     </div>
                                 ))}
                                 {manualLineup.starting11.length === 0 && (
@@ -635,12 +691,20 @@ const ManageLineups = () => {
                                             <div className="font-bold">{player.name}</div>
                                             <div className="text-xs text-blue-400">{player.position}</div>
                                         </div>
-                                        <button
-                                            onClick={() => removeManualFromBench(index)}
-                                            className="p-1.5 bg-red-500/10 hover:bg-red-500/20 text-red-500 rounded-lg transition-all"
-                                        >
-                                            <X size={14} />
-                                        </button>
+                                        <div className="flex gap-2">
+                                            <button
+                                                onClick={() => startEditManual('bench', index)}
+                                                className="p-1.5 bg-amber-500/10 hover:bg-amber-500/20 text-amber-500 rounded-lg transition-all"
+                                            >
+                                                <Pencil size={14} />
+                                            </button>
+                                            <button
+                                                onClick={() => removeManualFromBench(index)}
+                                                className="p-1.5 bg-red-500/10 hover:bg-red-500/20 text-red-500 rounded-lg transition-all"
+                                            >
+                                                <X size={14} />
+                                            </button>
+                                        </div>
                                     </div>
                                 ))}
                                 {manualLineup.bench.length === 0 && (

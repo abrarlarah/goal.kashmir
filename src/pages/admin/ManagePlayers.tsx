@@ -1,4 +1,4 @@
-﻿// @ts-nocheck
+// @ts-nocheck
 import React, { useState, useEffect, useMemo } from 'react';
 import { collection, addDoc, updateDoc, deleteDoc, doc } from 'firebase/firestore';
 import { useLocation, useNavigate } from 'react-router-dom';
@@ -188,7 +188,7 @@ const ManagePlayers = () => {
         setLoading(false);
     };
 
-    const handleEdit = (player) => {
+    function handleEdit(player: any) {
         setFormData({
             ...player,
             nationality: player.nationality || '',
@@ -201,7 +201,7 @@ const ManagePlayers = () => {
         setEditingId(player.id);
         setSuccessMessage('');
         window.scrollTo({ top: 0, behavior: 'smooth' });
-    };
+    }
 
     const handleDelete = async (id) => {
         if (window.confirm('Are you sure you want to delete this player?')) {
