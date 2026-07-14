@@ -7,13 +7,13 @@ import { getStorage } from 'firebase/storage';
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
-  apiKey: "AIzaSyCyH8h0OqHmI3vXsW_ee1qugqCAHRiL3vk",
-  authDomain: "soccer-app-e81d0.firebaseapp.com",
-  projectId: "soccer-app-e81d0",
-  storageBucket: "soccer-app-e81d0.appspot.com",  // Fixed storage bucket URL
-  messagingSenderId: "199836947592",
-  appId: "1:199836947592:web:8388db5a944f98b6d57b3d",
-  measurementId: "G-JQZVTJX6TJ"
+  apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
+  authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN,
+  projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID,
+  storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET,
+  messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID,
+  appId: import.meta.env.VITE_FIREBASE_APP_ID,
+  measurementId: import.meta.env.VITE_FIREBASE_MEASUREMENT_ID
 };
 
 // Initialize Firebase
