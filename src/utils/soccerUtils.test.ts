@@ -4,12 +4,12 @@ import { Match, Team } from '../types';
 
 describe('soccerUtils - calculateStandings', () => {
     it('should correctly calculate points, wins, and goal differences for finished matches', () => {
-        const teams: Team[] = [
+        const teams = [
             { id: 'team1', name: 'Team A', shortName: 'TA', status: 'Active' },
             { id: 'team2', name: 'Team B', shortName: 'TB', status: 'Active' },
-        ];
+        ] as any;
 
-        const matches: Match[] = [
+        const matches = [
             {
                 id: 'm1',
                 teamA: 'Team A',
@@ -17,9 +17,8 @@ describe('soccerUtils - calculateStandings', () => {
                 scoreA: 2,
                 scoreB: 1,
                 status: 'finished',
-                tournamentId: 't1'
             }
-        ];
+        ] as any;
 
         const standings = calculateStandings(teams, matches);
         
@@ -39,12 +38,12 @@ describe('soccerUtils - calculateStandings', () => {
     });
 
     it('should handle draws correctly', () => {
-        const teams: Team[] = [
+        const teams = [
             { id: 'team1', name: 'Team A', shortName: 'TA', status: 'Active' },
             { id: 'team2', name: 'Team B', shortName: 'TB', status: 'Active' },
-        ];
+        ] as any;
 
-        const matches: Match[] = [
+        const matches = [
             {
                 id: 'm1',
                 teamA: 'Team A',
@@ -52,9 +51,8 @@ describe('soccerUtils - calculateStandings', () => {
                 scoreA: 1,
                 scoreB: 1,
                 status: 'finished',
-                tournamentId: 't1'
             }
-        ];
+        ] as any;
 
         const standings = calculateStandings(teams, matches);
         
@@ -69,12 +67,12 @@ describe('soccerUtils - calculateStandings', () => {
     });
     
     it('should ignore scheduled or live matches', () => {
-        const teams: Team[] = [
+        const teams = [
             { id: 'team1', name: 'Team A', shortName: 'TA', status: 'Active' },
             { id: 'team2', name: 'Team B', shortName: 'TB', status: 'Active' },
-        ];
+        ] as any;
 
-        const matches: Match[] = [
+        const matches = [
             {
                 id: 'm1',
                 teamA: 'Team A',
@@ -82,9 +80,8 @@ describe('soccerUtils - calculateStandings', () => {
                 scoreA: 2,
                 scoreB: 0,
                 status: 'live', // Not finished!
-                tournamentId: 't1'
             }
-        ];
+        ] as any;
 
         const standings = calculateStandings(teams, matches);
         

@@ -1,4 +1,4 @@
-﻿// @ts-nocheck
+// @ts-nocheck
 import React, { useState, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import { collection, addDoc, updateDoc, deleteDoc, doc, query, where, getDocs } from 'firebase/firestore';
@@ -166,13 +166,13 @@ const ManageTournaments = () => {
         setShowForm(false);
     };
 
-    const handleEdit = (t) => {
+    function handleEdit(t: any) {
         setFormData(t);
         setEditingId(t.id);
         setShowForm(true);
         setSuccessMessage('');
         window.scrollTo({ top: 0, behavior: 'smooth' });
-    };
+    }
 
     const handleDelete = async (id) => {
         if (window.confirm('Delete this tournament and all its associated matches? This action cannot be undone.')) {

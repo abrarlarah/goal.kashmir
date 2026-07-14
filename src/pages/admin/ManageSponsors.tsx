@@ -1,4 +1,4 @@
-﻿// @ts-nocheck
+// @ts-nocheck
 import React, { useState, useEffect, useRef } from 'react';
 import { collection, addDoc, getDocs, deleteDoc, doc, serverTimestamp, orderBy, query, updateDoc } from 'firebase/firestore';
 import { ref, getDownloadURL, uploadBytesResumable } from 'firebase/storage';
@@ -35,25 +35,26 @@ const ManageSponsors = () => {
         fetchSponsors();
     }, []);
 
-    const fetchSponsors = async () => {
+    async function fetchSponsors() {
         setLoading(true);
         try {
-            const q = query(collection(db, 'sponsors'), orderBy('createdAt', 'desc'));
-            const querySnapshot = await getDocs(q);
-            const sponsorsData = querySnapshot.docs.map(doc => ({
+            const sponsorsQuery = query(collection(db, 'sponsors'), orderBy('createdAt', 'desc'));
+            const snapshot = await getDocs(sponsorsQuery);
+            const sponsorsData = snapshot.docs.map(doc => ({
                 id: doc.id,
                 ...doc.data()
             }));
             setSponsors(sponsorsData);
         } catch (error) {
-            console.error("Error fetching sponsors:", error);
+            console.error('Error fetching sponsors:', error);
+            setError('Failed to load sponsors');
         } finally {
             setLoading(false);
         }
-    };
+    }
 
     const handleImageUpload = async (e) => {
-        let file = e.target.files[0];
+        const file = e.target.files[0];
         if (!file) return;
 
         setUploading(true);

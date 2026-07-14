@@ -203,7 +203,7 @@ const ManageTeams = () => {
         }
     };
 
-    const handleEdit = (team) => {
+    function handleEdit(team: any) {
         setFormData({
             ...team,
             tournaments: Array.isArray(team.tournaments) ? team.tournaments : []
@@ -211,7 +211,7 @@ const ManageTeams = () => {
         setEditingId(team.id);
         setSuccessMessage('');
         window.scrollTo({ top: 0, behavior: 'smooth' });
-    };
+    }
 
     const handleDelete = async (id) => {
         if (window.confirm('Are you sure you want to delete this team?')) {

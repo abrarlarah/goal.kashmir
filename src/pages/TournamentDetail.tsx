@@ -190,7 +190,7 @@ const TournamentDetail = () => {
 
             // Map "Team X" to actual team names
             tournamentMatches.forEach(match => {
-                let matchUpdate = {};
+                const matchUpdate = {};
                 let changed = false;
 
                 // Check Team A

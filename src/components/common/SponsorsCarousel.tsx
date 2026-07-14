@@ -19,7 +19,7 @@ const SponsorsCarousel = () => {
                 );
 
                 const snapshot = await getDocs(q);
-                let sponsorsData = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+                const sponsorsData = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
 
                 // Sort by tier if needed (Premium > Gold > Silver > Bronze)
                 const tierWeights = { 'Premium': 4, 'Gold': 3, 'Silver': 2, 'Bronze': 1 };
